@@ -1,3 +1,7 @@
+# TODO
+# - spec vs name
+# - merge google-chromium.spec vs chromium-browser.spec -- one must go
+
 # spec from  http://spot.fedorapeople.org/chromium/
 
 %global svndate 20090711
