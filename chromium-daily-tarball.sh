@@ -101,7 +101,7 @@ printf "Checking out the source tree. This will take some time.\n"
 if [ "$VERBOSE" = "true" ]; then
    gclient sync --force
 else
-   gclient sync --force &>/dev/null
+   gclient sync --force 2>&1 >/dev/null
 fi
 
 # Determine SVN rev of chromium (we don't care about the other sub-checkouts)
