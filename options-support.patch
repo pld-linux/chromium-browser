@@ -1,0 +1,41 @@
+diff -up chromium-20090916svn26392/src/build/common.gypi.options chromium-20090916svn26392/src/build/common.gypi
+--- chromium-20090916svn26392/src/build/common.gypi.options	2009-09-16 17:34:31.000000000 -0400
++++ chromium-20090916svn26392/src/build/common.gypi	2009-09-16 19:55:45.000000000 -0400
+@@ -135,6 +135,18 @@
+     # Set this to true to enable SELinux support.
+     'selinux%': 0,
+ 
++    # Use system libpng
++    'use_system_libpng%': 1,
++
++    # Use system bzip2
++    'use_system_bzip2%': 1,
++
++    # Use system libjpeg
++    'use_system_libjpeg%': 1,
++
++    # Use system zlib
++    'use_system_zlib%': 1,
++
+     'conditions': [
+       ['OS=="linux"', {
+         'conditions': [
+@@ -215,6 +227,18 @@
+       ['selinux==1', {
+         'defines': ['CHROMIUM_SELINUX=1'],
+       }],
++      ['use_system_libpng==1', {
++        'defines': ['USE_SYSTEM_LIBPNG=1'],
++      }],
++      ['use_system_bzip2==1', {
++        'defines': ['USE_SYSTEM_LIBBZ2=1'],
++      }],
++      ['use_system_libjpeg==1', {
++        'defines': ['USE_SYSTEM_LIBJPEG=1'],
++      }],
++      ['use_system_zlib==1', {
++        'defines': ['USE_SYSTEM_ZLIB=1'],
++      }],
+       ['coverage!=0', {
+         'conditions': [
+           ['OS=="mac"', {
