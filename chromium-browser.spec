@@ -1,49 +1,56 @@
 # TODO
 # - spec vs name
 # - merge google-chromium.spec vs chromium-browser.spec -- one must go
-
 # spec from  http://spot.fedorapeople.org/chromium/
 
-%global svndate 20090711
-%global svnver  svn20464
-
+%define		svndate 20090916
+%define		svnver  svn26424
 Summary:	A WebKit powered web browser
-Name:		chromium
-Version:	3.0.194.0
+Name:		chromium-browser
+Version:	4.0.212.0
 Release:	0.1.%{svndate}%{svnver}%{?dist}
-License:	BSD
+License:	BSD, LGPL v2+ (ffmpeg)
 Group:		Applications/Networking
-# see src/chrome/VERSION
-Patch0:		%{name}-20090711-system-bz2-xml2-xslt-zlib-minizip-libevent-jpeg-png-nss-nspr-v8.patch
-# Use chromium-daily-tarball.sh to generate tarball.
-Source0:	%{name}-%{svndate}%{svnver}.tar.bz2
+Patch0:		system-libs.patch
+Patch1:		system-libs-gyp.patch
+Patch2:		gyp-system-minizip.patch
+Patch3:		noffmpeg.patch
+Patch5:		options-support.patch
+Patch6:		64bit-plugin-path.patch
+Patch7:		gyp-system-icu.patch
+Patch8:		icu-code-changes.patch
+Patch9:		no-sqlite-debug.patch
+Patch10:	debug_util_posix-fix.patch
+Source0:	chromium-%{svndate}%{svnver}.tar.bz2
+# Source0-md5:	20663b974249b35d7ab655ce21b8f868
 # Custom build tools for chromium, hammer is a fancy front-end for scons
 Source1:	http://src.chromium.org/svn/trunk/tools/depot_tools.tar.gz
+# Source1-md5:	40811b18e2cbdc900272618486bf37e1
 Source2:	%{name}-browser.sh
 Source3:	%{name}-browser.desktop
 # We don't actually use this in the build, but it is included so you can make the tarball.
 Source4:	%{name}-daily-tarball.sh
+BuildRequires:	GConf2-devel
+BuildRequires:	alsa-lib-devel
+BuildRequires:	atk-devel
+BuildRequires:	bison
 BuildRequires:	bzip2-devel
+BuildRequires:	dbus-devel
+BuildRequires:	desktop-file-utils
+BuildRequires:	flex
+BuildRequires:	fontconfig-devel
+BuildRequires:	gperf
+BuildRequires:	gtk2-devel
 BuildRequires:	libevent-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
-BuildRequires:	desktop-file-utils
-BuildRequires:	gperf
-BuildRequires:	flex
-BuildRequires:	gtk2-devel
-BuildRequires:	atk-devel
-BuildRequires:	v8-devel
-BuildRequires:	scons
-BuildRequires:	gcc-c++
-BuildRequires:	bison
-BuildRequires:	fontconfig-devel
-BuildRequires:	GConf2-devel
-BuildRequires:	dbus-devel
-BuildRequires:	alsa-lib-devel
+BuildRequires:	libstdc++-devel
 BuildRequires:	libxslt-devel
-BuildRequires:	nss-devel
-BuildRequires:	nspr-devel
 BuildRequires:	minizip-devel
+BuildRequires:	nspr-devel
+BuildRequires:	nss-devel
+BuildRequires:	scons
+BuildRequires:	v8-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # Chromium bits don't compile on x86_64.
 ExclusiveArch:	%{ix86} arm
@@ -53,6 +60,15 @@ Chromium is an open-source web browser, powered by WebKit.
 
 %prep
 %setup -q -n %{name}-%{svndate}%{svnver} -a 1
+
+# see src/chrome/VERSION
+# Google's versioning is interesting. They never reset "BUILD", which is how we jumped
+# from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
+ver=$(cat src/chrome/VERSION)
+if [ "$ver" != %{version} ]; then
+	exit 1
+fi
+
 cp %{SOURCE4} .
 
 # Somehow, path noise from the tarball creation got embedded.
@@ -62,9 +78,16 @@ for i in `find . |grep "\.scons"`; do
 	sed -i "s|/home/spot/sandbox/chromium-%{svndate}/|%{_builddir}/chromium-%{svndate}%{svnver}/|g" $i
 done
 
-# Patch in support for system libs
-# bz2, xml2, xslt, zlib, minizp, event, jpeg, png, nss, nspr, v8
-%patch0 -p1 -b .system
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 # Scrape out incorrect optflags and hack in the correct ones
 PARSED_OPT_FLAGS=`echo \'$RPM_OPT_FLAGS \' | sed "s/ /',/g" | sed "s/',/', '/g"`
