@@ -35,7 +35,6 @@ Source3:	%{name}.desktop
 # We don't actually use this in the build, but it is included so you can make the tarball.
 Source4:	chromium-daily-tarball.sh
 BuildRequires:	GConf2-devel
-%{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -47,8 +46,10 @@ BuildRequires:	fontconfig-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
 BuildRequires:	libevent-devel
+BuildRequires:	libicu-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
+%{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	minizip-devel
@@ -94,9 +95,11 @@ find -name '*\.scons' | xargs %{__sed} -i -e "
 	s|'-O0',|'%{rpmcxxflags}'.split(' ')|g
 "
 
+%build
+cd src/build
+
 # Regenerate the scons files
 # Also, set the sandbox paths correctly.
-cd src/build
 ./gyp_chromium all.gyp \
 	-D linux_sandbox_path=%{_libdir}/%{name}/chrome-sandbox \
 	-D linux_sandbox_chrome_path=%{_libdir}/%{name}/chromium-browser \
@@ -111,10 +114,7 @@ cd src/build
 	-Dselinux=1 \
 %endif
 	-Djavascript_engine=v8
-cd -
 
-%build
-cd src/build
 # If we're building sandbox without SELINUX, add "chrome_sandbox" here.
 %if %{with selinux}
 ../../depot_tools/hammer --mode=Release chrome
@@ -124,19 +124,17 @@ cd src/build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_bindir}
-cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/chromium-browser
-install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir}/%{name},%{_pixmapsdir},%{_desktopdir}}
+
 cd src/sconsbuild/Release
+install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/chromium-browser
 cp -a chrome.pak locales resources themes $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-browser
 cp -a chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
 cd -
 
-install -d $RPM_BUILD_ROOT%{_pixmapsdir}
 cp -a src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/chromium-browser.png
 
-install -d $RPM_BUILD_ROOT%{_desktopdir}
 desktop-file-install --dir $RPM_BUILD_ROOT%{_desktopdir} %{SOURCE3}
 
 %clean
@@ -154,4 +152,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/resources
 %{_libdir}/%{name}/themes
 # These unique permissions are intentional and necessary for the sandboxing
-%attr(4555, root, root) %{_libdir}/%{name}/chrome-sandbox
+%attr(4555,root,root) %{_libdir}/%{name}/chrome-sandbox
