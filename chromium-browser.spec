@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_with	selinux		# with SELinux (need policy first)
+
 # TODO
 # - spec vs name
 # - merge google-chromium.spec vs chromium-browser.spec -- one must go
@@ -31,6 +35,7 @@ Source3:	%{name}.desktop
 # We don't actually use this in the build, but it is included so you can make the tarball.
 Source4:	chromium-daily-tarball.sh
 BuildRequires:	GConf2-devel
+%{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -59,24 +64,15 @@ ExclusiveArch:	%{ix86} arm
 Chromium is an open-source web browser, powered by WebKit.
 
 %prep
-%setup -q -n %{name}-%{svndate}%{svnver} -a 1
+%setup -q -n chromium-%{svndate}%{svnver} -a 1
 
-# see src/chrome/VERSION
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
-ver=$(cat src/chrome/VERSION)
+. ./src/chrome/VERSION
+ver=$MAJOR.$MINOR.$BUILD.$PATCH
 if [ "$ver" != %{version} ]; then
 	exit 1
 fi
-
-cp %{SOURCE4} .
-
-# Somehow, path noise from the tarball creation got embedded.
-# Thanks gclient. :P
-# FIXME: Figure out how to avoid this
-for i in `find . |grep "\.scons"`; do
-	sed -i "s|/home/spot/sandbox/chromium-%{svndate}/|%{_builddir}/chromium-%{svndate}%{svnver}/|g" $i
-done
 
 %patch0 -p1
 %patch1 -p1
@@ -90,40 +86,57 @@ done
 %patch10 -p1
 
 # Scrape out incorrect optflags and hack in the correct ones
-PARSED_OPT_FLAGS=`echo \'$RPM_OPT_FLAGS \' | sed "s/ /',/g" | sed "s/',/', '/g"`
-for i in `find . |grep "\.scons"`; do
-	sed -i "s|'-march=pentium4',||g" $i
-	sed -i "s|'-msse2',||g" $i
-	sed -i "s|'-mfpmath=sse',||g" $i
-	sed -i "s|'-O0',||g" $i
-	sed -i "s|'-m32',|$PARSED_OPT_FLAGS|g" $i
-done
+find -name '*\.scons' | xargs %{__sed} -i -e "
+	s|'-march=pentium4',||g
+	s|'-msse2',||g
+	s|'-mfpmath=sse',||g
+	s|'-m32',||g
+	s|'-O0',|'%{rpmcxxflags}'.split(' ')|g
+"
 
-# Change the location for the sandbox helper binary
-sed -i 's|/opt/google/chrome/chrome-sandbox|%{_libdir}/chromium-browser/chrome-sandbox|g' src/chrome/browser/zygote_host_linux.cc
-
-# Tell the sandbox code where to find chromium-browser
-sed -i 's|/opt/google/chrome/chrome|%{_libdir}/chromium-browser/chromium-browser|g' src/sandbox/linux/suid/sandbox.cc
+# Regenerate the scons files
+# Also, set the sandbox paths correctly.
+cd src/build
+./gyp_chromium all.gyp \
+	-D linux_sandbox_path=%{_libdir}/%{name}/chrome-sandbox \
+	-D linux_sandbox_chrome_path=%{_libdir}/%{name}/chromium-browser \
+%ifarch x86_64
+	-Dtarget_arch=x64 \
+%endif
+	-Duse_system_libpng=1 \
+	-Duse_system_bzip2=1 \
+	-Duse_system_libjpeg=1 \
+	-Duse_system_zlib=1 \
+%if %{with selinux}
+	-Dselinux=1 \
+%endif
+	-Djavascript_engine=v8
+cd -
 
 %build
-cd src/build/
+cd src/build
+# If we're building sandbox without SELINUX, add "chrome_sandbox" here.
+%if %{with selinux}
+../../depot_tools/hammer --mode=Release chrome
+%else
 ../../depot_tools/hammer --mode=Release chrome chrome_sandbox
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_bindir}
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/chromium-browser
-install -d $RPM_BUILD_ROOT%{_libdir}/chromium-browser/
-pushd src/sconsbuild/Release
-cp -a chrome.pak locales resources themes $RPM_BUILD_ROOT%{_libdir}/chromium-browser/
-cp -a chrome $RPM_BUILD_ROOT%{_libdir}/chromium-browser/chromium-browser
-cp -a chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/chromium-browser/chrome-sandbox
-popd
+install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/
+cd src/sconsbuild/Release
+cp -a chrome.pak locales resources themes $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -a chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-browser
+cp -a chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
+cd -
 
-install -d $RPM_BUILD_ROOT%{_pixmapsdir}/
+install -d $RPM_BUILD_ROOT%{_pixmapsdir}
 cp -a src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/chromium-browser.png
 
-install -d $RPM_BUILD_ROOT%{_desktopdir}/
+install -d $RPM_BUILD_ROOT%{_desktopdir}
 desktop-file-install --dir $RPM_BUILD_ROOT%{_desktopdir} %{SOURCE3}
 
 %clean
@@ -131,15 +144,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc chromium-daily-tarball.sh
 %attr(755,root,root) %{_bindir}/chromium-browser
-%dir %{_libdir}/chromium-browser/
-%{_libdir}/chromium-browser/chrome.pak
-# These unique permissions are intentional and necessary for the sandboxing
-%{_libdir}/chromium-browser/chromium-browser
-%attr(4555, root, root) %{_libdir}/chromium-browser/chrome-sandbox
-%{_libdir}/chromium-browser/locales/
-%{_libdir}/chromium-browser/resources/
-%{_libdir}/chromium-browser/themes/
 %{_pixmapsdir}/chromium-browser.png
 %{_desktopdir}/*.desktop
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/chrome.pak
+%{_libdir}/%{name}/chromium-browser
+%{_libdir}/%{name}/locales
+%{_libdir}/%{name}/resources
+%{_libdir}/%{name}/themes
+# These unique permissions are intentional and necessary for the sandboxing
+%attr(4555, root, root) %{_libdir}/%{name}/chrome-sandbox
