@@ -29,7 +29,7 @@ Source0:	chromium-%{svndate}%{svnver}.tar.bz2
 # Source0-md5:	20663b974249b35d7ab655ce21b8f868
 # Custom build tools for chromium, hammer is a fancy front-end for scons
 Source1:	http://src.chromium.org/svn/trunk/tools/depot_tools.tar.gz
-# Source1-md5:	40811b18e2cbdc900272618486bf37e1
+# Source1-md5:	1f821101d5a6f26345dc22ae5e0cbe1e
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 # We don't actually use this in the build, but it is included so you can make the tarball.
@@ -58,7 +58,7 @@ BuildRequires:	scons
 BuildRequires:	v8-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # Chromium bits don't compile on x86_64.
-ExclusiveArch:	%{ix86} arm
+ExclusiveArch:	%{x8664} %{ix86} arm
 
 %description
 Chromium is an open-source web browser, powered by WebKit.
