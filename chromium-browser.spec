@@ -26,10 +26,10 @@ Source0:	chromium-%{svndate}%{svnver}.tar.bz2
 # Custom build tools for chromium, hammer is a fancy front-end for scons
 Source1:	http://src.chromium.org/svn/trunk/tools/depot_tools.tar.gz
 # Source1-md5:	40811b18e2cbdc900272618486bf37e1
-Source2:	%{name}-browser.sh
-Source3:	%{name}-browser.desktop
+Source2:	%{name}.sh
+Source3:	%{name}.desktop
 # We don't actually use this in the build, but it is included so you can make the tarball.
-Source4:	%{name}-daily-tarball.sh
+Source4:	chromium-daily-tarball.sh
 BuildRequires:	GConf2-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
@@ -40,7 +40,7 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
 BuildRequires:	gperf
-BuildRequires:	gtk2-devel
+BuildRequires:	gtk+2-devel
 BuildRequires:	libevent-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
