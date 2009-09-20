@@ -118,7 +118,16 @@ if [ "$VERBOSE" = "true" ]; then
    printf "[VERBOSE]: Removing unnecessary third_party bits\n"
 fi
 pushd src/third_party
-rm -rf bzip2/ libevent/ libjpeg/ libpng/ libxml/ libxslt/ nss/ nspr/ zlib/
+
+# First, just take out the sources for the items which have already been conditionalized so we're sure we're not using them.
+# We need to leave the .gyp files since this is how it finds the system libs.
+rm -rf bzip2/*.c bzip2/*.h bzip2/LICENSE libjpeg/*.c libjpeg/README* libpng/*.c libpng/*.h libpng/README* libpng/LICENSE zlib/*.c zlib/*.h zlib/contrib/ zlib/README*
+
+# Next, nuke the whole directories for things not yet conditionalized:
+rm -rf libevent/ libxml/ libxslt/ nss/ nspr/ icu/
+
+# Lastly, get rid of the ffmpeg binaries
+rm -rf ffmpeg/binaries
 popd
 
 # Get rid of .svn bits to save space
