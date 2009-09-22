@@ -5,7 +5,9 @@
 # TODO
 # - spec vs name
 # - merge google-chromium.spec vs chromium-browser.spec -- one must go
-# spec from  http://spot.fedorapeople.org/chromium/
+# - optflags and strip (-debuginfo is quite empty)
+
+# NOTE: keep eye on spec from http://spot.fedorapeople.org/chromium/
 
 %define		svndate 20090916
 %define		svnver  svn26424
@@ -46,7 +48,7 @@ BuildRequires:	fontconfig-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
 BuildRequires:	libevent-devel
-BuildRequires:	libicu-devel
+BuildRequires:	libicu-devel >= 4.2.1-2
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
@@ -57,9 +59,8 @@ BuildRequires:	nspr-devel
 BuildRequires:	nss-devel
 BuildRequires:	scons
 BuildRequires:	v8-devel
+ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-# Chromium bits don't compile on x86_64.
-ExclusiveArch:	%{x8664} %{ix86} arm
 
 %description
 Chromium is an open-source web browser, powered by WebKit.
