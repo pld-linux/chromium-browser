@@ -130,7 +130,7 @@ cd src/build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir}/%{name},%{_pixmapsdir},%{_desktopdir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir}/%{name},%{_mandir}/man1,%{_pixmapsdir},%{_desktopdir}}
 
 cd src/sconsbuild/Release
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/chromium-browser
@@ -140,6 +140,7 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/chromium-browser
 cp -a chrome.pak locales resources themes $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-browser
 cp -a chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
+cp -a chromium-browser.1 $RPM_BUILD_ROOT%{_mandir}/man1
 cd -
 
 cp -a src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/chromium-browser.png
@@ -155,6 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/chromium-browser
+%{_mandir}/man1/chromium-browser.1*
 %{_pixmapsdir}/chromium-browser.png
 %{_desktopdir}/*.desktop
 %dir %{_libdir}/%{name}
