@@ -129,6 +129,9 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir}/%{name},%{_pixmapsdir},%{_deskt
 
 cd src/sconsbuild/Release
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/chromium-browser
+%if "%{_lib}" != "lib"
+%{__sed} -i -e 's,/usr/lib,%{_libdir},' $RPM_BUILD_ROOT%{_bindir}/chromium-browser
+%endif
 cp -a chrome.pak locales resources themes $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-browser
 cp -a chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
@@ -148,9 +151,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_desktopdir}/*.desktop
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome.pak
-%{_libdir}/%{name}/chromium-browser
 %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/resources
 %{_libdir}/%{name}/themes
+%attr(755,root,root) %{_libdir}/%{name}/chromium-browser
 # These unique permissions are intentional and necessary for the sandboxing
 %attr(4555,root,root) %{_libdir}/%{name}/chrome-sandbox
