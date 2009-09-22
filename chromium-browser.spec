@@ -34,8 +34,9 @@ Source1:	http://src.chromium.org/svn/trunk/tools/depot_tools.tar.gz
 # Source1-md5:	1f821101d5a6f26345dc22ae5e0cbe1e
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
+Source4:	find-lang.sh
 # We don't actually use this in the build, but it is included so you can make the tarball.
-Source4:	chromium-daily-tarball.sh
+Source5:	chromium-daily-tarball.sh
 BuildRequires:	GConf2-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
@@ -62,11 +63,15 @@ BuildRequires:	v8-devel
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		find_lang 	sh find-lang.sh %{buildroot}
+
 %description
 Chromium is an open-source web browser, powered by WebKit.
 
 %prep
 %setup -q -n chromium-%{svndate}%{svnver} -a 1
+
+sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
@@ -141,17 +146,20 @@ cp -a src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmap
 
 desktop-file-install --dir $RPM_BUILD_ROOT%{_desktopdir} %{SOURCE3}
 
+# find locales
+%find_lang %{name}.lang
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/chromium-browser
 %{_pixmapsdir}/chromium-browser.png
 %{_desktopdir}/*.desktop
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome.pak
-%{_libdir}/%{name}/locales
+%dir %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/resources
 %{_libdir}/%{name}/themes
 %attr(755,root,root) %{_libdir}/%{name}/chromium-browser
