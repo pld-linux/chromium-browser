@@ -27,6 +27,7 @@ Patch7:		gyp-system-icu.patch
 Patch8:		icu-code-changes.patch
 Patch9:		no-sqlite-debug.patch
 Patch10:	debug_util_posix-fix.patch
+Patch11:	memory_details-iceweasel.patch
 Source0:	chromium-%{svndate}%{svnver}.tar.bz2
 # Source0-md5:	20663b974249b35d7ab655ce21b8f868
 # Custom build tools for chromium, hammer is a fancy front-end for scons
@@ -91,6 +92,7 @@ fi
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 # Scrape out incorrect optflags and hack in the correct ones
 find -name '*\.scons' | xargs %{__sed} -i -e "
