@@ -116,7 +116,7 @@ cd src/build
 # Also, set the sandbox paths correctly.
 ./gyp_chromium all.gyp \
 	-D linux_sandbox_path=%{_libdir}/%{name}/chromium-sandbox \
-	-D linux_sandbox_chrome_path=%{_libdir}/%{name}/chromium \
+	-D linux_sandbox_chrome_path=%{_libdir}/%{name}/chromium-browser \
 %ifarch x86_64
 	-Dtarget_arch=x64 \
 %endif
