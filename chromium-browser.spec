@@ -3,11 +3,12 @@
 %bcond_with	selinux		# with SELinux (need policy first)
 
 # TODO
-# - spec vs name
-# - merge google-chromium.spec vs chromium-browser.spec -- one must go
 # - optflags and strip (-debuginfo is quite empty)
+# - use tarballs from http://build.chromium.org/buildbot/tarball/
 
-# NOTE: keep eye on spec from http://spot.fedorapeople.org/chromium/
+# NOTES:
+# - build - bp: ~1.3G GB bc: ~1.5 GB
+# - keep eye on spec from http://spot.fedorapeople.org/chromium/
 
 %define		svndate 20090916
 %define		svnver  svn26424
@@ -16,7 +17,7 @@ Name:		chromium-browser
 Version:	4.0.212.0
 Release:	0.1.%{svndate}%{svnver}%{?dist}
 License:	BSD, LGPL v2+ (ffmpeg)
-Group:		Applications/Networking
+Group:		X11/Applications/Networking
 Patch0:		system-libs.patch
 Patch1:		system-libs-gyp.patch
 Patch2:		gyp-system-minizip.patch
@@ -61,10 +62,15 @@ BuildRequires:	nspr-devel
 BuildRequires:	nss-devel
 BuildRequires:	scons
 BuildRequires:	v8-devel
+Requires:	browser-plugins >= 2.0
+Provides:	wwwbrowser
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		find_lang 	sh find-lang.sh %{buildroot}
+
+%define		_enable_debug_packages	0
+%define		no_install_post_strip	1
 
 %description
 Chromium is an open-source web browser, powered by WebKit.
@@ -109,8 +115,8 @@ cd src/build
 # Regenerate the scons files
 # Also, set the sandbox paths correctly.
 ./gyp_chromium all.gyp \
-	-D linux_sandbox_path=%{_libdir}/%{name}/chrome-sandbox \
-	-D linux_sandbox_chrome_path=%{_libdir}/%{name}/chromium-browser \
+	-D linux_sandbox_path=%{_libdir}/%{name}/chromium-sandbox \
+	-D linux_sandbox_chrome_path=%{_libdir}/%{name}/chromium \
 %ifarch x86_64
 	-Dtarget_arch=x64 \
 %endif
@@ -123,11 +129,15 @@ cd src/build
 %endif
 	-Djavascript_engine=v8
 
-# If we're building sandbox without SELINUX, add "chrome_sandbox" here.
+LDFLAGS="${LDFLAGS:-%rpmldflags}" \
+CFLAGS="${CFLAGS:-%rpmcflags}" \
+CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
+CPPFLAGS="${CPPFLAGS:-%rpmcppflags}" \
+%{?__cc:CC="%{__cc}"} \
 %if %{with selinux}
-../../depot_tools/hammer --mode=Release chrome
+	../../depot_tools/hammer --mode=Release chrome
 %else
-../../depot_tools/hammer --mode=Release chrome chrome_sandbox
+	../../depot_tools/hammer --mode=Release chrome chrome_sandbox
 %endif
 
 %install
@@ -140,12 +150,11 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/chromium-browser
 %{__sed} -i -e 's,/usr/lib,%{_libdir},' $RPM_BUILD_ROOT%{_bindir}/chromium-browser
 %endif
 cp -a chrome.pak locales resources themes $RPM_BUILD_ROOT%{_libdir}/%{name}
-cp -a chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-browser
-cp -a chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
 cp -a chromium-browser.1 $RPM_BUILD_ROOT%{_mandir}/man1
+cp -a product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/chromium-browser.png
+install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-browser
+install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 cd -
-
-cp -a src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/chromium-browser.png
 
 desktop-file-install --dir $RPM_BUILD_ROOT%{_desktopdir} %{SOURCE3}
 
@@ -168,4 +177,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/themes
 %attr(755,root,root) %{_libdir}/%{name}/chromium-browser
 # These unique permissions are intentional and necessary for the sandboxing
-%attr(4555,root,root) %{_libdir}/%{name}/chrome-sandbox
+%attr(4555,root,root) %{_libdir}/%{name}/chromium-sandbox
