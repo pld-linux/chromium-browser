@@ -58,4 +58,3 @@ if [ $want_debug -eq 1 ] ; then
 else
   exec $LIBDIR/$APPNAME "$@"
 fi
-
