@@ -1,15 +1,13 @@
 [Desktop Entry]
-Version=1.0
-Name=Chromium Web Browser
-Comment=Browse the World Wide Web
+Name=Chromium
 GenericName=Web Browser
-Exec=chromium-browser --enable-plugins --enable-extensions --enable-user-scripts --enable-printing
-Terminal=false
-X-MultipleArgs=false
-Type=Application
+Comment=Browse the World Wide Web
+Exec=chromium-browser %U
 Icon=chromium-browser
-Categories=Application;Network;
-MimeType=text/html;
+Terminal=false
+Type=Application
+X-MultipleArgs=false
+Categories=GTK;Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;
 StartupWMClass=Chromium
 StartupNotify=true
-
