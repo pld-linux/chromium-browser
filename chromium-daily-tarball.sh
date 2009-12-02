@@ -7,12 +7,15 @@ REMOVE=false
 TODAYSDATE=`date +%Y%m%d`
 USAGE="Usage: chromium-daily-tarball.sh [-hrv]"
 VERBOSE=false
+CLEAN=false
 
 
-while getopts "hrv" opt; do
+while getopts "chrv" opt; do
    case $opt in
+      c  ) CLEAN=true ;;
       h  ) printf "$USAGE\n"
            printf "\nAvailable command line options:\n"
+           printf "%b\t-c\t\tmake tarball of clean source, nothing removed/altered\n"
            printf "%b\t-h\t\tthis help\n"
            printf "%b\t-r\t\tremove conflicting chromium files/directories\n"
            printf "%b\t-v\t\tverbose output\n\n"
@@ -113,6 +116,10 @@ printf "Chromium svn$SVNREV [$TODAYSDATE] checked out\n"
 
 FULLVER=`echo ${TODAYSDATE}svn${SVNREV}`
 
+if [ "$CLEAN" = "true" ]; then
+   printf "[CLEAN] Not removing unnecessary third_party bits\n"
+else
+
 # Remove third party bits that we have on the system
 if [ "$VERBOSE" = "true" ]; then
    printf "[VERBOSE]: Removing unnecessary third_party bits\n"
@@ -141,6 +148,9 @@ if [ "$VERBOSE" = "true" ]; then
    printf "[VERBOSE]: Removing reference_build prebuilt binaries\n"
 fi
 find src -depth -name reference_build -type d -exec rm -rf {} \;
+
+# Clean
+fi
 
 # Gclient embeds the full checkout path all over the .scons files. We'll replace it with a known dummy tree, which we can sed out
 # in the rpm spec.
