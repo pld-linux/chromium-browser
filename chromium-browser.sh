@@ -1,60 +1,29 @@
 #!/bin/sh
 
-# Chromium launcher
+# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
 
-# Authors:
-#  Fabien Tassin <fta@sofaraway.org>
-# License: GPLv2 or later
+# Always use our ffmpeg libs.
+# Also symlinks for nss/nspr libs can be found from our dir.
+export LD_LIBRARY_PATH=@libdir@${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}
 
-APPNAME=chromium-browser
-LIBDIR=/usr/lib/chromium-browser
-GDB=/usr/bin/gdb
+# for to find xdg-settings
+export PATH=@libdir@${PATH:+:"$PATH"}
 
-usage () {
-  echo "$APPNAME [-h|--help] [-g|--debug] [options] [URL]"
-  echo
-  echo "        -g or --debug           Start within $GDB"
-  echo "        -h or --help            This help screen"
-}
+# chromium needs /dev/shm being mounted
+m=$(awk '$2 == "/dev/shm" && $3 == "tmpfs" {print}' /proc/mounts)
+if [ -z "$m" ]; then
+	cat >&2 <<-'EOF'
+	Chromium needs /dev/shm being mounted for Shared Memory access.
 
-# FFmpeg needs to know where its libs are located
-if [ "Z$LD_LIBRARY_PATH" != Z ] ; then
-  LD_LIBRARY_PATH=$LIBDIR:$LD_LIBRARY_PATH
-else
-  LD_LIBRARY_PATH=$LIBDIR
+	To do so, invoke (as root):
+	mount -t tmpfs -o rw,nosuid,nodev,noexec none /dev/shm
+
+	EOF
 fi
-export LD_LIBRARY_PATH
 
-want_debug=0
-while [ $# -gt 0 ]; do
-  case "$1" in
-    -h | --help | -help )
-      usage
-      exit 0 ;;
-    -g | --debug )
-      want_debug=1
-      shift ;;
-    -- ) # Stop option prcessing
-      shift
-      break ;;
-    * )
-      break ;;
-  esac
-done
+# Set CHROME_VERSION_EXTRA visible in the About dialog and in about:version
+export CHROME_VERSION_EXTRA="PLD Linux"
 
-if [ $want_debug -eq 1 ] ; then
-  if [ ! -x $GDB ] ; then
-    echo "Sorry, can't find usable $GDB. Please install it."
-    exit 1
-  fi
-  tmpfile=`mktemp /tmp/chromiumargs.XXXXXX` || { echo "Cannot create temporary file" >&2; exit 1; }
-  trap " [ -f \"$tmpfile\" ] && /bin/rm -f -- \"$tmpfile\"" 0 1 2 3 13 15
-  echo "set args ${1+"$@"}" > $tmpfile
-  echo "# Env:"
-  echo "#     LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-  echo "$GDB $LIBDIR/$APPNAME -x $tmpfile"
-  $GDB "$LIBDIR/$APPNAME" -x $tmpfile
-  exit $?
-else
-  exec $LIBDIR/$APPNAME "$@"
-fi
+exec @libdir@/chromium-browser "$@"
