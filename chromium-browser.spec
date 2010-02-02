@@ -21,7 +21,7 @@
 
 %define		svndate 20100202
 %define		svnver  37790
-%define		rel		0.18
+%define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -30,8 +30,7 @@ Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# NoSource0-md5:	49d2d8f289facc215566a4f1aec37cb9
-NoSource:	0
+# Source0-md5:	49d2d8f289facc215566a4f1aec37cb9
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
