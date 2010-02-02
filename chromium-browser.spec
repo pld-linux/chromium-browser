@@ -21,7 +21,7 @@
 
 %define		svndate 20100202
 %define		svnver  37790
-%define		rel		0.17
+%define		rel		0.18
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
