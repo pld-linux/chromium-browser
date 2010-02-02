@@ -21,7 +21,7 @@
 
 %define		svndate 20100202
 %define		svnver  37790
-%define		rel		0.16
+%define		rel		0.17
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -58,7 +58,6 @@ BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
 BuildRequires:	hunspell-devel
 BuildRequires:	libevent-devel
-BuildRequires:	libicu-devel >= 4.2.1-2
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
@@ -72,13 +71,12 @@ BuildRequires:	minizip-devel
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
 BuildRequires:	pango-devel
-BuildRequires:	patchutils >= 0.2.25
 BuildRequires:	pkg-config
 BuildRequires:	python
 BuildRequires:	python-gyp >= 0.1-0.770
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
-BuildRequires:	v8-devel
+%{?with_system_v8:BuildRequires:	v8-devel}
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
