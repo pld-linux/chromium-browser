@@ -53,7 +53,6 @@ BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
-BuildRequires:	hunspell-devel
 BuildRequires:	libevent-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
@@ -61,9 +60,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
-BuildRequires:	lsb-release
 BuildRequires:	lzma
-BuildRequires:	lzma-devel
 BuildRequires:	minizip-devel
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
