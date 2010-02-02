@@ -1,67 +1,86 @@
 #
 # Conditional build:
+%bcond_with	verbose		# verbose build (V=1)
 %bcond_with	selinux		# with SELinux (need policy first)
+%bcond_with	system_v8	# with system v8
+%bcond_without	system_zlib	# with system zlib
+%bcond_with	system_sqlite	# with system sqlite
+%bcond_with	system_ffmpeg	# with system ffmpeg_mt
+%bcond_without	sandboxing	# with sandboxing
+%bcond_with	shared_libs	# with shared libs
 
 # TODO
-# - optflags and strip (-debuginfo is quite empty)
-# - use tarballs from http://build.chromium.org/buildbot/tarball/
+# - check system sqlite linking problems
 
 # NOTES:
-# - build - bp: ~1.3G GB bc: ~1.5 GB
-# - keep eye on spec from http://spot.fedorapeople.org/chromium/
+# - use nosource until the package is ready to be stbr, no point poisioning distfiles
+# - build i686: -bp: ~570MB; bc: ~928MB; -bb: ~1.0GB
+# - build x86_64: -bp: ~570MB; bc: ~990MB; -bb: ~1.0GB
+# - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
+# - lynx -dump http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/ | grep orig.tar.gz
 
-%define		svndate 20090916
-%define		svnver  svn26424
+%define		svndate 20100202
+%define		svnver  37790
+%define		rel		0.16
+
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	4.0.212.0
-Release:	0.1.%{svndate}%{svnver}%{?dist}
+Version:	5.0.313.0
+Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Patch0:		system-libs.patch
-Patch1:		system-libs-gyp.patch
+Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
-Patch3:		noffmpeg.patch
 Patch5:		options-support.patch
-Patch6:		64bit-plugin-path.patch
-Patch7:		gyp-system-icu.patch
-Patch8:		icu-code-changes.patch
-Patch9:		no-sqlite-debug.patch
-Patch10:	debug_util_posix-fix.patch
 Patch11:	memory_details-iceweasel.patch
-Source0:	chromium-%{svndate}%{svnver}.tar.bz2
-# Source0-md5:	20663b974249b35d7ab655ce21b8f868
-# Custom build tools for chromium, hammer is a fancy front-end for scons
-Source1:	http://src.chromium.org/svn/trunk/tools/depot_tools.tar.gz
-# Source1-md5:	1f821101d5a6f26345dc22ae5e0cbe1e
+Patch12:	libpng14.patch
+Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
+# NoSource0-md5:	49d2d8f289facc215566a4f1aec37cb9
+NoSource:	0
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
-# We don't actually use this in the build, but it is included so you can make the tarball.
-Source5:	chromium-daily-tarball.sh
+URL:		http://code.google.com/chromium/
 BuildRequires:	GConf2-devel
+BuildRequires:	OpenGL
+BuildRequires:	OpenGL-GLU-devel
+BuildRequires:	OpenGL-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
 BuildRequires:	bzip2-devel
 BuildRequires:	dbus-devel
-BuildRequires:	desktop-file-utils
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
+BuildRequires:	glib2-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
+BuildRequires:	hunspell-devel
 BuildRequires:	libevent-devel
 BuildRequires:	libicu-devel >= 4.2.1-2
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
+BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
+BuildRequires:	lsb-release
+BuildRequires:	lzma
+BuildRequires:	lzma-devel
 BuildRequires:	minizip-devel
 BuildRequires:	nspr-devel
-BuildRequires:	nss-devel
-BuildRequires:	scons
+BuildRequires:	nss-devel >= 1:3.12.3
+BuildRequires:	pango-devel
+BuildRequires:	patchutils >= 0.2.25
+BuildRequires:	pkg-config
+BuildRequires:	python
+BuildRequires:	python-gyp >= 0.1-0.770
+BuildRequires:	rpmbuild(macros) >= 1.453
+BuildRequires:	sqlite3-devel >= 3.6.1
 BuildRequires:	v8-devel
+BuildRequires:	xorg-lib-libXScrnSaver-devel
+%{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
 Provides:	wwwbrowser
 ExclusiveArch:	%{ix86} %{x8664} arm
@@ -69,16 +88,43 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		find_lang 	sh find-lang.sh %{buildroot}
 
-%define		_enable_debug_packages	0
-%define		no_install_post_strip	1
-
 %description
 Chromium is an open-source web browser, powered by WebKit.
 
-%prep
-%setup -q -n chromium-%{svndate}%{svnver} -a 1
+%package inspector
+Summary:	Page inspector for the chromium-browser
+Group:		Development/Tools
+Requires:	%{name} = %{version}-%{release}
 
-sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
+%description inspector
+Chromium is an open-source browser project that aims to build a safer,
+faster, and more stable way for all Internet users to experience the
+web.
+
+This package contains 'inspector', allowing web developpers to inspect
+any element of a web page at runtime (html, javascript, css, ..)
+
+%package l10n
+Summary:	chromium-browser language packages
+Group:		I18n
+Requires:	%{name} = %{version}-%{release}
+
+%description l10n
+Chromium is an open-source browser project that aims to build a safer,
+faster, and more stable way for all Internet users to experience the
+web.
+
+This package contains language packages for 50 languages:
+
+ar, bg, bn, ca, cs, da, de, el, en-GB, es-419, es, et, fi, fil, fr,
+gu, he, hi, hr, hu, id, it, ja, kn, ko, lt, lv, ml, mr, nb, nl, or,
+pl, pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi,
+zh-CN, zh-TW
+
+%prep
+%setup -q -n %{name}-%{version}~svn%{svndate}r%{svnver}
+lzma -dc %{name}-%{version}~svn%{svndate}r%{svnver}-source.tar.lzma | tar x
+rm -f %{name}-%{version}~svn%{svndate}r%{svnver}-source.tar.lzma
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
@@ -88,93 +134,131 @@ if [ "$ver" != %{version} ]; then
 	exit 1
 fi
 
+# Populate the LASTCHANGE file template as we no longer have the VCS files at this point
+echo "%{svnver}" > src/build/LASTCHANGE.in
+
+sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
+
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
 %patch11 -p1
-
-# Scrape out incorrect optflags and hack in the correct ones
-find -name '*\.scons' | xargs %{__sed} -i -e "
-	s|'-march=pentium4',||g
-	s|'-msse2',||g
-	s|'-mfpmath=sse',||g
-	s|'-m32',||g
-	s|'-O0',|'%{rpmcxxflags}'.split(' ')|g
-"
+%patch12 -p1
 
 %build
-cd src/build
-
-# Regenerate the scons files
-# Also, set the sandbox paths correctly.
-./gyp_chromium all.gyp \
-	-D linux_sandbox_path=%{_libdir}/%{name}/chromium-sandbox \
-	-D linux_sandbox_chrome_path=%{_libdir}/%{name}/chromium-browser \
-%ifarch x86_64
+cd src
+%{__python} build/gyp_chromium --format=make build/all.gyp \
+%ifarch %{ix86}
+	-Dtarget_arch=ia32 \
+%endif
+%ifarch %{x8664}
 	-Dtarget_arch=x64 \
 %endif
-	-Duse_system_libpng=1 \
+%if "%{cc_version}" >= "4.4.0"
+	-Dno_strict_aliasing=1 -Dgcc_version=44 \
+%endif
+%if %{with sandboxing}
+	-Dlinux_sandbox_path=%{_libdir}/%{name}/chromium-sandbox \
+	-Dlinux_sandbox_chrome_path=%{_libdir}/%{name}/%{name} \
+%endif
+	%{!?debug:-Dwerror=} \
+	%{?with_shared_libs:-Dlibrary=shared_library} \
+	-Djavascript_engine=%{?with_system_v8:system-v8}%{!?with_system_v8:v8} \
 	-Duse_system_bzip2=1 \
+	-Duse_system_ffmpeg=%{?with_system_ffmpeg:1}%{!?with_system_ffmpeg:0} \
+	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
-	-Duse_system_zlib=1 \
+	-Duse_system_libpng=1 \
+	-Duse_system_libxml=1 \
+	-Duse_system_libxslt=1 \
+	-Duse_system_sqlite=%{?with_system_sqlite:1}%{!?with_system_sqlite:0} \
+	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
+%if %{with arch}
+-Duse_system_yasm=1 \
+	-Dffmpeg_branding=Chrome \
+%endif
 %if %{with selinux}
 	-Dselinux=1 \
 %endif
-	-Djavascript_engine=v8
 
-LDFLAGS="${LDFLAGS:-%rpmldflags}" \
-CFLAGS="${CFLAGS:-%rpmcflags}" \
-CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
-CPPFLAGS="${CPPFLAGS:-%rpmcppflags}" \
-%{?__cc:CC="%{__cc}"} \
-%if %{with selinux}
-	../../depot_tools/hammer --mode=Release chrome
-%else
-	../../depot_tools/hammer --mode=Release chrome chrome_sandbox
-%endif
+%{__make} chrome %{?with_sandboxing:chrome_sandbox} \
+	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
+	%{?with_verbose:V=1} \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	CC.host="%{__cc}" \
+	CXX.host="%{__cxx}" \
+	CFLAGS="%{rpmcflags}" \
+	CXXFLAGS="%{rpmcxxflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir}/%{name},%{_mandir}/man1,%{_pixmapsdir},%{_desktopdir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir}/%{name}/{themes,locales,plugins,extensions,resources},%{_mandir}/man1,%{_pixmapsdir},%{_desktopdir}}
 
-cd src/sconsbuild/Release
-install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/chromium-browser
-%if "%{_lib}" != "lib"
-%{__sed} -i -e 's,/usr/lib,%{_libdir},' $RPM_BUILD_ROOT%{_bindir}/chromium-browser
-%endif
-cp -a chrome.pak locales resources themes $RPM_BUILD_ROOT%{_libdir}/%{name}
-cp -a chromium-browser.1 $RPM_BUILD_ROOT%{_mandir}/man1
-cp -a product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/chromium-browser.png
-install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-browser
+cd src/out/%{!?debug:Release}%{?debug:Debug}
+
+install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
+%{__sed} -i -e 's,@libdir@,%{_libdir}/%{name},' $RPM_BUILD_ROOT%{_bindir}/%{name}
+cp -a chrome.pak $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -a locales/*.pak $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
+cp -a resources/* $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
+find $RPM_BUILD_ROOT%{_libdir}/%{name}/resources -name '*.d' | xargs rm
+cp -a chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
+cp -a product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
+install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
+install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
+install -p xdg-settings $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cd -
 
-desktop-file-install --dir $RPM_BUILD_ROOT%{_desktopdir} %{SOURCE3}
+%browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
 
 # find locales
 %find_lang %{name}.lang
+%{__sed} -i -e '/en-US.pak/d' %{name}.lang
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+%update_browser_plugins
+
+%postun
+if [ "$1" = 0 ]; then
+	%update_browser_plugins
+fi
+
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/chromium-browser
-%{_mandir}/man1/chromium-browser.1*
-%{_pixmapsdir}/chromium-browser.png
+%{_browserpluginsconfdir}/browsers.d/%{name}.*
+%config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
+%attr(755,root,root) %{_bindir}/%{name}
+%{_mandir}/man1/%{name}.1*
+%{_pixmapsdir}/%{name}.png
 %{_desktopdir}/*.desktop
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome.pak
 %dir %{_libdir}/%{name}/locales
-%{_libdir}/%{name}/resources
-%{_libdir}/%{name}/themes
-%attr(755,root,root) %{_libdir}/%{name}/chromium-browser
+%{_libdir}/%{name}/locales/en-US.pak
+%dir %{_libdir}/%{name}/resources
+%dir %{_libdir}/%{name}/themes
+%dir %{_libdir}/%{name}/extensions
+%dir %{_libdir}/%{name}/plugins
+%attr(755,root,root) %{_libdir}/%{name}/%{name}
 # These unique permissions are intentional and necessary for the sandboxing
 %attr(4555,root,root) %{_libdir}/%{name}/chromium-sandbox
+
+# ffmpeg libs
+%attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
+
+# bundle this copy until xdg-utils will have this itself
+%attr(755,root,root) %{_libdir}/%{name}/xdg-settings
+
+%files inspector
+%defattr(644,root,root,755)
+%{_libdir}/%{name}/resources/inspector
+
+%files l10n -f %{name}.lang
+%defattr(644,root,root,755)

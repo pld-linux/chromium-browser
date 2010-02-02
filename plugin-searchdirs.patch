@@ -1,0 +1,21 @@
+--- chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/glue/plugins/plugin_list_linux.cc~	2010-01-27 05:02:57.000000000 +0200
++++ chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/glue/plugins/plugin_list_linux.cc	2010-02-02 11:11:28.576140937 +0200
+@@ -65,6 +65,10 @@
+   PathService::Get(base::DIR_EXE, &dir);
+   plugin_dirs->push_back(dir.Append("plugins"));
+ 
++  // on PLD Linux we want to search only Chrome specific dirs, but as there is
++  // not user specific dir yet, this leaves us with Chrome system dir only.
++#if 0
++
+   // Mozilla code to reference:
+   // http://mxr.mozilla.org/firefox/ident?i=NS_APP_PLUGINS_DIR_LIST
+   // and tens of accompanying files (mxr is very helpful).
+@@ -101,6 +105,7 @@
+   plugin_dirs->push_back(FilePath("/usr/lib64/firefox/plugins"));
+   plugin_dirs->push_back(FilePath("/usr/lib64/xulrunner-addons/plugins"));
+ #endif
++#endif
+ }
+ 
+ void PluginList::LoadPluginsFromDir(const FilePath& path,
