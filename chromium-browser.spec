@@ -29,23 +29,21 @@ Version:	5.0.313.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Patch0:		system-libs.patch
-Patch1:		plugin-searchdirs.patch
-Patch2:		gyp-system-minizip.patch
-Patch5:		options-support.patch
-Patch11:	memory_details-iceweasel.patch
-Patch12:	libpng14.patch
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
 # NoSource0-md5:	49d2d8f289facc215566a4f1aec37cb9
 NoSource:	0
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
+Patch0:		system-libs.patch
+Patch1:		plugin-searchdirs.patch
+Patch2:		gyp-system-minizip.patch
+Patch5:		options-support.patch
+Patch11:	memory_details-iceweasel.patch
+Patch12:	libpng14.patch
 URL:		http://code.google.com/chromium/
 BuildRequires:	GConf2-devel
-BuildRequires:	OpenGL
 BuildRequires:	OpenGL-GLU-devel
-BuildRequires:	OpenGL-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -71,9 +69,11 @@ BuildRequires:	minizip-devel
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
 BuildRequires:	pango-devel
-BuildRequires:	pkg-config
+BuildRequires:	perl-modules
+BuildRequires:	pkgconfig
 BuildRequires:	python
 BuildRequires:	python-gyp >= 0.1-0.770
+BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
 %{?with_system_v8:BuildRequires:	v8-devel}
