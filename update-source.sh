@@ -1,4 +1,11 @@
 #!/bin/sh
+# work in package dir
+dir=$(dirname "$0")
+cd "$dir"
+
+# abort on errors
+set -e
+
 baseurl=http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser
 
 if [ "$1" ]; then
@@ -20,11 +27,11 @@ if [ ! -f $tarball ]; then
 		echo >&2 "${1##*/}: need wget to fetch tarball"
 		exit 1
 	fi
-	wget -c $tarball
+	wget -c $url
 	upload=$tarball
 fi
 
-if [ "$upload" ] && [ -x /usr/bin/lftp ]; then
+if [ -z "$skip_distfiles" ] && [ "$upload" ] && [ -x /usr/bin/lftp ]; then
 	echo "Uploading to dropin. ^C to abort"
 	../dropin $upload
 fi
@@ -46,9 +53,13 @@ if [ "$newtar" != "$tarball" ]; then
 	sed -i -e "
 		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
 		s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
-		s/^\(Version[ \t]\+\)[0-9]\+\$/\1$version/
+		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
 	" $specfile
 	../builder -ncs -5 $specfile
+
+	if [ "$build_package" ]; then
+		../builder -bb --define '_enable_debug_packages 0' $specfile
+	fi
 else
 	echo "$specfile already up to $newtar"
 fi
