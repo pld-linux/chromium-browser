@@ -18,20 +18,20 @@
 # - build i686: -bp: ~570MB; bc: ~928MB; -bb: ~1.0GB
 # - build x86_64: -bp: ~570MB; bc: ~990MB; -bb: ~1.0GB
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
-# - lynx -dump http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/ | grep orig.tar.gz
+# - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100202
-%define		svnver  37790
+%define		svndate 20100203
+%define		svnver  37939
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	5.0.313.0
-Release:	0.%{svnver}.%{rel}
+Version:	5.0.315.0
+Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	49d2d8f289facc215566a4f1aec37cb9
+# Source0-md5:	48d34a76c0b68d22c8fc6e74b87c08cb
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
