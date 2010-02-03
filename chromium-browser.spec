@@ -11,6 +11,7 @@
 
 # TODO
 # - check system sqlite linking problems
+# - enable H264 video support if possible (test:  youtube.com/html5 and join html5 there)
 
 # NOTES:
 # - use nosource until the package is ready to be stbr, no point poisioning distfiles
