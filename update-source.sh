@@ -42,6 +42,7 @@ specfile=$pkg.spec
 svndate=$(awk '/^%define[ 	]+svndate[ 	]+/{print $NF}' $specfile)
 svnver=$(awk '/^%define[ 	]+svnver[ 	]+/{print $NF}' $specfile)
 version=$(awk '/^Version:[ 	]+/{print $NF}' $specfile)
+rel=$(awk '/^%define[ 	]+rel[ 	]+/{print $NF}' $specfile)
 
 newtar=${pkg}_${version}~svn${svndate}r${svnver}.orig.tar.gz
 if [ "$newtar" != "$tarball" ]; then
@@ -58,7 +59,22 @@ if [ "$newtar" != "$tarball" ]; then
 	../builder -ncs -5 $specfile
 
 	if [ "$build_package" ]; then
-		../builder -bb --define '_enable_debug_packages 0' $specfile
+		dist=$(rpm -E %{pld_release})
+		arch=$(rpm -E %{_host_cpu})
+		outdir=$(readlink -f $dir)/build-$dist-$arch
+		rpmdir=$outdir/RPMS
+		install -d $rpmdir
+
+		../builder -bb --clean --define '_enable_debug_packages 0' --define "_builddir $outdir" --define "_rpmdir $rpmdir" $specfile
+
+		rpmdest=~/public_html/$dist/$arch/
+		if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
+			install -d $rpmdest
+			umask 022
+			chmod 644 $rpmdir/*.rpm
+			mv -v $rpmdir/*.rpm $rpmdest/
+			poldek --cachedir=$HOME/tmp --mkidx -s $rpmdest/ --mt=pndir
+		fi
 	fi
 else
 	echo "$specfile already up to $newtar"
