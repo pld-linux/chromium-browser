@@ -14,6 +14,8 @@
 # - enable H264 video support if possible (test:  youtube.com/html5 and join html5 there)
 
 # NOTES:
+# - mute BEEP mixer if you do not want to hear horrible system bell when
+#   pressing home/end in url bar or more ^F search results on page.
 # - use nosource until the package is ready to be stbr, no point poisioning distfiles
 # - build i686: -bp: ~570MB; bc: ~928MB; -bb: ~1.0GB
 # - build x86_64: -bp: ~570MB; bc: ~990MB; -bb: ~1.0GB
