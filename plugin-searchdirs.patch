@@ -1,5 +1,5 @@
---- chromium-browser-5.0.313.0~svn20100202r37790/src/webkit/glue/plugins/plugin_list_linux.cc~	2010-02-02 15:14:25.933074719 +0200
-+++ chromium-browser-5.0.313.0~svn20100202r37790/src/webkit/glue/plugins/plugin_list_linux.cc	2010-02-02 16:08:06.014003355 +0200
+--- chromium-browser-5.0.313.0~svn20100202r37790/src/webkit/glue/plugins/plugin_list_posix.cc~	2010-02-02 15:14:25.933074719 +0200
++++ chromium-browser-5.0.313.0~svn20100202r37790/src/webkit/glue/plugins/plugin_list_posix.cc	2010-02-02 16:08:06.014003355 +0200
 @@ -90,6 +86,8 @@
    if (home)
      plugin_dirs->push_back(FilePath(home).Append(".mozilla/plugins"));

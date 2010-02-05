@@ -36,8 +36,8 @@ diff -up chromium-20090827svn24640/src/chrome/common/zip.cc.system-code chromium
  #if defined(OS_WIN)
  #include "third_party/zlib/contrib/minizip/iowin32.h"
  #endif
---- chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/glue/plugins/plugin_lib_linux.cc~	2010-01-07 23:19:11.000000000 +0200
-+++ chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/glue/plugins/plugin_lib_linux.cc	2010-02-02 09:16:08.740140511 +0200
+--- chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/glue/plugins/plugin_lib_posix.cc~	2010-01-07 23:19:11.000000000 +0200
++++ chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/glue/plugins/plugin_lib_posix.cc	2010-02-02 09:16:08.740140511 +0200
 @@ -13,7 +13,7 @@
  
  // These headers must be included in this order to make the declaration gods
