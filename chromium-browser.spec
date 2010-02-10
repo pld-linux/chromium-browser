@@ -22,13 +22,13 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100207
-%define		svnver  38319
+%define		svndate 20100210
+%define		svnver  38568
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	5.0.320.0
+Version:	5.0.323.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
@@ -40,6 +40,8 @@ Source4:	find-lang.sh
 Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
+# http://bazaar.launchpad.net/~chromium-team/chromium-browser/chromium-browser.head/annotate/head%3A/debian/patches/html5_video_mimetypes.patch
+Patch3:		%{name}-html5-video-mimetypes.patch
 Patch5:		options-support.patch
 Patch11:	memory_details-iceweasel.patch
 Patch12:	libpng14.patch
@@ -139,6 +141,7 @@ sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p0
 %patch5 -p1
 %patch11 -p1
 %patch12 -p1
