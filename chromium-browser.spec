@@ -210,7 +210,10 @@ install -p xdg-settings $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cd -
 
-%browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
+%browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins -b <<'EOF'
+# http://code.google.com/p/chromium/issues/detail?id=24507
+gecko-mediaplayer*.so
+EOF
 
 # find locales
 %find_lang %{name}.lang
