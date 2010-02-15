@@ -1,10 +1,25 @@
 #!/bin/sh
+# Usage:
+# ./update-source.sh
+# env variables controlling behaviour
+#  skip_distfiles=[0|1] - skip upload to distfiles if new version is fetched
+#  build_package=[0|1] - build package when new version is fetched
+#  publish_packages=[0|1] - publish built packages in ~/public_html/$dist/$arch
+#  quiet=[0|1] - discard stdout of process
+
 # work in package dir
 dir=$(dirname "$0")
 cd "$dir"
 
 # abort on errors
 set -e
+
+# setup $quiet, you may override with env it
+quiet=${quiet:-$(tty -s && echo 0 || echo 1)}
+if [ "$quiet" = "1" ]; then
+	# we do not want output when running on cron
+	exec 1>/dev/null
+fi
 
 baseurl=http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser
 
