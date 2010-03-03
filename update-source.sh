@@ -77,10 +77,32 @@ if [ "$newtar" != "$tarball" ]; then
 		dist=$(rpm -E %{pld_release})
 		arch=$(rpm -E %{_host_cpu})
 		outdir=$(readlink -f $dir)/build-$dist-$arch
+		logfile=$outdir/$pkg.log
 		rpmdir=$outdir/RPMS
 		install -d $rpmdir
 
-		../builder -bb --clean --define '_enable_debug_packages 0' --define "_builddir $outdir" --define "_rpmdir $rpmdir" $specfile
+		# setup custom logfile via $HOME_ETC hack
+		# TODO: just add --logfile support for builder
+		cat > $outdir/.builderrc <<-EOF
+			if [ -n "$HOME_ETC" ]; then
+				. "$HOME_ETC/.builderrc"
+			else
+				. ~/.builderrc
+			fi
+			LOGFILE='$logfile'
+		EOF
+
+		> $logfile
+		HOME_ETC=$outdir \
+			../builder -bb --clean \
+			--define '_enable_debug_packages 0' \
+			--define "_builddir $outdir" \
+			--define "_rpmdir $rpmdir" \
+			$specfile || {
+			echo "Package build failed"
+			tail -n 1000 $logfile
+			exit 1
+		}
 
 		rpmdest=~/public_html/$dist/$arch/
 		if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
