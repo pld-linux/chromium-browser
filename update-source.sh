@@ -2,7 +2,6 @@
 # Usage:
 # ./update-source.sh
 # env variables controlling behaviour
-#  skip_distfiles=[0|1] - skip upload to distfiles if new version is fetched
 #  build_package=[0|1] - build package when new version is fetched
 #  publish_packages=[0|1] - publish built packages in ~/public_html/$dist/$arch
 #  quiet=[0|1] - discard stdout of process
@@ -44,11 +43,6 @@ if [ ! -f $tarball ]; then
 	fi
 	wget -q -c $url
 	upload=$tarball
-fi
-
-if [ -z "$skip_distfiles" ] && [ "$upload" ] && [ -x /usr/bin/lftp ]; then
-	echo "Uploading to dropin. ^C to abort"
-	../dropin $upload
 fi
 
 pkg=chromium-browser
