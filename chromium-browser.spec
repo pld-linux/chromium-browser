@@ -8,6 +8,7 @@
 %bcond_with	system_ffmpeg	# with system ffmpeg_mt
 %bcond_without	sandboxing	# with sandboxing
 %bcond_with	shared_libs	# with shared libs
+%bcond_without	debuginfo	# disable debuginfo creation (it is huge)
 
 # TODO
 # - check system sqlite linking problems
@@ -22,18 +23,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100303
-%define		svnver  40484
+%define		svndate 20100310
+%define		svnver  41118
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	5.0.343.0
+Version:	5.0.350.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	7c97bc116cb05498e0548c6d3d8c3f48
+# Source0-md5:	af02054b1b94df2e1509af818ff3b921
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -87,6 +88,10 @@ ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		find_lang 	sh find-lang.sh %{buildroot}
+
+%if %{without debuginfo}
+%define		_enable_debug_packages	0
+%endif
 
 %description
 Chromium is an open-source web browser, powered by WebKit.
