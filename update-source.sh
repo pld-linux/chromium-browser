@@ -94,7 +94,7 @@ if [ "$newtar" != "$tarball" ]; then
 			--define "_rpmdir $rpmdir" \
 			$specfile || {
 			echo "Package build failed"
-			tail -n 1000 $logfile
+			tail -n 1000 $logfile >&2
 			exit 1
 		}
 
