@@ -67,7 +67,7 @@ if [ "$newtar" != "$tarball" ]; then
 	" $specfile
 	../builder -ncs -5 $specfile
 
-	if [ "$build_package" ]; then
+	if [ "$build_package" != 0 ]; then
 		dist=$(rpm -E %{pld_release})
 		arch=$(rpm -E %{_host_cpu})
 		outdir=$(readlink -f $dir)/build-$dist-$arch
