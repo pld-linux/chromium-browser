@@ -23,18 +23,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100316
-%define		svnver  41671
+%define		svndate 20100319
+%define		svnver  42070
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	5.0.355.0
+Version:	5.0.358.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	541333c261dbcfbe64c7949c2148438c
+# Source0-md5:	2957aa416f3773d93a02356f36fb24d1
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -108,6 +108,18 @@ web.
 
 This package contains 'inspector', allowing web developpers to inspect
 any element of a web page at runtime (html, javascript, css, ..)
+
+%package bookmark_manager
+Summary:	Bookmark manager for the chromium-browser
+Group:		Development/Tools
+Requires:	%{name} = %{version}-%{release}
+
+%description bookmark_manager
+Chromium is an open-source browser project that aims to build a safer,
+faster, and more stable way for all Internet users to experience the
+web.
+
+This package contains bookmark manager for the chromium-browser.
 
 %package l10n
 Summary:	chromium-browser language packages
@@ -268,6 +280,10 @@ fi
 %files inspector
 %defattr(644,root,root,755)
 %{_libdir}/%{name}/resources/inspector
+
+%files bookmark_manager
+%defattr(644,root,root,755)
+%{_libdir}/%{name}/resources/bookmark_manager
 
 %files l10n -f %{name}.lang
 %defattr(644,root,root,755)
