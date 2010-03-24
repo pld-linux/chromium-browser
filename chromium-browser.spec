@@ -111,7 +111,7 @@ any element of a web page at runtime (html, javascript, css, ..)
 
 %package bookmark_manager
 Summary:	Bookmark manager for the chromium-browser
-Group:		Development/Tools
+Group:		X11/Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description bookmark_manager
