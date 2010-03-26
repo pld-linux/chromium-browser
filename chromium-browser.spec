@@ -38,6 +38,7 @@ Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
+Source5:	update-source.sh
 Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
