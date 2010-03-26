@@ -83,6 +83,7 @@ BuildRequires:	sqlite3-devel >= 3.6.1
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
+Requires:	xdg-utils
 Provides:	wwwbrowser
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
