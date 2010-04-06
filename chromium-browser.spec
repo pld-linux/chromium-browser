@@ -5,7 +5,7 @@
 %bcond_with	system_v8	# with system v8
 %bcond_without	system_zlib	# with system zlib
 %bcond_with	system_sqlite	# with system sqlite
-%bcond_with	system_ffmpeg	# with system ffmpeg_mt
+%bcond_without	ffmpegsumo	# build with ffmpegsumo
 %bcond_without	sandboxing	# with sandboxing
 %bcond_with	shared_libs	# with shared libs
 %bcond_without	debuginfo	# disable debuginfo creation (it is huge)
@@ -23,18 +23,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100323
-%define		svnver  42303
+%define		svndate 20100406
+%define		svnver  43687
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	5.0.360.0
+Version:	5.0.370.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	d23ef524587c78be4948f15b86afbeb3
+# Source0-md5:	d96c4e113b6762cf9db7949b01eef2ec
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -76,7 +76,7 @@ BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	python
 # grep gyp.googlecode.com src/DEPS | cut -d'"' -f2 | cut -d@ -f2
-BuildRequires:	python-gyp >= 0.1-790
+BuildRequires:	python-gyp >= 0.1-795
 BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
@@ -185,8 +185,8 @@ cd src
 	%{!?debug:-Dwerror=} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	-Djavascript_engine=%{?with_system_v8:system-v8}%{!?with_system_v8:v8} \
+	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
 	-Duse_system_bzip2=1 \
-	-Duse_system_ffmpeg=%{?with_system_ffmpeg:1}%{!?with_system_ffmpeg:0} \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
 	-Duse_system_libpng=1 \
@@ -195,7 +195,7 @@ cd src
 	-Duse_system_sqlite=%{?with_system_sqlite:1}%{!?with_system_sqlite:0} \
 	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
 %if %{with arch}
--Duse_system_yasm=1 \
+	-Duse_system_yasm=1 \
 	-Dffmpeg_branding=Chrome \
 %endif
 %if %{with selinux}
@@ -223,7 +223,6 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 cp -a chrome.pak $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a locales/*.pak $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
 cp -a resources/* $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
-find $RPM_BUILD_ROOT%{_libdir}/%{name}/resources -name '*.d' | xargs rm
 cp -a chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 cp -a product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
@@ -278,6 +277,8 @@ fi
 
 # bundle this copy until xdg-utils will have this itself
 %attr(755,root,root) %{_libdir}/%{name}/xdg-settings
+
+%{_libdir}/%{name}/resources/net_internals
 
 %files inspector
 %defattr(644,root,root,755)

@@ -1,10 +1,10 @@
---- chromium-20090916svn26424/src/chrome/browser/memory_details_linux.cc~	2009-09-17 03:41:20.000000000 +0300
-+++ chromium-20090916svn26424/src/chrome/browser/memory_details_linux.cc	2009-09-22 14:52:06.395596285 +0300
-@@ -50,6 +50,7 @@
-   { "firefox", FIREFOX },
+--- chromium-browser-5.0.370.0~svn20100406r43687/src/chrome/browser/memory_details_linux.cc~	2010-04-06 05:02:30.000000000 +0300
++++ chromium-browser-5.0.370.0~svn20100406r43687/src/chrome/browser/memory_details_linux.cc	2010-04-06 14:12:40.832330395 +0300
+@@ -52,6 +52,7 @@
    { "firefox-3.5", FIREFOX },
    { "firefox-3.0", FIREFOX },
+   { "firefox-bin", FIREFOX },
 +  { "iceweasel", FIREFOX },
    { "opera", OPERA },
    { "konqueror", KONQUEROR },
-   { "epiphany-browser", EPIPHANY },
+   { "epiphany-browse", EPIPHANY },
