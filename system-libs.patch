@@ -44,14 +44,14 @@
  
  namespace {
  
---- chromium-browser-5.0.350.0~svn20100310r41118/src/chrome/browser/metrics/metrics_log.cc~	2010-03-09 05:04:58.000000000 +0200
-+++ chromium-browser-5.0.350.0~svn20100310r41118/src/chrome/browser/metrics/metrics_log.cc	2010-03-10 12:57:56.743925628 +0200
-@@ -13,7 +13,7 @@
+--- chromium-browser-5.0.378.0~svn20100415r44604/src/chrome/browser/metrics/metrics_log.cc~	2010-04-14 18:30:23.000000000 +0300
++++ chromium-browser-5.0.378.0~svn20100415r44604/src/chrome/browser/metrics/metrics_log.cc	2010-04-15 11:40:36.482149714 +0300
+@@ -14,7 +14,7 @@
  #include "base/string_util.h"
  #include "base/sys_info.h"
  #include "base/utf_string_conversions.h"
 -#include "base/third_party/nspr/prtime.h"
 +#include <prtime.h>
+ #include "chrome/app/chrome_version_info.h"
  #include "chrome/browser/autocomplete/autocomplete.h"
  #include "chrome/browser/browser_process.h"
- #include "chrome/browser/pref_service.h"
