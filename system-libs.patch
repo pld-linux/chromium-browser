@@ -5,7 +5,7 @@
  #include <time.h>
  
 -#include "base/third_party/nspr/prtime.h"
-+#include <prtime.h>
++#include <nspr/prtime.h>
  #include "base/time.h"
  #include "testing/gtest/include/gtest/gtest.h"
  
@@ -16,7 +16,7 @@
  #include "base/string_util.h"
  #include "base/sys_string_conversions.h"
 -#include "base/third_party/nspr/prtime.h"
-+#include <prtime.h>
++#include <nspr/prtime.h>
  
  #include "base/logging.h"
  
@@ -40,7 +40,7 @@
  // These headers must be included in this order to make the declaration gods
  // happy.
 -#include "base/third_party/nspr/prcpucfg_linux.h"
-+#include <prcpucfg.h>
++#include <nspr/prcpucfg.h>
  
  namespace {
  
@@ -51,7 +51,7 @@
  #include "base/sys_info.h"
  #include "base/utf_string_conversions.h"
 -#include "base/third_party/nspr/prtime.h"
-+#include <prtime.h>
++#include <nspr/prtime.h>
  #include "chrome/app/chrome_version_info.h"
  #include "chrome/browser/autocomplete/autocomplete.h"
  #include "chrome/browser/browser_process.h"
