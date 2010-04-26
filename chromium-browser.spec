@@ -96,7 +96,15 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %endif
 
 %description
-Chromium is an open-source web browser, powered by WebKit.
+Chromium is an open-source browser project that aims to build a safer,
+faster, and more stable way for all Internet users to experience the
+web.
+
+Chromium serves as a base for Google Chrome, which is Chromium
+rebranded (name and logo) with very few additions such as usage
+tracking and an auto-updater system.
+
+This package contains the Chromium browser.
 
 %package inspector
 Summary:	Page inspector for the chromium-browser
@@ -110,18 +118,6 @@ web.
 
 This package contains 'inspector', allowing web developpers to inspect
 any element of a web page at runtime (html, javascript, css, ..)
-
-%package bookmark_manager
-Summary:	Bookmark manager for the chromium-browser
-Group:		X11/Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description bookmark_manager
-Chromium is an open-source browser project that aims to build a safer,
-faster, and more stable way for all Internet users to experience the
-web.
-
-This package contains bookmark manager for the chromium-browser.
 
 %package l10n
 Summary:	chromium-browser language packages
@@ -278,16 +274,15 @@ fi
 # bundle this copy until xdg-utils will have this itself
 %attr(755,root,root) %{_libdir}/%{name}/xdg-settings
 
+%{_libdir}/%{name}/resources/bookmark_manager
+%{_libdir}/%{name}/resources/calendar_app
+%{_libdir}/%{name}/resources/docs_app
+%{_libdir}/%{name}/resources/gmail_app
 %{_libdir}/%{name}/resources/net_internals
-%{_libdir}/%{name}/resources/*_app
 
 %files inspector
 %defattr(644,root,root,755)
 %{_libdir}/%{name}/resources/inspector
-
-%files bookmark_manager
-%defattr(644,root,root,755)
-%{_libdir}/%{name}/resources/bookmark_manager
 
 %files l10n -f %{name}.lang
 %defattr(644,root,root,755)
