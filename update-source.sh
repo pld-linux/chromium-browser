@@ -89,6 +89,7 @@ if [ "$newtar" != "$tarball" ]; then
 		> $logfile
 		HOME_ETC=$outdir \
 			../builder -bb --clean \
+			--define "_unpackaged_files_terminate_build 1" \
 			--define '_enable_debug_packages 0' \
 			--define "_builddir $outdir" \
 			--define "_rpmdir $rpmdir" \
