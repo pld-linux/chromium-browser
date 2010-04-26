@@ -13,28 +13,28 @@
 # TODO
 # - check system sqlite linking problems
 # - enable H264 video support if possible (test:  youtube.com/html5 and join html5 there)
+# - http://groups.google.com/a/chromium.org/group/chromium-discuss/browse_thread/thread/c82bf49672a213f4/9267df53f5d734c4
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
-# - use nosource until the package is ready to be stbr, no point poisioning distfiles
 # - build i686: -bp: ~570MB; bc: ~928MB; -bb: ~1.0GB
 # - build x86_64: -bp: ~570MB; bc: ~990MB; -bb: ~1.0GB
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100415
-%define		svnver  44604
+%define		svndate 20100425
+%define		svnver  45553
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	5.0.378.0
+Version:	5.0.388.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	6fbd62971a8a20af733a81501555aef6
+# Source0-md5:	b4753dbf8d3b5cd46eb7eec3c4c57df8
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -279,6 +279,7 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/xdg-settings
 
 %{_libdir}/%{name}/resources/net_internals
+%{_libdir}/%{name}/resources/*_app
 
 %files inspector
 %defattr(644,root,root,755)
