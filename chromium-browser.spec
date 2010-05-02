@@ -23,18 +23,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100429
-%define		svnver  45902
+%define		svndate 20100501
+%define		svnver  46184
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	5.0.392.0
+Version:	5.0.394.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	14e6f27bbc86f1c07f7cbbea8d7f96d9
+# Source0-md5:	be24bef367a79bf80aabb2387027db10
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -46,7 +46,6 @@ Patch2:		gyp-system-minizip.patch
 Patch3:		%{name}-html5-video-mimetypes.patch
 Patch5:		options-support.patch
 Patch11:	memory_details-iceweasel.patch
-Patch12:	libpng14.patch
 URL:		http://code.google.com/chromium/
 BuildRequires:	GConf2-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -160,7 +159,6 @@ sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 %patch3 -p0
 %patch5 -p1
 %patch11 -p1
-%patch12 -p1
 
 %build
 cd src
