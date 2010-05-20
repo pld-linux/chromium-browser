@@ -23,18 +23,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100501
-%define		svnver  46184
+%define		svndate 20100520
+%define		svnver  47760
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	5.0.394.0
+Version:	6.0.411.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	be24bef367a79bf80aabb2387027db10
+# Source0-md5:	aef2da351aea516c6ef3cd0248e6b77b
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -43,7 +43,6 @@ Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
 # http://bazaar.launchpad.net/~chromium-team/chromium-browser/chromium-browser.head/annotate/head%3A/debian/patches/html5_video_mimetypes.patch
-Patch3:		%{name}-html5-video-mimetypes.patch
 Patch5:		options-support.patch
 Patch11:	memory_details-iceweasel.patch
 URL:		http://code.google.com/chromium/
@@ -64,6 +63,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
+BuildRequires:	libvpx-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
@@ -156,7 +156,6 @@ sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p0
 %patch5 -p1
 %patch11 -p1
 
@@ -170,7 +169,7 @@ cd src
 	-Dtarget_arch=x64 \
 %endif
 %if "%{cc_version}" >= "4.4.0"
-	-Dno_strict_aliasing=1 -Dgcc_version=44 \
+	-Dno_strict_aliasing=1 -Dgcc_version=$(echo %{cc_version} | cut -d. -f1-2 | tr -d .) \
 %endif
 %if %{with sandboxing}
 	-Dlinux_sandbox_path=%{_libdir}/%{name}/chromium-sandbox \
@@ -188,6 +187,7 @@ cd src
 	-Duse_system_libxslt=1 \
 	-Duse_system_sqlite=%{?with_system_sqlite:1}%{!?with_system_sqlite:0} \
 	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
+	-Dproprietary_codecs=1 \
 %if %{with arch}
 	-Duse_system_yasm=1 \
 	-Dffmpeg_branding=Chrome \
