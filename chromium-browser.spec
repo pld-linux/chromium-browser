@@ -82,6 +82,7 @@ BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
 %{?with_system_v8:BuildRequires:	v8-devel}
 BuildRequires:	xorg-lib-libXScrnSaver-devel
+%{?with_arch:BuildRequires:	yasm}
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
 Requires:	xdg-utils
