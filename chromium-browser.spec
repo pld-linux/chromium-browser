@@ -9,6 +9,7 @@
 %bcond_without	sandboxing	# with sandboxing
 %bcond_with	shared_libs	# with shared libs
 %bcond_without	debuginfo	# disable debuginfo creation (it is huge)
+%bcond_without	arch		# arch asm optimization
 
 # TODO
 # - check system sqlite linking problems
