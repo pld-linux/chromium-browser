@@ -188,6 +188,7 @@ cd src
 	-Duse_system_libxslt=1 \
 	-Duse_system_sqlite=%{?with_system_sqlite:1}%{!?with_system_sqlite:0} \
 	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
+	-Duse_system_vpx=1 \
 %if %{with arch}
 	-Duse_system_yasm=1 \
 	-Dffmpeg_branding=Chrome \
