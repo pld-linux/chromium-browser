@@ -1,0 +1,3 @@
+- proprietary_codecs makes sense only when ffmpeg_branding is enabled (since
+  branding enables codec support while proprietary_codecs enables only mime
+  types announce)
