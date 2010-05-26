@@ -9,12 +9,12 @@
 %bcond_without	sandboxing	# with sandboxing
 %bcond_with	shared_libs	# with shared libs
 %bcond_without	debuginfo	# disable debuginfo creation (it is huge)
-%bcond_without	arch		# arch asm optimization
 
 # TODO
 # - check system sqlite linking problems
 # - enable H264 video support if possible (test:  youtube.com/html5 and join html5 there)
 # - http://groups.google.com/a/chromium.org/group/chromium-discuss/browse_thread/thread/c82bf49672a213f4/9267df53f5d734c4
+# - http://flyx.org/content/building-chromium-h264-support
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -43,7 +43,6 @@ Source5:	update-source.sh
 Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
-# http://bazaar.launchpad.net/~chromium-team/chromium-browser/chromium-browser.head/annotate/head%3A/debian/patches/html5_video_mimetypes.patch
 Patch5:		options-support.patch
 Patch11:	memory_details-iceweasel.patch
 URL:		http://code.google.com/chromium/
@@ -82,7 +81,7 @@ BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
 %{?with_system_v8:BuildRequires:	v8-devel}
 BuildRequires:	xorg-lib-libXScrnSaver-devel
-%{?with_arch:BuildRequires:	yasm}
+BuildRequires:	yasm
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
 Requires:	xdg-utils
@@ -190,11 +189,9 @@ cd src
 	-Duse_system_sqlite=%{?with_system_sqlite:1}%{!?with_system_sqlite:0} \
 	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
 	-Duse_system_vpx=1 \
-%if %{with arch}
 	-Duse_system_yasm=1 \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
-%endif
 %if %{with selinux}
 	-Dselinux=1 \
 %endif
