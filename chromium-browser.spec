@@ -12,9 +12,6 @@
 
 # TODO
 # - check system sqlite linking problems
-# - enable H264 video support if possible (test:  youtube.com/html5 and join html5 there)
-# - http://groups.google.com/a/chromium.org/group/chromium-discuss/browse_thread/thread/c82bf49672a213f4/9267df53f5d734c4
-# - http://flyx.org/content/building-chromium-h264-support
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -24,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100526
-%define		svnver  48240
+%define		svndate 20100527
+%define		svnver  48348
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	6.0.416.0
+Version:	6.0.417.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	1d156dce3c3326b0c3edfbafccb8110a
+# Source0-md5:	df98915d28f3365c539db6ab5c750f5e
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
