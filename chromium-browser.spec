@@ -83,6 +83,7 @@ BuildRequires:	yasm
 Requires:	browser-plugins >= 2.0
 Requires:	xdg-utils
 Provides:	wwwbrowser
+Obsoletes:	chromium-browser-bookmark_manager
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
