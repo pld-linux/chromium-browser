@@ -49,6 +49,7 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
 BuildRequires:	bzip2-devel
+BuildRequires:	cups-devel
 BuildRequires:	dbus-devel
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
@@ -77,6 +78,7 @@ BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
 %{?with_system_v8:BuildRequires:	v8-devel}
+BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	yasm
 %{?with_system_zlib:BuildRequires:	zlib-devel}
