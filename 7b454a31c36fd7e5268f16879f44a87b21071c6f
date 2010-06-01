@@ -1,0 +1,3 @@
+- up to 6.0.423.0; disable debug logs; add search workaround;
+  -Dno_strict_aliasing=1 -Dgcc_version=44 are workaround for gcc 4.4.x series
+  bug only; pass rpmcppflags
