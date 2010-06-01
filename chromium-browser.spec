@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100529
-%define		svnver  48550
+%define		svndate 20100601
+%define		svnver  48614
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	6.0.420.0
+Version:	6.0.423.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	2cdccd5693ba1f1efc79042e90c179fd
+# Source0-md5:	bbb7289f2d8e52c9e16d992233d620f6
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -40,6 +40,9 @@ Source5:	update-source.sh
 Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
+Patch3:		disable_dlog_and_dcheck_in_release_builds.patch.diff
+# http://aur.archlinux.org/packages/chromium-browser-svn/chromium-browser-svn/search-workaround.patch
+Patch4:		search-workaround.patch
 Patch5:		options-support.patch
 Patch11:	memory_details-iceweasel.patch
 URL:		http://code.google.com/chromium/
@@ -157,6 +160,8 @@ sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p0
+%patch4 -p0
 %patch5 -p1
 %patch11 -p1
 
@@ -169,8 +174,8 @@ cd src
 %ifarch %{x8664}
 	-Dtarget_arch=x64 \
 %endif
-%if "%{cc_version}" >= "4.4.0"
-	-Dno_strict_aliasing=1 -Dgcc_version=$(echo %{cc_version} | cut -d. -f1-2 | tr -d .) \
+%if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
+	-Dno_strict_aliasing=1 -Dgcc_version=44 \
 %endif
 %if %{with sandboxing}
 	-Dlinux_sandbox_path=%{_libdir}/%{name}/chromium-sandbox \
@@ -203,8 +208,8 @@ cd src
 	CXX="%{__cxx}" \
 	CC.host="%{__cc}" \
 	CXX.host="%{__cxx}" \
-	CFLAGS="%{rpmcflags}" \
-	CXXFLAGS="%{rpmcxxflags}"
+	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
+	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
