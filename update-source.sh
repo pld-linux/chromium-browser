@@ -41,7 +41,7 @@ if [ ! -f $tarball ]; then
 		echo >&2 "${1##*/}: need wget to fetch tarball"
 		exit 1
 	fi
-	wget -q -c $url
+	wget -c $url
 	upload=$tarball
 fi
 
