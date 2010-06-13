@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100610
-%define		svnver  49356
+%define		svndate 20100613
+%define		svnver  49638
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	6.0.431.0
+Version:	6.0.434.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	050c8db52b2e261a55fcca86ec56bebb
+# Source0-md5:	bfc9f9fe855660c6ee28b1e46d352f32
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -164,6 +164,25 @@ sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 %patch4 -p0
 %patch5 -p1
 %patch11 -p1
+
+# drop bundled libs, from gentoo
+remove_bundled_lib() {
+        echo "Removing bundled library $1 ..."
+        local out
+        out="$(find $1 -mindepth 1 \! -iname '*.gyp' -print -delete)"
+        if [ -z "$out" ]; then
+                echo "no files matched when removing bundled library $1" >&2 && exit 1
+        fi
+}
+
+cd src
+remove_bundled_lib "third_party/bzip2"
+remove_bundled_lib "third_party/libevent"
+remove_bundled_lib "third_party/libjpeg"
+remove_bundled_lib "third_party/libpng"
+remove_bundled_lib "third_party/libxml"
+remove_bundled_lib "third_party/libxslt"
+# TODO: also remove third_party/zlib.
 
 %build
 cd src
