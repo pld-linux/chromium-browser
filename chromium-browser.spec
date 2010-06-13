@@ -60,6 +60,7 @@ BuildRequires:	glib2-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
 BuildRequires:	libevent-devel
+BuildRequires:	libgnome-keyring-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
