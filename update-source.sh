@@ -80,7 +80,7 @@ if [ "$newtar" != "$tarball" ]; then
 		cat > $outdir/.builderrc <<-EOF
 			if [ -n "$HOME_ETC" ]; then
 				. "$HOME_ETC/.builderrc"
-			else
+			elif [ -r ~/.builderrc ]; then
 				. ~/.builderrc
 			fi
 			LOGFILE='$logfile'
