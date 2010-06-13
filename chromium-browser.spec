@@ -183,7 +183,7 @@ remove_bundled_lib "third_party/libjpeg"
 remove_bundled_lib "third_party/libpng"
 remove_bundled_lib "third_party/libxml"
 remove_bundled_lib "third_party/libxslt"
-# TODO: also remove third_party/zlib.
+remove_bundled_lib "third_party/zlib"
 
 %build
 cd src
