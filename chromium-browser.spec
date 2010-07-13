@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100613
-%define		svnver  49638
+%define		svndate 20100713
+%define		svnver  52155
 %define		rel		1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	6.0.434.0
+Version:	6.0.464.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	bfc9f9fe855660c6ee28b1e46d352f32
+# Source0-md5:	3611abf4e0a29e2fbc2c7a0510056b29
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -44,7 +44,7 @@ Patch3:		disable_dlog_and_dcheck_in_release_builds.patch.diff
 # http://aur.archlinux.org/packages/chromium-browser-svn/chromium-browser-svn/search-workaround.patch
 Patch4:		search-workaround.patch
 Patch5:		options-support.patch
-Patch11:	memory_details-iceweasel.patch
+Patch6:		gcc45.patch
 URL:		http://code.google.com/chromium/
 BuildRequires:	GConf2-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -162,18 +162,19 @@ sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 %patch1 -p1
 %patch2 -p1
 %patch3 -p0
-%patch4 -p0
+%patch4 -p1
 %patch5 -p1
-%patch11 -p1
+%patch6 -p1
 
 # drop bundled libs, from gentoo
 remove_bundled_lib() {
-        echo "Removing bundled library $1 ..."
-        local out
-        out="$(find $1 -mindepth 1 \! -iname '*.gyp' -print -delete)"
-        if [ -z "$out" ]; then
-                echo "no files matched when removing bundled library $1" >&2 && exit 1
-        fi
+	echo "Removing bundled library $1 ..."
+	local out
+	out=$(find $1 -mindepth 1 ! -iname '*.gyp' -print -delete)
+	if [ -z "$out" ]; then
+		echo >&2 "No files matched when removing bundled library $1"
+		exit 1
+	fi
 }
 
 cd src
@@ -239,9 +240,7 @@ cd src/out/%{!?debug:Release}%{?debug:Debug}
 
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 %{__sed} -i -e 's,@libdir@,%{_libdir}/%{name},' $RPM_BUILD_ROOT%{_bindir}/%{name}
-cp -a chrome.pak $RPM_BUILD_ROOT%{_libdir}/%{name}
-cp -a locales/*.pak $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
-cp -a resources/* $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
+cp -a *.pak locales resources $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 cp -a product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
@@ -281,6 +280,7 @@ fi
 %{_desktopdir}/*.desktop
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome.pak
+%{_libdir}/%{name}/resources.pak
 %dir %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/locales/en-US.pak
 %dir %{_libdir}/%{name}/resources
@@ -297,12 +297,9 @@ fi
 # bundle this copy until xdg-utils will have this itself
 %attr(755,root,root) %{_libdir}/%{name}/xdg-settings
 
-%{_libdir}/%{name}/resources/bookmark_manager
 %{_libdir}/%{name}/resources/calendar_app
 %{_libdir}/%{name}/resources/docs_app
 %{_libdir}/%{name}/resources/gmail_app
-%{_libdir}/%{name}/resources/net_internals
-%{_libdir}/%{name}/resources/shared
 
 %files inspector
 %defattr(644,root,root,755)
