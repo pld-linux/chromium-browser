@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate 20100722
-%define		svnver  53294
-%define		rel		1
+%define		svndate	20100731
+%define		svnver	54421
+%define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	6.0.474.0
+Version:	6.0.481.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	6d32faaa7c46f95aac0935cdacb576bb
+# Source0-md5:	239297ddca56723554a954c24e247605
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -245,7 +245,9 @@ cp -a chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 cp -a product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
+%if %{with ffmpegsumo.so}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
+%endif
 install -p xdg-settings $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cd -
@@ -292,7 +294,9 @@ fi
 %attr(4555,root,root) %{_libdir}/%{name}/chromium-sandbox
 
 # ffmpeg libs
+%if %{with ffmpegsumo.so}
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
+%endif
 
 # bundle this copy until xdg-utils will have this itself
 %attr(755,root,root) %{_libdir}/%{name}/xdg-settings
