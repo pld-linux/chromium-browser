@@ -245,7 +245,7 @@ cp -a chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 cp -a product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
-%if %{with ffmpegsumo.so}
+%if %{with ffmpegsumo}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 install -p xdg-settings $RPM_BUILD_ROOT%{_libdir}/%{name}
@@ -294,7 +294,7 @@ fi
 %attr(4555,root,root) %{_libdir}/%{name}/chromium-sandbox
 
 # ffmpeg libs
-%if %{with ffmpegsumo.so}
+%if %{with ffmpegsumo}
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
 %endif
 
