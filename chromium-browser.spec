@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate	20100731
-%define		svnver	54421
+%define		svndate	20100817
+%define		svnver	56291
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	6.0.481.0
+Version:	7.0.497.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	239297ddca56723554a954c24e247605
+# Source0-md5:	4e3b930b23256c023dd8f63545715f66
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -77,7 +77,7 @@ BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	python
 # grep gyp.googlecode.com src/DEPS | cut -d'"' -f2 | cut -d@ -f2
-BuildRequires:	python-gyp >= 0.1-795
+BuildRequires:	python-gyp >= 1-840
 BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
