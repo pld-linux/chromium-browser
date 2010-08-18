@@ -23,7 +23,7 @@
 
 %define		svndate	20100817
 %define		svnver	56291
-%define		rel	1
+%define		rel	2
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -218,6 +218,7 @@ cd src
 	-Duse_system_yasm=1 \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
+	-Ddisable_sse2=1 \
 %if %{with selinux}
 	-Dselinux=1 \
 %endif
