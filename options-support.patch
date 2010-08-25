@@ -1,6 +1,6 @@
---- chromium-browser-5.0.382.0~svn20100418r44898/src/build/common.gypi~	2010-04-19 12:58:15.000000000 +0300
-+++ chromium-browser-5.0.382.0~svn20100418r44898/src/build/common.gypi	2010-04-19 13:02:22.913765194 +0300
-@@ -199,6 +199,18 @@
+--- chromium-browser-7.0.505.0~svn20100825r57278/src/build/common.gypi~	2010-08-25 10:57:49.000000000 +0300
++++ chromium-browser-7.0.505.0~svn20100825r57278/src/build/common.gypi	2010-08-25 10:59:07.552987859 +0300
+@@ -249,6 +249,18 @@
      # Set this to true to enable SELinux support.
      'selinux%': 0,
  
@@ -16,9 +16,9 @@
 +    # Use system zlib
 +    'use_system_zlib%': 1,
 +
-     # Strip the binary after dumping symbols.
-     'linux_strip_binary%': 0,
- 
+     # Override whether we should use Breakpad on Linux. I.e. for Chrome bot.
+     'linux_breakpad%': 0,
+     # And if we want to dump symbols for Breakpad-enabled builds.
 @@ -215,6 +227,18 @@
        ['selinux==1', {
          'defines': ['CHROMIUM_SELINUX=1'],
