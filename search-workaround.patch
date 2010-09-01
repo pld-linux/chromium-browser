@@ -1,6 +1,6 @@
---- chromium-browser-6.0.464.0~svn20100713r52155/src/chrome/browser/search_engines/template_url.cc~	2010-06-30 05:01:32.000000000 +0300
-+++ chromium-browser-6.0.464.0~svn20100713r52155/src/chrome/browser/search_engines/template_url.cc	2010-07-13 11:25:51.194829863 +0300
-@@ -309,27 +309,28 @@
+--- chromium-browser-7.0.510.0~svn20100831r57933/src/chrome/browser/search_engines/template_url.cc~	2010-08-31 17:24:46.000000000 +0300
++++ chromium-browser-7.0.510.0~svn20100831r57933/src/chrome/browser/search_engines/template_url.cc	2010-09-01 22:28:29.663788855 +0300
+@@ -337,27 +337,28 @@
         i != replacements_.rend(); ++i) {
      switch (i->type) {
        case ENCODING:
@@ -19,13 +19,13 @@
          break;
  
        case GOOGLE_BASE_URL:
--        url.insert(i->index, GoogleBaseURLValue());
-+        url.replace(i->index, 0, GoogleBaseURLValue());
+-        url.insert(i->index, search_terms_data.GoogleBaseURLValue());
++        url.replace(i->index, 0, search_terms_data.GoogleBaseURLValue());
          break;
  
        case GOOGLE_BASE_SUGGEST_URL:
--        url.insert(i->index, GoogleBaseSuggestURLValue());
-+        url.replace(i->index, 0, GoogleBaseSuggestURLValue());
+-        url.insert(i->index, search_terms_data.GoogleBaseSuggestURLValue());
++        url.replace(i->index, 0, search_terms_data.GoogleBaseSuggestURLValue());
          break;
  
        case GOOGLE_ORIGINAL_QUERY_FOR_SUGGESTION:
@@ -35,16 +35,7 @@
                                 "&");
          break;
  
-@@ -343,7 +344,7 @@
-         RLZTracker::GetAccessPointRlz(rlz_lib::CHROME_OMNIBOX, &rlz_string);
-         if (!rlz_string.empty()) {
-           rlz_string = L"rlz=" + rlz_string + L"&";
--          url.insert(i->index, WideToUTF8(rlz_string));
-+          url.replace(i->index, 0, WideToUTF8(rlz_string));
-         }
- #endif
-         break;
-@@ -354,17 +355,17 @@
+@@ -381,17 +382,17 @@
          base::WideToCodepage(terms, input_encoding.c_str(),
                               base::OnStringConversionError::SKIP,
                               &unescaped_terms);
@@ -55,8 +46,8 @@
        }
  
        case LANGUAGE:
--        url.insert(i->index, g_browser_process->GetApplicationLocale());
-+        url.replace(i->index, 0, g_browser_process->GetApplicationLocale());
+-        url.insert(i->index, search_terms_data.GetApplicationLocale());
++        url.replace(i->index, 0, search_terms_data.GetApplicationLocale());
          break;
  
        case SEARCH_TERMS:
