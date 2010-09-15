@@ -141,9 +141,9 @@ pl, pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi,
 zh-CN, zh-TW
 
 %prep
-%setup -q -n %{name}-%{version}~svn%{svndate}r%{svnver}
-lzma -dc %{name}-%{version}~svn%{svndate}r%{svnver}-source.tar.lzma | tar x
-rm -f %{name}-%{version}~svn%{svndate}r%{svnver}-source.tar.lzma
+%setup -q -n %{name}-%{version}~r%{svnver}
+lzma -dc %{name}-%{version}~r%{svnver}-source.tar.lzma | tar x
+rm -f %{name}-%{version}~r%{svnver}-source.tar.lzma
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
