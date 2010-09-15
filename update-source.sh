@@ -48,21 +48,18 @@ fi
 pkg=chromium-browser
 specfile=$pkg.spec
 
-svndate=$(awk '/^%define[ 	]+svndate[ 	]+/{print $NF}' $specfile)
 svnver=$(awk '/^%define[ 	]+svnver[ 	]+/{print $NF}' $specfile)
 version=$(awk '/^Version:[ 	]+/{print $NF}' $specfile)
 rel=$(awk '/^%define[ 	]+rel[ 	]+/{print $NF}' $specfile)
 
-newtar=${pkg}_${version}~svn${svndate}r${svnver}.orig.tar.gz
+newtar=${pkg}_${version}~r${svnver}.orig.tar.gz
 if [ "$newtar" != "$tarball" ]; then
 	echo "Updating $specfile $to $newtar"
 	version=${tarball#${pkg}_} version=${version%~*}
-	svndate=${tarball#*svn} svndate=${svndate%%r*}
-	svnver=${tarball#${pkg}_${version}~svn${svndate}r} svnver=${svnver%%.*}
+	svnver=${tarball#${pkg}_${version}~r} svnver=${svnver%%.*}
 
 	sed -i -e "
 		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
-		s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
 		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
 	" $specfile
 	../builder -ncs -5 $specfile
