@@ -46,12 +46,12 @@
  
 --- chromium-browser-6.0.474.0~svn20100722r53294/src/chrome/browser/metrics/metrics_log.cc~	2010-07-21 05:01:25.000000000 +0300
 +++ chromium-browser-6.0.474.0~svn20100722r53294/src/chrome/browser/metrics/metrics_log.cc	2010-07-22 13:58:51.340525649 +0300
-@@ -16,7 +16,7 @@
- #include "base/scoped_ptr.h"
+@@ -15,7 +15,7 @@
  #include "base/string_util.h"
  #include "base/sys_info.h"
+ #include "base/utf_string_conversions.h"
 -#include "base/third_party/nspr/prtime.h"
 +#include <nspr/prtime.h>
- #include "base/time.h"
- #include "base/utf_string_conversions.h"
+ #include "chrome/app/chrome_version_info.h"
  #include "chrome/browser/autocomplete/autocomplete.h"
+ #include "chrome/browser/browser_process.h"
