@@ -20,7 +20,7 @@ if [ "$quiet" = "1" ]; then
 	exec 1>/dev/null
 fi
 
-baseurl=http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser
+baseurl=http://ppa.launchpad.net/chromium-daily/stable/ubuntu/pool/main/c/chromium-browser/
 
 if [ "$1" ]; then
 	url=$1
