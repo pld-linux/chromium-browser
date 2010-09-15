@@ -21,7 +21,6 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate	20100910
 %define		svnver	59126
 %define		rel	1
 
