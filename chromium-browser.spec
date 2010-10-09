@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate	20101002
-%define		svnver	61319
-%define		rel	2
+%define		svndate	20101009
+%define		svnver	62060
+%define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	7.0.542.0
+Version:	8.0.550.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	a391fa753e9e3919404e7da928da9965
+# Source0-md5:	a7e30000182f97ddc5bad0e179cd1d42
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -81,6 +81,7 @@ BuildRequires:	python-gyp >= 1-840
 BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
+BuildRequires:	util-linux
 %{?with_system_v8:BuildRequires:	v8-devel}
 BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
@@ -203,6 +204,7 @@ cd src
 	-Dlinux_sandbox_chrome_path=%{_libdir}/%{name}/%{name} \
 %endif
 	%{!?debug:-Dwerror=} \
+	%{!?debuginfo:-Dfastbuild=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	-Djavascript_engine=%{?with_system_v8:system-v8}%{!?with_system_v8:v8} \
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
