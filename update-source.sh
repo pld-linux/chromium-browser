@@ -65,6 +65,10 @@ if [ "$newtar" != "$tarball" ]; then
 		s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
 		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
 	" $specfile
+
+	# cvs up specfile, rename in case of conflicts
+	cvs up $specfile || mv -b $specfile $specfile.old
+
 	../builder -ncs -5 $specfile
 
 	if [ "$build_package" != 0 ]; then
