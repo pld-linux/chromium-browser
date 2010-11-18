@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate	20101117
-%define		svnver	66374
+%define		svndate	20101118
+%define		svnver	66583
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	9.0.587.0
+Version:	9.0.589.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	412d56dc04db78bb35afa4f8ce9b9b42
+# Source0-md5:	79d79b56c6ae014477ef803c9e5c7a4e
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -88,7 +88,7 @@ BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	yasm
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
-Requires:	xdg-utils
+Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager
 ExclusiveArch:	%{ix86} %{x8664} arm
@@ -251,7 +251,6 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 %if %{with ffmpegsumo}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
-install -p xdg-settings $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cd -
 
@@ -300,9 +299,6 @@ fi
 %if %{with ffmpegsumo}
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
 %endif
-
-# bundle this copy until xdg-utils will have this itself
-%attr(755,root,root) %{_libdir}/%{name}/xdg-settings
 
 %files inspector
 %defattr(644,root,root,755)
