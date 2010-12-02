@@ -48,6 +48,9 @@ fi
 pkg=chromium-browser
 specfile=$pkg.spec
 
+# cvs up specfile, rename in case of conflicts
+cvs up $specfile || { set -x; mv -b $specfile $specfile.old && cvs up $specfile; }
+
 svndate=$(awk '/^%define[ 	]+svndate[ 	]+/{print $NF}' $specfile)
 svnver=$(awk '/^%define[ 	]+svnver[ 	]+/{print $NF}' $specfile)
 version=$(awk '/^Version:[ 	]+/{print $NF}' $specfile)
@@ -65,9 +68,6 @@ if [ "$newtar" != "$tarball" ]; then
 		s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
 		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
 	" $specfile
-
-	# cvs up specfile, rename in case of conflicts
-	cvs up $specfile || mv -b $specfile $specfile.old
 
 	../builder -ncs -5 $specfile
 
