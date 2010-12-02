@@ -1,0 +1,2 @@
+- up to 6.0.434.0~svn20100613r49638; remove bundled libraries (we use system
+  one) in case when some headers are used from bundled libs
