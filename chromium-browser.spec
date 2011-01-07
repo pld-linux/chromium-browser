@@ -23,7 +23,7 @@
 
 %define		svndate	20110107
 %define		svnver	70714
-%define		rel	1
+%define		rel	2
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -88,6 +88,7 @@ BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	yasm
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
+Requires:	libvpx >= 0.9.5-2
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager
