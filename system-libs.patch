@@ -33,8 +33,8 @@
  #if defined(OS_WIN)
  #include "third_party/zlib/contrib/minizip/iowin32.h"
  #endif
---- chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/glue/plugins/plugin_lib_posix.cc~	2010-01-07 23:19:11.000000000 +0200
-+++ chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/glue/plugins/plugin_lib_posix.cc	2010-02-02 09:16:08.740140511 +0200
+--- chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/plugins/npapi/plugin_lib_posix.cc~	2010-01-07 23:19:11.000000000 +0200
++++ chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/plugins/npapi/plugin_lib_posix.cc	2010-02-02 09:16:08.740140511 +0200
 @@ -13,7 +13,7 @@
  
  // These headers must be included in this order to make the declaration gods
@@ -42,7 +42,7 @@
 -#include "base/third_party/nspr/prcpucfg_linux.h"
 +#include <nspr/prcpucfg.h>
  
- namespace {
+ namespace webkit {
  
 --- chromium-browser-6.0.474.0~svn20100722r53294/src/chrome/browser/metrics/metrics_log.cc~	2010-07-21 05:01:25.000000000 +0300
 +++ chromium-browser-6.0.474.0~svn20100722r53294/src/chrome/browser/metrics/metrics_log.cc	2010-07-22 13:58:51.340525649 +0300
@@ -55,3 +55,14 @@
  #include "base/time.h"
  #include "base/utf_string_conversions.h"
  #include "chrome/browser/autocomplete/autocomplete.h"
+--- chromium-browser-10.0.632.0~svn20110107r70714/src/chrome/common/metrics_helpers.cc~	2010-12-14 04:02:04.000000000 +0100
++++ chromium-browser-10.0.632.0~svn20110107r70714/src/chrome/common/metrics_helpers.cc	2011-01-07 18:42:11.020015382 +0100
+@@ -19,7 +19,7 @@
+ #include "base/string_number_conversions.h"
+ #include "base/sys_info.h"
+ #include "base/utf_string_conversions.h"
+-#include "base/third_party/nspr/prtime.h"
++#include <nspr/prtime.h>
+ #include "chrome/common/logging_chrome.h"
+ #include "googleurl/src/gurl.h"
+ #include "libxml/xmlwriter.h"

@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate	20101214
-%define		svnver	69095
+%define		svndate	20110107
+%define		svnver	70714
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	10.0.611.0
+Version:	10.0.632.0
 Release:	%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	d91fca61b2c2300643e773bd31d813cb
+# Source0-md5:	03ca2a884fb63066ee77172c9ed07a26
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -65,7 +65,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
-BuildRequires:	libvpx-devel
+BuildRequires:	libvpx-devel >= 0.9.5-2
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
