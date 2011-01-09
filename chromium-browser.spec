@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate	20110107
-%define		svnver	70714
-%define		rel	2
+%define		svndate	20110108
+%define		svnver	70854
+%define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	10.0.632.0
-Release:	%{svnver}.%{rel}
+Version:	10.0.634.0
+Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	03ca2a884fb63066ee77172c9ed07a26
+# Source0-md5:	0970f2a7b6b975e1ebda82126b5d3967
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
