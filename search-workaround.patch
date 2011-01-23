@@ -1,6 +1,6 @@
---- chromium-browser-7.0.510.0~svn20100831r57933/src/chrome/browser/search_engines/template_url.cc~	2010-08-31 17:24:46.000000000 +0300
-+++ chromium-browser-7.0.510.0~svn20100831r57933/src/chrome/browser/search_engines/template_url.cc	2010-09-01 22:28:29.663788855 +0300
-@@ -337,27 +337,28 @@
+--- chromium-browser-10.0.647.0~svn20110123r72286/src/chrome/browser/search_engines/template_url.cc.orig	2011-01-22 04:01:50.000000000 +0100
++++ chromium-browser-10.0.647.0~svn20110123r72286/src/chrome/browser/search_engines/template_url.cc	2011-01-23 13:22:52.878238576 +0100
+@@ -341,27 +341,28 @@
         i != replacements_.rend(); ++i) {
      switch (i->type) {
        case ENCODING:
@@ -35,10 +35,10 @@
                                 "&");
          break;
  
-@@ -381,17 +382,17 @@
-         base::WideToCodepage(terms, input_encoding.c_str(),
-                              base::OnStringConversionError::SKIP,
-                              &unescaped_terms);
+@@ -385,17 +386,17 @@
+         base::UTF16ToCodepage(terms, input_encoding.c_str(),
+                               base::OnStringConversionError::SKIP,
+                               &unescaped_terms);
 -        url.insert(i->index, std::string(unescaped_terms.begin(),
 +        url.replace(i->index, 0, std::string(unescaped_terms.begin(),
                                           unescaped_terms.end()));
