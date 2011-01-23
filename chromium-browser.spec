@@ -21,18 +21,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate	20110108
-%define		svnver	70854
+%define		svndate	20110121
+%define		svnver	72095
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	10.0.634.0
+Version:	10.0.645.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	0970f2a7b6b975e1ebda82126b5d3967
+# Source0-md5:	2f2b52aaebeb047ffb6b6311ab54b3b5
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -53,7 +53,7 @@ BuildRequires:	atk-devel
 BuildRequires:	bison
 BuildRequires:	bzip2-devel
 BuildRequires:	cups-devel
-BuildRequires:	dbus-devel
+BuildRequires:	dbus-glib-devel
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
@@ -85,6 +85,8 @@ BuildRequires:	util-linux
 %{?with_system_v8:BuildRequires:	v8-devel}
 BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
+BuildRequires:	xorg-lib-libXt-devel
+BuildRequires:	xorg-lib-libXtst-devel
 BuildRequires:	yasm
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
@@ -158,7 +160,7 @@ fi
 # Populate the LASTCHANGE file template as we no longer have the VCS files at this point
 echo "%{svnver}" > src/build/LASTCHANGE.in
 
-sed -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
+%{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 
 %patch0 -p1
 %patch1 -p1
@@ -186,6 +188,7 @@ remove_bundled_lib "third_party/bzip2"
 remove_bundled_lib "third_party/libevent"
 remove_bundled_lib "third_party/libjpeg"
 remove_bundled_lib "third_party/libpng"
+remove_bundled_lib "third_party/libvpx"
 remove_bundled_lib "third_party/libxml"
 remove_bundled_lib "third_party/libxslt"
 remove_bundled_lib "third_party/zlib"
