@@ -2,12 +2,13 @@
 # Conditional build:
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	selinux		# with SELinux (need policy first)
-%bcond_with	system_v8	# with system v8
-%bcond_without	system_zlib	# with system zlib
+%bcond_with	shared_libs	# with shared libs
+%bcond_with	sse2		# use SSE2 instructions
 %bcond_with	system_sqlite	# with system sqlite
+%bcond_with	system_v8	# with system v8
 %bcond_without	ffmpegsumo	# build with ffmpegsumo
 %bcond_without	sandboxing	# with sandboxing
-%bcond_with	shared_libs	# with shared libs
+%bcond_without	system_zlib	# with system zlib
 %bcond_without	debuginfo	# disable debuginfo creation (it is huge)
 
 # TODO
@@ -21,18 +22,18 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		svndate	20110121
-%define		svnver	72095
+%define		svndate	20110123
+%define		svnver	72286
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	10.0.645.0
+Version:	10.0.647.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	2f2b52aaebeb047ffb6b6311ab54b3b5
+# Source0-md5:	3c7c17645ac1d573b81487fd90aa9208
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -44,6 +45,7 @@ Patch3:		disable_dlog_and_dcheck_in_release_builds.patch.diff
 # http://aur.archlinux.org/packages/chromium-browser-svn/chromium-browser-svn/search-workaround.patch
 Patch4:		search-workaround.patch
 Patch5:		options-support.patch
+Patch6:		get-webkit_revision.patch
 Patch7:		chromium-system-vpx.patch
 URL:		http://code.google.com/chromium/
 BuildRequires:	GConf2-devel
@@ -168,6 +170,7 @@ echo "%{svnver}" > src/build/LASTCHANGE.in
 %patch3 -p0
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 cd src
 %patch7 -p0
 cd ..
@@ -226,7 +229,7 @@ cd src
 	-Duse_system_yasm=1 \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
-	-Ddisable_sse2=1 \
+	%{!?with_sse2:-Ddisable_sse2=1} \
 %if %{with selinux}
 	-Dselinux=1 \
 %endif
