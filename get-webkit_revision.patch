@@ -1,0 +1,30 @@
+--- chromium-browser-10.0.647.0~svn20110123r72286/src/webkit/build/webkit_version.py.orig	2011-01-22 04:01:31.000000000 +0100
++++ chromium-browser-10.0.647.0~svn20110123r72286/src/webkit/build/webkit_version.py	2011-01-23 21:01:47.000000000 +0100
+@@ -64,6 +64,18 @@
+   return "%s@%s" % (webkit_url, version_info.revision)
+ 
+ 
++def GetWebKitRevisionFromDEPS():
++  result = "trunk"
++  f = open('../../DEPS', 'rb')
++  try:
++    m = re.search(r'webkit_revision":\s*"(\d+?)"', ''.join(f.readlines()), re.MULTILINE)
++    if m:
++      result = "trunk@%s" % (m.group(1))
++  finally:
++    f.close()
++  return result
++
++
+ def EmitVersionHeader(webkit_dir, version_file, output_dir):
+   '''Given webkit's version file, emit a header file that we can use from
+   within webkit_glue.cc.
+@@ -75,7 +87,7 @@
+ 
+   major, minor = ReadVersionFile(os.path.join(webkit_dir, version_file))
+ 
+-  webkit_revision = GetWebKitRevision(webkit_dir, version_file)
++  webkit_revision = GetWebKitRevisionFromDEPS()
+ 
+   fname = os.path.join(output_dir, "webkit_version.h")
+   f = open(fname, 'wb')
