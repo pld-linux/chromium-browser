@@ -22,6 +22,12 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
+# NOTE TO USERS:
+# To use chromium nightly builds for pld-th save to /etc/poldek/repos.d (as pld-chromium.conf):
+# http://carme.pld-linux.org/~glen/chromium-browser/th/i686/pld-chromium.conf
+# or:
+# http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/pld-chromium.conf
+
 %define		svndate	20110201
 %define		svnver	73244
 %define		rel	1

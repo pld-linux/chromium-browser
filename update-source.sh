@@ -103,7 +103,7 @@ if [ "$newtar" != "$tarball" ]; then
 			exit 1
 		}
 
-		rpmdest=~/public_html/$dist/$arch/
+		rpmdest=~/public_html/chromium-browser/$dist/$arch/
 		if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
 			install -d $rpmdest
 			umask 022
