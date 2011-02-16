@@ -23,23 +23,23 @@
 # - to look for new tarball, use update-source.sh script
 
 # NOTE TO USERS:
-# To use chromium nightly builds for pld-th save to /etc/poldek/repos.d (as pld-chromium.conf):
-# http://carme.pld-linux.org/~glen/chromium-browser/th/i686/pld-chromium.conf
+# To use chromium nightly builds for pld-th save to /etc/poldek/repos.d (as chromium-nightly.conf):
+# http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 # or:
-# http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/pld-chromium.conf
+# http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110201
-%define		svnver	73244
+%define		svndate	20110216
+%define		svnver	75059
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	11.0.656.0
+Version:	11.0.673.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	2b7926493dff6eda2bb53e1a98220277
+# Source0-md5:	41504d0065f4fc7f2b95688b69e2abde
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
