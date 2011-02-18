@@ -57,66 +57,67 @@ version=$(awk '/^Version:[ 	]+/{print $NF}' $specfile)
 rel=$(awk '/^%define[ 	]+rel[ 	]+/{print $NF}' $specfile)
 
 newtar=${pkg}_${version}~svn${svndate}r${svnver}.orig.tar.gz
-if [ "$newtar" != "$tarball" ]; then
-	echo "Updating $specfile $to $newtar"
-	version=${tarball#${pkg}_} version=${version%~*}
-	svndate=${tarball#*svn} svndate=${svndate%%r*}
-	svnver=${tarball#${pkg}_${version}~svn${svndate}r} svnver=${svnver%%.*}
+if [ "$newtar" = "$tarball" ]; then
+	echo "$specfile already up to $newtar"
+	exit 0
+fi
 
-	sed -i -e "
-		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
-		s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
-		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
-	" $specfile
+echo "Updating $specfile $to $newtar"
+version=${tarball#${pkg}_} version=${version%~*}
+svndate=${tarball#*svn} svndate=${svndate%%r*}
+svnver=${tarball#${pkg}_${version}~svn${svndate}r} svnver=${svnver%%.*}
 
-	../builder -ncs -5 $specfile
+sed -i -e "
+	s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
+	s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
+	s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
+" $specfile
 
-	if [ "$build_package" != 0 ]; then
-		dist=$(rpm -E %{pld_release})
-		arch=$(rpm -E %{_host_cpu})
-		outdir=$(readlink -f $dir)/build-$dist-$arch
-		logfile=$outdir/$pkg.log
-		rpmdir=$outdir/RPMS
-		install -d $rpmdir
+../builder -ncs -5 $specfile
 
-		# setup custom logfile via $HOME_ETC hack
-		# TODO: just add --logfile support for builder
-		cat > $outdir/.builderrc <<-EOF
-			if [ -n "$HOME_ETC" ]; then
-				. "$HOME_ETC/.builderrc"
-			elif [ -r ~/.builderrc ]; then
-				. ~/.builderrc
-			fi
-			LOGFILE='$logfile'
-		EOF
+if [ "$build_package" != 0 ]; then
+	dist=$(rpm -E %{pld_release})
+	arch=$(rpm -E %{_host_cpu})
+	outdir=$(readlink -f $dir)/build-$dist-$arch
+	logfile=$outdir/$pkg.log
+	rpmdir=$outdir/RPMS
+	install -d $rpmdir
 
-		> $logfile
-		HOME_ETC=$outdir \
-			../builder -bb --clean \
-			--define "_unpackaged_files_terminate_build 1" \
-			--define '_enable_debug_packages 0' \
-			--define "_builddir $outdir" \
-			--define "_rpmdir $rpmdir" \
-			$specfile || {
-			echo "Package build failed"
-			tail -n 1000 $logfile >&2
-			exit 1
-		}
+	# setup custom logfile via $HOME_ETC hack
+	# TODO: just add --logfile support for builder
+	cat > $outdir/.builderrc <<-EOF
+		if [ -n "$HOME_ETC" ]; then
+			. "$HOME_ETC/.builderrc"
+		elif [ -r ~/.builderrc ]; then
+			. ~/.builderrc
+		fi
+		LOGFILE='$logfile'
+	EOF
 
-		rpmdest=~/public_html/chromium-browser/$dist/$arch/
-		if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
-			install -d $rpmdest
-			umask 022
-			chmod 644 $rpmdir/*.rpm
-			mv -v $rpmdir/*.rpm $rpmdest/
-			poldek --cachedir=$HOME/tmp --mkidx -s $rpmdest/ --mt=pndir
+	> $logfile
+	HOME_ETC=$outdir \
+		../builder -bb --clean \
+		--define "_unpackaged_files_terminate_build 1" \
+		--define '_enable_debug_packages 0' \
+		--define "_builddir $outdir" \
+		--define "_rpmdir $rpmdir" \
+		$specfile || {
+		echo "Package build failed"
+		tail -n 1000 $logfile >&2
+		exit 1
+	}
 
-			if [ -x /usr/bin/createrepo ]; then
-				install -d $rpmdest/repodata/cache
-				createrepo -q -c $rpmdest/repodata/cache $rpmdest
-			fi
+	rpmdest=~/public_html/chromium-browser/$dist/$arch/
+	if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
+		install -d $rpmdest
+		umask 022
+		chmod 644 $rpmdir/*.rpm
+		mv -v $rpmdir/*.rpm $rpmdest/
+		poldek --cachedir=$HOME/tmp --mkidx -s $rpmdest/ --mt=pndir
+
+		if [ -x /usr/bin/createrepo ]; then
+			install -d $rpmdest/repodata/cache
+			createrepo -q -c $rpmdest/repodata/cache $rpmdest
 		fi
 	fi
-else
-	echo "$specfile already up to $newtar"
 fi
