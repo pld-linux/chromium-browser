@@ -75,49 +75,51 @@ sed -i -e "
 
 ../builder -ncs -5 $specfile
 
-if [ "$build_package" != 0 ]; then
-	dist=$(rpm -E %{pld_release})
-	arch=$(rpm -E %{_host_cpu})
-	outdir=$(readlink -f $dir)/build-$dist-$arch
-	logfile=$outdir/$pkg.log
-	rpmdir=$outdir/RPMS
-	install -d $rpmdir
+if [ "$build_package" = 0 ]; then
+	exit 0
+fi
 
-	# setup custom logfile via $HOME_ETC hack
-	# TODO: just add --logfile support for builder
-	cat > $outdir/.builderrc <<-EOF
-		if [ -n "$HOME_ETC" ]; then
-			. "$HOME_ETC/.builderrc"
-		elif [ -r ~/.builderrc ]; then
-			. ~/.builderrc
-		fi
-		LOGFILE='$logfile'
-	EOF
+dist=$(rpm -E %{pld_release})
+arch=$(rpm -E %{_host_cpu})
+outdir=$(readlink -f $dir)/build-$dist-$arch
+logfile=$outdir/$pkg.log
+rpmdir=$outdir/RPMS
+install -d $rpmdir
 
-	> $logfile
-	HOME_ETC=$outdir \
-		../builder -bb --clean \
-		--define "_unpackaged_files_terminate_build 1" \
-		--define '_enable_debug_packages 0' \
-		--define "_builddir $outdir" \
-		--define "_rpmdir $rpmdir" \
-		$specfile || {
-		echo "Package build failed"
-		tail -n 1000 $logfile >&2
-		exit 1
-	}
+# setup custom logfile via $HOME_ETC hack
+# TODO: just add --logfile support for builder
+cat > $outdir/.builderrc <<-EOF
+	if [ -n "$HOME_ETC" ]; then
+		. "$HOME_ETC/.builderrc"
+	elif [ -r ~/.builderrc ]; then
+		. ~/.builderrc
+	fi
+	LOGFILE='$logfile'
+EOF
 
-	rpmdest=~/public_html/chromium-browser/$dist/$arch/
-	if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
-		install -d $rpmdest
-		umask 022
-		chmod 644 $rpmdir/*.rpm
-		mv -v $rpmdir/*.rpm $rpmdest/
-		poldek --cachedir=$HOME/tmp --mkidx -s $rpmdest/ --mt=pndir
+> $logfile
+HOME_ETC=$outdir \
+	../builder -bb --clean \
+	--define "_unpackaged_files_terminate_build 1" \
+	--define '_enable_debug_packages 0' \
+	--define "_builddir $outdir" \
+	--define "_rpmdir $rpmdir" \
+	$specfile || {
+	echo "Package build failed"
+	tail -n 1000 $logfile >&2
+	exit 1
+}
 
-		if [ -x /usr/bin/createrepo ]; then
-			install -d $rpmdest/repodata/cache
-			createrepo -q -c $rpmdest/repodata/cache $rpmdest
-		fi
+rpmdest=~/public_html/chromium-browser/$dist/$arch/
+if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
+	install -d $rpmdest
+	umask 022
+	chmod 644 $rpmdir/*.rpm
+	mv -v $rpmdir/*.rpm $rpmdest/
+	poldek --cachedir=$HOME/tmp --mkidx -s $rpmdest/ --mt=pndir
+
+	if [ -x /usr/bin/createrepo ]; then
+		install -d $rpmdest/repodata/cache
+		createrepo -q -c $rpmdest/repodata/cache $rpmdest
 	fi
 fi
