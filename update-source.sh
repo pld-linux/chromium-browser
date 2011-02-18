@@ -110,6 +110,11 @@ if [ "$newtar" != "$tarball" ]; then
 			chmod 644 $rpmdir/*.rpm
 			mv -v $rpmdir/*.rpm $rpmdest/
 			poldek --cachedir=$HOME/tmp --mkidx -s $rpmdest/ --mt=pndir
+
+			if [ -x /usr/bin/createrepo ]; then
+				install -d $rpmdest/repodata/cache
+				createrepo -q -c $rpmdest/repodata/cache $rpmdest
+			fi
 		fi
 	fi
 else
