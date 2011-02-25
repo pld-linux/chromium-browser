@@ -59,22 +59,27 @@ rel=$(awk '/^%define[ 	]+rel[ 	]+/{print $NF}' $specfile)
 newtar=${pkg}_${version}~svn${svndate}r${svnver}.orig.tar.gz
 if [ "$newtar" = "$tarball" ]; then
 	echo "$specfile already up to $newtar"
-	exit 0
+
+	# if we don't publish result, there's nothing more to do
+	if [ "$publish_packages" != 1 ]; then
+		exit 0
+	fi
+else
+	echo "Updating $specfile $to $newtar"
+	version=${tarball#${pkg}_} version=${version%~*}
+	svndate=${tarball#*svn} svndate=${svndate%%r*}
+	svnver=${tarball#${pkg}_${version}~svn${svndate}r} svnver=${svnver%%.*}
+
+	sed -i -e "
+		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
+		s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
+		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
+	" $specfile
+
+	../builder -ncs -5 $specfile
 fi
 
-echo "Updating $specfile $to $newtar"
-version=${tarball#${pkg}_} version=${version%~*}
-svndate=${tarball#*svn} svndate=${svndate%%r*}
-svnver=${tarball#${pkg}_${version}~svn${svndate}r} svnver=${svnver%%.*}
-
-sed -i -e "
-	s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
-	s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
-	s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
-" $specfile
-
-../builder -ncs -5 $specfile
-
+# if we don't build. we're done
 if [ "$build_package" = 0 ]; then
 	exit 0
 fi
@@ -84,7 +89,16 @@ arch=$(rpm -E %{_host_cpu})
 outdir=$(readlink -f $dir)/build-$dist-$arch
 logfile=$outdir/$pkg.log
 rpmdir=$outdir/RPMS
+rpmdest=~/public_html/chromium-browser/$dist/$arch
 install -d $rpmdir
+
+# if already published?
+if [ "$publish_packages" = 1 ]; then
+	pkg=$rpmdest/$pkg-$version-0.$svnver.$rel.$arch.rpm
+	if [ -f "$pkg" ]; then
+		exit 0
+	fi
+fi
 
 # setup custom logfile via $HOME_ETC hack
 # TODO: just add --logfile support for builder
@@ -110,7 +124,6 @@ HOME_ETC=$outdir \
 	exit 1
 }
 
-rpmdest=~/public_html/chromium-browser/$dist/$arch/
 if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
 	install -d $rpmdest
 	umask 022
