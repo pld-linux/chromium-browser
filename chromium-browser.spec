@@ -39,7 +39,7 @@ Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	41504d0065f4fc7f2b95688b69e2abde
+# Source0-md5:	5d2a301c48d636b6d1df6d8331f45773
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
