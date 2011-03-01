@@ -28,13 +28,13 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110216
-%define		svnver	75059
-%define		rel	2
+%define		svndate	20110301
+%define		svnver	76345
+%define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	11.0.673.0
+Version:	11.0.687.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
@@ -80,6 +80,7 @@ BuildRequires:	lzma
 BuildRequires:	minizip-devel
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
+BuildRequires:	pam-devel
 BuildRequires:	pango-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
