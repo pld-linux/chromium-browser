@@ -1,17 +1,6 @@
----
- webkit/glue/user_agent.cc |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-Index: src/webkit/glue/user_agent.cc
-===================================================================
---- src.orig/webkit/glue/user_agent.cc
-+++ src/webkit/glue/user_agent.cc
-@@ -97,24 +97,31 @@
-       "?";
- #endif
- 
-   // Get the product name and version, and replace Safari's Version/X string
-   // with it.  This is done to expose our product name in a manner that is
+--- chromium-browser-11.0.691.0~svn20110304r76865/src/webkit/glue/user_agent.cc~	2011-03-04 05:00:41.000000000 +0200
++++ chromium-browser-11.0.691.0~svn20110304r76865/src/webkit/glue/user_agent.cc	2011-03-04 18:55:33.180524092 +0200
+@@ -102,15 +102,22 @@
    // maximally compatible with Safari, we hope!!
    std::string product = GetProductVersion();
  
@@ -24,18 +13,14 @@ Index: src/webkit/glue/user_agent.cc
    // Derived from Safari's UA string.
    base::StringAppendF(
        result,
-       "Mozilla/5.0 (%s; %s) AppleWebKit/%d.%d"
+       "Mozilla/5.0 (%s%s) AppleWebKit/%d.%d"
 -      " (KHTML, like Gecko) %s Safari/%d.%d",
 +      " (KHTML, like Gecko) @BUILD_DIST_NAME@/@BUILD_DIST_VERSION@ %s %s Safari/%d.%d",
-       mimic_windows ? "Windows" : kUserAgentPlatform,
-       ((mimic_windows ? "Windows " : "") + BuildOSCpuInfo()).c_str(),
+       mimic_windows ? "Windows " : kUserAgentPlatform,
+       BuildOSCpuInfo().c_str(),
        WEBKIT_VERSION_MAJOR,
        WEBKIT_VERSION_MINOR,
 +      realproduct.c_str(),
        product.c_str(),
        WEBKIT_VERSION_MAJOR,
        WEBKIT_VERSION_MINOR);
- }
- 
- }  // namespace webkit_glue
- 
