@@ -119,7 +119,7 @@ HOME_ETC=$outdir \
 	--define "_builddir $outdir" \
 	--define "_rpmdir $rpmdir" \
 	$specfile || {
-	echo "Package build failed"
+	echo >&2 "Package build failed"
 	tail -n 1000 $logfile >&2
 	exit 1
 }
