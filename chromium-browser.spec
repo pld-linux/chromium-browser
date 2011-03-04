@@ -174,7 +174,7 @@ echo "%{svnver}" > src/build/LASTCHANGE.in
 sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
     -e 's/@BUILD_DIST_NAME@/PLD/g' \
     -e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
-    < %{PATCH8} | %{__patch} -p0
+    < %{PATCH8} | %{__patch} -p1
 
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 
