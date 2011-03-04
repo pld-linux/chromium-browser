@@ -8,6 +8,6 @@ Terminal=false
 Type=Application
 X-MultipleArgs=false
 Categories=GTK;Network;WebBrowser;
-MimeType=text/html;text/xml;application/xhtml+xml;
+MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
 StartupWMClass=Chromium
 StartupNotify=true
