@@ -10,8 +10,8 @@ as we don't want to Depend on the -dev packages for the .so files:
 
 Index: src/app/gfx/gl/gl_implementation_linux.cc
 ===================================================================
---- src.orig/app/gfx/gl/gl_implementation_linux.cc
-+++ src/app/gfx/gl/gl_implementation_linux.cc
+--- ./src.orig/app/gfx/gl/gl_implementation_linux.cc
++++ ./src/app/gfx/gl/gl_implementation_linux.cc
 @@ -40,19 +40,19 @@
      case kGLImplementationOSMesaGL: {
        FilePath module_path;

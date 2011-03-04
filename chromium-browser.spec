@@ -52,6 +52,7 @@ Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 Patch4:		search-workaround.patch
 Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
+Patch7:		dlopen_sonamed_gl.patch
 URL:		http://code.google.com/chromium/
 BuildRequires:	GConf2-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -175,6 +176,7 @@ echo "%{svnver}" > src/build/LASTCHANGE.in
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 # drop bundled libs, from gentoo
 remove_bundled_lib() {
