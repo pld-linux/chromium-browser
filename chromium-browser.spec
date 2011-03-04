@@ -28,18 +28,18 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110301
-%define		svnver	76345
+%define		svndate	20110304
+%define		svnver	76865
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	11.0.687.0
+Version:	11.0.691.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	5d2a301c48d636b6d1df6d8331f45773
+# Source0-md5:	62de113711d3d9ac7b678d407bee4da8
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -52,7 +52,6 @@ Patch3:		disable_dlog_and_dcheck_in_release_builds.patch.diff
 Patch4:		search-workaround.patch
 Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
-Patch7:		chromium-system-vpx.patch
 URL:		http://code.google.com/chromium/
 BuildRequires:	GConf2-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -85,7 +84,7 @@ BuildRequires:	pango-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	python
-# grep gyp.googlecode.com src/DEPS | cut -d'"' -f2 | cut -d@ -f2
+# grep googlecode_url.*gyp src/DEPS |cut -d'"' -f6 | cut -d@ -f2
 BuildRequires:	python-gyp >= 1-840
 BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.453
@@ -120,8 +119,6 @@ web.
 Chromium serves as a base for Google Chrome, which is Chromium
 rebranded (name and logo) with very few additions such as usage
 tracking and an auto-updater system.
-
-This package contains the Chromium browser.
 
 %package inspector
 Summary:	Page inspector for the chromium-browser
@@ -178,9 +175,6 @@ echo "%{svnver}" > src/build/LASTCHANGE.in
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-cd src
-%patch7 -p0
-cd ..
 
 # drop bundled libs, from gentoo
 remove_bundled_lib() {
@@ -198,7 +192,8 @@ remove_bundled_lib "third_party/bzip2"
 remove_bundled_lib "third_party/libevent"
 remove_bundled_lib "third_party/libjpeg"
 remove_bundled_lib "third_party/libpng"
-remove_bundled_lib "third_party/libvpx"
+# third_party/libvpx/libvpx.h should be kept
+#remove_bundled_lib "third_party/libvpx"
 remove_bundled_lib "third_party/libxml"
 remove_bundled_lib "third_party/libxslt"
 remove_bundled_lib "third_party/zlib"
