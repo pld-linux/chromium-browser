@@ -53,6 +53,7 @@ Patch4:		search-workaround.patch
 Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
+Patch8:		chromium_useragent.patch.in
 URL:		http://code.google.com/chromium/
 BuildRequires:	GConf2-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -85,6 +86,7 @@ BuildRequires:	pango-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	python
+BuildRequires:	rpm >= 4.4.9-56
 # grep googlecode_url.*gyp src/DEPS |cut -d'"' -f6 | cut -d@ -f2
 BuildRequires:	python-gyp >= 1-840
 BuildRequires:	python-modules
@@ -166,6 +168,13 @@ fi
 
 # Populate the LASTCHANGE file template as we no longer have the VCS files at this point
 echo "%{svnver}" > src/build/LASTCHANGE.in
+
+# add chromium and pld to useragent
+%define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
+sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
+    -e 's/@BUILD_DIST_NAME@/PLD/g' \
+    -e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
+    < %{PATCH8} | %{__patch} -p0
 
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
 

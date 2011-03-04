@@ -1,0 +1,41 @@
+---
+ webkit/glue/user_agent.cc |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+Index: src/webkit/glue/user_agent.cc
+===================================================================
+--- src.orig/webkit/glue/user_agent.cc
++++ src/webkit/glue/user_agent.cc
+@@ -97,24 +97,31 @@
+       "?";
+ #endif
+ 
+   // Get the product name and version, and replace Safari's Version/X string
+   // with it.  This is done to expose our product name in a manner that is
+   // maximally compatible with Safari, we hope!!
+   std::string product = GetProductVersion();
+ 
++  // We want to also add Chromium
++  std::string realproduct = product.c_str();
++  size_t pos;
++  if ((pos = realproduct.find("/")) != std::string::npos)
++      realproduct.replace(0, pos, "Chromium");
++
+   // Derived from Safari's UA string.
+   base::StringAppendF(
+       result,
+       "Mozilla/5.0 (%s; %s) AppleWebKit/%d.%d"
+-      " (KHTML, like Gecko) %s Safari/%d.%d",
++      " (KHTML, like Gecko) @BUILD_DIST_NAME@/@BUILD_DIST_VERSION@ %s %s Safari/%d.%d",
+       mimic_windows ? "Windows" : kUserAgentPlatform,
+       ((mimic_windows ? "Windows " : "") + BuildOSCpuInfo()).c_str(),
+       WEBKIT_VERSION_MAJOR,
+       WEBKIT_VERSION_MINOR,
++      realproduct.c_str(),
+       product.c_str(),
+       WEBKIT_VERSION_MAJOR,
+       WEBKIT_VERSION_MINOR);
+ }
+ 
+ }  // namespace webkit_glue
+ 
