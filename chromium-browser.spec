@@ -47,7 +47,7 @@ Source5:	update-source.sh
 Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
-Patch3:		disable_dlog_and_dcheck_in_release_builds.patch.diff
+Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 # http://aur.archlinux.org/packages/chromium-browser-svn/chromium-browser-svn/search-workaround.patch
 Patch4:		search-workaround.patch
 Patch5:		options-support.patch
@@ -171,7 +171,7 @@ echo "%{svnver}" > src/build/LASTCHANGE.in
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p0
+%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
