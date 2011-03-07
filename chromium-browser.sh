@@ -26,4 +26,14 @@ fi
 # Set CHROME_VERSION_EXTRA visible in the About dialog and in about:version
 export CHROME_VERSION_EXTRA="PLD Linux"
 
-exec @libdir@/chromium-browser "$@"
+# Google Chrome has a number of command line switches which change the behavior of Chrome
+# This param allows you to set extra args for browser startup.
+# See source for possible choices:
+# http://git.chromium.org/gitweb/?p=chromium.git;f=chrome/common/chrome_switches.cc;hb=HEAD
+CHROME_FLAGS_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/chromium/Chrome Flags"
+if [ -f "$CHROME_FLAGS_FILE" ]; then
+	# All lines starting with # are ignored
+	CHROME_FLAGS=$(grep -v '^#' "$CHROME_FLAGS_FILE")
+fi
+
+exec @libdir@/chromium-browser $CHROME_FLAGS "$@"
