@@ -9,6 +9,7 @@
 %bcond_without	ffmpegsumo	# build with ffmpegsumo
 %bcond_without	sandboxing	# with sandboxing
 %bcond_without	system_zlib	# with system zlib
+%bcond_without	keyring 	# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
 %bcond_without	debuginfo	# disable debuginfo creation (it is huge)
 
 # TODO
@@ -28,18 +29,18 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110304
-%define		svnver	76865
+%define		svndate	20110311
+%define		svnver	77774
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	11.0.691.0
+Version:	12.0.700.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	62de113711d3d9ac7b678d407bee4da8
+# Source0-md5:	dc38e6d5e52919f4e8cfbeb4e204d710
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -69,7 +70,7 @@ BuildRequires:	glib2-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
 BuildRequires:	libevent-devel
-BuildRequires:	libgnome-keyring-devel
+%{?with_keyring:BuildRequires:	libgnome-keyring-devel}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
@@ -237,11 +238,17 @@ cd src
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
 	-Duse_system_sqlite=%{?with_system_sqlite:1}%{!?with_system_sqlite:0} \
-	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
 	-Duse_system_vpx=1 \
+	-Duse_system_xdg_utils=1 \
 	-Duse_system_yasm=1 \
+	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
+%if %{with keyring}
+	-Duse_gnome_keyring=1 -Dlinux_link_gnome_keyring=0 \
+%else
+	-Duse_gnome_keyring=0 \
+%endif
 	%{!?with_sse2:-Ddisable_sse2=1} \
 %if %{with selinux}
 	-Dselinux=1 \
@@ -262,12 +269,10 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir}/%{name}/{themes,locales,plugins,extensions,resources},%{_mandir}/man1,%{_pixmapsdir},%{_desktopdir}}
 
 cd src/out/%{!?debug:Release}%{?debug:Debug}
-
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 %{__sed} -i -e 's,@libdir@,%{_libdir}/%{name},' $RPM_BUILD_ROOT%{_bindir}/%{name}
 cp -a *.pak locales resources $RPM_BUILD_ROOT%{_libdir}/%{name}
-cp -a chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
-cp -a product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
+cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 %if %{with ffmpegsumo}
@@ -275,6 +280,8 @@ install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cd -
+
+cp -p src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
 
 %browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins -b <<'EOF'
 # http://code.google.com/p/chromium/issues/detail?id=24507
