@@ -30,6 +30,7 @@ export CHROME_VERSION_EXTRA="PLD Linux"
 # This param allows you to set extra args for browser startup.
 # See source for possible choices:
 # http://git.chromium.org/gitweb/?p=chromium.git;f=chrome/common/chrome_switches.cc;hb=HEAD
+# Also: http://peter.sh/experiments/chromium-command-line-switches/
 CHROME_FLAGS_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/chromium/Chrome Flags"
 if [ -f "$CHROME_FLAGS_FILE" ]; then
 	# All lines starting with # are ignored
