@@ -8,16 +8,9 @@ as we don't want to Depend on the -dev packages for the .so files:
  app/gfx/gl/gl_implementation_linux.cc |   12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
-Index: src/app/gfx/gl/gl_implementation_linux.cc
-===================================================================
---- ./src.orig/app/gfx/gl/gl_implementation_linux.cc
-+++ ./src/app/gfx/gl/gl_implementation_linux.cc
-@@ -40,19 +40,19 @@
-     case kGLImplementationOSMesaGL: {
-       FilePath module_path;
-       if (!PathService::Get(base::DIR_MODULE, &module_path)) {
-         LOG(ERROR) << "PathService::Get failed.";
-         return false;
+--- chromium-browser-12.0.718.0~svn20110329r79651/src/ui/gfx/gl/gl_implementation_linux.cc~	2011-03-29 05:01:42.000000000 +0300
++++ chromium-browser-12.0.718.0~svn20110329r79651/src/ui/gfx/gl/gl_implementation_linux.cc	2011-03-29 18:47:17.048111826 +0300
+@@ -45,9 +45,9 @@
        }
  
        base::NativeLibrary library = base::LoadNativeLibrary(
@@ -29,17 +22,7 @@ Index: src/app/gfx/gl/gl_implementation_linux.cc
          return false;
        }
  
-       GLGetProcAddressProc get_proc_address =
-           reinterpret_cast<GLGetProcAddressProc>(
-               base::GetFunctionPointerFromNativeLibrary(
-                   library, "OSMesaGetProcAddress"));
-       if (!get_proc_address) {
-@@ -92,26 +92,26 @@
-       SetGLImplementation(kGLImplementationDesktopGL);
- 
-       InitializeGLBindingsGL();
-       InitializeGLBindingsGLX();
-       break;
+@@ -97,16 +97,16 @@
      }
      case kGLImplementationEGLGLES2: {
        base::NativeLibrary gles_library = base::LoadNativeLibrary(
@@ -60,8 +43,3 @@ Index: src/app/gfx/gl/gl_implementation_linux.cc
          base::UnloadNativeLibrary(gles_library);
          return false;
        }
- 
-       GLGetProcAddressProc get_proc_address =
-           reinterpret_cast<GLGetProcAddressProc>(
-               base::GetFunctionPointerFromNativeLibrary(
-                   egl_library, "eglGetProcAddress"));
