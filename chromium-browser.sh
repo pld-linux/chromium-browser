@@ -37,4 +37,4 @@ if [ -f "$CHROME_FLAGS_FILE" ]; then
 	CHROME_FLAGS=$(grep -v '^#' "$CHROME_FLAGS_FILE")
 fi
 
-exec @libdir@/chromium-browser $CHROME_FLAGS "$@"
+exec @libdir@/chromium-browser --password-store=detect $CHROME_FLAGS "$@"
