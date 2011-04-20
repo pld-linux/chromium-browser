@@ -4,42 +4,27 @@ as we don't want to Depend on the -dev packages for the .so files:
 - libGLESv2.so.2: Mesa-libGLES-7.11-0.20110227.1
 - libEGL.so.1: Mesa-libEGL-7.10-1
 
----
- app/gfx/gl/gl_implementation_linux.cc |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
---- chromium-browser-12.0.718.0~svn20110329r79651/src/ui/gfx/gl/gl_implementation_linux.cc~	2011-03-29 05:01:42.000000000 +0300
-+++ chromium-browser-12.0.718.0~svn20110329r79651/src/ui/gfx/gl/gl_implementation_linux.cc	2011-03-29 18:47:17.048111826 +0300
-@@ -45,9 +45,9 @@
+--- chromium-browser-12.0.741.0~svn20110419r82050/src/ui/gfx/gl/gl_implementation_linux.cc~	2011-04-19 05:00:54.000000000 +0300
++++ chromium-browser-12.0.741.0~svn20110419r82050/src/ui/gfx/gl/gl_implementation_linux.cc	2011-04-19 20:35:27.149741018 +0300
+@@ -61,7 +61,7 @@
        }
  
-       base::NativeLibrary library = base::LoadNativeLibrary(
+       base::NativeLibrary library = LoadLibrary(
 -          module_path.Append("libosmesa.so"));
 +          module_path.Append("libosmesa.so.7"));
-       if (!library) {
--        VLOG(1) << "libosmesa.so not found";
-+        VLOG(1) << "libosmesa.so.7 not found";
+       if (!library)
          return false;
-       }
  
-@@ -97,16 +97,16 @@
+@@ -107,10 +107,10 @@
+       break;
      }
      case kGLImplementationEGLGLES2: {
-       base::NativeLibrary gles_library = base::LoadNativeLibrary(
--          FilePath("libGLESv2.so"));
-+          FilePath("libGLESv2.so.2"));
-       if (!gles_library) {
--        VLOG(1) << "libGLESv2.so not found";
-+        VLOG(1) << "libGLESv2.so.2 not found";
+-      base::NativeLibrary gles_library = LoadLibrary("libGLESv2.so");
++      base::NativeLibrary gles_library = LoadLibrary("libGLESv2.so.2");
+       if (!gles_library)
          return false;
-       }
+-      base::NativeLibrary egl_library = LoadLibrary("libEGL.so");
++      base::NativeLibrary egl_library = LoadLibrary("libEGL.so.1");
+       if (!egl_library)
+         return false;
  
-       base::NativeLibrary egl_library = base::LoadNativeLibrary(
--          FilePath("libEGL.so"));
-+          FilePath("libEGL.so.1"));
-       if (!egl_library) {
--        VLOG(1) << "libEGL.so not found";
-+        VLOG(1) << "libEGL.so.1 not found";
-         base::UnloadNativeLibrary(gles_library);
-         return false;
-       }

@@ -29,18 +29,18 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110402
-%define		svnver	80248
+%define		svndate	20110419
+%define		svnver	82076
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	12.0.722.0
+Version:	12.0.741.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	fbface339ecf0022f691f0f9268709b3
+# Source0-md5:	8941e233f7da3919dfa2bf8f62b39eba
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
