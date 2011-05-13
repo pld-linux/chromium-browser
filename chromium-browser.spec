@@ -29,13 +29,13 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110419
-%define		svnver	82076
+%define		svndate	20110513
+%define		svnver	85235
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	12.0.741.0
+Version:	13.0.764.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
@@ -71,6 +71,7 @@ BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
 BuildRequires:	libevent-devel
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
+BuildRequires:	libicu-devel >= 4.6
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
@@ -201,6 +202,7 @@ remove_bundled_lib() {
 
 cd src
 remove_bundled_lib "third_party/bzip2"
+remove_bundled_lib "third_party/icu"
 remove_bundled_lib "third_party/libevent"
 remove_bundled_lib "third_party/libjpeg"
 remove_bundled_lib "third_party/libpng"
@@ -232,6 +234,7 @@ cd src
 	-Djavascript_engine=%{?with_system_v8:system-v8}%{!?with_system_v8:v8} \
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
 	-Duse_system_bzip2=1 \
+	-Duse_system_icu=1 \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
 	-Duse_system_libpng=1 \

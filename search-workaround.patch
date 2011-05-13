@@ -1,6 +1,6 @@
---- chromium-browser-10.0.647.0~svn20110123r72286/src/chrome/browser/search_engines/template_url.cc.orig	2011-01-22 04:01:50.000000000 +0100
-+++ chromium-browser-10.0.647.0~svn20110123r72286/src/chrome/browser/search_engines/template_url.cc	2011-01-23 13:22:52.878238576 +0100
-@@ -341,27 +341,28 @@
+--- chromium-browser-13.0.763.0~svn20110512r85088/src/chrome/browser/search_engines/template_url.cc.orig	2011-05-12 04:00:22.000000000 +0200
++++ chromium-browser-13.0.763.0~svn20110512r85088/src/chrome/browser/search_engines/template_url.cc	2011-05-12 18:20:21.260874114 +0200
+@@ -347,28 +347,28 @@
         i != replacements_.rend(); ++i) {
      switch (i->type) {
        case ENCODING:
@@ -14,8 +14,9 @@
 -          url.insert(i->index, "aq=f&");
 +          url.replace(i->index, 0, "aq=f&");
          else if (accepted_suggestion != NO_SUGGESTIONS_AVAILABLE)
--          url.insert(i->index, StringPrintf("aq=%d&", accepted_suggestion));
-+          url.replace(i->index, 0, StringPrintf("aq=%d&", accepted_suggestion));
+-          url.insert(i->index,
+-                     base::StringPrintf("aq=%d&", accepted_suggestion));
++          url.replace(i->index, 0, base::StringPrintf("aq=%d&", accepted_suggestion));
          break;
  
        case GOOGLE_BASE_URL:
@@ -35,7 +36,7 @@
                                 "&");
          break;
  
-@@ -385,17 +386,17 @@
+@@ -392,17 +392,17 @@
          base::UTF16ToCodepage(terms, input_encoding.c_str(),
                                base::OnStringConversionError::SKIP,
                                &unescaped_terms);
