@@ -12,12 +12,12 @@
 +
    // Derived from Safari's UA string.
    base::StringAppendF(
-       result,
+       &user_agent,
        "Mozilla/5.0 (%s%s) AppleWebKit/%d.%d"
 -      " (KHTML, like Gecko) %s Safari/%d.%d",
 +      " (KHTML, like Gecko) @BUILD_DIST_NAME@/@BUILD_DIST_VERSION@ %s %s Safari/%d.%d",
        mimic_windows ? "Windows " : kUserAgentPlatform,
-       BuildOSCpuInfo().c_str(),
+       webkit_glue::BuildOSCpuInfo().c_str(),
        WEBKIT_VERSION_MAJOR,
        WEBKIT_VERSION_MINOR,
 +      realproduct.c_str(),

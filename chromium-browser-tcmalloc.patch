@@ -32,6 +32,6 @@
  }
 -void *(*__memalign_hook)(size_t, size_t, const void *) = MemalignOverride;
 +void *(* volatile __memalign_hook)(size_t, size_t, const void *) = MemalignOverride;
- #endif  // #ifndef TCMALLOC_FOR_DEBUGALLOCATION
+ #endif  // TCMALLOC_USING_DEBUGALLOCATION
  
  // ---Double free() debugging implementation -----------------------------------
