@@ -29,18 +29,18 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110805
-%define		svnver	95552
+%define		svndate	20110813
+%define		svnver	96657
 %define		rel	1
 
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	15.0.845.0
+Version:	15.0.851.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	a73cdd6aa466e6a76896dcced1b6cf9d
+# Source0-md5:	6f16d5cb67972958846599841e7c75f0
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -55,8 +55,7 @@ Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
-Patch9:		cups15.patch
-URL:		http://code.google.com/chromium/
+URL:		http://www.chromium.org/Home
 BuildRequires:	GConf2-devel
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	alsa-lib-devel
@@ -190,7 +189,6 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch9 -p1
 
 # drop bundled libs, from gentoo
 remove_bundled_lib() {
