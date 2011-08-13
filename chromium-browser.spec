@@ -108,7 +108,7 @@ Requires:	browser-plugins >= 2.0
 Requires:	libvpx >= 0.9.5-2
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
-Obsoletes:	chromium-browser-bookmark_manager
+Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
