@@ -1,25 +1,33 @@
 #
 # Conditional build:
-%bcond_with	verbose		# verbose build (V=1)
-%bcond_with	selinux		# with SELinux (need policy first)
-%bcond_with	shared_libs	# with shared libs
-%bcond_with	sse2		# use SSE2 instructions
-%bcond_with	system_sqlite	# with system sqlite
-%bcond_with	system_v8	# with system v8
-%bcond_without	ffmpegsumo	# build with ffmpegsumo
-%bcond_without	sandboxing	# with sandboxing
-%bcond_without	system_zlib	# with system zlib
-%bcond_without	keyring 	# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
-%bcond_without	debuginfo	# disable debuginfo creation (it is huge)
+%bcond_without	debuginfo		# disable debuginfo creation (it is huge)
+%bcond_without	ffmpegsumo		# build with ffmpegsumo
+%bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
+%bcond_without	sandboxing		# with sandboxing
+%bcond_with		selinux			# with SELinux (need policy first)
+%bcond_with		shared_libs		# with shared libs
+%bcond_with		sse2			# use SSE2 instructions
+%bcond_with		system_sqlite	# with system sqlite
+%bcond_with		system_v8		# with system v8
+%bcond_without	system_zlib		# with system zlib
+%bcond_with		verbose			# verbose build (V=1)
 
 # TODO
 # - check system sqlite linking problems
+# - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
+# - use_system_speex
+# - use_system_libwebp
+# - use_system_flac
+# - use_system_ssl (use_openssl?)
+# - use_system_v8
+# - use_system_ffmpeg
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
-# - build i686: -bp: ~570MB; bc: ~928MB; -bb: ~1.0GB
-# - build x86_64: -bp: ~570MB; bc: ~990MB; -bb: ~1.0GB
+# - build -bp: 1.2G
+# - build i686: -bc: 2.7G; -bb: ~1.0GB
+# - build x86_64: -bc: ~990MB; -bb: ~1.0GB
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
