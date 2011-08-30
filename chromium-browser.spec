@@ -2,13 +2,17 @@
 # Conditional build:
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
 %bcond_without	ffmpegsumo		# build with ffmpegsumo
+%bcond_with		kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
+%bcond_with		nacl			# build Native Client support
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
+%bcond_without	system_speex	# with system speex
 %bcond_with		system_sqlite	# with system sqlite
 %bcond_with		system_v8		# with system v8
+%bcond_with		system_yasm		# with system yasm
 %bcond_without	system_zlib		# with system zlib
 %bcond_with		verbose			# verbose build (V=1)
 
@@ -18,9 +22,15 @@
 # - use_system_speex
 # - use_system_libwebp
 # - use_system_flac
-# - use_system_ssl (use_openssl?)
+# - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_v8
 # - use_system_ffmpeg
+# - other defaults: src/build/common.gypi
+
+# build broken on x86-64 due 32bit exe:
+# /home/users/glen/rpm/BUILD.x86_64-linux/chromium-browser-15.0.863.0~svn20110826r98379/src/native_client/toolchain/linux_x86_newlib/bin/x86_64-nacl-ar: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.15, stripped
+# build broken on x86-32:
+# /home/users/glen/rpm/BUILD.i686-linux/chromium-browser-15.0.863.0~svn20110826r98379/src/native_client/toolchain/linux_x86_newlib/bin/../lib/gcc/x86_64-nacl/acl/bin/ld: crtbegin.o: No such file: No such file or directory
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -37,18 +47,19 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110813
-%define		svnver	96657
-%define		rel	1
+%define		svndate	20110830
+%define		svnver	98749
+%define		rel		0.1
 
+%define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	15.0.851.0
+Version:	15.0.866.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	6f16d5cb67972958846599841e7c75f0
+# Source0-md5:	1e329b92d89e1a668b29101c2c91378b
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -58,7 +69,7 @@ Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 # http://aur.archlinux.org/packages/chromium-browser-svn/chromium-browser-svn/search-workaround.patch
-Patch4:		search-workaround.patch
+#Patch4:		search-workaround.patch
 Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
@@ -77,6 +88,7 @@ BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
+%{?with_kerberos:BuildRequires:	heimdal-devel}
 BuildRequires:	libevent-devel
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
 BuildRequires:	libicu-devel >= 4.6
@@ -98,8 +110,8 @@ BuildRequires:	pkgconfig
 BuildRequires:	pulseaudio-devel
 BuildRequires:	python
 BuildRequires:	rpm >= 4.4.9-56
-# grep googlecode_url.*gyp src/DEPS |cut -d'"' -f6 | cut -d@ -f2
-BuildRequires:	python-gyp >= 1-840
+%{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
+BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
@@ -109,13 +121,14 @@ BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	xorg-lib-libXtst-devel
-BuildRequires:	yasm
+%{?with_system_yasm:BuildRequires:	yasm}
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
 Requires:	libvpx >= 0.9.5-2
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
+Obsoletes:	chromium-browser-inspector < 15.0.863.0
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -133,19 +146,6 @@ web.
 Chromium serves as a base for Google Chrome, which is Chromium
 rebranded (name and logo) with very few additions such as usage
 tracking and an auto-updater system.
-
-%package inspector
-Summary:	Page inspector for the chromium-browser
-Group:		Development/Tools
-Requires:	%{name} = %{version}-%{release}
-
-%description inspector
-Chromium is an open-source browser project that aims to build a safer,
-faster, and more stable way for all Internet users to experience the
-web.
-
-This package contains 'inspector', allowing web developpers to inspect
-any element of a web page at runtime (html, javascript, css, ..)
 
 %package l10n
 Summary:	chromium-browser language packages
@@ -173,9 +173,10 @@ rm -f %{name}-%{version}~svn%{svndate}r%{svnver}-source.tar.lzma
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
 . ./src/chrome/VERSION
 ver=$MAJOR.$MINOR.$BUILD.$PATCH
-if [ "$ver" != %{version} ]; then
-	exit 1
-fi
+test "$ver" = %{version}
+
+gyp_rev=$(grep googlecode_url.*gyp src/DEPS | cut -d'"' -f6 | cut -d@ -f2)
+test "$gyp_rev" = %{gyp_rev}
 
 # Populate the LASTCHANGE file template as we no longer have the VCS files at this point
 echo "%{svnver}" > src/build/LASTCHANGE.in
@@ -193,7 +194,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
+#%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
@@ -220,6 +221,8 @@ remove_bundled_lib "third_party/libpng"
 remove_bundled_lib "third_party/libxml"
 remove_bundled_lib "third_party/libxslt"
 remove_bundled_lib "third_party/zlib"
+# third_party/yasm/source/patched-yasm/modules/arch/x86/gen_x86_insn.py', needed by `out/Release/obj/gen/third_party/yasm/x86insns.c'.  Stop.
+#remove_bundled_lib "third_party/yasm"
 
 %build
 cd src
@@ -242,6 +245,10 @@ cd src
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	-Djavascript_engine=%{?with_system_v8:system-v8}%{!?with_system_v8:v8} \
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
+	-Dffmpeg_branding=Chrome \
+	-Dproprietary_codecs=1 \
+	%{!?with_sse2:-Ddisable_sse2=1} \
+	%{?with_selinux:-Dselinux=1} \
 	-Duse_system_bzip2=1 \
 	-Duse_system_icu=1 \
 	-Duse_system_libevent=1 \
@@ -249,21 +256,21 @@ cd src
 	-Duse_system_libpng=1 \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
+	-Duse_system_speex=%{?with_system_speex:1}%{!?with_system_speex:0} \
 	-Duse_system_sqlite=%{?with_system_sqlite:1}%{!?with_system_sqlite:0} \
 	-Duse_system_vpx=1 \
 	-Duse_system_xdg_utils=1 \
-	-Duse_system_yasm=1 \
+	-Duse_system_yasm=%{?with_system_yasm:1}%{!?with_system_yasm:0} \
 	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
-	-Dffmpeg_branding=Chrome \
-	-Dproprietary_codecs=1 \
+%if %{with kerberos}
+	-Duse_kerberos=1 -Dlinux_link_kerberos=0 \
+%else
+	-Duse_kerberos=0 \
+%endif
 %if %{with keyring}
 	-Duse_gnome_keyring=1 -Dlinux_link_gnome_keyring=0 \
 %else
 	-Duse_gnome_keyring=0 \
-%endif
-	%{!?with_sse2:-Ddisable_sse2=1} \
-%if %{with selinux}
-	-Dselinux=1 \
 %endif
 
 %{__make} chrome %{?with_sandboxing:chrome_sandbox} \
@@ -329,6 +336,7 @@ fi
 %dir %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/locales/en-US.pak
 %dir %{_libdir}/%{name}/resources
+%{_libdir}/%{name}/resources/inspector
 %dir %{_libdir}/%{name}/themes
 %dir %{_libdir}/%{name}/extensions
 %dir %{_libdir}/%{name}/plugins
@@ -340,10 +348,6 @@ fi
 %if %{with ffmpegsumo}
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
 %endif
-
-%files inspector
-%defattr(644,root,root,755)
-%{_libdir}/%{name}/resources/inspector
 
 %files l10n -f %{name}.lang
 %defattr(644,root,root,755)
