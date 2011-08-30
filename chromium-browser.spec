@@ -247,6 +247,7 @@ cd src
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
+	%{!?with_nacl:-Ddisable_nacl=1} \
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
 	-Duse_system_bzip2=1 \
