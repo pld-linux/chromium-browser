@@ -47,19 +47,19 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110830
-%define		svnver	98749
-%define		rel		0.1
+%define		svndate	20110831
+%define		svnver	98911
+%define		rel		1
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	15.0.866.0
+Version:	15.0.867.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	1e329b92d89e1a668b29101c2c91378b
+# Source0-md5:	ff99ac06796cf69e19a89f89e9e1f898
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -68,8 +68,6 @@ Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
-# http://aur.archlinux.org/packages/chromium-browser-svn/chromium-browser-svn/search-workaround.patch
-#Patch4:		search-workaround.patch
 Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
@@ -194,7 +192,6 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-#%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
