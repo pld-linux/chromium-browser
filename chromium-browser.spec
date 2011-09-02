@@ -47,19 +47,19 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110831
-%define		svnver	98911
+%define		svndate	20110902
+%define		svnver	99284
 %define		rel		1
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	15.0.867.0
+Version:	15.0.869.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	ff99ac06796cf69e19a89f89e9e1f898
+# Source0-md5:	a1339e6daf163ddefcc4c757dd989470
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -109,7 +109,7 @@ BuildRequires:	pulseaudio-devel
 BuildRequires:	python
 BuildRequires:	rpm >= 4.4.9-56
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
-BuildRequires:	python-gyp >= 1-%{gyp_rev}
+#BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
@@ -174,7 +174,7 @@ ver=$MAJOR.$MINOR.$BUILD.$PATCH
 test "$ver" = %{version}
 
 gyp_rev=$(grep googlecode_url.*gyp src/DEPS | cut -d'"' -f6 | cut -d@ -f2)
-test "$gyp_rev" = %{gyp_rev}
+#test "$gyp_rev" = %{gyp_rev}
 
 # Populate the LASTCHANGE file template as we no longer have the VCS files at this point
 echo "%{svnver}" > src/build/LASTCHANGE.in
