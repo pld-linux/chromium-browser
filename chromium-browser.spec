@@ -47,19 +47,19 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110902
-%define		svnver	99284
+%define		svndate	20110904
+%define		svnver	99583
 %define		rel		1
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	15.0.869.0
+Version:	15.0.871.0
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	a1339e6daf163ddefcc4c757dd989470
+# Source0-md5:	2a3b5e5d632e9b2a93bb7b3b8a0d1db8
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -127,6 +127,7 @@ Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
 Obsoletes:	chromium-browser-inspector < 15.0.863.0
+Requires:	desktop-file-utils
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -313,6 +314,7 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %post
+%update_desktop_database
 %update_browser_plugins
 
 %postun
