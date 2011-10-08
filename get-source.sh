@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# based on debian/rules for chromium package
+# based on debian/rules for chromium-browser package
 
 set -e
 set -x
@@ -18,14 +18,27 @@ CHANNELS_URL="http://omahaproxy.appspot.com/"
 
 CHANNEL="beta"
 
-TMP_DIR=$(pwd)/chromium-browser
+# local mirror of chromium checkout,
+# if empty code will be checked out each time
+LOCAL_BRANCH=$(pwd)/chromium-browser
+
+TMP_DDIR=$(pwd)/chromium-browser-$$
+TMP_DIR=${LOCAL_BRANCH:-${TMP_DDIR}}
 
 VERSION=$(wget -qO - "$CHANNELS_URL" | grep -i "^linux,${CHANNEL}" | cut -d, -f3)
 
+if [ -z "$LOCAL_BRANCH" ]; then
+	rm -rf $TMP_DIR
+fi
 
-rm -rf $TMP_DIR
 install -d $TMP_DIR
-svn co "$GCLIENT_URL" chromium-browser/tools/depot_tools
+
+if [ ! -d $TMP_DIR/tools/depot_tools ] ; then \
+	svn co "$GCLIENT_URL" $TMP_DIR/tools/depot_tools
+else
+	svn update $TMP_DIR/tools/depot_tools
+fi
+
 cd $TMP_DIR
 if [ "$USE_GREEN_REV" -eq 1 ]; then
 	REVISION=$(wget -qO - "${GREEN_REV_URL}")
@@ -46,7 +59,12 @@ perl -i~ -pe 's%(.python., .src/build/gyp_chromium.)%"echo", "#disabled#", $1%' 
 ./tools/depot_tools/gclient runhooks
 mv $SDIR/DEPS~ $SDIR/DEPS
 
-cd $(TMP_DIR)/src && find . -type f \( -iname \*.exe -o -iname \*.dll -o -iname \*.pdb -o -name \*.o -o -name \*.a -o -name \*.dylib \) -exec rm -fv {} \; > REMOVED-bin_only.txt
-wc -l $(TMP_DIR)/src/REMOVED-*.txt
+if [ -n "$LOCAL_BRANCH" ]; then
+	rm -rf $TMP_DDIR
+	cp -la $TMP_DIR $TMP_DDIR
+fi
 
+cd $TMP_DDIR/src && find . -type f \( -iname \*.exe -o -iname \*.dll -o -iname \*.pdb -o -name \*.o -o -name \*.a -o -name \*.dylib \) -exec rm -fv {} \; > REMOVED-bin_only.txt
+wc -l $TMP_DDIR/src/REMOVED-*.txt
 
+TMP_DIR=$TMP_DDIR
