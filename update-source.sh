@@ -6,6 +6,9 @@
 #  publish_packages=[0|1] - publish built packages in ~/public_html/$dist/$arch
 #  quiet=[0|1] - discard stdout of process
 
+pkg=chromium-browser
+specfile=$pkg.spec
+
 # work in package dir
 dir=$(dirname "$0")
 cd "$dir"
@@ -20,7 +23,8 @@ if [ "$quiet" = "1" ]; then
 	exec 1>/dev/null
 fi
 
-baseurl=http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser
+# take baseurl from .spec Source0
+baseurl=$(awk '/^Source0:/{print $2}'  $specfile | xargs dirname)
 
 if [ "$1" ]; then
 	url=$1
@@ -31,6 +35,13 @@ else
 	fi
 	echo "Fetching latest tarball name..."
 	url=$(lynx -dump $baseurl/ | awk '/orig\.tar\.gz/{tarball=$NF} END{print tarball}')
+	# unescape "~" encoded by lighttpd
+	url=$(echo "$url" | sed -e 's,%7e,~,gi')
+fi
+
+if [ -z "$url" ]; then
+	echo >&2 "URL empty..."
+	exit 1
 fi
 
 tarball=${url##*/}
@@ -45,8 +56,6 @@ if [ ! -f $tarball ]; then
 	upload=$tarball
 fi
 
-pkg=chromium-browser
-specfile=$pkg.spec
 
 # cvs up specfile, rename in case of conflicts
 cvs up $specfile || { set -x; mv -b $specfile $specfile.old && cvs up $specfile; }
@@ -55,8 +64,11 @@ svndate=$(awk '/^%define[ 	]+svndate[ 	]+/{print $NF}' $specfile)
 svnver=$(awk '/^%define[ 	]+svnver[ 	]+/{print $NF}' $specfile)
 version=$(awk '/^Version:[ 	]+/{print $NF}' $specfile)
 rel=$(awk '/^%define[ 	]+rel[ 	]+/{print $NF}' $specfile)
+if [ "$svndate" = "%{nil}" ]; then
+	svndate=
+fi
 
-newtar=${pkg}_${version}~svn${svndate}r${svnver}.orig.tar.gz
+newtar=${pkg}_${version}~${svndate:+svn${svndate}}r${svnver}.orig.tar.gz
 if [ "$newtar" = "$tarball" ]; then
 	echo "$specfile already up to $newtar"
 
@@ -65,10 +77,16 @@ if [ "$newtar" = "$tarball" ]; then
 		exit 0
 	fi
 else
-	echo "Updating $specfile $to $newtar"
-	version=${tarball#${pkg}_} version=${version%~*}
-	svndate=${tarball#*svn} svndate=${svndate%%r*}
-	svnver=${tarball#${pkg}_${version}~svn${svndate}r} svnver=${svnver%%.*}
+	echo "Updating $specfile to $tarball"
+	part=${tarball#${pkg}_}
+   	version=${part%~*} part=${part#*${version}~}
+   	if [ "$part" != "${part%%svn*}" ]; then
+		svndate=${part#svn*} svndate=${svndate%%r*}
+		part=${part#svn${svndate}}
+	else
+		svndate='%{nil}'
+	fi
+	svnver=${part#r} svnver=${svnver%%.*}
 
 	sed -i -e "
 		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/

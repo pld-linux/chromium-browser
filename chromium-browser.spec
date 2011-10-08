@@ -47,19 +47,20 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	20110904
-%define		svnver	99583
+%define		svndate	%{nil}
+%define		svnver	104223
 %define		rel		1
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	15.0.871.0
+Version:	15.0.874.83
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
-# Source0-md5:	2a3b5e5d632e9b2a93bb7b3b8a0d1db8
+#Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}_%{version}~r%{svnver}.orig.tar.gz
+# Source0-md5:	c9013564af4f1f9dbeb40737830adb9f
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -107,12 +108,13 @@ BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	pulseaudio-devel
 BuildRequires:	python
-BuildRequires:	rpm >= 4.4.9-56
-%{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-modules
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
+%{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 BuildRequires:	sqlite3-devel >= 3.6.1
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	util-linux
 %{?with_system_v8:BuildRequires:	v8-devel}
 BuildRequires:	which
@@ -122,12 +124,12 @@ BuildRequires:	xorg-lib-libXtst-devel
 %{?with_system_yasm:BuildRequires:	yasm}
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
+Requires:	desktop-file-utils
 Requires:	libvpx >= 0.9.5-2
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
 Obsoletes:	chromium-browser-inspector < 15.0.863.0
-Requires:	desktop-file-utils
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -135,6 +137,11 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %if %{without debuginfo}
 %define		_enable_debug_packages	0
+%endif
+
+# undefine if empty, makes prep simplier
+%if "%{svndate}" == "%{nil}"
+%undefine	svndate
 %endif
 
 %description
@@ -164,9 +171,11 @@ pl, pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi,
 zh-CN, zh-TW
 
 %prep
-%setup -q -n %{name}-%{version}~svn%{svndate}r%{svnver}
-lzma -dc %{name}-%{version}~svn%{svndate}r%{svnver}-source.tar.lzma | tar x
-rm -f %{name}-%{version}~svn%{svndate}r%{svnver}-source.tar.lzma
+# chromium-browser-15.0.874.83~svnr104223
+%setup -q -n %{name}-%{version}~%{?svndate:svn%{svndate}}r%{svnver}
+SRC=%{name}-%{version}~%{?svndate:svn%{svndate}}r%{svnver}-source.tar.*
+tar xf $SRC
+%{__rm} $SRC
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
