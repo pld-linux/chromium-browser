@@ -49,7 +49,7 @@
 
 %define		svndate	%{nil}
 %define		svnver	104223
-%define		rel		1
+%define		rel		2
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
