@@ -37,4 +37,7 @@ if [ -f "$CHROME_FLAGS_FILE" ]; then
 	CHROME_FLAGS=$(grep -v '^#' "$CHROME_FLAGS_FILE")
 fi
 
-exec @libdir@/chromium-browser --password-store=detect $CHROME_FLAGS "$@"
+# Google guys cannot properly handle coma, so download speed/est is shown
+# as not a number (NaN). Workaround that with LC_NUMERIC=C
+
+LC_NUMERIC=C exec @libdir@/chromium-browser --password-store=detect $CHROME_FLAGS "$@"
