@@ -48,19 +48,19 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
 %define		svndate	%{nil}
-%define		svnver	104223
+%define		svnver	104978
 %define		rel		2
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	15.0.874.83
+Version:	15.0.874.92
 Release:	0.%{svnver}.%{rel}
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 #Source0:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}_%{version}~r%{svnver}.orig.tar.gz
-# Source0-md5:	c9013564af4f1f9dbeb40737830adb9f
+# Source0-md5:	7edcd620df977ab407be6ae6034293d7
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
@@ -171,7 +171,6 @@ pl, pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi,
 zh-CN, zh-TW
 
 %prep
-# chromium-browser-15.0.874.83~svnr104223
 %setup -q -n %{name}-%{version}~%{?svndate:svn%{svndate}}r%{svnver}
 SRC=%{name}-%{version}~%{?svndate:svn%{svndate}}r%{svnver}-source.tar.*
 tar xf $SRC
@@ -184,7 +183,7 @@ ver=$MAJOR.$MINOR.$BUILD.$PATCH
 test "$ver" = %{version}
 
 gyp_rev=$(grep googlecode_url.*gyp src/DEPS | cut -d'"' -f6 | cut -d@ -f2)
-#test "$gyp_rev" = %{gyp_rev}
+test "$gyp_rev" = %{gyp_rev} || :
 
 # Populate the LASTCHANGE file template as we no longer have the VCS files at this point
 echo "%{svnver}" > src/build/LASTCHANGE.in
