@@ -24,7 +24,7 @@ if [ "$quiet" = "1" ]; then
 fi
 
 # take baseurl from .spec Source0
-baseurl=$(awk '/^Source0:/{print $2}'  $specfile | xargs dirname)
+baseurl=$(awk '/^Source0:/{print $2}' $specfile | xargs dirname)
 
 if [ "$1" ]; then
 	url=$1
@@ -79,8 +79,9 @@ if [ "$newtar" = "$tarball" ]; then
 else
 	echo "Updating $specfile to $tarball"
 	part=${tarball#${pkg}_}
-   	version=${part%~*} part=${part#*${version}~}
-   	if [ "$part" != "${part%%svn*}" ]; then
+	version=${part%~*} part=${part#*${version}~}
+	release=1
+	if [ "$part" != "${part%%svn*}" ]; then
 		svndate=${part#svn*} svndate=${svndate%%r*}
 		part=${part#svn${svndate}}
 	else
@@ -91,6 +92,7 @@ else
 	sed -i -e "
 		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
 		s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
+		s/^\(%define[ \t]\+rel[ \t]\+\)[0-9]\+\$/\1$release/
 		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
 	" $specfile
 
