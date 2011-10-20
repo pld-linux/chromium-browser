@@ -34,9 +34,9 @@ else
 		exit 1
 	fi
 	echo "Fetching latest tarball name..."
-	url=$(lynx -dump $baseurl/ | awk '/orig\.tar\.gz/{tarball=$NF} END{print tarball}')
+	urls=$(lynx -dump $baseurl/ | awk '/[0-9]+\. .*orig\.tar\.gz/{print $NF}')
 	# unescape "~" encoded by lighttpd
-	url=$(echo "$url" | sed -e 's,%7e,~,gi')
+	url=$(echo "$urls" | sed -e 's,%7e,~,gi' | sort -Vr | head -n1)
 fi
 
 if [ -z "$url" ]; then
