@@ -1,10 +1,22 @@
 #!/bin/sh
 set -e
 
-CHANNEL=beta
+# CHANNEL: any from CHANNELS_URL: beta, dev
+CHANNEL=${1:-beta}
+
+CHANNELS_URL=http://omahaproxy.appspot.com/
 PACKAGE_NAME=chromium-browser
 WORK_DIR=$HOME/bzr/$PACKAGE_NAME.head.daily
 CHROMIUM=$HOME/svn/$PACKAGE_NAME-$CHANNEL
+
+VERSION=$(wget -qO - $CHANNELS_URL | grep -i "^linux,$CHANNEL" | cut -d, -f3)
+VERSION_LOCK=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.$VERSION
+
+if [ -f $VERSION_LOCK ]; then
+	# nothing to update
+	exit 0
+fi
+
 LOGFILE=$(mktemp $WORK_DIR/$PACKAGE_NAME-$CHANNEL.XXXXXX)
 
 cd "$WORK_DIR"
@@ -28,3 +40,4 @@ scp -pr $logfile $tarball carme.pld-linux.org:public_html/chromium-browser/src/$
 
 install -d archive/$CHANNEL
 mv $logfile $tarball archive/$CHANNEL
+touch $VERSION_LOCK
