@@ -9,7 +9,7 @@ PACKAGE_NAME=chromium-browser
 WORK_DIR=$HOME/bzr/$PACKAGE_NAME.head.daily
 CHROMIUM=$HOME/svn/$PACKAGE_NAME-$CHANNEL
 
-VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | grep -v "^os," | cut -d, -f3)
+VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')
 VERSION_LOCK=$CHROMIUM/$VERSION
 
 if [ -e $VERSION_LOCK ]; then
