@@ -91,7 +91,7 @@ else
 
 	sed -i -e "
 		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
-		s/^\(%define[ \t]\+svndate[ \t]\+\)[0-9]\+\$/\1$svndate/
+		s/^\(%define[ \t]\+svndate[ \t]\+\).\+\$/\1$svndate/
 		s/^\(%define[ \t]\+rel[ \t]\+\)[0-9]\+\$/\1$release/
 		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
 	" $specfile
