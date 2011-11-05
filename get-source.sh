@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
+set -x
 
 # CHANNEL: any from CHANNELS_URL: beta, dev
 CHANNEL=${1:-beta}
@@ -8,6 +9,7 @@ CHANNELS_URL=http://omahaproxy.appspot.com/
 PACKAGE_NAME=chromium-browser
 WORK_DIR=$HOME/bzr/$PACKAGE_NAME.head.daily
 CHROMIUM=$HOME/svn/$PACKAGE_NAME-$CHANNEL
+LOCKFILE=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.lock
 
 VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')
 VERSION_LOCK=$CHROMIUM/$VERSION
@@ -17,11 +19,18 @@ if [ -e $VERSION_LOCK ]; then
 	exit 0
 fi
 
+# consider lockfile stale after 2h
+if ! lockfile -l 7200 $LOCKFILE; then
+	exit 1
+fi
+
+trap "rm -f $LOCKFILE" EXIT
+
 LOGFILE=$(mktemp $WORK_DIR/$PACKAGE_NAME-$CHANNEL.XXXXXX)
 
 cd "$WORK_DIR"
 dpkg-architecture -c \
-./debian/rules get-orig-source LOCAL_BRANCH=$CHROMIUM CHANNEL=$CHANNEL USE_GREEN_REV=1 > $LOGFILE 2>&1
+./debian/rules get-orig-source LOCAL_BRANCH=$CHROMIUM CHANNEL=$CHANNEL USE_GREEN_REV=1 > $LOGFILE 2>&1 </dev/null
 
 tarball=$(ls $PACKAGE_NAME*.orig.tar.gz)
 count=$(echo "$tarball" | wc -w)
