@@ -12,15 +12,15 @@ CHROMIUM=$HOME/svn/$PACKAGE_NAME-$CHANNEL
 LOCKFILE=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.lock
 
 VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')
-VERSION_LOCK=$CHROMIUM/$VERSION
+VERSION_FILE=$WORK_DIR/archive/$CHANNEL/${PACKAGE_NAME}_$VERSION~*.tar.gz
 
-if [ -e $VERSION_LOCK ]; then
+if [ -e $VERSION_FILE ]; then
 	# nothing to update
 	exit 0
 fi
 
-# consider lockfile stale after 2h
-if ! lockfile -l 7200 $LOCKFILE; then
+# consider lockfile stale after 3h
+if ! lockfile -l 10800 $LOCKFILE; then
 	exit 1
 fi
 
