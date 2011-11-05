@@ -1,8 +1,8 @@
---- chromium-browser-11.0.691.0~svn20110304r76865/src/webkit/glue/user_agent.cc~	2011-03-04 05:00:41.000000000 +0200
-+++ chromium-browser-11.0.691.0~svn20110304r76865/src/webkit/glue/user_agent.cc	2011-03-04 18:55:33.180524092 +0200
-@@ -102,15 +102,22 @@
-   // maximally compatible with Safari, we hope!!
-   std::string product = GetProductVersion();
+--- chromium-browser-16.0.912.21~r108057/src/webkit/glue/user_agent.cc~	2011-11-05 15:01:12.000000000 +0100
++++ chromium-browser-16.0.912.21~r108057/src/webkit/glue/user_agent.cc	2011-11-05 17:29:13.809556210 +0100
+@@ -127,6 +127,12 @@
+ 
+   std::string user_agent;
  
 +  // We want to also add Chromium
 +  std::string realproduct = product.c_str();
@@ -10,13 +10,16 @@
 +  if ((pos = realproduct.find("/")) != std::string::npos)
 +      realproduct.replace(0, pos, "Chromium");
 +
-   // Derived from Safari's UA string.
+   // This is done to expose our product name in a manner that is maximally
+   // compatible with Safari, we hope!!
+ 
+@@ -134,11 +140,12 @@
    base::StringAppendF(
        &user_agent,
        "Mozilla/5.0 (%s%s) AppleWebKit/%d.%d"
 -      " (KHTML, like Gecko) %s Safari/%d.%d",
 +      " (KHTML, like Gecko) @BUILD_DIST_NAME@/@BUILD_DIST_VERSION@ %s %s Safari/%d.%d",
-       mimic_windows ? "Windows " : kUserAgentPlatform,
+       kUserAgentPlatform,
        webkit_glue::BuildOSCpuInfo().c_str(),
        WEBKIT_VERSION_MAJOR,
        WEBKIT_VERSION_MINOR,
