@@ -1,6 +1,5 @@
 #!/bin/sh
 set -e
-set -x
 
 # CHANNEL: any from CHANNELS_URL: beta, dev
 CHANNEL=${1:-beta}
@@ -19,6 +18,8 @@ if [ -e $VERSION_FILE ]; then
 	exit 0
 fi
 
+set -x
+
 # consider lockfile stale after 3h
 if ! lockfile -l 10800 $LOCKFILE; then
 	exit 1
@@ -30,7 +31,10 @@ LOGFILE=$(mktemp $WORK_DIR/$PACKAGE_NAME-$CHANNEL.XXXXXX)
 
 cd "$WORK_DIR"
 dpkg-architecture -c \
-./debian/rules get-orig-source LOCAL_BRANCH=$CHROMIUM CHANNEL=$CHANNEL USE_GREEN_REV=1 > $LOGFILE 2>&1 </dev/null
+./debian/rules get-orig-source \
+	LOCAL_BRANCH=$CHROMIUM CHANNEL=$CHANNEL USE_GREEN_REV=1 \
+	WANT_XZ_SRC=1 WANT_LP_TRANSLATIONS=0 \
+	> $LOGFILE 2>&1 </dev/null
 
 tarball=$(ls $PACKAGE_NAME*.orig.tar.gz)
 count=$(echo "$tarball" | wc -w)
