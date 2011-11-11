@@ -79,15 +79,15 @@ if [ "$newtar" = "$tarball" ]; then
 else
 	echo "Updating $specfile to $tarball"
 	part=${tarball#${pkg}_}
-	version=${part%~*} part=${part#*${version}~}
+	version=${part%~*}; part=${part#*${version}~}
 	release=1
 	if [ "$part" != "${part%%svn*}" ]; then
-		svndate=${part#svn*} svndate=${svndate%%r*}
+		svndate=${part#svn*}; svndate=${svndate%%r*}
 		part=${part#svn${svndate}}
 	else
 		svndate='%{nil}'
 	fi
-	svnver=${part#r} svnver=${svnver%%.*}
+	svnver=${part#r}; svnver=${svnver%%.*}
 
 	sed -i -e "
 		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
