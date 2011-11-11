@@ -3,8 +3,11 @@
 # ./update-source.sh
 # env variables controlling behaviour
 #  build_package=[0|1] - build package when new version is fetched
+#  prep_package=[0|1] - check if package can be unpacked (implies build_package)
 #  publish_packages=[0|1] - publish built packages in ~/public_html/$dist/$arch
 #  quiet=[0|1] - discard stdout of process
+
+test $prep_package = 0 && build_package=0
 
 pkg=chromium-browser
 specfile=$pkg.spec
@@ -100,7 +103,7 @@ else
 fi
 
 # if we don't build. we're done
-if [ "$build_package" = 0 ]; then
+if [ "$prep_package" = 0 ]; then
 	exit 0
 fi
 
@@ -131,9 +134,11 @@ cat > $outdir/.builderrc <<-EOF
 	LOGFILE='$logfile'
 EOF
 
+command=-bp
+test $build_package = 1 && command=-bb
 > $logfile
 HOME_ETC=$outdir \
-	../builder -bb --clean \
+	../builder $command --clean \
 	--define "_unpackaged_files_terminate_build 1" \
 	--define '_enable_debug_packages 0' \
 	--define "_builddir $outdir" \
@@ -144,7 +149,7 @@ HOME_ETC=$outdir \
 	exit 1
 }
 
-if [ "$publish_packages" ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
+if [ "$publish_packages" = 1 ] && [ "$(ls $rpmdir/*.rpm 2>/dev/null)" ]; then
 	install -d $rpmdest
 	umask 022
 	chmod 644 $rpmdir/*.rpm
