@@ -2,7 +2,7 @@
 # Conditional build:
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
 %bcond_without	ffmpegsumo		# build with ffmpegsumo
-%bcond_with		kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
+%bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
 %bcond_without	cups			# with cups
 %bcond_without	gconf			# with GConf
