@@ -12,19 +12,20 @@
 %bcond_without	system_speex	# with system speex
 %bcond_with		system_sqlite	# with system sqlite
 %bcond_with		system_v8		# with system v8
-%bcond_with		system_yasm		# with system yasm
+%bcond_without	system_yasm		# with system yasm
 %bcond_without	system_zlib		# with system zlib
+%bcond_without	system_flac		# with system flac
 %bcond_with		verbose			# verbose build (V=1)
 
 # TODO
 # - check system sqlite linking problems
 # - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
-# - use_system_speex
 # - use_system_libwebp
-# - use_system_flac
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_v8
 # - use_system_ffmpeg
+# - use_system_hunspell
+# - use_system_vpx
 # - other defaults: src/build/common.gypi
 
 # build broken on x86-64 due 32bit exe:
@@ -82,6 +83,7 @@ BuildRequires:	bison
 BuildRequires:	bzip2-devel
 BuildRequires:	cups-devel
 BuildRequires:	dbus-glib-devel
+%{?with_system_flac:BuildRequires:	flac-devel}
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
@@ -257,6 +259,7 @@ cd src
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
 	-Duse_system_bzip2=1 \
+	-Duse_system_flac=%{?with_system_flac:1}%{!?with_system_flac:0} \
 	-Duse_system_icu=1 \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
