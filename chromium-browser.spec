@@ -14,6 +14,7 @@
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_with		system_sqlite	# with system sqlite
 %bcond_without	system_flac		# with system flac
+%bcond_without	system_libwebp	# with system libwebp
 %bcond_without	system_speex	# with system speex
 %bcond_without	system_v8		# with system v8
 %bcond_without	system_vpx		# with system vpx
@@ -24,7 +25,6 @@
 # TODO
 # - check system sqlite linking problems
 # - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
-# - use_system_libwebp
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_ffmpeg && build_ffmpegsumo
 # - use_system_hunspell
@@ -41,7 +41,7 @@
 #   pressing home/end in url bar or more ^F search results on page.
 # - build -bp: 1.2G
 # - build i686: -bc: 2.7G; -bb: ~1.0GB
-# - build x86_64: -bc: ~990MB; -bb: ~1.0GB
+# - build x86_64: ~1.9G
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
@@ -101,6 +101,7 @@ BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_vpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
+%{?with_system_libwebp:BuildRequires:	libwebp-devel}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
@@ -279,6 +280,7 @@ cd src
 	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
+	%{gyp_with system_libwebp} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
