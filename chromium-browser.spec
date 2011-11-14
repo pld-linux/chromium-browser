@@ -53,7 +53,7 @@
 
 %define		svndate	%{nil}
 %define		svnver	109393
-%define		rel		1
+%define		rel		2
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -121,7 +121,7 @@ BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	util-linux
-%{?with_system_v8:BuildRequires:	v8-devel}
+%{?with_system_v8:BuildRequires:	v8-devel >= 3.6}
 BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXt-devel
@@ -237,6 +237,17 @@ remove_bundled_lib "third_party/zlib"
 # third_party/yasm/source/patched-yasm/modules/arch/x86/gen_x86_insn.py', needed by `out/Release/obj/gen/third_party/yasm/x86insns.c'.  Stop.
 #remove_bundled_lib "third_party/yasm"
 
+%if %{with system_v8}
+# Remove bundled v8.
+find v8 -type f \! -iname '*.gyp*' -delete
+
+# The implementation files include v8 headers with full path,
+# like #include "v8/include/v8.h". Make sure the system headers
+# will be used.
+rmdir v8/include
+ln -s %{_includedir} v8/include
+%endif
+
 %build
 cd src
 %{__python} build/gyp_chromium --format=make build/all.gyp \
@@ -256,7 +267,6 @@ cd src
 	%{!?debug:-Dwerror=} \
 	%{!?debuginfo:-Dfastbuild=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
-	-Djavascript_engine=%{?with_system_v8:system-v8}%{!?with_system_v8:v8} \
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
