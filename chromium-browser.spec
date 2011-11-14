@@ -139,6 +139,8 @@ ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		find_lang 	sh find-lang.sh %{buildroot}
+# Usage: gyp_with BCOND_NAME [OPTION_NAME]
+%define		gyp_with() %{expand:%%{?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=1}%%{!?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=0}}
 
 %if %{without debuginfo}
 %define		_enable_debug_packages	0
@@ -170,10 +172,10 @@ web.
 
 This package contains language packages for 50 languages:
 
-ar, bg, bn, ca, cs, da, de, el, en-GB, es-LA, es, et, fi, fil, fr,
-gu, he, hi, hr, hu, id, it, ja, kn, ko, lt, lv, ml, mr, nb, nl, or,
-pl, pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi,
-zh-CN, zh-TW
+ar, bg, bn, ca, cs, da, de, el, en-GB, es-LA, es, et, fi, fil, fr, gu,
+he, hi, hr, hu, id, it, ja, kn, ko, lt, lv, ml, mr, nb, nl, or, pl,
+pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi, zh-CN,
+zh-TW
 
 %prep
 %setup -q -n %{name}-%{version}~%{?svndate:svn%{svndate}}r%{svnver}
@@ -261,25 +263,26 @@ cd src
 	%{!?with_nacl:-Ddisable_nacl=1} \
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
+	%{gyp_with cups} \
+	%{gyp_with flac} \
+	%{gyp_with gconf} \
+	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
+	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
+	%{gyp_with pulseaudio} \
+	%{gyp_with system_speex} \
+	%{gyp_with system_sqlite} \
+	%{gyp_with system_v8} \
+	%{gyp_with system_yasm} \
+	%{gyp_with system_zlib} \
 	-Duse_system_bzip2=1 \
-	-Duse_system_flac=%{?with_system_flac:1}%{!?with_system_flac:0} \
 	-Duse_system_icu=1 \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
 	-Duse_system_libpng=1 \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
-	-Duse_system_speex=%{?with_system_speex:1}%{!?with_system_speex:0} \
-	-Duse_system_sqlite=%{?with_system_sqlite:1}%{!?with_system_sqlite:0} \
 	-Duse_system_vpx=1 \
 	-Duse_system_xdg_utils=1 \
-	-Duse_system_yasm=%{?with_system_yasm:1}%{!?with_system_yasm:0} \
-	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
-	-Duse_cups=%{?with_cups:1}%{!?with_cups:0} \
-	-Duse_gconf=%{?with_gconf:1}%{!?with_gconf:0} \
-	-Duse_gnome_keyring==%{?with_keyring:1 -Dlinux_link_gnome_keyring=0}%{!?with_keyring:0} \
-	-Duse_kerberos=%{?with_kerberos:1 -Dlinux_link_kerberos=0}%{!?with_kerberos:0} \
-	-Duse_pulseaudio=%{?with_pulseaudio:1}%{!?with_pulseaudio:0} \
 
 %{__make} chrome %{?with_sandboxing:chrome_sandbox} \
 	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
@@ -305,7 +308,7 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 %if %{with ffmpegsumo}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
-cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cd -
 
 cp -p src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
@@ -317,6 +320,7 @@ EOF
 
 # find locales
 %find_lang %{name}.lang
+# always package en-US
 %{__sed} -i -e '/en-US.pak/d' %{name}.lang
 
 %clean
