@@ -12,12 +12,13 @@
 %bcond_with		selinux			# with SELinux (need policy first)
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
-%bcond_without	system_speex	# with system speex
 %bcond_with		system_sqlite	# with system sqlite
+%bcond_without	system_flac		# with system flac
+%bcond_without	system_speex	# with system speex
 %bcond_without	system_v8		# with system v8
+%bcond_without	system_vpx		# with system vpx
 %bcond_without	system_yasm		# with system yasm
 %bcond_without	system_zlib		# with system zlib
-%bcond_without	system_flac		# with system flac
 %bcond_with		verbose			# verbose build (V=1)
 
 # TODO
@@ -25,9 +26,9 @@
 # - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
 # - use_system_libwebp
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
-# - use_system_ffmpeg
+# - use_system_ffmpeg && build_ffmpegsumo
 # - use_system_hunspell
-# - use_system_vpx
+# - use_system_stlport
 # - other defaults: src/build/common.gypi
 
 # build broken on x86-64 due 32bit exe:
@@ -99,7 +100,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
-BuildRequires:	libvpx-devel >= 0.9.5-2
+%{?with_system_vpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
@@ -129,7 +130,7 @@ BuildRequires:	xorg-lib-libXtst-devel
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
 Requires:	desktop-file-utils
-Requires:	libvpx >= 0.9.5-2
+%{?with_system_vpx:Requires:	libvpx >= 0.9.5-2}
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
@@ -281,6 +282,7 @@ cd src
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
+	%{gyp_with system_vpx} \
 	%{gyp_with system_yasm} \
 	%{gyp_with system_zlib} \
 	-Duse_system_bzip2=1 \
@@ -290,7 +292,6 @@ cd src
 	-Duse_system_libpng=1 \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
-	-Duse_system_vpx=1 \
 	-Duse_system_xdg_utils=1 \
 
 %{__make} chrome %{?with_sandboxing:chrome_sandbox} \
