@@ -14,7 +14,7 @@
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_speex	# with system speex
 %bcond_with		system_sqlite	# with system sqlite
-%bcond_with		system_v8		# with system v8
+%bcond_without	system_v8		# with system v8
 %bcond_without	system_yasm		# with system yasm
 %bcond_without	system_zlib		# with system zlib
 %bcond_without	system_flac		# with system flac
@@ -25,7 +25,6 @@
 # - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
 # - use_system_libwebp
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
-# - use_system_v8
 # - use_system_ffmpeg
 # - use_system_hunspell
 # - use_system_vpx
