@@ -4,6 +4,9 @@
 %bcond_without	ffmpegsumo		# build with ffmpegsumo
 %bcond_with		kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
+%bcond_without	cups			# with cups
+%bcond_without	gconf			# with GConf
+%bcond_without	pulseaudio		# with pulseaudio
 %bcond_with		nacl			# build Native Client support
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
@@ -75,13 +78,13 @@ Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 URL:		http://www.chromium.org/Home
-BuildRequires:	GConf2-devel
+%{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
 BuildRequires:	bzip2-devel
-BuildRequires:	cups-devel
+%{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	dbus-glib-devel
 %{?with_system_flac:BuildRequires:	flac-devel}
 BuildRequires:	flex
@@ -108,7 +111,7 @@ BuildRequires:	pam-devel
 BuildRequires:	pango-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
-BuildRequires:	pulseaudio-devel
+%{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-modules
@@ -272,16 +275,11 @@ cd src
 	-Duse_system_xdg_utils=1 \
 	-Duse_system_yasm=%{?with_system_yasm:1}%{!?with_system_yasm:0} \
 	-Duse_system_zlib=%{?with_system_zlib:1}%{!?with_system_zlib:0} \
-%if %{with kerberos}
-	-Duse_kerberos=1 -Dlinux_link_kerberos=0 \
-%else
-	-Duse_kerberos=0 \
-%endif
-%if %{with keyring}
-	-Duse_gnome_keyring=1 -Dlinux_link_gnome_keyring=0 \
-%else
-	-Duse_gnome_keyring=0 \
-%endif
+	-Duse_cups=%{?with_cups:1}%{!?with_cups:0} \
+	-Duse_gconf=%{?with_gconf:1}%{!?with_gconf:0} \
+	-Duse_gnome_keyring==%{?with_keyring:1 -Dlinux_link_gnome_keyring=0}%{!?with_keyring:0} \
+	-Duse_kerberos=%{?with_kerberos:1 -Dlinux_link_kerberos=0}%{!?with_kerberos:0} \
+	-Duse_pulseaudio=%{?with_pulseaudio:1}%{!?with_pulseaudio:0} \
 
 %{__make} chrome %{?with_sandboxing:chrome_sandbox} \
 	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
