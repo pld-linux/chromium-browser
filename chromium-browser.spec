@@ -165,7 +165,7 @@ web.
 
 This package contains language packages for 50 languages:
 
-ar, bg, bn, ca, cs, da, de, el, en-GB, es-419, es, et, fi, fil, fr,
+ar, bg, bn, ca, cs, da, de, el, en-GB, es-LA, es, et, fi, fil, fr,
 gu, he, hi, hr, hu, id, it, ja, kn, ko, lt, lv, ml, mr, nb, nl, or,
 pl, pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi,
 zh-CN, zh-TW

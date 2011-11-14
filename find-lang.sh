@@ -33,7 +33,7 @@ while read file; do
 		lang=pt
 	;;
 	es-419)
-		lang=es
+		lang=es_LA
 	;;
 	*-*)
 		echo >&2 "ERROR: Need mapping for $lang!"
