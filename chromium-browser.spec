@@ -31,11 +31,6 @@
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
 
-# build broken on x86-64 due 32bit exe:
-# /home/users/glen/rpm/BUILD.x86_64-linux/chromium-browser-15.0.863.0~svn20110826r98379/src/native_client/toolchain/linux_x86_newlib/bin/x86_64-nacl-ar: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.15, stripped
-# build broken on x86-32:
-# /home/users/glen/rpm/BUILD.i686-linux/chromium-browser-15.0.863.0~svn20110826r98379/src/native_client/toolchain/linux_x86_newlib/bin/../lib/gcc/x86_64-nacl/acl/bin/ld: crtbegin.o: No such file: No such file or directory
-
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
@@ -53,7 +48,7 @@
 
 %define		svndate	%{nil}
 %define		svnver	109393
-%define		rel		2
+%define		rel		3
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -106,6 +101,7 @@ BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
 BuildRequires:	minizip-devel
+%{?with_nacl:BuildRequires:	nacl-toolchain-newlib >= 0.6941}
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
 BuildRequires:	pam-devel
@@ -249,9 +245,15 @@ rmdir v8/include
 ln -s %{_includedir} v8/include
 %endif
 
+%if %{with nacl}
+# NOTE: here is always x86_64
+rm -rf native_client/toolchain/linux_x86_newlib
+ln -s %{_prefix}/x86_64-nacl-newlib native_client/toolchain/linux_x86_newlib
+%endif
+
 %build
 cd src
-%{__python} build/gyp_chromium --format=make build/all.gyp \
+test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \
 %endif
@@ -321,6 +323,19 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
+
+%if %{with nacl}
+# Install Native Client files on platforms that support it.
+install -p nacl_helper{,_bootstrap} $RPM_BUILD_ROOT%{_libdir}/%{name}
+install -p libppGoogleNaClPluginChrome.so $RPM_BUILD_ROOT%{_libdir}/%{name}
+%ifarch %{x8664}
+install -p nacl_irt_x86_64.nexe $RPM_BUILD_ROOT%{_libdir}/%{name}
+%endif
+%ifarch %{ix86}
+install -p nacl_irt_x86_32.nexe $RPM_BUILD_ROOT%{_libdir}/%{name}
+%endif
+%endif
+
 cd -
 
 cp -p src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
@@ -372,6 +387,13 @@ fi
 # ffmpeg libs
 %if %{with ffmpegsumo}
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
+%endif
+
+%if %{with nacl}
+%attr(755,root,root) %{_libdir}/%{name}/libppGoogleNaClPluginChrome.so
+%attr(755,root,root) %{_libdir}/%{name}/nacl_helper
+%attr(755,root,root) %{_libdir}/%{name}/nacl_helper_bootstrap
+%attr(755,root,root) %{_libdir}/%{name}/nacl_irt_x86_*.nexe
 %endif
 
 %files l10n -f %{name}.lang
