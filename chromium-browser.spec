@@ -64,6 +64,7 @@ Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source4:	find-lang.sh
 Source5:	update-source.sh
+Source6:	clean-source.sh
 Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
@@ -202,6 +203,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
     < %{PATCH8} | %{__patch} -p1
 
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE4} > find-lang.sh
+ln -s %{SOURCE6} src
 
 %patch0 -p1
 %patch1 -p1
@@ -214,48 +216,8 @@ cd src
 %patch9 -p1
 cd ..
 
-# drop bundled libs, from gentoo
-remove_bundled_lib() {
-	echo "Removing bundled library $1 ..."
-	local out
-	out=$(find $1 -mindepth 1 ! -iname '*.gyp' -print -delete)
-	if [ -z "$out" ]; then
-		echo >&2 "No files matched when removing bundled library $1"
-		exit 1
-	fi
-}
-
 cd src
-rm -v third_party/expat/files/lib/expat.h
-remove_bundled_lib "third_party/bzip2"
-remove_bundled_lib "third_party/icu"
-remove_bundled_lib "third_party/libevent"
-remove_bundled_lib "third_party/libjpeg"
-remove_bundled_lib "third_party/libpng"
-# third_party/libvpx/libvpx.h should be kept
-#remove_bundled_lib "third_party/libvpx"
-remove_bundled_lib "third_party/libxml"
-remove_bundled_lib "third_party/libxslt"
-remove_bundled_lib "third_party/zlib"
-# third_party/yasm/source/patched-yasm/modules/arch/x86/gen_x86_insn.py', needed by `out/Release/obj/gen/third_party/yasm/x86insns.c'.  Stop.
-#remove_bundled_lib "third_party/yasm"
-
-%if %{with system_v8}
-# Remove bundled v8.
-find v8 -type f \! -iname '*.gyp*' -delete
-
-# The implementation files include v8 headers with full path,
-# like #include "v8/include/v8.h". Make sure the system headers
-# will be used.
-rmdir v8/include
-ln -s %{_includedir} v8/include
-%endif
-
-%if %{with nacl}
-# NOTE: here is always x86_64
-rm -rf native_client/toolchain/linux_x86_newlib
-ln -s %{_prefix}/x86_64-nacl-newlib native_client/toolchain/linux_x86_newlib
-%endif
+sh -x clean-source.sh %{?with_system_v8:v8=1} %{?with_nacl:nacl=1}
 
 %build
 cd src
