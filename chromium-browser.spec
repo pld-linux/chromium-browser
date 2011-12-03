@@ -72,6 +72,7 @@ Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
+Patch9:		system-expat.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -81,6 +82,7 @@ BuildRequires:	bison
 BuildRequires:	bzip2-devel
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	dbus-glib-devel
+BuildRequires:	expat-devel
 %{?with_system_flac:BuildRequires:	flac-devel}
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
@@ -208,6 +210,9 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+cd src
+%patch9 -p1
+cd ..
 
 # drop bundled libs, from gentoo
 remove_bundled_lib() {
@@ -221,6 +226,7 @@ remove_bundled_lib() {
 }
 
 cd src
+rm -v third_party/expat/files/lib/expat.h
 remove_bundled_lib "third_party/bzip2"
 remove_bundled_lib "third_party/icu"
 remove_bundled_lib "third_party/libevent"
