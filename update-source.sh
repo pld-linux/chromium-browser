@@ -7,7 +7,7 @@
 #  publish_packages=[0|1] - publish built packages in ~/public_html/$dist/$arch
 #  quiet=[0|1] - discard stdout of process
 
-test $prep_package = 0 && build_package=0
+test "$prep_package" = 0 && build_package=0
 
 pkg=chromium-browser
 specfile=$pkg.spec
@@ -26,6 +26,7 @@ if [ "$quiet" = "1" ]; then
 	exec 1>/dev/null
 fi
 
+test -e $specfile || cvs up $specfile
 # take baseurl from .spec Source0
 baseurl=$(awk '/^Source0:/{print $2}' $specfile | xargs dirname)
 
@@ -135,7 +136,7 @@ cat > $outdir/.builderrc <<-EOF
 EOF
 
 command=-bp
-test $build_package = 1 && command=-bb
+test "$build_package" = 1 && command=-bb
 > $logfile
 HOME_ETC=$outdir \
 	../builder $command --clean \
