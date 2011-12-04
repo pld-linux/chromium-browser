@@ -1,42 +1,45 @@
 #!/bin/sh
+set -e
+set -x
 
 # import options
 eval "$@"
 
 # drop bundled libs, from gentoo
-remove_bundled_lib() {
+gyp_clean() {
 	set +x
-	echo "Removing bundled library $1 ..."
-	local out
-	out=$(find $1 -mindepth 1 ! -iname '*.gyp' -print -delete)
-	if [ -z "$out" ]; then
+	local l lib=$1
+	echo "Removing bundled library $lib ..."
+	l=$(find "$lib" -mindepth 1 ! -iname '*.gyp*' -print -delete | wc -l)
+	if [ $l -eq 0 ]; then
 		echo >&2 "No files matched when removing bundled library $1"
 		exit 1
 	fi
 }
 
 rm -v third_party/expat/files/lib/expat.h
-remove_bundled_lib "third_party/bzip2"
-remove_bundled_lib "third_party/icu"
-remove_bundled_lib "third_party/libevent"
-remove_bundled_lib "third_party/libjpeg"
-remove_bundled_lib "third_party/libpng"
+
+gyp_clean third_party/bzip2
+gyp_clean third_party/icu
+gyp_clean third_party/libevent
+gyp_clean third_party/libjpeg
+gyp_clean third_party/libpng
 # third_party/libvpx/libvpx.h should be kept
-#remove_bundled_lib "third_party/libvpx"
-remove_bundled_lib "third_party/libxml"
-remove_bundled_lib "third_party/libxslt"
-remove_bundled_lib "third_party/zlib"
+#gyp_clean third_party/libvpx
+gyp_clean third_party/libxml
+gyp_clean third_party/libxslt
+gyp_clean third_party/zlib
 # third_party/yasm/source/patched-yasm/modules/arch/x86/gen_x86_insn.py', needed by `out/Release/obj/gen/third_party/yasm/x86insns.c'.  Stop.
-#remove_bundled_lib "third_party/yasm"
+#gyp_clean third_party/yasm
 
 if [ $v8 = 1 ]; then
 	# Remove bundled v8.
-	find v8 -type f \! -iname '*.gyp*' -delete
+	gyp_clean v8
 
 	# The implementation files include v8 headers with full path,
 	# like #include "v8/include/v8.h". Make sure the system headers
 	# will be used.
-	rmdir v8/include
+	rm -rf v8/include
 	ln -s /usr/include v8/include
 fi
 
