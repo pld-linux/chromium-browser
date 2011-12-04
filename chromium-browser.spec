@@ -273,8 +273,10 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	%{?with_verbose:V=1} \
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
+	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
 	CC.host="%{__cc}" \
 	CXX.host="%{__cxx}" \
+	LDFLAGS.host="%{rpmldflags}" \
 	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
 	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}"
 
