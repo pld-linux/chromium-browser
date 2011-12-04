@@ -238,7 +238,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	-Dlinux_sandbox_chrome_path=%{_libdir}/%{name}/%{name} \
 %endif
 	%{!?debug:-Dwerror=} \
-	%{!?debuginfo:-Dfastbuild=1} \
+	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
 	-Dffmpeg_branding=Chrome \
