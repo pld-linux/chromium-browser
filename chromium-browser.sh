@@ -5,7 +5,6 @@
 # found in the LICENSE file.
 
 # Always use our ffmpeg libs.
-# Also symlinks for nss/nspr libs can be found from our dir.
 export LD_LIBRARY_PATH=@libdir@${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}
 
 # for to find xdg-settings
@@ -28,16 +27,15 @@ export CHROME_VERSION_EXTRA="PLD Linux"
 
 # Google Chrome has a number of command line switches which change the behavior of Chrome
 # This param allows you to set extra args for browser startup.
-# See source for possible choices:
-# http://git.chromium.org/gitweb/?p=chromium.git;f=chrome/common/chrome_switches.cc;hb=HEAD
-# Also: http://peter.sh/experiments/chromium-command-line-switches/
+# See: http://peter.sh/experiments/chromium-command-line-switches/
 CHROME_FLAGS_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/chromium/Chrome Flags"
 if [ -f "$CHROME_FLAGS_FILE" ]; then
 	# All lines starting with # are ignored
 	CHROME_FLAGS=$(grep -v '^#' "$CHROME_FLAGS_FILE")
 fi
 
-# Google guys cannot properly handle coma, so download speed/est is shown
+# Google guys cannot properly handle comma, so download speed/est is shown
 # as not a number (NaN). Workaround that with LC_NUMERIC=C
+export LC_NUMERIC=C
 
-LC_NUMERIC=C exec @libdir@/chromium-browser --password-store=detect $CHROME_FLAGS "$@"
+exec @libdir@/chromium-browser $CHROME_FLAGS "$@"
