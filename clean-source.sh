@@ -17,6 +17,50 @@ gyp_clean() {
 	fi
 }
 
+# https://code.google.com/p/chromium/wiki/LinuxPackaging
+# list from src/tools/export_tarball/export_tarball.py
+remove_nonessential_dirs() {
+	local dir
+	for dir in \
+    chrome/common/extensions/docs \
+    chrome/test/data \
+    chrome/tools/test/reference_build \
+    courgette/testdata \
+    data \
+    native_client/src/trusted/service_runtime/testdata \
+    src/chrome/test/data \
+    o3d/documentation \
+    o3d/samples \
+    o3d/tests \
+    third_party/angle/samples/gles2_book \
+    third_party/hunspell_dictionaries \
+    third_party/hunspell/tests \
+    third_party/lighttpd \
+    third_party/sqlite/test \
+    third_party/vc_80 \
+    third_party/xdg-utils/tests \
+    third_party/yasm/source/patched-yasm/modules/arch/x86/tests \
+    third_party/yasm/source/patched-yasm/modules/dbgfmts/dwarf2/tests \
+    third_party/yasm/source/patched-yasm/modules/objfmts/bin/tests \
+    third_party/yasm/source/patched-yasm/modules/objfmts/coff/tests \
+    third_party/yasm/source/patched-yasm/modules/objfmts/elf/tests \
+    third_party/yasm/source/patched-yasm/modules/objfmts/macho/tests \
+    third_party/yasm/source/patched-yasm/modules/objfmts/rdf/tests \
+    third_party/yasm/source/patched-yasm/modules/objfmts/win32/tests \
+    third_party/yasm/source/patched-yasm/modules/objfmts/win64/tests \
+    third_party/yasm/source/patched-yasm/modules/objfmts/xdf/tests \
+    third_party/WebKit/Source/JavaScriptCore/tests \
+    third_party/WebKit/LayoutTests \
+    v8/test \
+    webkit/data/layout_tests \
+    webkit/tools/test/reference_build \
+	; do
+		rm -vfr "$dir"
+	done
+}
+
+remove_nonessential_dirs | tee REMOVED-nonessential_dirs.txt
+
 rm -v third_party/expat/files/lib/expat.h
 
 gyp_clean third_party/bzip2
