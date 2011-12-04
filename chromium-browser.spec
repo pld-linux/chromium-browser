@@ -192,6 +192,8 @@ test "$ver" = %{version}
 gyp_rev=$(grep googlecode_url.*gyp src/DEPS | cut -d'"' -f6 | cut -d@ -f2)
 test "$gyp_rev" = %{gyp_rev} || :
 
+v8_ver=$(awk 'NR=1 {print $NF; exit}' src/v8/ChangeLog)
+
 # Populate the LASTCHANGE file template as we no longer have the VCS files at this point
 echo "%{svnver}" > src/build/LASTCHANGE.in
 
