@@ -62,7 +62,6 @@ Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}_%{ve
 #SourceX:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
-Source4:	chromium-service.desktop
 Source5:	find-lang.sh
 Source6:	update-source.sh
 Source7:	clean-source.sh
@@ -284,7 +283,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
-	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_pixmapsdir},%{_desktopdir},/etc/xdg/autostart}
+	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_pixmapsdir},%{_desktopdir}}
 
 cd src/out/%{!?debug:Release}%{?debug:Debug}
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
@@ -297,7 +296,6 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
-cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/xdg/autostart
 
 %if %{with nacl}
 # Install Native Client files on platforms that support it.
@@ -345,7 +343,6 @@ fi
 %{_mandir}/man1/%{name}.1*
 %{_pixmapsdir}/%{name}.png
 %{_desktopdir}/*.desktop
-/etc/xdg/autostart/*.desktop
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome.pak
 %{_libdir}/%{name}/resources.pak
