@@ -1,70 +1,71 @@
 #!/bin/sh
-
-# based on debian/rules for chromium-browser package
-
 set -e
+
+# CHANNEL: any from CHANNELS_URL: beta, dev
+CHANNEL=${1:-beta}
+
+CHANNELS_URL=http://omahaproxy.appspot.com/
+PACKAGE_NAME=chromium-browser
+WORK_DIR=$(cd $(dirname "$0"); pwd)
+CHROMIUM=$HOME/svn/$PACKAGE_NAME-$CHANNEL
+LOCKFILE=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.lock
+OFFICIAL_URL=http://commondatastorage.googleapis.com/chromium-browser-official
+DIST_DIR=$HOME/public_html/chromium-browser/src/$CHANNEL
+
+VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')
+VERSION_FILE=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.xz
+
+if [ -e $VERSION_FILE ]; then
+	# nothing to update
+	exit 0
+fi
+
 set -x
 
-CHANNEL="beta"
-# See Staying Green More Of The Time at http://dev.chromium.org/developers/how-tos/get-the-code
-USE_GREEN_REV=1
-
-GCLIENT_URL="http://src.chromium.org/svn/trunk/tools/depot_tools"
-CHROMIUM_URL="http://src.chromium.org/svn/trunk/src"
-CHROMIUM_RLZ="http://src.chromium.org/svn/releases"
-DEPS_URL="http://src.chromium.org/svn/trunk/deps/third_party"
-GREEN_REV_URL="http://chromium-status.appspot.com/lkgr"
-CHANNELS_URL="http://omahaproxy.appspot.com/"
-
-CHANNEL="beta"
-
-# local mirror of chromium checkout,
-# if empty code will be checked out each time
-LOCAL_BRANCH=$(pwd)/chromium-browser
-
-TMP_DDIR=$(pwd)/chromium-browser-$$
-TMP_DIR=${LOCAL_BRANCH:-${TMP_DDIR}}
-
-VERSION=$(wget -qO - "$CHANNELS_URL" | grep -i "^linux,${CHANNEL}" | cut -d, -f3)
-
-if [ -z "$LOCAL_BRANCH" ]; then
-	rm -rf $TMP_DIR
+# consider lockfile stale after 3h
+if ! lockfile -l 10800 $LOCKFILE; then
+	exit 1
 fi
 
-install -d $TMP_DIR
+trap "rm -f $LOCKFILE" EXIT
 
-if [ ! -d $TMP_DIR/tools/depot_tools ] ; then \
-	svn co "$GCLIENT_URL" $TMP_DIR/tools/depot_tools
-else
-	svn update $TMP_DIR/tools/depot_tools
-fi
+TMP_DIR=$(mktemp -d $WORK_DIR/$PACKAGE_NAME-$CHANNEL-$VERSION-_XXXXXX)
+LOGFILE=$TMP_DIR/$PACKAGE_NAME-$VERSION.log
 
-cd $TMP_DIR
-if [ "$USE_GREEN_REV" -eq 1 ]; then
-	REVISION=$(wget -qO - "${GREEN_REV_URL}")
-	./tools/depot_tools/gclient config "${CHROMIUM_URL}" "${GREEN_REV_URL}"
-else
-	REVISION=101024
-	./tools/depot_tools/gclient config "${CHROMIUM_URL}"
-fi
+(
+cd "$TMP_DIR"
+srctarball=$PACKAGE_NAME-$VERSION.tar.bz2
+wget -c -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
 
-REVISION="--revision src@${REVISION}"
+# repackage cleaned up tarball
+test -d $PACKAGE_NAME-$VERSION || {
+	tar xjf $srctarball
+	install -d $PACKAGE_NAME-$VERSION
+	# relocate to src dir (needed  to workaround some gyp bug)
+	mv chromium-$VERSION $PACKAGE_NAME-$VERSION/src
+}
 
-cd $TMP_DIR
-./tools/depot_tools/gclient update --nohooks ${REVISION}
+ls -lh $srctarball
+rm $srctarball
 
-cd $TMP_DIR
-SDIR=`grep '"name"' .gclient | cut -d\" -f4`
-perl -i~ -pe 's%(.python., .src/build/gyp_chromium.)%"echo", "#disabled#", $1%' $SDIR/DEPS
-./tools/depot_tools/gclient runhooks
-mv $SDIR/DEPS~ $SDIR/DEPS
+cd $PACKAGE_NAME-$VERSION/src
+du -sh .
+sh -x $WORK_DIR/clean-source.sh
+du -sh .
+cd ../..
 
-if [ -n "$LOCAL_BRANCH" ]; then
-	rm -rf $TMP_DDIR
-	cp -la $TMP_DIR $TMP_DDIR
-fi
+tarball=$PACKAGE_NAME-$VERSION.tar.xz
+tar -cf $tarball --xz $PACKAGE_NAME-$VERSION
+ls -lh $tarball
 
-cd $TMP_DDIR/src && find . -type f \( -iname \*.exe -o -iname \*.dll -o -iname \*.pdb -o -name \*.o -o -name \*.a -o -name \*.dylib \) -exec rm -fv {} \; > REMOVED-bin_only.txt
-wc -l $TMP_DDIR/src/REMOVED-*.txt
+rm -rf $PACKAGE_NAME-$VERSION
 
-TMP_DIR=$TMP_DDIR
+chmod 644 $tarball
+mv $tarball $DIST_DIR
+
+) > $LOGFILE 2>&1
+
+chmod 644 $LOGFILE
+mv $LOGFILE $DIST_DIR
+
+rm -rf $TMP_DIR
