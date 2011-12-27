@@ -46,25 +46,22 @@
 # or:
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 
-%define		svndate	%{nil}
-%define		svnver	113337
-%define		rel		2
-
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	16.0.912.63
-Release:	0.%{svnver}.%{rel}
+Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}_%{version}~r%{svnver}.orig.tar.gz
-# Source0-md5:	c01869f276a9bf5f651771d93b07dac8
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
+# Source0-md5:	f9e8eb4ddf23640aa6cfbe797d750055
 #SourceX:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source5:	find-lang.sh
 Source6:	update-source.sh
 Source7:	clean-source.sh
+Source8:	get-source.sh
 Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
@@ -126,6 +123,7 @@ BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	xorg-lib-libXtst-devel
+BuildRequires:	xz
 %{?with_system_yasm:BuildRequires:	yasm}
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
@@ -144,11 +142,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %if %{without debuginfo}
 %define		_enable_debug_packages	0
-%endif
-
-# undefine if empty, makes prep simplier
-%if "%{svndate}" == "%{nil}"
-%undefine	svndate
 %endif
 
 %description
@@ -178,10 +171,7 @@ pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi, zh-CN,
 zh-TW
 
 %prep
-%setup -q -n %{name}-%{version}~%{?svndate:svn%{svndate}}r%{svnver}
-SRC=%{name}-%{version}~%{?svndate:svn%{svndate}}r%{svnver}-source.tar.*
-tar xf $SRC
-%{__rm} $SRC
+%setup -q
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
@@ -192,10 +182,10 @@ test "$ver" = %{version}
 gyp_rev=$(grep googlecode_url.*gyp src/DEPS | cut -d'"' -f6 | cut -d@ -f2)
 test "$gyp_rev" = %{gyp_rev} || :
 
-v8_ver=$(awk 'NR=1 {print $NF; exit}' src/v8/ChangeLog)
+v8_ver=$(awk 'NR=1 {print $NF; exit}' src/v8/ChangeLog || :)
 
 # Populate the LASTCHANGE file template as we no longer have the VCS files at this point
-echo "%{svnver}" > src/build/LASTCHANGE.in
+#echo "%{svnver}" > src/build/LASTCHANGE.in
 
 # add chromium and pld to useragent
 %define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
