@@ -52,6 +52,11 @@ cd $PACKAGE_NAME-$VERSION/src
 du -sh .
 sh -x $WORK_DIR/clean-source.sh
 du -sh .
+
+# add LASTCHANGE info, take "branch_revision" item
+svnver=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $8}')
+echo "$svnver" > build/LASTCHANGE.in
+
 cd ../..
 
 tarball=$PACKAGE_NAME-$VERSION.tar.xz
