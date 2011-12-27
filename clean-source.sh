@@ -141,7 +141,6 @@ strip_system_dirs() {
 almost_strip_dirs() {
 	local dir
 	for dir in "$@"; do
-		echo >&2 "almost strip dir: $dir"
 		find $dir -depth -mindepth 1 \! \( -name \*.gyp -o -name \*.gypi -o -name README.chromium \) -print -delete || :
 	done
 }
