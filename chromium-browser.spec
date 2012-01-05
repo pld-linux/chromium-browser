@@ -16,7 +16,7 @@
 %bcond_without	system_flac		# with system flac
 %bcond_without	system_libwebp	# with system libwebp
 %bcond_without	system_speex	# with system speex
-%bcond_without	system_v8		# with system v8
+%bcond_with		system_v8		# with system v8
 %bcond_without	system_vpx		# with system vpx
 %bcond_without	system_yasm		# with system yasm
 %bcond_without	system_zlib		# with system zlib
@@ -49,12 +49,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	16.0.912.63
+Version:	17.0.963.26
 Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
-# Source0-md5:	f9e8eb4ddf23640aa6cfbe797d750055
+# Source0-md5:	ef898d316b5cc5754aba29bbb919185a
 #SourceX:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -118,7 +118,7 @@ BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sqlite3-devel >= 3.6.1
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	util-linux
-%{?with_system_v8:BuildRequires:	v8-devel >= 3.6}
+%{?with_system_v8:BuildRequires:	v8-devel >= 3.7}
 BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXt-devel
@@ -335,6 +335,7 @@ fi
 %{_desktopdir}/*.desktop
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome.pak
+%{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/resources.pak
 %dir %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/locales/en-US.pak

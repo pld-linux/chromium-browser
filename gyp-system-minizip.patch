@@ -22,3 +22,64 @@
              ],
            },
          },
+--- chromium-browser-17.0.963.26/src/chrome/common/zip.cc~	2012-01-04 04:02:54.000000000 +0200
++++ chromium-browser-17.0.963.26/src/chrome/common/zip.cc	2012-01-05 22:51:39.376075829 +0200
+@@ -12,8 +12,8 @@
+ #include "chrome/common/zip_internal.h"
+ #include "chrome/common/zip_reader.h"
+ #include "net/base/file_stream.h"
+-#include "third_party/zlib/contrib/minizip/unzip.h"
+-#include "third_party/zlib/contrib/minizip/zip.h"
++#include <minizip/unzip.h>
++#include <minizip/zip.h>
+ 
+ namespace {
+ 
+--- chromium-browser-17.0.963.26/src/chrome/common/zip_internal.h~	2012-01-04 04:02:54.000000000 +0200
++++ chromium-browser-17.0.963.26/src/chrome/common/zip_internal.h	2012-01-06 01:00:57.206864774 +0200
+@@ -8,8 +8,8 @@
+ 
+ #include <string>
+ 
+-#include "third_party/zlib/contrib/minizip/unzip.h"
+-#include "third_party/zlib/contrib/minizip/zip.h"
++#include <minizip/unzip.h>
++#include <minizip/zip.h>
+ 
+ // Utility functions and constants used internally for the zip file
+ // library in the directory. Don't use them outside of the library.
+--- chromium-browser-17.0.963.26/src/chrome/common/zip_internal.cc~	2012-01-04 04:02:54.000000000 +0200
++++ chromium-browser-17.0.963.26/src/chrome/common/zip_internal.cc	2012-01-06 01:08:20.967378679 +0200
+@@ -5,8 +5,8 @@
+ #include "chrome/common/zip.h"
+ 
+ #include "base/utf_string_conversions.h"
+-#include "third_party/zlib/contrib/minizip/unzip.h"
+-#include "third_party/zlib/contrib/minizip/zip.h"
++#include <minizip/unzip.h>
++#include <minizip/zip.h>
+ #if defined(OS_WIN)
+ #include "third_party/zlib/contrib/minizip/iowin32.h"
+ #endif
+--- chromium-browser-17.0.963.26/src/chrome/common/zip_reader.h~	2012-01-04 04:02:54.000000000 +0200
++++ chromium-browser-17.0.963.26/src/chrome/common/zip_reader.h	2012-01-06 01:12:08.277856237 +0200
+@@ -12,7 +12,7 @@
+ #include "base/file_path.h"
+ #include "base/memory/scoped_ptr.h"
+ #include "base/time.h"
+-#include "third_party/zlib/contrib/minizip/unzip.h"
++#include <minizip/unzip.h>
+ 
+ namespace zip {
+ 
+--- chromium-browser-17.0.963.26/src/chrome/common/zip_reader.cc~	2012-01-04 04:02:54.000000000 +0200
++++ chromium-browser-17.0.963.26/src/chrome/common/zip_reader.cc	2012-01-06 01:12:40.065988131 +0200
+@@ -10,7 +10,7 @@
+ #include "base/utf_string_conversions.h"
+ #include "chrome/common/zip_internal.h"
+ #include "net/base/file_stream.h"
+-#include "third_party/zlib/contrib/minizip/unzip.h"
++#include <minizip/unzip.h>
+ #if defined(OS_WIN)
+ #include "third_party/zlib/contrib/minizip/iowin32.h"
+ #endif

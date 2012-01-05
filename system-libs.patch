@@ -20,19 +20,6 @@
  
  #include "base/logging.h"
  
---- chromium-20090827svn24640/src/chrome/common/zip.cc.system-code	2009-08-27 15:22:46.000000000 -0400
-+++ chromium-20090827svn24640/src/chrome/common/zip.cc	2009-08-27 16:05:17.000000000 -0400
-@@ -7,8 +7,8 @@
- #include "base/file_util.h"
- #include "base/string_util.h"
- #include "net/base/file_stream.h"
--#include "third_party/zlib/contrib/minizip/unzip.h"
--#include "third_party/zlib/contrib/minizip/zip.h"
-+#include <minizip/unzip.h>
-+#include <minizip/zip.h>
- #if defined(OS_WIN)
- #include "third_party/zlib/contrib/minizip/iowin32.h"
- #endif
 --- chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/plugins/npapi/plugin_lib_posix.cc~	2010-01-07 23:19:11.000000000 +0200
 +++ chromium-browser-5.0.312.0~svn20100201r37680/src/webkit/plugins/npapi/plugin_lib_posix.cc	2010-02-02 09:16:08.740140511 +0200
 @@ -13,7 +13,7 @@
