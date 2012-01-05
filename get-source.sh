@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# CHANNEL: any from CHANNELS_URL: beta, dev
+# CHANNEL: any from CHANNELS_URL: stable, beta, dev
 CHANNEL=${1:-beta}
 
 CHANNELS_URL=http://omahaproxy.appspot.com/
@@ -51,9 +51,16 @@ rm $srctarball
 cd $PACKAGE_NAME-$VERSION/src
 du -sh .
 
-awk 'NR=1 {print $NF; exit}' v8/ChangeLog | tee v8.txt
+awk 'NR=1 {print $NF; exit}' v8/ChangeLog | tee -a v8.txt
 
-sh -x $WORK_DIR/clean-source.sh
+# keep v8 in sources if branch is not stable
+if [ "$CHANNEL" = "stable" ]; then
+	v8=1
+else
+	v8=0
+fi
+
+sh -x $WORK_DIR/clean-source.sh v8=$v8
 du -sh .
 
 # add LASTCHANGE info, take "branch_revision" item
