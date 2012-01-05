@@ -50,6 +50,9 @@ rm $srctarball
 
 cd $PACKAGE_NAME-$VERSION/src
 du -sh .
+
+awk 'NR=1 {print $NF; exit}' v8/ChangeLog | tee v8.txt
+
 sh -x $WORK_DIR/clean-source.sh
 du -sh .
 
