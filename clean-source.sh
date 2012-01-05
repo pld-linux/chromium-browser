@@ -3,6 +3,8 @@ set -e
 set -x
 
 # import options
+# remove everything unless it's remove has been disabled with "0"
+# "v8=0" means "do not remove v8"
 eval "$@"
 
 # drop bundled libs, from gentoo
@@ -126,7 +128,7 @@ strip_system_dirs() {
 	for dir in "$@"; do
 		lib=${dir##*/}
 		bcond=$(eval echo \$$lib)
-		[ "$bcond" = 0 ] && continue
+		[ "${bcond:-1}" = 0 ] && continue
 
 		# skip already removed dirs
 		test -d $dir || continue
@@ -175,7 +177,7 @@ strip_system_dirs \
 
 rm -vf third_party/expat/files/lib/expat.h
 
-if [ "$v8" = 1 ]; then
+if [ "${v8:-1}" != "0" ]; then
 	# The implementation files include v8 headers with full path,
 	# like #include "v8/include/v8.h". Make sure the system headers
 	# will be used.
@@ -183,7 +185,7 @@ if [ "$v8" = 1 ]; then
 	ln -s /usr/include v8/include
 fi
 
-if [ "$nacl" = 1 ]; then
+if [ "${nacl:-1}" != "0" ]; then
 	# NOTE: here is always x86_64
 	rm -rf native_client/toolchain/linux_x86_newlib
 	ln -s /usr/x86_64-nacl-newlib native_client/toolchain/linux_x86_newlib

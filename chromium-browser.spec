@@ -209,7 +209,7 @@ cd src
 cd ..
 
 cd src
-sh -x clean-source.sh %{?with_system_v8:v8=1} %{?with_nacl:nacl=1}
+sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0}
 
 %build
 cd src
