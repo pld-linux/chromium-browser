@@ -16,6 +16,54 @@ specfile=$pkg.spec
 dir=$(dirname "$0")
 cd "$dir"
 
+# extract version components from url
+# exports: $version; $release; $svndate; $svnver
+extract_version() {
+	set -x
+	local url=$1 part
+
+	part=${url#${pkg}[_-]}
+	if [[ $version = *~* ]]; then
+		# ubuntu urls
+		version=${part%~*}; part=${part#*${version}~}
+	else
+		version=${part%.tar.xz}; part=${part#*${version}.tar.xz}
+	fi
+
+	# release always 1 :)
+	release=1
+	if [ "$part" != "${part%%svn*}" ]; then
+		svndate=${part#svn*}; svndate=${svndate%%r*}
+		part=${part#svn${svndate}}
+	else
+		svndate='%{nil}'
+	fi
+	svnver=${part#r}; svnver=${svnver%%.*}
+}
+
+url2version() {
+	local url=$1
+
+	echo "${url}" | sed -e "
+		s,$version,%{version},g
+		s,$release,%{release},g
+		s,$svndate,%{svndate},g
+		s,$svnver,%{svnver},g
+	"
+}
+
+# setup url from template
+version2url() {
+	local url=$1
+
+	echo "${url}" | sed -e "
+		s,%{version},$version,g
+		s,%{release},$release,g
+		s,%{svndate},$svndate,g
+		s,%{svnver},$svnver,g
+	"
+}
+
 # abort on errors
 set -e
 
@@ -38,7 +86,7 @@ else
 		exit 1
 	fi
 	echo "Fetching latest tarball name..."
-	urls=$(lynx -dump $baseurl/ | awk '/[0-9]+\. .*orig\.tar\.gz/{print $NF}')
+	urls=$(lynx -width 200 -dump $baseurl/ | awk '/[0-9]+\. .*\.tar/{print $NF}')
 	# unescape "~" encoded by lighttpd
 	url=$(echo "$urls" | sed -e 's,%7e,~,gi' | sort -Vr | head -n1)
 fi
@@ -51,18 +99,20 @@ fi
 tarball=${url##*/}
 echo "tarball: $tarball..."
 
+
 if [ ! -f $tarball ]; then
 	if [ ! -x /usr/bin/wget ]; then
 		echo >&2 "${1##*/}: need wget to fetch tarball"
 		exit 1
 	fi
 	wget $(test "$quiet" = "1" && echo -q) -c $url
-	upload=$tarball
 fi
-
 
 # cvs up specfile, rename in case of conflicts
 cvs up $specfile || { set -x; mv -b $specfile $specfile.old && cvs up $specfile; }
+
+extract_version $tarball
+url_tpl=$(url2version $tarball)
 
 svndate=$(awk '/^%define[ 	]+svndate[ 	]+/{print $NF}' $specfile)
 svnver=$(awk '/^%define[ 	]+svnver[ 	]+/{print $NF}' $specfile)
@@ -72,7 +122,8 @@ if [ "$svndate" = "%{nil}" ]; then
 	svndate=
 fi
 
-newtar=${pkg}_${version}~${svndate:+svn${svndate}}r${svnver}.orig.tar.gz
+newtar=$(version2url $url_tpl)
+
 if [ "$newtar" = "$tarball" ]; then
 	echo "$specfile already up to $newtar"
 
@@ -82,16 +133,7 @@ if [ "$newtar" = "$tarball" ]; then
 	fi
 else
 	echo "Updating $specfile to $tarball"
-	part=${tarball#${pkg}_}
-	version=${part%~*}; part=${part#*${version}~}
-	release=1
-	if [ "$part" != "${part%%svn*}" ]; then
-		svndate=${part#svn*}; svndate=${svndate%%r*}
-		part=${part#svn${svndate}}
-	else
-		svndate='%{nil}'
-	fi
-	svnver=${part#r}; svnver=${svnver%%.*}
+	extract_version $tarball
 
 	sed -i -e "
 		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
