@@ -25,6 +25,9 @@ fi
 # Set CHROME_VERSION_EXTRA visible in the About dialog and in about:version
 export CHROME_VERSION_EXTRA="PLD Linux"
 
+# Let the wrapped binary know that it has been run through the wrapper
+export CHROME_WRAPPER="$(readlink -f "$0")"
+
 # Google Chrome has a number of command line switches which change the behavior of Chrome
 # This param allows you to set extra args for browser startup.
 # See: http://peter.sh/experiments/chromium-command-line-switches/
