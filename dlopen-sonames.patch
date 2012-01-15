@@ -1,0 +1,11 @@
+--- chromium-browser-17.0.963.33/src/printing/backend/print_backend_cups.cc~	2012-01-11 10:01:11.000000000 +0200
++++ chromium-browser-17.0.963.33/src/printing/backend/print_backend_cups.cc	2012-01-15 22:39:36.059522637 +0200
+@@ -60,7 +60,7 @@
+  private:
+   void Init() {
+     gcry_control(GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
+-    const char* kGnuTlsFile = "libgnutls.so";
++    const char* kGnuTlsFile = "libgnutls.so.28";
+     void* gnutls_lib = dlopen(kGnuTlsFile, RTLD_NOW);
+     if (!gnutls_lib) {
+       LOG(ERROR) << "Cannot load " << kGnuTlsFile;

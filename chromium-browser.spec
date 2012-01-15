@@ -71,6 +71,7 @@ Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 Patch9:		system-expat.patch
+Patch10:	dlopen-sonames.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -207,6 +208,7 @@ ln -s %{SOURCE7} src
 cd src
 %patch9 -p1
 cd ..
+%patch10 -p1
 
 cd src
 sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0}
