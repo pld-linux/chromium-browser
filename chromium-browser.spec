@@ -72,6 +72,10 @@ Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 Patch9:		system-expat.patch
 Patch10:	dlopen-sonames.patch
+# https://bugs.gentoo.org/show_bug.cgi?id=393471
+# libjpeg-turbo >= 1.1.90 supports that feature
+# but there is no autodetection currently, so revert for now
+Patch11:	chromium-revert-jpeg-swizzle-r0.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -209,6 +213,9 @@ cd src
 %patch9 -p1
 cd ..
 %patch10 -p1
+cd src
+%patch11 -p0
+cd ..
 
 cd src
 sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0}
