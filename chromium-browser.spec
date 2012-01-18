@@ -50,7 +50,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	16.0.912.75
-Release:	1
+Release:	2
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
@@ -88,6 +88,7 @@ BuildRequires:	glib2-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
 %{?with_kerberos:BuildRequires:	heimdal-devel}
+BuildRequires:	hicolor-icon-theme
 BuildRequires:	libevent-devel
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
 BuildRequires:	libicu-devel >= 4.6
@@ -128,6 +129,7 @@ BuildRequires:	xz
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
 Requires:	desktop-file-utils
+Requires:	hicolor-icon-theme
 %{?with_system_vpx:Requires:	libvpx >= 0.9.5-2}
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
@@ -273,7 +275,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
-	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_pixmapsdir},%{_desktopdir}}
+	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_desktopdir}}
 
 cd src/out/%{!?debug:Release}%{?debug:Debug}
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
@@ -301,7 +303,17 @@ install -p nacl_irt_x86_32.nexe $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 cd -
 
-cp -p src/chrome/app/theme/chromium/product_logo_48.png $RPM_BUILD_ROOT%{_pixmapsdir}/%{name}.png
+for icon in src/chrome/app/theme/chromium/product_logo_[0-9]*.png; do
+	size=${icon##*/product_logo_}
+	size=${size%.png}
+
+	# this will skip non-numeric (22_mono_invert, 22_mono)
+	dir=%{_iconsdir}/hicolor/${size}x${size}/apps
+	test -d "$dir" || continue
+
+	install -d $RPM_BUILD_ROOT$dir
+	cp -p $icon $RPM_BUILD_ROOT$dir/%{name}.png
+done
 
 %browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins -b <<'EOF'
 # http://code.google.com/p/chromium/issues/detail?id=24507
@@ -317,11 +329,13 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %post
+%update_icon_cache hicolor
 %update_desktop_database
 %update_browser_plugins
 
 %postun
 if [ "$1" = 0 ]; then
+	%update_icon_cache hicolor
 	%update_browser_plugins
 fi
 
@@ -331,8 +345,8 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 %attr(755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1*
-%{_pixmapsdir}/%{name}.png
 %{_desktopdir}/*.desktop
+%{_iconsdir}/hicolor/*/apps/%{name}.png
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome.pak
 %{_libdir}/%{name}/resources.pak
