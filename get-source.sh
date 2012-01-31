@@ -84,3 +84,10 @@ chmod 644 $LOGFILE
 mv $LOGFILE $DIST_DIR
 
 rm -rf $TMP_DIR
+
+# try updating spec and build it as well
+if [ -x $WORK_DIR/update-source.sh ]; then
+	build_package=1 \
+	publish_packages=1 \
+	sh -x $WORK_DIR/update-source.sh
+fi
