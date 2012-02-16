@@ -42,14 +42,15 @@
  #include "base/time.h"
  #include "base/utf_string_conversions.h"
  #include "chrome/browser/autocomplete/autocomplete.h"
---- chromium-browser-14.0.830.0~svn20110722r93513/src/chrome/common/metrics_helpers.cc.orig	2011-07-19 04:00:59.000000000 +0200
-+++ chromium-browser-14.0.830.0~svn20110722r93513/src/chrome/common/metrics_helpers.cc	2011-07-22 20:43:47.608727449 +0200
-@@ -17,7 +17,7 @@
+--- a/src/chrome/common/metrics/metrics_log_base.cc~	2012-02-09 03:36:29.000000000 +0100
++++ b/src/chrome/common/metrics/metrics_log_base.cc	2012-02-12 16:17:46.992725484 +0100
+@@ -10,7 +10,7 @@
  #include "base/perftimer.h"
  #include "base/string_number_conversions.h"
  #include "base/sys_info.h"
 -#include "base/third_party/nspr/prtime.h"
 +#include <nspr/prtime.h>
- #include "base/time.h"
  #include "base/utf_string_conversions.h"
  #include "chrome/common/logging_chrome.h"
+ #include "libxml/xmlwriter.h"
+
