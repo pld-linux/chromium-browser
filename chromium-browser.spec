@@ -49,12 +49,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	18.0.1025.11
-Release:	1
+Version:	17.0.963.46
+Release:	2
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
-# Source0-md5:	0bde819c093c1de4b76955608dcccc00
+# Source0-md5:	2799babdc6837530775219ff8a1b322b
 #SourceX:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -71,11 +71,11 @@ Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 Patch9:		system-expat.patch
-Patch10:	%{name}-pulse.patch
+Patch10:	dlopen-sonames.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 # but there is no autodetection currently, so revert for now
-Patch11:	chromium-revert-jpeg-swizzle-r2.patch
+Patch11:	chromium-revert-jpeg-swizzle-r0.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -213,7 +213,9 @@ ln -s %{SOURCE7} src
 %patch7 -p1
 cd src
 %patch9 -p1
+cd ..
 %patch10 -p1
+cd src
 %patch11 -p0
 cd ..
 

@@ -83,14 +83,3 @@
  #if defined(OS_WIN)
  #include "third_party/zlib/contrib/minizip/iowin32.h"
  #endif
---- chromium-browser-18.0.1025.11/src/chrome/common/zip_internal.cc~	2012-02-12 16:37:27.000000000 +0100
-+++ chromium-browser-18.0.1025.11/src/chrome/common/zip_internal.cc	2012-02-12 16:53:51.341474034 +0100
-@@ -10,7 +10,7 @@
- #if defined(OS_WIN)
- #include "third_party/zlib/contrib/minizip/iowin32.h"
- #elif defined(OS_POSIX)
--#include "third_party/zlib/contrib/minizip/ioapi.h"
-+#include <minizip/ioapi.h>
- #endif
- 
- namespace {
