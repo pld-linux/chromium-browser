@@ -49,12 +49,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	18.0.1025.33
+Version:	18.0.1025.39
 Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
-# Source0-md5:	0ea40a4130999d98bf430b7abc161e14
+# Source0-md5:	8da4475f51f6817fa92129da69955077
 #SourceX:	http://ppa.launchpad.net/chromium-daily/ppa/ubuntu/pool/main/c/chromium-browser/%{name}_%{version}~svn%{svndate}r%{svnver}.orig.tar.gz
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
