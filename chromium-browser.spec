@@ -20,6 +20,7 @@
 %bcond_without	system_vpx		# with system vpx
 %bcond_without	system_yasm		# with system yasm
 %bcond_without	system_zlib		# with system zlib
+%bcond_without	libjpegturbo		# use libjpeg-turbo features
 %bcond_with		verbose			# verbose build (V=1)
 
 # TODO
@@ -50,7 +51,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	18.0.1025.39
-Release:	1
+Release:	2
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
@@ -74,7 +75,6 @@ Patch9:		system-expat.patch
 Patch10:	%{name}-pulse.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
-# but there is no autodetection currently, so revert for now
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
@@ -98,6 +98,7 @@ BuildRequires:	libevent-devel
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
 BuildRequires:	libicu-devel >= 4.6
 BuildRequires:	libjpeg-devel
+%{?with_libjpegturbo:BuildRequires:	libjpeg-turbo-devel >= 1.2.0}
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
@@ -137,6 +138,7 @@ Requires:	desktop-file-utils
 Requires:	hicolor-icon-theme
 %{?with_system_vpx:Requires:	libvpx >= 0.9.5-2}
 Requires:	xdg-utils >= 1.0.2-4
+%{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
 Obsoletes:	chromium-browser-inspector < 15.0.863.0
@@ -214,7 +216,7 @@ ln -s %{SOURCE7} src
 cd src
 %patch9 -p1
 %patch10 -p1
-%patch11 -p0
+%{!?with_libjpegturbo:%patch11 -p0}
 cd ..
 
 cd src
