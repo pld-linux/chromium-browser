@@ -55,7 +55,7 @@ awk 'NR=1 {print $NF; exit}' v8/ChangeLog | tee -a v8.txt
 
 # keep v8 in sources if branch is not stable
 if [ "$CHANNEL" = "stable" ]; then
-	v8=1
+	v8=0
 else
 	v8=0
 fi
