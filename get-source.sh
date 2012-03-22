@@ -89,5 +89,5 @@ rm -rf $TMP_DIR
 if [ -x $WORK_DIR/update-source.sh ]; then
 	build_package=1 \
 	publish_packages=1 \
-	sh -x $WORK_DIR/update-source.sh
+	sh $WORK_DIR/update-source.sh
 fi
