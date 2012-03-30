@@ -75,6 +75,7 @@ Patch10:	%{name}-pulse.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
+Patch12:	chromium-glib.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -216,6 +217,7 @@ cd src
 %patch9 -p1
 %patch10 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
+%patch12 -p3
 cd ..
 
 cd src
