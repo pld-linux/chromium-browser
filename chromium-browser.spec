@@ -50,12 +50,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	18.0.1025.151
-Release:	1
+Version:	19.0.1084.15
+Release:	0.1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
-# Source0-md5:	72b1d67787a1de284fd63497a657a4ad
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
+# Source0-md5:	a05e6422e7688c0a77691b0c5787b206
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source5:	find-lang.sh
@@ -75,7 +75,6 @@ Patch10:	%{name}-pulse.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
-Patch12:	chromium-glib.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -217,7 +216,6 @@ cd src
 %patch9 -p1
 %patch10 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
-%patch12 -p3
 cd ..
 
 cd src

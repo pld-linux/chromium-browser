@@ -15,16 +15,3 @@ as we don't want to Depend on the -dev packages for the .so files:
        if (!library)
          return false;
  
-@@ -107,10 +107,10 @@
-       break;
-     }
-     case kGLImplementationEGLGLES2: {
--      base::NativeLibrary gles_library = LoadLibrary("libGLESv2.so");
-+      base::NativeLibrary gles_library = LoadLibrary("libGLESv2.so.2");
-       if (!gles_library)
-         return false;
--      base::NativeLibrary egl_library = LoadLibrary("libEGL.so");
-+      base::NativeLibrary egl_library = LoadLibrary("libEGL.so.1");
-       if (!egl_library) {
-         base::UnloadNativeLibrary(gles_library);
-         return false;
