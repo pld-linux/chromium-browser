@@ -267,6 +267,8 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
 	-Duse_system_xdg_utils=1 \
+	-Dlinux_use_gold_binary=0 \
+	-Dlinux_use_gold_flags=0
 
 %{__make} chrome %{?with_sandboxing:chrome_sandbox} \
 	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
