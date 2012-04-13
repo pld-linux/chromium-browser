@@ -31,6 +31,7 @@
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
+# - track pulse 1.x problem: https://code.google.com/p/chromium/issues/detail?id=119903
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
