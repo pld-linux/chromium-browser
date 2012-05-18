@@ -105,7 +105,7 @@ BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_vpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
-%{?with_system_libwebp:BuildRequires:	libwebp-devel}
+%{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.3}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
