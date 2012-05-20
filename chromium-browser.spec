@@ -51,7 +51,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	19.0.1084.46
-Release:	0.1
+Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
@@ -76,8 +76,6 @@ Patch10:	%{name}-pulse.patch
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 # https://code.google.com/p/chromium/issues/detail?id=119903
-Patch12:	http://archrepo.jeago.com/sources/chromium-dev/pulse_output_fix.diff
-# Patch12-md5:	e3a9539e16fc6c2336b8e709ac76b0f2
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -138,9 +136,9 @@ BuildRequires:	xz
 Requires:	browser-plugins >= 2.0
 Requires:	desktop-file-utils
 Requires:	hicolor-icon-theme
+%{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 %{?with_system_vpx:Requires:	libvpx >= 0.9.5-2}
 Requires:	xdg-utils >= 1.0.2-4
-%{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
 Obsoletes:	chromium-browser-inspector < 15.0.863.0
@@ -219,7 +217,6 @@ cd src
 %patch9 -p1
 %patch10 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
-%patch12 -p0
 cd ..
 
 cd src
