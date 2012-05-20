@@ -57,6 +57,7 @@ License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
 # Source0-md5:	6119a345de59252ba219f8b2ed9d71a4
+Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
 Source5:	find-lang.sh
@@ -289,9 +290,10 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
-	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_desktopdir}}
+	$RPM_BUILD_ROOT{%{_bindir},%{_sysconfdir}/%{name},%{_mandir}/man1,%{_desktopdir}}
 
 cd src/out/%{!?debug:Release}%{?debug:Debug}
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 %{__sed} -i -e 's,@libdir@,%{_libdir}/%{name},' $RPM_BUILD_ROOT%{_bindir}/%{name}
 cp -a *.pak locales resources $RPM_BUILD_ROOT%{_libdir}/%{name}
@@ -357,6 +359,8 @@ fi
 %defattr(644,root,root,755)
 %{_browserpluginsconfdir}/browsers.d/%{name}.*
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
+%dir %{_sysconfdir}/%{name}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/default
 %attr(755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1*
 %{_desktopdir}/*.desktop

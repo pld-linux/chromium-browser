@@ -1,8 +1,11 @@
 #!/bin/sh
 
-# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
+# Allow the user to override command-line flags, http://bugs.gentoo.org/357629
+# This is based on Debian's chromium-browser package, and is intended
+# to be consistent with Debian.
+if [ -f /etc/chromium-browser/default ] ; then
+	. /etc/chromium-browser/default
+fi
 
 # Always use our ffmpeg libs.
 export LD_LIBRARY_PATH=@libdir@${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}
@@ -34,11 +37,15 @@ export CHROME_WRAPPER="$(readlink -f "$0")"
 CHROME_FLAGS_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/chromium/Chrome Flags"
 if [ -f "$CHROME_FLAGS_FILE" ]; then
 	# All lines starting with # are ignored
-	CHROME_FLAGS=$(grep -v '^#' "$CHROME_FLAGS_FILE")
+	CHROMIUM_USER_FLAGS=$(grep -v '^#' "$CHROME_FLAGS_FILE")
 fi
+
+# Prefer user defined CHROMIUM_USER_FLAGS (from env) over system
+# default CHROMIUM_FLAGS (from /etc/chromium-browser/default).
+CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-"$CHROMIUM_FLAGS"}
 
 # Google guys cannot properly handle comma, so download speed/est is shown
 # as not a number (NaN). Workaround that with LC_NUMERIC=C
 export LC_NUMERIC=C
 
-exec @libdir@/chromium-browser $CHROME_FLAGS "$@"
+exec @libdir@/chromium-browser $CHROMIUM_FLAGS "$@"
