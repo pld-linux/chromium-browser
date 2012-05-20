@@ -12,6 +12,7 @@
 %bcond_with		selinux			# with SELinux (need policy first)
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
+%bcond_with		tcmalloc		# use tcmalloc
 %bcond_with		system_sqlite	# with system sqlite
 %bcond_without	system_flac		# with system flac
 %bcond_without	system_libwebp	# with system libwebp
@@ -75,7 +76,7 @@ Patch10:	%{name}-pulse.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
-# https://code.google.com/p/chromium/issues/detail?id=119903
+Patch12:	tcmalloc.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -217,6 +218,7 @@ cd src
 %patch9 -p1
 %patch10 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
+%patch12 -p0
 cd ..
 
 cd src
@@ -268,6 +270,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
 	-Duse_system_xdg_utils=1 \
+	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0
 
