@@ -1,9 +1,9 @@
 --- chromium-20090827svn24640/src/base/pr_time_unittest.cc.system-code	2009-08-27 15:21:27.000000000 -0400
 +++ chromium-20090827svn24640/src/base/pr_time_unittest.cc	2009-08-27 16:05:17.000000000 -0400
-@@ -4,7 +4,7 @@
- 
+@@ -5,7 +5,7 @@
  #include <time.h>
  
+ #include "base/compiler_specific.h"
 -#include "base/third_party/nspr/prtime.h"
 +#include <nspr/prtime.h>
  #include "base/time.h"
