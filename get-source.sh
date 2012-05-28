@@ -15,7 +15,7 @@ DIST_DIR=$HOME/public_html/chromium-browser/src/$CHANNEL
 VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')
 VERSION_FILE=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.xz
 
-if [ -e $VERSION_FILE ]; then
+if [ -e $VERSION_FILE -a -z "$FORCE" ]; then
 	# nothing to update
 	exit 0
 fi
@@ -60,7 +60,7 @@ else
 	v8=0
 fi
 
-sh -x $WORK_DIR/clean-source.sh v8=$v8
+sh -x $WORK_DIR/clean-source.sh v8=$v8 libxml=0
 du -sh .
 
 # add LASTCHANGE info, take "branch_revision" item
