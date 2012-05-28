@@ -133,6 +133,6 @@ X-MultipleArgs=false
 Type=Application
 Icon=chromium-browser
 Categories=GTK;Network;WebBrowser;
-MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;
+MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;x-scheme-handler/mailto;x-scheme-handler/webcal;
 StartupWMClass=Chromium-browser
 StartupNotify=true
