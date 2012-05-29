@@ -56,7 +56,7 @@ Release:	0.1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
-# Source0-md5:	f7e2293dc8edeb47f4057ef1f9ad7dd0
+# Source0-md5:	20be28fab78784b5c6b73e83abd20bb2
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -369,6 +369,8 @@ fi
 %{_libdir}/%{name}/chrome.pak
 %{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/resources.pak
+%{_libdir}/%{name}/theme_resources_standard.pak
+%{_libdir}/%{name}/ui_resources_standard.pak
 %dir %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/locales/en-US.pak
 %dir %{_libdir}/%{name}/resources
