@@ -126,6 +126,7 @@ BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 BuildRequires:	sqlite3-devel >= 3.6.1
 BuildRequires:	tar >= 1:1.22
+BuildRequires:	udev-devel
 BuildRequires:	util-linux
 %{?with_system_v8:BuildRequires:	v8-devel >= 3.7}
 BuildRequires:	which
