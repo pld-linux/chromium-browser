@@ -99,7 +99,7 @@ BuildRequires:	hicolor-icon-theme
 BuildRequires:	libevent-devel
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
 BuildRequires:	libicu-devel >= 4.6
-BuildRequires:	libjpeg-devel
+%{!?with_libjpegturbo:BuildRequires:	libjpeg-devel}
 %{?with_libjpegturbo:BuildRequires:	libjpeg-turbo-devel >= 1.2.0}
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
