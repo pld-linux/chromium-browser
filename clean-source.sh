@@ -163,7 +163,7 @@ strip_system_dirs \
 	third_party/libevent \
 	third_party/libjpeg \
 	third_party/libpng \
-	third_party/libxml \
+	_third_party/libxml \
 	third_party/libxslt \
 	third_party/zlib \
 	third_party/libwebp \
