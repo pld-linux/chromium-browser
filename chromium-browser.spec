@@ -51,12 +51,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	20.0.1132.39
+Version:	20.0.1132.42
 Release:	0.1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
-# Source0-md5:	5a06775196da39d2acc9735a4eb6d79e
+# Source0-md5:	48a879ca939b726e41b0a3924d3ea807
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
