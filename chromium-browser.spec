@@ -51,12 +51,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	20.0.1132.42
+Version:	20.0.1132.43
 Release:	0.1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
-# Source0-md5:	48a879ca939b726e41b0a3924d3ea807
+# Source0-md5:	aacc5499e056ce011efbc44d6e04694b
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -79,6 +79,7 @@ Patch10:	%{name}-pulse.patch
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch12:	tcmalloc.patch
 Patch13:	%{name}-c++.patch
+Patch14:	chromium-alignment-r0.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -224,6 +225,7 @@ cd src
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p0
 %patch13 -p0
+%patch14 -p0
 cd ..
 
 cd src
