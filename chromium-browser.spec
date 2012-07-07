@@ -7,7 +7,7 @@
 %bcond_without	cups			# with cups
 %bcond_without	gconf			# with GConf
 %bcond_without	pulseaudio		# with pulseaudio
-%bcond_with		nacl			# build Native Client support
+%bcond_without	nacl			# build Native Client support
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
 %bcond_with		shared_libs		# with shared libs
@@ -21,7 +21,7 @@
 %bcond_without	system_vpx		# with system vpx
 %bcond_without	system_yasm		# with system yasm
 %bcond_without	system_zlib		# with system zlib
-%bcond_without	libjpegturbo		# use libjpeg-turbo features
+%bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_with		verbose			# verbose build (V=1)
 
 # TODO
@@ -52,7 +52,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	20.0.1132.47
-Release:	1
+Release:	2
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
@@ -80,6 +80,8 @@ Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch12:	tcmalloc.patch
 Patch13:	%{name}-c++.patch
 Patch14:	chromium-alignment-r0.patch
+Patch15:	nacl-build-irt.patch
+Patch16:	nacl-linkingfix.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -87,6 +89,10 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
 BuildRequires:	bzip2-devel
+%{?with_nacl:BuildRequires:	crossnacl-binutils >= 2.20.1}
+%{?with_nacl:BuildRequires:	crossnacl-gcc >= 4.4.3}
+%{?with_nacl:BuildRequires:	crossnacl-gcc-c++ >= 4.4.3}
+%{?with_nacl:BuildRequires:	crossnacl-newlib >= 1.18.0}
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	dbus-glib-devel
 BuildRequires:	expat-devel
@@ -112,7 +118,6 @@ BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
 BuildRequires:	minizip-devel
-%{?with_nacl:BuildRequires:	nacl-toolchain-newlib >= 0.6941}
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
 BuildRequires:	pam-devel
@@ -226,6 +231,8 @@ cd src
 %patch12 -p0
 %patch13 -p0
 %patch14 -p0
+%patch15 -p1
+%patch16 -p1
 cd ..
 
 cd src
@@ -233,6 +240,34 @@ sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} libxml=0
 
 %build
 cd src
+
+%if %{with nacl}
+rm -rf native_client/toolchain/linux_x86_newlib
+# Make symlinks for nacl
+cd native_client/toolchain
+install -d linux_x86_newlib/x86_64-nacl/bin
+install -d linux_x86_newlib/x86_64-nacl/lib
+install -d linux_x86_newlib/x86_64-nacl/lib32
+install -d linux_x86_newlib/x86_64-nacl/nacl/include/bits
+install -d linux_x86_newlib/x86_64-nacl/nacl/include/machine
+install -d linux_x86_newlib/x86_64-nacl/nacl/include/sys
+cd linux_x86_newlib/x86_64-nacl/bin
+ln -s %{_bindir}/x86_64-nacl-gcc gcc
+ln -s %{_bindir}/x86_64-nacl-g++ g++
+ln -s %{_bindir}/x86_64-nacl-ar ar
+ln -s %{_bindir}/x86_64-nacl-as as
+ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
+ln -s %{_bindir}/x86_64-nacl-strip x86-64-nacl-strip
+ln -s %{_bindir}/x86_64-nacl-strip strip
+ln -s %{_prefix}/x86_64-nacl/lib/*.a ../lib/
+ln -s %{_prefix}/x86_64-nacl/lib/32/*.a ../lib32/
+cd ../nacl/include
+for i in $(find %{_prefix}/x86_64-nacl/include -type f | grep -v "c++"); do
+	ln -s $i ${i#%{_prefix}/x86_64-nacl/include/}
+done
+cd ../../../../../..
+%endif
+
 test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \

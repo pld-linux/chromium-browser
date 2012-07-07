@@ -1,0 +1,40 @@
+--- chromium-browser-20.0.1132.47/native_client/SConstruct~	2012-06-28 16:03:20.000000000 +0300
++++ chromium-browser-20.0.1132.47/native_client/SConstruct	2012-07-07 01:27:46.054400799 +0300
+@@ -3329,7 +3329,7 @@
+     #### ALPHABETICALLY SORTED ####
+     ], ppapi_scons_files['nonvariant_test_scons_files'])
+ 
+-nacl_env.Append(BUILD_SCONSCRIPTS=irt_variant_tests + nonvariant_tests)
++#nacl_env.Append(BUILD_SCONSCRIPTS=irt_variant_tests + nonvariant_tests)
+ 
+ # ----------------------------------------------------------
+ # Possibly install an sdk by downloading it
+diff -up chromium-17.0.963.46/native_client/site_scons/site_tools/naclsdk.py.buildnacl chromium-17.0.963.46/native_client/site_scons/site_tools/naclsdk.py
+--- chromium-17.0.963.46/native_client/site_scons/site_tools/naclsdk.py.buildnacl	2012-01-27 03:03:50.000000000 -0500
++++ chromium-17.0.963.46/native_client/site_scons/site_tools/naclsdk.py	2012-02-13 17:09:38.402988894 -0500
+@@ -138,18 +138,21 @@ def _SetEnvForX86Sdk(env, sdk_path):
+   # does not run under Cygwin and does not follow Cygwin symlinks.
+   if env['TARGET_SUBARCH'] == default_subarch:
+     libsuffix = 'lib'
+-    as_mode_flag = ''
+-    ld_mode_flag = ''
++    cc_mode_flag = ' -m%s -L/usr/x86_64-nacl/lib/%s' % (env['TARGET_SUBARCH'], env['TARGET_SUBARCH'])
++    as_mode_flag = ' --%s' % env['TARGET_SUBARCH']
++    if env['TARGET_SUBARCH'] == '64':
++      ld_mode_flag = ' -melf64_nacl'
++    else:
++      ld_mode_flag = ' -melf_nacl'
+   else:
+     libsuffix = 'lib%s' % env['TARGET_SUBARCH']
++    cc_mode_flag = '-m%s' % env['TARGET_SUBARCH']
+     as_mode_flag = '--%s' % env['TARGET_SUBARCH']
+     if env['TARGET_SUBARCH'] == '64':
+       ld_mode_flag = ' -melf64_nacl'
+     else:
+       ld_mode_flag = ' -melf_nacl'
+ 
+-  cc_mode_flag = '-m%s' % env['TARGET_SUBARCH']
+-
+   env.Replace(# Replace header and lib paths.
+               # where to put nacl extra sdk headers
+               # TODO(robertm): switch to using the mechanism that
