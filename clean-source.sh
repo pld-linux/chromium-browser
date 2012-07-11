@@ -234,5 +234,4 @@ fi
 if [ "${nacl:-1}" != "0" ]; then
 	# NOTE: here is always x86_64
 	rm -rf native_client/toolchain/linux_x86_newlib
-	ln -s /usr/x86_64-nacl-newlib native_client/toolchain/linux_x86_newlib
 fi
