@@ -52,6 +52,52 @@ remove_nonessential_dirs() {
     third_party/yasm/source/patched-yasm/modules/objfmts/xdf/tests \
     third_party/WebKit/Source/JavaScriptCore/tests \
     third_party/WebKit/LayoutTests \
+	\
+	breakpad/src/client/mac/tests \
+	breakpad/src/client/windows/tests \
+	breakpad/src/common/linux/tests \
+	breakpad/src/common/tests \
+	chrome/browser/resources/tracing/tests \
+	chrome/browser/ui/tests \
+	content/test/data/layout_tests/LayoutTests/http/tests \
+	content/test/data/layout_tests/LayoutTests/http/tests/websocket/tests \
+	content/test/data/layout_tests/LayoutTests/platform/chromium-win/http/tests \
+	gpu/command_buffer/tests \
+	native_client/tests \
+	native_client/tools/tests \
+	native_client_sdk/src/build_tools/tests \
+	ppapi/native_client/tests \
+	ppapi/tests \
+	sandbox/tests \
+	seccompsandbox/tests \
+	third_party/WebKit/Source/JavaScriptCore/API/tests \
+	third_party/WebKit/Source/JavaScriptCore/qt/tests \
+	third_party/WebKit/Source/WebKit/chromium/tests \
+	third_party/WebKit/Source/WebKit/gtk/tests \
+	third_party/WebKit/Source/WebKit/qt/tests \
+	third_party/WebKit/Source/WebKit2/UIProcess/API/gtk/tests \
+	third_party/WebKit/Source/WebKit2/UIProcess/API/qt/tests \
+	third_party/angle/tests \
+	third_party/ffmpeg/tests \
+	third_party/harfbuzz/tests \
+	third_party/hyphen/tests \
+	third_party/mesa/MesaLib/src/gallium/tests \
+	third_party/mesa/MesaLib/src/gallium/tests/python/tests \
+	third_party/tcmalloc/chromium/src/tests \
+	third_party/tcmalloc/vendor/src/tests \
+	third_party/yasm/source/patched-yasm/libyasm/tests \
+	third_party/yasm/source/patched-yasm/modules/arch/lc3b/tests \
+	third_party/yasm/source/patched-yasm/modules/dbgfmts/stabs/tests \
+	third_party/yasm/source/patched-yasm/modules/parsers/gas/tests \
+	third_party/yasm/source/patched-yasm/modules/parsers/nasm/tests \
+	third_party/yasm/source/patched-yasm/modules/parsers/tasm/tests \
+	third_party/yasm/source/patched-yasm/modules/preprocs/nasm/tests \
+	third_party/yasm/source/patched-yasm/modules/preprocs/raw/tests \
+	third_party/yasm/source/patched-yasm/tools/python-yasm/tests \
+	tools/clang/plugins/tests \
+	tools/page_cycler/webpagereplay/tests \
+	tools/perf_expectations/tests \
+	\
     v8/test \
     webkit/data/layout_tests \
     webkit/tools/test/reference_build \
