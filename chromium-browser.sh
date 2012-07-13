@@ -50,9 +50,10 @@ CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-"$CHROMIUM_FLAGS"}
 export LC_NUMERIC=C
 
 # load PepperFlash if present
-if [ -f $CHROMIUM_DIR/PepperFlash/manifest.ver ]; then
-	. $CHROMIUM_DIR/PepperFlash/manifest.ver
-	PEPPERFLASH_ARGS="--ppapi-flash-path=$CHROMIUM_DIR/PepperFlash/libpepflashplayer.so --ppapi-flash-version=$version"
+PEPFLASH=$(readlink -f $CHROMIUM_DIR/../browser-plugins/PepperFlash)
+if [ -f $PEPFLASH/manifest.ver ]; then
+	. $PEPFLASH/manifest.ver
+	PEPPERFLASH_ARGS="--ppapi-flash-path=$PEPFLASH/libpepflashplayer.so --ppapi-flash-version=$version"
 fi
 
 exec $CHROMIUM_DIR/chromium-browser $PEPPERFLASH_ARGS $CHROMIUM_FLAGS "$@"
