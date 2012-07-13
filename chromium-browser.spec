@@ -68,6 +68,7 @@ Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
+Patch4:		path-libpdf.patch
 Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
@@ -221,6 +222,7 @@ ln -s %{SOURCE7} src
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
