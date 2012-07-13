@@ -8,7 +8,8 @@ if [ -f /etc/chromium-browser/default ] ; then
 fi
 
 # Always use our ffmpeg libs.
-export LD_LIBRARY_PATH=@libdir@${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}
+CHROMIUM_DIR=@libdir@
+export LD_LIBRARY_PATH=$CHROMIUM_DIR${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}
 
 # for to find xdg-settings
 export PATH=@libdir@${PATH:+:"$PATH"}
@@ -48,4 +49,10 @@ CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-"$CHROMIUM_FLAGS"}
 # as not a number (NaN). Workaround that with LC_NUMERIC=C
 export LC_NUMERIC=C
 
-exec @libdir@/chromium-browser $CHROMIUM_FLAGS "$@"
+# load PepperFlash if present
+if [ -f $CHROMIUM_DIR/PepperFlash/manifest.ver ]; then
+	. $CHROMIUM_DIR/PepperFlash/manifest.ver
+	PEPPERFLASH_ARGS="--ppapi-flash-path=$CHROMIUM_DIR/PepperFlash/libpepflashplayer.so --ppapi-flash-version=$version"
+fi
+
+exec $CHROMIUM_DIR/chromium-browser $PEPPERFLASH_ARGS $CHROMIUM_FLAGS "$@"
