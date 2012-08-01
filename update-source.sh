@@ -74,7 +74,6 @@ if [ "$quiet" = "1" ]; then
 	exec 1>/dev/null
 fi
 
-test -e $specfile || cvs up $specfile
 # take baseurl from .spec Source0
 baseurl=$(awk '/^Source0:/{print $2}' $specfile | xargs dirname)
 
@@ -107,9 +106,6 @@ if [ ! -f $tarball ]; then
 	fi
 	wget $(test "$quiet" = "1" && echo -q) -c $url
 fi
-
-# cvs up specfile, rename in case of conflicts
-cvs up $specfile || { set -x; mv -b $specfile $specfile.old && cvs up $specfile; }
 
 extract_version $tarball
 url_tpl=$(url2version $tarball)

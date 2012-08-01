@@ -51,12 +51,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	20.0.1132.57
-Release:	2
+Version:	21.0.1180.57
+Release:	0.1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
-# Source0-md5:	49ca9c418a10d99196951ecef01bcb5a
+# Source0-md5:	15242c061905204e93cd364a5db954cc
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -73,14 +73,9 @@ Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
-Patch9:		system-expat.patch
-Patch10:	%{name}-pulse.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
-Patch12:	tcmalloc.patch
-Patch13:	%{name}-c++.patch
-Patch14:	chromium-alignment-r0.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 URL:		http://www.chromium.org/Home
@@ -114,7 +109,7 @@ BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_vpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
-%{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.3}
+%{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
@@ -227,12 +222,7 @@ ln -s %{SOURCE7} src
 %patch6 -p1
 %patch7 -p1
 cd src
-%patch9 -p1
-%patch10 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
-%patch12 -p0
-%patch13 -p0
-%patch14 -p0
 %patch15 -p1
 %patch16 -p1
 cd ..
@@ -418,6 +408,8 @@ fi
 %{_libdir}/%{name}/locales/en-US.pak
 %dir %{_libdir}/%{name}/resources
 %{_libdir}/%{name}/resources/inspector
+%dir %{_libdir}/%{name}/resources/extension
+%{_libdir}/%{name}/resources/extension/demo
 %dir %{_libdir}/%{name}/themes
 %dir %{_libdir}/%{name}/extensions
 %dir %{_libdir}/%{name}/plugins

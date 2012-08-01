@@ -4,9 +4,9 @@ as we don't want to Depend on the -dev packages for the .so files:
 - libGLESv2.so.2: Mesa-libGLES-7.11-0.20110227.1
 - libEGL.so.1: Mesa-libEGL-7.10-1
 
---- chromium-browser-14.0.803.0~svn20110625r90472/src/ui/gfx/gl/gl_implementation_linux.cc.orig	2011-06-23 04:01:00.000000000 +0200
-+++ chromium-browser-14.0.803.0~svn20110625r90472/src/ui/gfx/gl/gl_implementation_linux.cc	2011-06-25 06:28:03.219139002 +0200
-@@ -61,7 +61,7 @@
+--- chromium-browser-21.0.1180.57/src/ui/gl/gl_implementation_linux.cc~	2012-07-27 04:02:32.000000000 +0300
++++ chromium-browser-21.0.1180.57/src/ui/gl/gl_implementation_linux.cc	2012-08-01 00:18:16.271402111 +0300
+@@ -75,7 +75,7 @@
        }
  
        base::NativeLibrary library = LoadLibrary(
