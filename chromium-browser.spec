@@ -52,7 +52,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	21.0.1180.57
-Release:	0.1
+Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
@@ -73,6 +73,7 @@ Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
+Patch9:		chromium-ppapi.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
@@ -222,6 +223,7 @@ ln -s %{SOURCE7} src
 %patch6 -p1
 %patch7 -p1
 cd src
+%patch9 -p0
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch15 -p1
 %patch16 -p1
@@ -243,6 +245,8 @@ install -d linux_x86_newlib/x86_64-nacl/lib32
 install -d linux_x86_newlib/x86_64-nacl/nacl/include/bits
 install -d linux_x86_newlib/x86_64-nacl/nacl/include/machine
 install -d linux_x86_newlib/x86_64-nacl/nacl/include/sys
+# link newlib toolchain to glibc as well, see gentoo bug #417019
+#ln -s linux_x86_newlib linux_x86
 cd linux_x86_newlib/x86_64-nacl/bin
 ln -s %{_bindir}/x86_64-nacl-gcc gcc
 ln -s %{_bindir}/x86_64-nacl-g++ g++
@@ -280,7 +284,12 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
-	%{!?with_nacl:-Ddisable_nacl=1} \
+%if %{with nacl}
+	%{?_:# Disable glibc Native Client toolchain, we don't need it (gentoo bug #417019).} \
+	-Ddisable_glibc=1 \
+%else
+	-Ddisable_nacl=1 \
+%endif
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
 	%{gyp_with cups} \
@@ -337,6 +346,8 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
+
+%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/resources/extension/demo
 
 %if %{with nacl}
 # Install Native Client files on platforms that support it.
@@ -408,8 +419,6 @@ fi
 %{_libdir}/%{name}/locales/en-US.pak
 %dir %{_libdir}/%{name}/resources
 %{_libdir}/%{name}/resources/inspector
-%dir %{_libdir}/%{name}/resources/extension
-%{_libdir}/%{name}/resources/extension/demo
 %dir %{_libdir}/%{name}/themes
 %dir %{_libdir}/%{name}/extensions
 %dir %{_libdir}/%{name}/plugins

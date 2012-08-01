@@ -106,6 +106,7 @@ remove_nonessential_dirs() {
 	tools/stats_viewer \
 	tools/symsrc \
 	tools/valgrind \
+	tools/gyp/test \
 	; do
 		rm -vfr "$dir"
 	done
