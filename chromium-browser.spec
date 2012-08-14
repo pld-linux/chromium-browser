@@ -51,12 +51,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	21.0.1180.75
+Version:	21.0.1180.77
 Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
-# Source0-md5:	ab9d8305aed422608d73cb342ee5abcf
+# Source0-md5:	0e43e286e9ebd3eb85ae4daea8638b66
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
