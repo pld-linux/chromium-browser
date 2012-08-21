@@ -52,7 +52,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	21.0.1180.77
-Release:	1
+Release:	2
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
