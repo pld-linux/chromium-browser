@@ -155,6 +155,7 @@ ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		find_lang 	sh find-lang.sh %{buildroot}
+
 # Usage: gyp_with BCOND_NAME [OPTION_NAME]
 %define		gyp_with() %{expand:%%{?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=1}%%{!?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=0}}
 
