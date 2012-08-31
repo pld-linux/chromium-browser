@@ -51,12 +51,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	21.0.1180.81
+Version:	21.0.1180.89
 Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
-# Source0-md5:	24e89dc84fef4fce5814de4051863b10
+# Source0-md5:	7df0323b8e38020647181825c4381f36
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -79,6 +79,7 @@ Patch9:		chromium-ppapi.patch
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
+Patch17:	bug-138243.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -227,6 +228,9 @@ cd src
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch15 -p1
 %patch16 -p1
+cd third_party/WebKit
+%patch17 -p2
+cd -
 cd ..
 
 cd src
