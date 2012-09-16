@@ -156,7 +156,7 @@ install -d $rpmdir
 
 # if already published?
 if [ "$publish_packages" = 1 ]; then
-	pkg=$rpmdest/$pkg-$version-0.$svnver.$rel.$arch.rpm
+	pkg=$rpmdest/$pkg-$version-${svnver:+0.$svnver.}$release.$arch.rpm
 	if [ -f "$pkg" ]; then
 		exit 0
 	fi
