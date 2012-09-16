@@ -15,6 +15,7 @@ specfile=$pkg.spec
 # work in package dir
 dir=$(dirname "$0")
 cd "$dir"
+dir=$(pwd)
 
 # extract version components from url
 # exports: $version; $release; $svndate; $svnver
@@ -162,27 +163,19 @@ if [ "$publish_packages" = 1 ]; then
 	fi
 fi
 
-# setup custom logfile via $HOME_ETC hack
-# TODO: just add --logfile support for builder
-cat > $outdir/.builderrc <<-EOF
-	if [ -n "$HOME_ETC" ]; then
-		. "$HOME_ETC/.builderrc"
-	elif [ -r ~/.builderrc ]; then
-		. ~/.builderrc
-	fi
-	LOGFILE='$logfile'
-EOF
-
 command=-bp
 test "$build_package" = 1 && command=-bb
-> $logfile
-HOME_ETC=$outdir \
-	../builder $command --clean \
+	rpmbuild $command --clean \
 	--define "_unpackaged_files_terminate_build 1" \
 	--define '_enable_debug_packages 0' \
+	--define "_topdir $dir" \
+	--define "_specdir $dir" \
+	--define "_sourcedir $dir" \
 	--define "_builddir $outdir" \
 	--define "_rpmdir $rpmdir" \
-	$specfile || {
+	--without debuginfo \
+	--with verbose \
+	$specfile > $logfile 2>&1 || {
 	echo >&2 "Package build failed"
 	tail -n 1000 $logfile >&2
 	exit 1
