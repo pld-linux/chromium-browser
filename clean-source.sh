@@ -20,6 +20,7 @@ gyp_clean() {
 
 # https://code.google.com/p/chromium/wiki/LinuxPackaging
 # initial list from src/tools/export_tarball/export_tarball.py
+# some scanned with find -name tests -o -name test -o -name test_data
 remove_nonessential_dirs() {
 	local dir
 	for dir in \
@@ -107,6 +108,73 @@ remove_nonessential_dirs() {
 	tools/symsrc \
 	tools/valgrind \
 	tools/gyp/test \
+	\
+	ash/test \
+	base/android/javatests/src/org/chromium/base/test \
+	base/test \
+	chrome/browser/chromeos/bluetooth/test \
+	chrome/browser/component_updater/test \
+	chrome/browser/printing/cloud_print/test \
+	chrome/browser/resources/gaia_auth/test \
+	chrome/browser/sync/test \
+	chrome/installer/test \
+	chrome/test/webdriver/test \
+	chrome/tools/test \
+	chrome_frame/test \
+	chrome_frame/tools/test \
+	content/browser/worker_host/test \
+	content/public/test \
+	content/test \
+	media/test \
+	media/tools/layout_tests/test_data \
+	native_client_sdk/src/libraries/c_salt/test \
+	net/test \
+	printing/test \
+	rlz/test \
+	sandbox/linux/seccomp-legacy/tests \
+	sandbox/linux/tests \
+	sandbox/win/tests \
+	sync/internal_api/public/test \
+	sync/internal_api/test \
+	sync/test \
+	testing/gmock/scripts/test \
+	testing/gmock/test \
+	testing/gtest/scripts/test \
+	testing/gtest/test \
+	third_party/WebKit/Source/ThirdParty/gtest/scripts/test \
+	third_party/WebKit/Source/ThirdParty/gtest/test \
+	third_party/WebKit/Source/ThirdParty/gyp/test \
+	third_party/WebKit/Source/ThirdParty/qunit/test \
+	third_party/WebKit/Source/WebCore/bindings/scripts/test \
+	third_party/WebKit/Source/WebKit/efl/tests \
+	third_party/WebKit/Source/WebKit2/UIProcess/API/efl/tests \
+	third_party/WebKit/Tools/Scripts/webkitpy/test \
+	third_party/cacheinvalidation/files/src/google/cacheinvalidation/test \
+	third_party/libexif/sources/test \
+	third_party/libjingle/source/talk/app/webrtc/test \
+	third_party/libphonenumber/src/resources/test \
+	third_party/libphonenumber/src/test \
+	third_party/libsrtp/srtp/crypto/test \
+	third_party/libsrtp/srtp/test \
+	third_party/openssl/openssl/crypto/des/t/test \
+	third_party/openssl/openssl/test \
+	third_party/ots/test \
+	third_party/sfntly/cpp/src/test \
+	third_party/sqlite/src/test \
+	third_party/talloc/libreplace/test \
+	third_party/tlslite/test \
+	third_party/trace-viewer/test_data \
+	third_party/v8-i18n/tests \
+	third_party/webdriver/pylib/test \
+	third_party/webdriver/test_data \
+	ui/app_list/test \
+	ui/aura/test \
+	ui/base/test \
+	ui/compositor/test \
+	ui/gfx/test \
+	ui/test \
+	ui/views/test \
+	webkit/plugins/npapi/test \
 	; do
 		rm -vfr "$dir"
 	done
@@ -214,11 +282,14 @@ strip_system_dirs \
 	third_party/libxslt \
 	third_party/zlib \
 	third_party/libwebp \
+	_third_party/libvpx \
 	v8 \
 | tee -a REMOVED-stripped.txt
 
-# third_party/libvpx/libvpx.h should be kept
-#gyp_clean third_party/libvpx
+# vpx can't be cleaned:
+#make: *** No rule to make target `out/Release/obj.target/libvpx_asm_offsets/third_party/libvpx/source/libvpx/vp8/common/asm_com_offsets.o',
+#needed by `out/Release/obj.target/third_party/libvpx/libvpx_asm_offsets.a'.  Stop.
+
 # third_party/yasm/source/patched-yasm/modules/arch/x86/gen_x86_insn.py', needed by `out/Release/obj/gen/third_party/yasm/x86insns.c'. Stop.
 #gyp_clean third_party/yasm
 
