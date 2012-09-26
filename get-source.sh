@@ -60,7 +60,7 @@ else
 	v8=0
 fi
 
-sh -x $WORK_DIR/clean-source.sh v8=$v8 libxml=0
+sh -x $WORK_DIR/clean-source.sh v8=$v8 libxml=0 zlib=0
 du -sh .
 
 # add LASTCHANGE info, take "branch_revision" item

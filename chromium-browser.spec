@@ -20,7 +20,9 @@
 %bcond_with		system_v8		# with system v8
 %bcond_without	system_vpx		# with system vpx
 %bcond_without	system_yasm		# with system yasm
-%bcond_without	system_zlib		# with system zlib
+# system zlib disabled because of mixed-source.patch
+# https://code.google.com/p/chromium/issues/detail?id=143623
+%bcond_with		system_zlib		# with system zlib
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_with		verbose			# verbose build (V=1)
 
@@ -231,7 +233,7 @@ cd src
 cd ..
 
 cd src
-sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} libxml=0
+sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} libxml=0 %{!?with_system_zlib:zlib=0}
 
 %build
 cd src
