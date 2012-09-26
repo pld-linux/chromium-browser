@@ -51,12 +51,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	21.0.1180.89
-Release:	2
+Version:	22.0.1229.79
+Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
-# Source0-md5:	7df0323b8e38020647181825c4381f36
+# Source0-md5:	e5c26bbc9260b059000d876d11a42031
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -79,7 +79,6 @@ Patch9:		chromium-ppapi.patch
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
-Patch17:	bug-138243.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -229,9 +228,6 @@ cd src
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch15 -p1
 %patch16 -p1
-cd third_party/WebKit
-%patch17 -p2
-cd -
 cd ..
 
 cd src
@@ -418,8 +414,8 @@ fi
 %{_libdir}/%{name}/chrome.pak
 %{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/resources.pak
-%{_libdir}/%{name}/theme_resources_standard.pak
-%{_libdir}/%{name}/ui_resources_standard.pak
+%{_libdir}/%{name}/theme_resources_*.pak
+%{_libdir}/%{name}/ui_resources_*.pak
 %dir %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/locales/en-US.pak
 %dir %{_libdir}/%{name}/resources

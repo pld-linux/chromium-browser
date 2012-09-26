@@ -9,32 +9,3 @@
  
  # ----------------------------------------------------------
  # Possibly install an sdk by downloading it
---- chromium-browser-21.0.1180.57/native_client/site_scons/site_tools/naclsdk.py~	2012-07-27 04:03:45.000000000 +0300
-+++ chromium-browser-21.0.1180.57/native_client/site_scons/site_tools/naclsdk.py	2012-08-01 11:31:37.996568146 +0300
-@@ -142,10 +142,15 @@
-   # does not run under Cygwin and does not follow Cygwin symlinks.
-   if env['TARGET_SUBARCH'] == default_subarch:
-     libsuffix = 'lib'
--    as_mode_flag = ''
--    ld_mode_flag = ''
-+    cc_mode_flag = ' -m%s -L/usr/x86_64-nacl/lib/%s' % (env['TARGET_SUBARCH'], env['TARGET_SUBARCH'])
-+    as_mode_flag = ' --%s' % env['TARGET_SUBARCH']
-+    if env['TARGET_SUBARCH'] == '64':
-+      ld_mode_flag = ' -melf64_nacl'
-+    else:
-+      ld_mode_flag = ' -melf_nacl'
-   else:
-     libsuffix = 'lib%s' % env['TARGET_SUBARCH']
-+    cc_mode_flag = '-m%s' % env['TARGET_SUBARCH']
-     as_mode_flag = '--%s' % env['TARGET_SUBARCH']
-     if env['TARGET_SUBARCH'] == '64':
-       ld_mode_flag = ' -melf64_nacl'
-@@ -154,8 +159,6 @@
- 
-   if arch == 'arm-nacl':
-     cc_mode_flag = ''
--  else:
--    cc_mode_flag = '-m%s' % env['TARGET_SUBARCH']
- 
-   env.Replace(# Replace header and lib paths.
-               # where to put nacl extra sdk headers
