@@ -286,6 +286,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 %if %{with nacl}
 	%{?_:# Disable glibc Native Client toolchain, we don't need it (gentoo bug #417019).} \
 	-Ddisable_glibc=1 \
+	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
 %else
 	-Ddisable_nacl=1 \
 %endif
