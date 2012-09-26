@@ -26,6 +26,16 @@
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_with		verbose			# verbose build (V=1)
 
+%if %{with nacl}
+# temporary hack as seems this does not work: http://codereview.chromium.org/8890043
+# nacl_bootstrap.c:(.text.load_elf_file+0x707): undefined reference to `__stack_chk_fail'
+#14:08:04 @baggins> glen: yes, I added SSP in rpm5, add -lssp to link flags to fix it
+#14:19:42 @baggins> it doesn't hurt to add -lssp here and there, and we'll be a bit more secure
+#14:51:06 @baggins> as-needed will take care of unneeded lib
+#14:52:03 @baggins> -lssp comes with gcc
+%define		filterout_c	-fstack-protector
+%endif
+
 # TODO
 # - check system sqlite linking problems
 # - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
