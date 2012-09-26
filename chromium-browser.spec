@@ -45,10 +45,9 @@
 # - to look for new tarball, use update-source.sh script
 
 # NOTE TO USERS:
-# To use chromium nightly builds for pld-th save to /etc/poldek/repos.d (as chromium-nightly.conf):
-# http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
-# or:
+# To use chromium nightly beta builds for pld-th save to /etc/poldek/repos.d (as chromium-nightly.conf):
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
+# http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -203,9 +202,6 @@ gyp_rev=$(grep googlecode_url.*gyp src/DEPS | cut -d'"' -f6 | cut -d@ -f2)
 test "$gyp_rev" = %{gyp_rev} || :
 
 v8_ver=$(awk 'NR=1 {print $NF; exit}' src/v8/ChangeLog || :)
-
-# Populate the LASTCHANGE file template as we no longer have the VCS files at this point
-#echo "%{svnver}" > src/build/LASTCHANGE.in
 
 # add chromium and pld to useragent
 %define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
