@@ -33,7 +33,7 @@
 #14:19:42 @baggins> it doesn't hurt to add -lssp here and there, and we'll be a bit more secure
 #14:51:06 @baggins> as-needed will take care of unneeded lib
 #14:52:03 @baggins> -lssp comes with gcc
-%define		filterout_c	-fstack-protector
+%define		_ssp_cflags	%{nil}
 %endif
 
 # TODO
