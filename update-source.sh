@@ -139,7 +139,7 @@ else
 		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
 	" $specfile
 
-	../builder -ncs -5 $specfile
+	../builder --no-init -ncs -5 $specfile
 fi
 
 # if we don't build. we're done
