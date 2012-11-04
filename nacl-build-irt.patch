@@ -1,11 +1,17 @@
---- chromium-browser-20.0.1132.47/native_client/SConstruct~	2012-06-28 16:03:20.000000000 +0300
-+++ chromium-browser-20.0.1132.47/native_client/SConstruct	2012-07-07 01:27:46.054400799 +0300
-@@ -3329,7 +3329,7 @@
+--- chromium-browser-23.0.1271.60/src/native_client/SConstruct~	2012-10-30 21:04:38.000000000 +0200
++++ chromium-browser-23.0.1271.60/src/native_client/SConstruct	2012-11-04 17:05:10.961306382 +0200
+@@ -2744,10 +2744,10 @@
      #### ALPHABETICALLY SORTED ####
-     ], ppapi_scons_files['nonvariant_test_scons_files'])
+ ]
  
--nacl_env.Append(BUILD_SCONSCRIPTS=irt_variant_tests + nonvariant_tests)
-+#nacl_env.Append(BUILD_SCONSCRIPTS=irt_variant_tests + nonvariant_tests)
+-nacl_env.Append(BUILD_SCONSCRIPTS=nonvariant_tests)
+-nacl_env.AddChromeFilesFromGroup('nonvariant_test_scons_files')
+-nacl_env.Append(BUILD_SCONSCRIPTS=irt_variant_tests)
+-nacl_env.AddChromeFilesFromGroup('irt_variant_test_scons_files')
++#nacl_env.Append(BUILD_SCONSCRIPTS=nonvariant_tests)
++#nacl_env.AddChromeFilesFromGroup('nonvariant_test_scons_files')
++#nacl_env.Append(BUILD_SCONSCRIPTS=irt_variant_tests)
++#nacl_env.AddChromeFilesFromGroup('irt_variant_test_scons_files')
  
- # ----------------------------------------------------------
- # Possibly install an sdk by downloading it
+ # Defines TESTS_TO_RUN_INBROWSER.
+ SConscript('tests/inbrowser_test_runner/selection.scons',

@@ -7,7 +7,8 @@
 %bcond_without	cups			# with cups
 %bcond_without	gconf			# with GConf
 %bcond_without	pulseaudio		# with pulseaudio
-%bcond_without	nacl			# build Native Client support
+# disable nacl, see http://forums.gentoo.org/viewtopic-t-937222-highlight-chromium.html
+%bcond_with	nacl			# build Native Client support
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
 %bcond_with		shared_libs		# with shared libs
@@ -62,12 +63,13 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	22.0.1229.94
-Release:	1
+Version:	23.0.1271.60
+Release:	0.1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
-# Source0-md5:	cdcdd11480178f0f823e54bf490db408
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
+# Source0-md5:	d7d10e30992db870820f7baa5e2f8e29
+#Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -90,6 +92,7 @@ Patch9:		chromium-ppapi.patch
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
+Patch17:	system-icu.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -231,14 +234,35 @@ ln -s %{SOURCE7} src
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch15 -p1
 cd src
 %patch9 -p0
 %{!?with_libjpegturbo:%patch11 -p0}
-%patch15 -p1
 %patch16 -p1
+%patch17 -p0
 cd ..
 
 cd src
+
+# Missing gyp files in tarball.
+# https://code.google.com/p/chromium/issues/detail?id=144823
+if [ -e chrome/test/data/nacl/nacl_test_data.gyp ]; then
+	echo "tarball fixed, please remove workaround"
+	exit 1
+fi
+
+install -d chrome/test/data/nacl
+cat > chrome/test/data/nacl/nacl_test_data.gyp <<-EOF
+{
+ 'targets': [
+   {
+     'target_name': 'nacl_tests',
+     'type': 'none',
+   },
+ ],
+}
+EOF
+
 sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} libxml=0 %{!?with_system_zlib:zlib=0}
 
 %build
@@ -420,11 +444,9 @@ fi
 %{_desktopdir}/*.desktop
 %{_iconsdir}/hicolor/*/apps/%{name}.png
 %dir %{_libdir}/%{name}
-%{_libdir}/%{name}/chrome.pak
+%{_libdir}/%{name}/chrome*.pak
 %{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/resources.pak
-%{_libdir}/%{name}/theme_resources_*.pak
-%{_libdir}/%{name}/ui_resources_*.pak
 %dir %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/locales/en-US.pak
 %dir %{_libdir}/%{name}/resources

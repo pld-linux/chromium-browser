@@ -1,26 +1,21 @@
---- chromium-browser-16.0.912.21~r108057/src/webkit/glue/user_agent.cc~	2011-11-05 15:01:12.000000000 +0100
-+++ chromium-browser-16.0.912.21~r108057/src/webkit/glue/user_agent.cc	2011-11-05 17:29:13.809556210 +0100
-@@ -127,6 +127,12 @@
- 
+--- chromium-browser-23.0.1271.60/src/webkit/user_agent/user_agent_util.cc~	2012-10-30 21:01:17.000000000 +0200
++++ chromium-browser-23.0.1271.60/src/webkit/user_agent/user_agent_util.cc	2012-11-04 17:00:57.206490293 +0200
+@@ -167,12 +167,20 @@
+   // This is done to expose our product name in a manner that is maximally
+   // compatible with Safari, we hope!!
    std::string user_agent;
- 
++
 +  // We want to also add Chromium
 +  std::string realproduct = product.c_str();
 +  size_t pos;
 +  if ((pos = realproduct.find("/")) != std::string::npos)
 +      realproduct.replace(0, pos, "Chromium");
 +
-   // This is done to expose our product name in a manner that is maximally
-   // compatible with Safari, we hope!!
- 
-@@ -134,11 +140,12 @@
    base::StringAppendF(
        &user_agent,
-       "Mozilla/5.0 (%s%s) AppleWebKit/%d.%d"
--      " (KHTML, like Gecko) %s Safari/%d.%d",
-+      " (KHTML, like Gecko) @BUILD_DIST_NAME@/@BUILD_DIST_VERSION@ %s %s Safari/%d.%d",
-       kUserAgentPlatform,
-       webkit_glue::BuildOSCpuInfo().c_str(),
+-      "Mozilla/5.0 (%s) AppleWebKit/%d.%d (KHTML, like Gecko) %s Safari/%d.%d",
++      "Mozilla/5.0 (%s) AppleWebKit/%d.%d (KHTML, like Gecko) %s %s Safari/%d.%d",
+       os_info.c_str(),
        WEBKIT_VERSION_MAJOR,
        WEBKIT_VERSION_MINOR,
 +      realproduct.c_str(),
