@@ -296,7 +296,7 @@ done
 cd ../../../../../..
 
 : Preparing NaCl newlib toolchain
-mkdir sdk
+install -d sdk
 cp -a native_client/toolchain/linux_x86_newlib sdk/nacl-sdk
 install -d native_client/toolchain/.tars
 tar czf native_client/toolchain/.tars/naclsdk_linux_x86.tgz sdk
