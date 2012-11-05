@@ -7,8 +7,7 @@
 %bcond_without	cups			# with cups
 %bcond_without	gconf			# with GConf
 %bcond_without	pulseaudio		# with pulseaudio
-# disable nacl, see http://forums.gentoo.org/viewtopic-t-937222-highlight-chromium.html
-%bcond_with	nacl			# build Native Client support
+%bcond_without	nacl			# build Native Client support
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
 %bcond_with		shared_libs		# with shared libs
@@ -295,6 +294,12 @@ for i in $(find %{_prefix}/x86_64-nacl/include -type f | grep -v "c++"); do
 	ln -s $i ${i#%{_prefix}/x86_64-nacl/include/}
 done
 cd ../../../../../..
+
+: Preparing NaCl newlib toolchain
+mkdir sdk
+cp -a native_client/toolchain/linux_x86_newlib sdk/nacl-sdk
+install -d native_client/toolchain/.tars
+tar czf native_client/toolchain/.tars/naclsdk_linux_x86.tgz sdk
 %endif
 
 test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
@@ -324,6 +329,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 %else
 	-Ddisable_nacl=1 \
 %endif
+	-Ddisable_pnacl=1 \
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
 	%{gyp_with cups} \
