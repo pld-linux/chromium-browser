@@ -24,7 +24,7 @@
 # https://code.google.com/p/chromium/issues/detail?id=143623
 %bcond_with		system_zlib		# with system zlib
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
-%bcond_with		verbose			# verbose build (V=1)
+%bcond_without	verbose			# verbose build (V=1)
 
 %if %{with nacl}
 # temporary hack as seems this does not work: http://codereview.chromium.org/8890043
