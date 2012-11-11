@@ -25,12 +25,10 @@ remove_nonessential_dirs() {
 	local dir
 	for dir in \
 	chrome/common/extensions/docs \
-	chrome/test/data \
 	chrome/tools/test/reference_build \
 	courgette/testdata \
 	data \
 	native_client/src/trusted/service_runtime/testdata \
-	src/chrome/test/data \
 	o3d/documentation \
 	o3d/samples \
 	o3d/tests \
@@ -269,6 +267,7 @@ strip_dirs | tee -a REMOVED-stripped.txt
 
 almost_strip_dirs \
 	courgette \
+	chrome/test/data \
 	third_party/gles2_book \
 | tee -a REMOVED-stripped.txt
 
