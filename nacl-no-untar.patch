@@ -1,0 +1,221 @@
+--- chromium-browser-23.0.1271.64/src/native_client/tools.gyp~	2012-11-11 16:04:58.000000000 +0200
++++ chromium-browser-23.0.1271.64/src/native_client/tools.gyp	2012-11-11 16:06:02.252718808 +0200
+@@ -35,7 +35,7 @@
+         'disable_pnacl%': 0,
+       },
+       'conditions': [
+-        ['disable_newlib==0', {
++        ['disable_newlib==0 and disable_newlib_untar==0', {
+           'actions': [
+             {
+               'action_name': 'Untar newlib',
+@@ -58,7 +58,7 @@
+             },
+           ]
+         }],
+-        ['disable_glibc==0', {
++        ['disable_glibc==0 and disable_glibc_untar==0', {
+           'actions': [
+             {
+               'action_name': 'Untar glibc',
+@@ -81,7 +81,7 @@
+             },
+           ]
+         }],
+-        ['disable_pnacl==0', {
++        ['disable_pnacl==0 and disable_pnacl_untar==0', {
+           'actions': [
+             {
+               'action_name': 'Untar pnacl',
+--- chromium-browser-23.0.1271.64/src/native_client/build/untrusted.gypi~	2012-11-11 16:04:58.000000000 +0200
++++ chromium-browser-23.0.1271.64/src/native_client/build/untrusted.gypi	2012-11-11 16:19:15.369299822 +0200
+@@ -168,7 +168,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_newlib64)',
+                     '>(source_list_newlib64)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
+                  ],
+                  'outputs': ['>(out_newlib64)'],
+                  'action': [
+@@ -209,7 +208,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_newlib64)',
+                     '>(source_list_newlib64)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
+                  ],
+                  'outputs': ['>(out_newlib64)'],
+                  'action': [
+@@ -250,7 +248,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_newlib32)',
+                     '>(source_list_newlib32)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
+                  ],
+                  'outputs': ['>(out_newlib32)'],
+                  'action': [
+@@ -291,7 +288,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_newlib32)',
+                     '>(source_list_newlib32)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
+                  ],
+                  'outputs': ['>(out_newlib32)'],
+                  'action': [
+@@ -424,7 +420,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_glibc64)',
+                     '>(source_list_glibc64)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_glibc/stamp.untar',
+                  ],
+                  'outputs': ['>(out_glibc64)'],
+                  'action': [
+@@ -465,7 +460,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_glibc32)',
+                     '>(source_list_glibc32)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_glibc/stamp.untar',
+                  ],
+                  'outputs': ['>(out_glibc32)'],
+                  'action': [
+@@ -506,7 +500,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_glibc64)',
+                     '>(source_list_glibc64)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_glibc/stamp.untar',
+                  ],
+                  'outputs': ['>(out_glibc64)'],
+                  'action': [
+@@ -547,7 +540,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_glibc32)',
+                     '>(source_list_glibc32)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_glibc/stamp.untar',
+                  ],
+                  'outputs': ['>(out_glibc32)'],
+                  'action': [
+@@ -588,7 +580,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_glibc64)',
+                     '>(source_list_glibc64)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
+                  ],
+                  'outputs': ['>(out_glibc64)'],
+                  'action': [
+@@ -629,7 +620,6 @@
+                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
+                     '>@(extra_deps_glibc32)',
+                     '>(source_list_glibc32)',
+-                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
+                  ],
+                  'outputs': ['>(out_glibc32)'],
+                  'action': [
+--- chromium-browser-23.0.1271.64/src/native_client/build/untrusted.gypi~	2012-11-11 16:54:53.000000000 +0000
++++ chromium-browser-23.0.1271.64/src/native_client/build/untrusted.gypi	2012-11-11 17:00:51.043248254 +0000
+@@ -173,7 +173,7 @@
+                  'action': [
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-64',
+                    '--build', 'newlib_nexe',
+@@ -213,7 +213,7 @@
+                  'action': [
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-64',
+                    '--build', 'newlib_nlib',
+@@ -253,7 +253,7 @@
+                  'action': [
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-32',
+                    '--build', 'newlib_nexe',
+@@ -293,7 +293,7 @@
+                  'action': [
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-32',
+                    '--build', 'newlib_nlib',
+@@ -339,7 +339,7 @@
+                 'action': [
+                   '>(python_exe)',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'arm',
+                   '--build', 'newlib_nexe',
+@@ -379,7 +379,7 @@
+                 'action': [
+                   '>(python_exe)',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'arm',
+                   '--build', 'newlib_nlib',
+@@ -425,7 +425,7 @@
+                  'action': [
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-64',
+                    '--build', 'glibc_nexe',
+@@ -465,7 +465,7 @@
+                  'action': [
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-32',
+                    '--build', 'glibc_nexe',
+@@ -505,7 +505,7 @@
+                  'action': [
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-64',
+                    '--build', 'glibc_nlib',
+@@ -545,7 +545,7 @@
+                  'action': [
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-32',
+                    '--build', 'glibc_nlib',
+@@ -586,7 +586,7 @@
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+                    '>@(extra_args)',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '--arch', 'x86-64',
+                    '--build', 'glibc_nso',
+                    '--root', '<(DEPTH)',
+@@ -626,7 +626,7 @@
+                    '>(python_exe)',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+                    '>@(extra_args)',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '--arch', 'x86-32',
+                    '--build', 'glibc_nso',
+                    '--root', '<(DEPTH)',

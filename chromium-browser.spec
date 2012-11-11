@@ -62,13 +62,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	23.0.1271.60
-Release:	0.1
+Version:	23.0.1271.64
+Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
-# Source0-md5:	d7d10e30992db870820f7baa5e2f8e29
-#Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
+# Source0-md5:	6c467affd292ee9a9020ac91147969c8
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -76,7 +75,7 @@ Source5:	find-lang.sh
 Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
-Patch0:		system-libs.patch
+#Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
@@ -92,6 +91,7 @@ Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch17:	system-icu.patch
+Patch18:	nacl-no-untar.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -102,7 +102,7 @@ BuildRequires:	bzip2-devel
 %{?with_nacl:BuildRequires:	crossnacl-binutils >= 2.20.1}
 %{?with_nacl:BuildRequires:	crossnacl-gcc >= 4.4.3}
 %{?with_nacl:BuildRequires:	crossnacl-gcc-c++ >= 4.4.3}
-%{?with_nacl:BuildRequires:	crossnacl-newlib >= 1.18.0}
+%{?with_nacl:BuildRequires:	crossnacl-newlib >= 1.20.0-3}
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	dbus-glib-devel
 BuildRequires:	expat-devel
@@ -225,7 +225,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} src
 
-%patch0 -p1
+#%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -240,6 +240,7 @@ cd src
 %patch16 -p1
 %patch17 -p0
 cd ..
+%patch18 -p1
 
 cd src
 
@@ -294,12 +295,6 @@ for i in $(find %{_prefix}/x86_64-nacl/include -type f | grep -v "c++"); do
 	ln -s $i ${i#%{_prefix}/x86_64-nacl/include/}
 done
 cd ../../../../../..
-
-: Preparing NaCl newlib toolchain
-install -d sdk
-cp -a native_client/toolchain/linux_x86_newlib sdk/nacl-sdk
-install -d native_client/toolchain/.tars
-tar czf native_client/toolchain/.tars/naclsdk_linux_x86.tgz sdk
 %endif
 
 test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
@@ -323,9 +318,11 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
 %if %{with nacl}
-	%{?_:# Disable glibc Native Client toolchain, we don't need it (gentoo bug #417019).} \
 	-Ddisable_glibc=1 \
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
+	-Ddisable_glibc_untar=1 \
+	-Ddisable_newlib_untar=1 \
+	-Ddisable_pnacl_untar=1 \
 %else
 	-Ddisable_nacl=1 \
 %endif
