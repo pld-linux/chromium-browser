@@ -15,6 +15,7 @@
 %bcond_with		tcmalloc		# use tcmalloc
 %bcond_with		system_sqlite	# with system sqlite
 %bcond_without	system_flac		# with system flac
+%bcond_without	system_jsoncpp	# with system jsoncpp
 %bcond_without	system_libwebp	# with system libwebp
 %bcond_without	system_speex	# with system speex
 %bcond_with		system_v8		# with system v8
@@ -92,6 +93,7 @@ Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch17:	system-icu.patch
 Patch18:	nacl-no-untar.patch
+Patch19:	system-jsoncpp.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -141,6 +143,7 @@ BuildRequires:	python-modules
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
+%{?with_system_jsoncpp:BuildRequires:	jsoncpp-devel}
 BuildRequires:	sqlite3-devel >= 3.6.1
 BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
@@ -239,6 +242,7 @@ cd src
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch16 -p1
 %patch17 -p0
+%patch19 -p1
 cd ..
 %patch18 -p1
 

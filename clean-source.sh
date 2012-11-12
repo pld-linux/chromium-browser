@@ -461,6 +461,8 @@ strip_system_dirs \
 	_third_party/zlib \
 	third_party/libwebp \
 	_third_party/libvpx \
+	native_client/src/third_party_mod/jsoncpp \
+	third_party/jsoncpp \
 	v8 \
 | tee -a REMOVED-stripped.txt
 
