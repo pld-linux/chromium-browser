@@ -1,0 +1,31 @@
+even third_party/speex/speex.h is wrapper to system speex, here are some
+includes included directly from third party dir...
+
+--- chromium-browser-23.0.1271.64/src/remoting/codec/audio_decoder_speex.cc~	2012-10-31 19:01:20.000000000 +0000
++++ chromium-browser-23.0.1271.64/src/remoting/codec/audio_decoder_speex.cc	2012-11-12 23:04:42.083266707 +0000
+@@ -11,9 +11,9 @@
+ #include "base/logging.h"
+ #include "base/stl_util.h"
+ #include "remoting/proto/audio.pb.h"
+-#include "third_party/speex/speex.h"
+-#include "third_party/speex/include/speex/speex_callbacks.h"
+-#include "third_party/speex/include/speex/speex_stereo.h"
++#include <speex/speex.h>
++#include <speex/speex_callbacks.h>
++#include <speex/speex_stereo.h>
+ 
+ namespace remoting {
+ 
+--- chromium-browser-23.0.1271.64/src/remoting/codec/audio_encoder_speex.cc~	2012-10-31 19:01:20.000000000 +0000
++++ chromium-browser-23.0.1271.64/src/remoting/codec/audio_encoder_speex.cc	2012-11-12 23:06:33.544849553 +0000
+@@ -11,8 +11,8 @@
+ #include "base/logging.h"
+ #include "base/stl_util.h"
+ #include "remoting/proto/audio.pb.h"
+-#include "third_party/speex/speex.h"
+-#include "third_party/speex/include/speex/speex_stereo.h"
++#include <speex/speex.h>
++#include <speex/speex_stereo.h>
+ 
+ namespace {
+ // A quality of 8 in wide band mode corresponds to 27,800 bits per second.
