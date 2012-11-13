@@ -108,7 +108,7 @@ BuildRequires:	bzip2-devel
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	dbus-glib-devel
 BuildRequires:	expat-devel
-%{?with_system_flac:BuildRequires:	flac-devel}
+%{?with_system_flac:BuildRequires:	flac-devel >= 1.2.1-7}
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
@@ -159,6 +159,7 @@ BuildRequires:	xz
 %{?with_system_zlib:BuildRequires:	zlib-devel}
 Requires:	browser-plugins >= 2.0
 Requires:	desktop-file-utils
+%{?with_system_flac:Requires:	flac >= 1.2.1-7}
 Requires:	hicolor-icon-theme
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 %{?with_system_vpx:Requires:	libvpx >= 0.9.5-2}
@@ -334,11 +335,11 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
 	%{gyp_with cups} \
-	%{gyp_with flac} \
 	%{gyp_with gconf} \
 	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
+	%{gyp_with system_flac} \
 	%{gyp_with system_libwebp} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \

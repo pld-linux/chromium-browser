@@ -1,6 +1,5 @@
 #!/bin/sh
-set -e
-set -x
+set -xe
 
 # import options
 # remove everything unless it's remove has been disabled with "0"
@@ -426,7 +425,7 @@ strip_system_dirs() {
 		test -d $dir || continue
 
 		# here we ignore errors, as some dirs contain README.chromium after removal
-		find $dir -depth -mindepth 1 \! \( -name \*.gyp -o -name \*.gypi -o -name README.chromium -o -name \*.patch \) -print -delete || :
+		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -name README.chromium -o -name '*.patch' -o -path $dir/$lib.h \) -print -delete || :
 	done
 }
 
@@ -435,7 +434,7 @@ strip_system_dirs() {
 almost_strip_dirs() {
 	local dir
 	for dir in "$@"; do
-		find $dir -depth -mindepth 1 \! \( -name \*.gyp -o -name \*.gypi -o -name README.chromium \) -print -delete || :
+		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -name README.chromium \) -print -delete || :
 	done
 }
 
@@ -463,6 +462,7 @@ strip_system_dirs \
 	_third_party/libvpx \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/jsoncpp \
+	third_party/flac \
 	v8 \
 | tee -a REMOVED-stripped.txt
 
