@@ -450,20 +450,20 @@ almost_strip_dirs \
 | tee -a REMOVED-stripped.txt
 
 strip_system_dirs \
+	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
+	third_party/flac \
 	third_party/icu \
+	third_party/jsoncpp \
 	third_party/libevent \
 	third_party/libjpeg \
 	third_party/libpng \
+	_third_party/libvpx \
+	third_party/libwebp \
 	_third_party/libxml \
 	third_party/libxslt \
-	_third_party/zlib \
-	third_party/libwebp \
-	_third_party/libvpx \
-	native_client/src/third_party_mod/jsoncpp \
-	third_party/jsoncpp \
 	third_party/speex \
-	third_party/flac \
+	_third_party/zlib \
 	v8 \
 | tee -a REMOVED-stripped.txt
 
