@@ -16,6 +16,7 @@
 %bcond_with		system_sqlite	# with system sqlite
 %bcond_without	system_flac		# with system flac
 %bcond_without	system_jsoncpp	# with system jsoncpp
+%bcond_without	system_libusb	# with system libusb-1
 %bcond_without	system_libwebp	# with system libwebp
 %bcond_without	system_speex	# with system speex
 %bcond_with		system_v8		# with system v8
@@ -128,6 +129,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel
 %{?with_system_vpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
+%{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
@@ -343,6 +345,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	%{gyp_with pulseaudio} \
 	%{gyp_with system_flac} \
 	%{gyp_with system_libwebp} \
+	%{gyp_with system_libusb} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
