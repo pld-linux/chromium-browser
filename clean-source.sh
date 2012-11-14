@@ -460,10 +460,10 @@ strip_system_dirs \
 	third_party/libpng \
 	_third_party/libvpx \
 	third_party/libwebp \
-	_third_party/libxml \
+	third_party/libxml \
 	third_party/libxslt \
 	third_party/speex \
-	_third_party/zlib \
+	third_party/zlib \
 	v8 \
 | tee -a REMOVED-stripped.txt
 
