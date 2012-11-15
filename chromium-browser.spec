@@ -98,6 +98,7 @@ Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
 Patch20:	system-speex.patch
 Patch21:	system-srtp.patch
+Patch22:	gnome3-volume-control.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -251,6 +252,7 @@ cd src
 %patch17 -p0
 %patch19 -p1
 %patch21 -p1
+%patch22 -p1
 cd ..
 %patch18 -p1
 %patch20 -p1
