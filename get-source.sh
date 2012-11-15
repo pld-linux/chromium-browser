@@ -4,7 +4,7 @@ set -e
 # CHANNEL: any from CHANNELS_URL: stable, beta, dev
 CHANNEL=${1:-beta}
 
-CHANNELS_URL=http://omahaproxy.appspot.com/
+CHANNELS_URL=http://omahaproxy.appspot.com/all
 PACKAGE_NAME=chromium-browser
 WORK_DIR=$(cd $(dirname "$0"); pwd)
 CHROMIUM=$HOME/svn/$PACKAGE_NAME-$CHANNEL
@@ -13,6 +13,11 @@ OFFICIAL_URL=http://commondatastorage.googleapis.com/chromium-browser-official
 DIST_DIR=$HOME/public_html/chromium-browser/src/$CHANNEL
 
 VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')
+if [ -z "$VERSION" ]; then
+	echo >&2 "Can't figure out version for $CHANNEL"
+	exit 1
+fi
+
 VERSION_FILE=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.xz
 
 if [ -e $VERSION_FILE -a -z "$FORCE" ]; then
@@ -89,5 +94,5 @@ rm -rf $TMP_DIR
 if [ -x $WORK_DIR/update-source.sh ]; then
 	build_package=1 \
 	publish_packages=1 \
-	sh $WORK_DIR/update-source.sh
+	sh -x $WORK_DIR/update-source.sh
 fi
