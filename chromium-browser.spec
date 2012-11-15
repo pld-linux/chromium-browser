@@ -1,31 +1,31 @@
 #
 # Conditional build:
+%bcond_without	cups			# with cups
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
 %bcond_without	ffmpegsumo		# build with ffmpegsumo
+%bcond_without	gconf			# with GConf
 %bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
-%bcond_without	cups			# with cups
-%bcond_without	gconf			# with GConf
-%bcond_without	pulseaudio		# with pulseaudio
+%bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_without	nacl			# build Native Client support
+%bcond_without	pulseaudio		# with pulseaudio
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
-%bcond_with		tcmalloc		# use tcmalloc
-%bcond_with		system_sqlite	# with system sqlite
-%bcond_without	system_flac		# with system flac
-%bcond_without	system_jsoncpp	# with system jsoncpp
-%bcond_without	system_libusb	# with system libusb-1
-%bcond_without	system_libwebp	# with system libwebp
-%bcond_without	system_speex	# with system speex
-%bcond_with		system_v8		# with system v8
-%bcond_without	system_vpx		# with system vpx
-%bcond_without	system_yasm		# with system yasm
+%bcond_without	system_flac		# system flac
+%bcond_without	system_jsoncpp	# system jsoncpp
+%bcond_without	system_libusb	# system libusb-1
+%bcond_without	system_libwebp	# system libwebp
+%bcond_without	system_speex	# system speex
+%bcond_with		system_sqlite	# system sqlite
+%bcond_with		system_v8		# system v8
+%bcond_without	system_vpx		# system vpx
+%bcond_without	system_yasm		# system yasm
 # system zlib disabled because of mixed-source.patch
 # https://code.google.com/p/chromium/issues/detail?id=143623
-%bcond_with		system_zlib		# with system zlib
-%bcond_without	libjpegturbo	# use libjpeg-turbo features
+%bcond_with		system_zlib		# system zlib
+%bcond_with		tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
 %if %{with nacl}
@@ -127,9 +127,9 @@ BuildRequires:	libicu-devel >= 4.6
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
+%{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
 %{?with_system_vpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
-%{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
@@ -344,8 +344,8 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
 	%{gyp_with system_flac} \
-	%{gyp_with system_libwebp} \
 	%{gyp_with system_libusb} \
+	%{gyp_with system_libwebp} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
