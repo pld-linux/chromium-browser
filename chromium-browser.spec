@@ -19,6 +19,7 @@
 %bcond_without	system_libwebp	# system libwebp
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
+%bcond_without	system_srtp		# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
 %bcond_without	system_vpx		# system vpx
 %bcond_without	system_yasm		# system yasm
@@ -96,6 +97,7 @@ Patch17:	system-icu.patch
 Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
 Patch20:	system-speex.patch
+Patch21:	system-srtp.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -148,6 +150,7 @@ BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 BuildRequires:	sqlite3-devel >= 3.6.1
+%{?with_system_srtp:BuildRequires:	srtp-devel >= 1.4.4}
 BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel
@@ -247,6 +250,7 @@ cd src
 %patch16 -p1
 %patch17 -p0
 %patch19 -p1
+%patch21 -p1
 cd ..
 %patch18 -p1
 %patch20 -p1

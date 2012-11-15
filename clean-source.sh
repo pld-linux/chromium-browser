@@ -458,6 +458,7 @@ strip_system_dirs \
 	third_party/libevent \
 	third_party/libjpeg \
 	third_party/libpng \
+	third_party/libsrtp \
 	third_party/libusb \
 	_third_party/libvpx \
 	third_party/libwebp \
