@@ -62,15 +62,22 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
+%define		branch		23.0.1271
+%define		basever		64
+%define		patchver	91
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	23.0.1271.64
-Release:	3
+Version:	%{branch}.%{patchver}
+Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
 # Source0-md5:	6c467affd292ee9a9020ac91147969c8
+%if "%{?patchver}" != ""
+Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
+# Patch0-md5:	1fa1a86b56fed7a9f04a7f0d8d591178
+%endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -78,7 +85,7 @@ Source5:	find-lang.sh
 Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
-#Patch0:		system-libs.patch
+#Patch10:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
@@ -213,7 +220,13 @@ pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi, zh-CN,
 zh-TW
 
 %prep
-%setup -q
+%setup -qc
+%if "%{?patchver}" != ""
+cd %{name}-%{branch}.%{basever}
+%patch0 -p1
+cd ..
+%endif
+mv %{name}-%{branch}.%{basever}/src .
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
@@ -236,7 +249,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} src
 
-#%patch0 -p1
+#%patch10 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
