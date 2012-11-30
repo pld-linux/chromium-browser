@@ -51,9 +51,9 @@
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
-# - build -bp: 1.2G
-# - build i686: -bc: 2.7G; -bb: ~1.0GB
-# - build x86_64: ~1.9G
+# - space considerations:
+#   - unpacked sources: ~800MiB
+#   - built code: ~1.4GiB (x86_64)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
@@ -64,7 +64,7 @@
 
 %define		branch		23.0.1271
 %define		basever		64
-%define		patchver	91
+%define		patchver	95
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -76,7 +76,7 @@ Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{
 # Source0-md5:	6c467affd292ee9a9020ac91147969c8
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	1fa1a86b56fed7a9f04a7f0d8d591178
+# Patch0-md5:	e5888c698c310a87bf395f089332955f
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
