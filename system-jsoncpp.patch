@@ -65,27 +65,17 @@ diff -up chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/manifest.h
  
  namespace pp {
  class URLUtil_Dev;
-diff -up chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/plugin.gyp.system-jsoncpp chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/plugin.gyp
---- chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/plugin.gyp.system-jsoncpp	2012-06-28 09:01:22.000000000 -0400
-+++ chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/plugin.gyp	2012-07-07 21:09:15.092006176 -0400
-@@ -65,7 +65,7 @@
-             '<(DEPTH)/native_client/src/shared/platform/platform.gyp:platform',
-             '<(DEPTH)/native_client/src/shared/srpc/srpc.gyp:nonnacl_srpc',
-             '<(DEPTH)/native_client/src/shared/srpc/srpc.gyp:nonnacl_srpc',
--            '<(DEPTH)/native_client/src/third_party_mod/jsoncpp/jsoncpp.gyp:jsoncpp',
-+            '<(DEPTH)/build/linux/system.gyp:jsoncpp',
-             '<(DEPTH)/native_client/src/trusted/desc/desc.gyp:nrd_xfer',
-             '<(DEPTH)/native_client/src/trusted/nonnacl_util/nonnacl_util.gyp:nonnacl_util',
-             '<(DEPTH)/native_client/src/trusted/platform_qualify/platform_qualify.gyp:platform_qual_lib',
-@@ -106,7 +106,7 @@
-             '<(DEPTH)/native_client/src/trusted/weak_ref/weak_ref.gyp:weak_ref',
-             '<(DEPTH)/ppapi/native_client/src/shared/ppapi_proxy/ppapi_proxy.gyp:nacl_ppapi_browser',
-             '<(DEPTH)/ppapi/ppapi.gyp:ppapi_cpp',
--            '<(DEPTH)/third_party/jsoncpp/jsoncpp.gyp:jsoncpp',
-+            '<(DEPTH)/build/linux/system.gyp:jsoncpp',
-           ],
-           'conditions': [
-             ['OS=="mac"', {
+--- chromium-browser-24.0.1312.14/ppapi/native_client/src/trusted/plugin/plugin.gyp~	2012-11-14 04:35:12.000000000 +0200
++++ chromium-browser-24.0.1312.14/ppapi/native_client/src/trusted/plugin/plugin.gyp	2012-11-16 00:01:34.889848810 +0200
+@@ -76,7 +76,7 @@
+         '<(DEPTH)/native_client/src/trusted/weak_ref/weak_ref.gyp:weak_ref',
+         '<(DEPTH)/ppapi/native_client/src/shared/ppapi_proxy/ppapi_proxy.gyp:nacl_ppapi_browser',
+         '<(DEPTH)/ppapi/ppapi.gyp:ppapi_cpp',
+-        '<(DEPTH)/third_party/jsoncpp/jsoncpp.gyp:jsoncpp',
++        '<(DEPTH)/build/linux/system.gyp:jsoncpp',
+       ],
+       'conditions': [
+         ['OS=="mac"', {
 diff -up chromium-20.0.1132.47/third_party/libjingle/libjingle.gyp.system-jsoncpp chromium-20.0.1132.47/third_party/libjingle/libjingle.gyp
 --- chromium-20.0.1132.47/third_party/libjingle/libjingle.gyp.system-jsoncpp	2012-07-07 21:09:54.042990761 -0400
 +++ chromium-20.0.1132.47/third_party/libjingle/libjingle.gyp	2012-07-07 21:10:37.294008997 -0400

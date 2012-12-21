@@ -17,6 +17,7 @@
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libusb	# system libusb-1
 %bcond_without	system_libwebp	# system libwebp
+%bcond_without	system_minizip	# system minizip
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_srtp		# system srtp (can be used if using bundled libjingle)
@@ -65,12 +66,12 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	23.0.1271.64
-Release:	2
+Version:	24.0.1312.45
+Release:	0.2
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.tar.xz
-# Source0-md5:	6c467affd292ee9a9020ac91147969c8
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
+# Source0-md5:	2995d5aa3f1ecb470e60e0984229fcce
 Source1:	%{name}.default
 Source2:	%{name}.sh
 Source3:	%{name}.desktop
@@ -80,7 +81,6 @@ Source7:	clean-source.sh
 Source8:	get-source.sh
 #Patch0:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
-Patch2:		gyp-system-minizip.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 Patch4:		path-libpdf.patch
 Patch5:		options-support.patch
@@ -93,11 +93,10 @@ Patch9:		chromium-ppapi.patch
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
-Patch17:	system-icu.patch
 Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
-Patch20:	system-speex.patch
 Patch21:	system-srtp.patch
+Patch22:	pulse_fix-157876.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -237,7 +236,6 @@ ln -s %{SOURCE7} src
 
 #%patch0 -p1
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -248,12 +246,11 @@ cd src
 %patch9 -p0
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch16 -p1
-%patch17 -p0
 %patch19 -p1
 %patch21 -p1
+%patch22 -p1
 cd ..
 %patch18 -p1
-%patch20 -p1
 
 cd src
 
@@ -350,6 +347,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	%{gyp_with system_flac} \
 	%{gyp_with system_libusb} \
 	%{gyp_with system_libwebp} \
+	%{gyp_with system_minizip} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
