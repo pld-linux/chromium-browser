@@ -149,7 +149,7 @@ fi
 
 dist=$(rpm -E %{pld_release})
 arch=$(rpm -E %{_host_cpu})
-outdir=$(readlink -f $dir)/build-$dist-$arch
+outdir=$(readlink -f $dir)/BUILD-$dist-$arch
 logfile=$outdir/$pkg.log
 rpmdir=$outdir/RPMS
 rpmdest=~/public_html/chromium-browser/$dist/$arch
