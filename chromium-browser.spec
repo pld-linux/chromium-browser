@@ -69,7 +69,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	%{branch}.%{patchver}
-Release:	1
+Release:	2
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -85,6 +85,7 @@ Source5:	find-lang.sh
 Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
+Source9:	master_preferences.json
 #Patch10:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch2:		gyp-system-minizip.patch
@@ -106,6 +107,7 @@ Patch19:	system-jsoncpp.patch
 Patch20:	system-speex.patch
 Patch21:	system-srtp.patch
 Patch22:	gnome3-volume-control.patch
+Patch23:	master-prefs-path.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -269,6 +271,7 @@ cd src
 cd ..
 %patch18 -p1
 %patch20 -p1
+%patch23 -p1
 
 cd src
 
@@ -412,6 +415,7 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/master_preferences
 
 %{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/resources/extension/demo
 
@@ -471,6 +475,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/default
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/master_preferences
 %attr(755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1*
 %{_desktopdir}/*.desktop
