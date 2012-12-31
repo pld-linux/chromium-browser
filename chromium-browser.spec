@@ -328,7 +328,10 @@ done
 cd ../../../../../..
 %endif
 
-test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
+test -e Makefile || %{__python} build/gyp_chromium \
+	--format=make \
+	-Goutput_dir=../out \
+	build/all.gyp \
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \
 %endif
@@ -403,7 +406,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sysconfdir}/%{name},%{_mandir}/man1,%{_desktopdir}}
 
-cd src/out/%{!?debug:Release}%{?debug:Debug}
+cd out/%{!?debug:Release}%{?debug:Debug}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 %{__sed} -i -e 's,@libdir@,%{_libdir}/%{name},' $RPM_BUILD_ROOT%{_bindir}/%{name}
