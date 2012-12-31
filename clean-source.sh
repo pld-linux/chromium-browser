@@ -375,6 +375,7 @@ strip_dirs() {
 		third_party/ffmpeg/binaries \
 		third_party/fuzzymatch \
 		third_party/gles_book_examples \
+		third_party/gold \
 		third_party/hunspell/dictionaries \
 		third_party/icu/mac \
 		third_party/lcov \
