@@ -394,7 +394,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0
 
-%{__make} chrome %{?with_sandboxing:chrome_sandbox} \
+%{__make} -r chrome %{?with_sandboxing:chrome_sandbox} \
 	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
 	%{?with_verbose:V=1} \
 	CC="%{__cc}" \
