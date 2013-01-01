@@ -475,6 +475,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
+%doc src/{AUTHORS,LICENSE}
 %{_browserpluginsconfdir}/browsers.d/%{name}.*
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 %dir %{_sysconfdir}/%{name}
