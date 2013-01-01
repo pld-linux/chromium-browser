@@ -296,11 +296,13 @@ EOF
 
 sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} libxml=0 %{!?with_system_zlib:zlib=0}
 
+rm -rf native_client/toolchain/linux_x86_newlib
+
 %build
 cd src
 
 %if %{with nacl}
-rm -rf native_client/toolchain/linux_x86_newlib
+if [ ! -d native_client/toolchain/linux_x86_newlib ]; then
 # Make symlinks for nacl
 cd native_client/toolchain
 install -d linux_x86_newlib/x86_64-nacl/bin
@@ -326,6 +328,7 @@ for i in $(find %{_prefix}/x86_64-nacl/include -type f | grep -v "c++"); do
 	ln -s $i ${i#%{_prefix}/x86_64-nacl/include/}
 done
 cd ../../../../../..
+fi
 %endif
 
 test -e Makefile || %{__python} build/gyp_chromium \
