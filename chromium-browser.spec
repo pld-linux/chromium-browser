@@ -350,6 +350,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
 	-Dffmpeg_branding=Chrome \
+	-Dremove_webcore_debug_symbols=1 \
 	-Dproprietary_codecs=1 \
 %if %{with nacl}
 	-Ddisable_glibc=1 \
