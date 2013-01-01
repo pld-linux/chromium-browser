@@ -368,6 +368,7 @@ strip_dirs() {
 		chrome/third_party/wtl/ \
 		gears \
 		google_update \
+		gpu/demos \
 		o3d \
 		third_party/boost \
 		third_party/bsdiff \
