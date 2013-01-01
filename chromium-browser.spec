@@ -331,6 +331,7 @@ cd ../../../../../..
 fi
 %endif
 
+test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} Makefile
 test -e Makefile || %{__python} build/gyp_chromium \
 	--format=make \
 	-Goutput_dir=../out \
