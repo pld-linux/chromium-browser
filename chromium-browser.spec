@@ -27,9 +27,7 @@
 %bcond_with		system_v8		# system v8
 %bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
-# system zlib disabled because of mixed-source.patch
-# https://code.google.com/p/chromium/issues/detail?id=143623
-%bcond_with		system_zlib		# system zlib
+%bcond_without	system_zlib		# system zlib
 %bcond_with		tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
