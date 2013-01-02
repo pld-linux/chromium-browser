@@ -15,9 +15,12 @@
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
 %bcond_without	system_jsoncpp	# system jsoncpp
+%bcond_without	system_libexif	# system libexif
+%bcond_without	system_libmtp	# system libmtp
 %bcond_without	system_libusb	# system libusb-1
 %bcond_without	system_libwebp	# system libwebp
 %bcond_without	system_minizip	# system minizip
+%bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_srtp		# system srtp (can be used if using bundled libjingle)
@@ -48,6 +51,10 @@
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
+# - use_system_libmtp
+# - use_system_libexif
+# - use_system_opus
+# - use_system_libjpeg==1 use_libjpeg_turbo==0
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -136,7 +143,10 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
-BuildRequires:	minizip-devel
+%{?with_system_minizip:BuildRequires:	minizip-devel}
+%{?with_system_libexif:BuildRequires:	libexif-devel >= 1:0.6.21}
+%{?with_system_libmtp:BuildRequires:	libmtp-devel >= 1.1.3}
+%{?with_system_opus:BuildRequires:	opus-devel >= 1.0.2}
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
 BuildRequires:	pam-devel
@@ -350,9 +360,12 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
 	%{gyp_with system_flac} \
+	%{gyp_with system_libexif} \
+	%{gyp_with system_libmtp} \
 	%{gyp_with system_libusb} \
 	%{gyp_with system_libwebp} \
 	%{gyp_with system_minizip} \
+	%{gyp_with system_opus} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
@@ -360,6 +373,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	%{gyp_with system_yasm} \
 	%{gyp_with system_zlib} \
 	-Duse_system_bzip2=1 \
+	-Duse_system_expat=1 \
 	-Duse_system_icu=1 \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
