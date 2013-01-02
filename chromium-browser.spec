@@ -74,7 +74,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.3
+Release:	0.6
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
@@ -378,7 +378,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
 	%{gyp_with cups} \
-	%{gyp_with gconf} \
+	%{gyp_with gconf} -Dlinux_link_gsettings=0 \
 	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
