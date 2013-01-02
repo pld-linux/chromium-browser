@@ -43,7 +43,7 @@ while read file; do
 	echo "%lang($lang) ${file#$RPM_BUILD_ROOT}" >> $langfile
 done < $tmp
 
-if [ "$(egrep -v '(^%defattr|^$)' $langfile | wc -l)" -le 0 ]; then
+if [ "$(grep -Ev '(^%defattr|^$)' $langfile | wc -l)" -le 0 ]; then
 	echo >&2 "$PROG: Error: international files not found!"
 	rc=1
 fi

@@ -59,9 +59,9 @@
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
-# - build -bp: 1.2G
-# - build i686: -bc: 2.7G; -bb: ~1.0GB
-# - build x86_64: ~1.9G
+# - space considerations:
+#   - unpacked sources: ~800MiB
+#   - built code: ~1.4GiB (x86_64)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
@@ -74,7 +74,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.2
+Release:	0.3
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
@@ -86,7 +86,8 @@ Source5:	find-lang.sh
 Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
-#Patch0:		system-libs.patch
+Source9:	master_preferences.json
+#Patch10:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 Patch4:		path-libpdf.patch
@@ -106,6 +107,8 @@ Patch21:	system-srtp.patch
 Patch22:	pulse_fix-157876.patch
 Patch23:	no-pnacl.patch
 Patch24:	nacl-verbose.patch
+Patch25:	gnome3-volume-control.patch
+Patch26:	master-prefs-path.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -246,7 +249,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} src
 
-#%patch0 -p1
+#%patch10 -p1
 %patch1 -p1
 %patch3 -p1
 %patch4 -p1
@@ -261,10 +264,12 @@ cd src
 %patch19 -p1
 %patch21 -p1
 %patch22 -p1
+%patch25 -p1
 cd ..
 %patch18 -p1
 %patch23 -p1
 %patch24 -p1
+%patch26 -p1
 
 cd src
 
@@ -289,11 +294,13 @@ EOF
 
 sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} libxml=0 %{!?with_system_zlib:zlib=0}
 
+rm -rf native_client/toolchain/linux_x86_newlib
+
 %build
 cd src
 
 %if %{with nacl}
-rm -rf native_client/toolchain/linux_x86_newlib
+if [ ! -d native_client/toolchain/linux_x86_newlib ]; then
 # Make symlinks for nacl
 cd native_client/toolchain
 install -d linux_x86_newlib/x86_64-nacl/bin
@@ -305,8 +312,18 @@ install -d linux_x86_newlib/x86_64-nacl/nacl/include/sys
 # link newlib toolchain to glibc as well, see gentoo bug #417019
 #ln -s linux_x86_newlib linux_x86
 cd linux_x86_newlib/x86_64-nacl/bin
-ln -s %{_bindir}/x86_64-nacl-gcc gcc
-ln -s %{_bindir}/x86_64-nacl-g++ g++
+
+__cc='%{__cc}'
+if [ "${__cc}#ccache}" != "$__cc" ]; then
+	echo 'exec ccache %{_bindir}/x86_64-nacl-gcc "$@"' > gcc
+	echo 'exec ccache %{_bindir}/x86_64-nacl-g++ "$@"' > g++
+	%{__sed} -i -e '1i#!/bin/sh' gcc g++
+	chmod +x gcc g++
+else
+	ln -s %{_bindir}/x86_64-nacl-gcc gcc
+	ln -s %{_bindir}/x86_64-nacl-g++ g++
+fi
+
 ln -s %{_bindir}/x86_64-nacl-ar ar
 ln -s %{_bindir}/x86_64-nacl-as as
 ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
@@ -319,9 +336,14 @@ for i in $(find %{_prefix}/x86_64-nacl/include -type f | grep -v "c++"); do
 	ln -s $i ${i#%{_prefix}/x86_64-nacl/include/}
 done
 cd ../../../../../..
+fi
 %endif
 
-test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
+test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
+test -e Makefile || %{__python} build/gyp_chromium \
+	--format=make \
+	-Goutput_dir=../out \
+	build/all.gyp \
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \
 %endif
@@ -340,6 +362,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
 	-Dffmpeg_branding=Chrome \
+	-Dremove_webcore_debug_symbols=1 \
 	-Dproprietary_codecs=1 \
 %if %{with nacl}
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
@@ -385,7 +408,7 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0
 
-%{__make} chrome %{?with_sandboxing:chrome_sandbox} \
+%{__make} -r chrome %{?with_sandboxing:chrome_sandbox} \
 	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
 	%{?with_verbose:V=1} \
 	CC="%{__cc}" \
@@ -402,7 +425,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sysconfdir}/%{name},%{_mandir}/man1,%{_desktopdir}}
 
-cd src/out/%{!?debug:Release}%{?debug:Debug}
+cd out/%{!?debug:Release}%{?debug:Debug}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 %{__sed} -i -e 's,@libdir@,%{_libdir}/%{name},' $RPM_BUILD_ROOT%{_bindir}/%{name}
@@ -414,6 +437,7 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/master_preferences
 
 %{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/resources/extension/demo
 
@@ -469,10 +493,12 @@ fi
 
 %files
 %defattr(644,root,root,755)
+%doc src/{AUTHORS,LICENSE}
 %{_browserpluginsconfdir}/browsers.d/%{name}.*
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/default
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/master_preferences
 %attr(755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1*
 %{_desktopdir}/*.desktop
