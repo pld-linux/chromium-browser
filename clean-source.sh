@@ -466,7 +466,7 @@ strip_system_dirs \
 	third_party/libpng \
 	third_party/libsrtp \
 	third_party/libusb \
-	_third_party/libvpx \
+	third_party/libvpx \
 	third_party/libwebp \
 	third_party/libxml \
 	third_party/libxslt \
@@ -476,13 +476,8 @@ strip_system_dirs \
 	v8 \
 | tee -a REMOVED-stripped.txt
 
-# vpx can't be cleaned:
-#make: *** No rule to make target `out/Release/obj.target/libvpx_asm_offsets/third_party/libvpx/source/libvpx/vp8/common/asm_com_offsets.o',
-#needed by `out/Release/obj.target/third_party/libvpx/libvpx_asm_offsets.a'.  Stop.
-
-# third_party/yasm/source/patched-yasm/modules/arch/x86/gen_x86_insn.py', needed by `out/Release/obj/gen/third_party/yasm/x86insns.c'. Stop.
-#gyp_clean \
-#	_third_party/yasm \
+gyp_clean \
+	third_party/yasm \
 
 # clean third party
 # list based from archlinux PKGBUILD

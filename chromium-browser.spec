@@ -25,7 +25,7 @@
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_srtp		# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
-%bcond_without	system_vpx		# system vpx
+%bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 # system zlib disabled because of mixed-source.patch
 # https://code.google.com/p/chromium/issues/detail?id=143623
@@ -74,7 +74,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.6
+Release:	0.8
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
@@ -141,7 +141,7 @@ BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
-%{?with_system_vpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
+%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
@@ -182,7 +182,7 @@ Requires:	desktop-file-utils
 %{?with_system_flac:Requires:	flac >= 1.2.1-7}
 Requires:	hicolor-icon-theme
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
-%{?with_system_vpx:Requires:	libvpx >= 0.9.5-2}
+%{?with_system_libvpx:Requires:	libvpx >= 0.9.5-2}
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
@@ -386,13 +386,13 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{gyp_with system_libexif} \
 	%{gyp_with system_libmtp} \
 	%{gyp_with system_libusb} \
+	%{gyp_with system_libvpx} \
 	%{gyp_with system_libwebp} \
 	%{gyp_with system_minizip} \
 	%{gyp_with system_opus} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
-	%{gyp_with system_vpx} \
 	%{gyp_with system_yasm} \
 	%{gyp_with system_zlib} \
 	-Duse_system_bzip2=1 \
