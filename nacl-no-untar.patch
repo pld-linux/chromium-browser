@@ -126,3 +126,161 @@
                '>@(extra_args)',
                '--arch', 'pnacl',
                '--build', 'newlib_plib',
+--- chromium-browser-24.0.1312.45/src/native_client/tools.gyp~	2012-12-19 10:04:23.000000000 +0200
++++ chromium-browser-24.0.1312.45/src/native_client/tools.gyp	2013-01-01 23:40:30.933802957 +0200
+@@ -44,6 +44,17 @@
+         'pnacl_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_pnacl',
+       },
+       'conditions': [
++        # create stamp.untar that build system depends on
++        ['disable_newlib==0 and disable_newlib_untar==1', {
++          'actions': [
++           {
++              'action_name': 'Touch newlib',
++              'outputs': ['>(newlib_dir)/stamp.untar'],
++              'inputs': [], # input is required. so let it be empty
++              'action': ['touch', '<@(_outputs)'],
++          },
++          ],
++        }],
+         ['disable_newlib==0 and disable_newlib_untar==0', {
+           'actions': [
+             {
+--- chromium-browser-24.0.1312.45/src/native_client/build/untrusted.gypi	2013-01-01 23:08:43.214443900 +0200
++++ chromium-browser-24.0.1312.45-almost-there/src/native_client/build/untrusted.gypi	2013-01-01 22:50:53.863859341 +0200
+@@ -142,6 +142,8 @@
+              'variables': {
+                 'tool_name': 'newlib',
+                 'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++# make semaphore.h visible for base/shared_memory_nacl.cc compilation
++				'newlib_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/x86_64-nacl',
+                 'out_newlib64%': '<(PRODUCT_DIR)/>(nexe_target)_newlib_x64.nexe',
+                 'objdir_newlib64%': '>(INTERMEDIATE_DIR)/<(tool_name)-x86-64/>(_target_name)',
+                 'source_list_newlib64%': '<(tool_name)-x86-64.>(_target_name).source_list.gypcmd',
+@@ -169,11 +171,14 @@
+                    '--root', '<(DEPTH)',
+                    '--name', '>(out_newlib64)',
+                    '--objdir', '>(objdir_newlib64)',
+-                   '--include-dirs=<(inst_dir)/include ^(include_dirs) >(_include_dirs)',
++# FIXED
++                   '--include-dirs=<(inst_dir)/include ^(include_dirs) <(newlib_dir)/include >(_include_dirs)',
+                    '--lib-dirs=>(lib_dirs_newlib64) ',
+                    '--compile_flags=-m64 ^(newlib_tls_flags) ^(gcc_compile_flags) >(_gcc_compile_flags) ^(compile_flags) >(_compile_flags)',
+                    '--defines=^(defines) >(_defines)',
+-                   '--link_flags=-B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib64 ^(link_flags) >(_link_flags)',
++# -B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib64
++# ./src/out/Release/obj/gen/sdk/toolchain/linux_x86_newlib/x86_64-nacl/lib/crt1.o
++                   '--link_flags=-B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib64 -B<(newlib_dir)/lib ^(link_flags) >(_link_flags)',
+                    '--source-list=^|(<(source_list_newlib64) ^(_sources) ^(sources))',
+                  ],
+                },
+@@ -183,6 +188,8 @@
+              'variables': {
+                 'tool_name': 'newlib',
+                 'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++# make semaphore.h visible for base/shared_memory_nacl.cc compilation
++				'newlib_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/x86_64-nacl',
+                 'objdir_newlib64%': '>(INTERMEDIATE_DIR)/<(tool_name)-x86-64/>(_target_name)',
+                 'source_list_newlib64%': '<(tool_name)-x86-64.>(_target_name).source_list.gypcmd',
+                 'out_newlib64%': '<(SHARED_INTERMEDIATE_DIR)/tc_<(tool_name)/lib64/>(nlib_target)',
+@@ -210,7 +217,19 @@
+                    '--root', '<(DEPTH)',
+                    '--name', '>(out_newlib64)',
+                    '--objdir', '>(objdir_newlib64)',
+-                   '--include-dirs=<(inst_dir)/include ^(include_dirs) >(_include_dirs)',
++#XXX
++#glen@carme-pld src/base $ find .. -name semaphore.h
++#../native_client/src/untrusted/pthread/semaphore.h
++#../native_client_sdk/src/libraries/third_party/pthreads-win32/semaphore.h
++#../out/Release/obj/gen/sdk/toolchain/linux_x86_newlib/x86_64-nacl/include/semaphore.h
++#../out/Release/obj/gen/sdk/toolchain/linux_x86_pnacl/newlib/sdk/include/include/semaphore.h
++#
++#-I/home/users/glen/rpm/packages/chromium-browser/autoupdate/beta/BU
++#ILD/chromium-browser-24.0.1312.45/src/out/Release/obj/gen/tc_newlib/include
++#                'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++#				'newlib_dir__': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib',
++
++                   '--include-dirs=<(inst_dir)/include ^(include_dirs) <(newlib_dir)/include >(_include_dirs)',
+                    '--lib-dirs=>(lib_dirs_newlib64) ',
+                    '--compile_flags=-m64 ^(newlib_tls_flags) ^(gcc_compile_flags) >(_gcc_compile_flags) ^(compile_flags) >(_compile_flags)',
+                    '--defines=^(defines) >(_defines)',
+@@ -224,6 +243,8 @@
+              'variables': {
+                 'tool_name': 'newlib',
+                 'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++# make semaphore.h visible for base/shared_memory_nacl.cc compilation
++				'newlib_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/x86_64-nacl',
+                 'out_newlib32%': '<(PRODUCT_DIR)/>(nexe_target)_newlib_x32.nexe',
+                 'objdir_newlib32%': '>(INTERMEDIATE_DIR)/<(tool_name)-x86-32/>(_target_name)',
+                 'source_list_newlib32%': '<(tool_name)-x86-32.>(_target_name).source_list.gypcmd',
+@@ -251,11 +272,12 @@
+                    '--root', '<(DEPTH)',
+                    '--name', '>(out_newlib32)',
+                    '--objdir', '>(objdir_newlib32)',
+-                   '--include-dirs=<(inst_dir)/include ^(include_dirs) >(_include_dirs)',
++# FIXED
++                   '--include-dirs=<(inst_dir)/include ^(include_dirs) <(newlib_dir)/include >(_include_dirs)',
+                    '--lib-dirs=>(lib_dirs_newlib32)',
+                    '--compile_flags=-m32 ^(newlib_tls_flags) ^(gcc_compile_flags) >(_gcc_compile_flags) ^(compile_flags) >(_compile_flags)',
+                    '--defines=^(defines) >(_defines)',
+-                   '--link_flags=-m32 -B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib32 ^(link_flags) >(_link_flags)',
++                   '--link_flags=-m32 -B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib32 -B<(newlib_dir)/lib ^(link_flags) >(_link_flags)',
+                    '--source-list=^|(<(source_list_newlib32) ^(_sources) ^(sources))',
+                  ],
+                },
+@@ -265,6 +287,8 @@
+              'variables': {
+                 'tool_name': 'newlib',
+                 'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++# make semaphore.h visible for base/shared_memory_nacl.cc compilation
++				'newlib_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/x86_64-nacl',
+                 'out_newlib32%': '<(SHARED_INTERMEDIATE_DIR)/tc_<(tool_name)/lib32/>(nlib_target)',
+                 'objdir_newlib32%': '>(INTERMEDIATE_DIR)/<(tool_name)-x86-32/>(_target_name)',
+                 'source_list_newlib32%': '<(tool_name)-x86-32.>(_target_name).source_list.gypcmd',
+@@ -292,7 +316,8 @@
+                    '--root', '<(DEPTH)',
+                    '--name', '>(out_newlib32)',
+                    '--objdir', '>(objdir_newlib32)',
+-                   '--include-dirs=<(inst_dir)/include ^(include_dirs) >(_include_dirs)',
++# FIXED
++                   '--include-dirs=<(inst_dir)/include ^(include_dirs) <(newlib_dir)/include >(_include_dirs)',
+                    '--lib-dirs=>(lib_dirs_newlib32)',
+                    '--compile_flags=-m32 ^(newlib_tls_flags) ^(gcc_compile_flags) >(_gcc_compile_flags) ^(compile_flags) >(_compile_flags)',
+                    '--defines=^(defines) >(_defines)',
+#--- /home/users/glen/rpm/packages/chromium-browser/autoupdate/beta/BUILD/chromium-browser-24.0.1312.45/src/native_client/src/untrusted/nacl/nacl.gyp	2012-12-19 10:03:43.000000000 +0200
+#+++ ../../../chromium-browser-24.0.1312.45-almost-there/src/native_client/src/untrusted/nacl/nacl.gyp	2013-01-01 22:26:15.004609235 +0200
+#@@ -94,7 +94,7 @@
+#         'nlib_target': 'libnacl.a',
+#         'build_glibc': 0,
+#         'build_newlib': 1,
+#-        'build_pnacl_newlib': 1,
+#+        'build_pnacl_newlib': 0,
+#       },
+#       'sources': [
+#         '<@(sources_for_nacl_extensions)',
+#--- chromium-browser-24.0.1312.45/src/native_client/tools.gyp~	2012-12-19 10:04:23.000000000 +0200
+#+++ chromium-browser-24.0.1312.45/src/native_client/tools.gyp	2013-01-01 17:22:30.098261613 +0200
+#@@ -134,7 +134,6 @@
+#               'msvs_cygwin_shell': 0,
+#               'description': 'Prep newlib',
+#               'inputs': [
+#-                 '<(newlib_dir)/stamp.untar',
+#                  '>!@pymod_do_main(prep_nacl_sdk --inputs --tool newlib)',
+#               ],
+#               'outputs': ['<(newlib_dir)/stamp.prep'],
+#@@ -154,7 +153,6 @@
+#               'msvs_cygwin_shell': 0,
+#               'description': 'Prep glibc',
+#               'inputs': [
+#-                 '<(glibc_dir)/stamp.untar',
+#                  '>!@pymod_do_main(prep_nacl_sdk --inputs --tool glibc)',
+#               ],
+#               'outputs': ['<(glibc_dir)/stamp.prep'],
+#@@ -174,7 +172,6 @@
+#               'msvs_cygwin_shell': 0,
+#               'description': 'Prep pnacl',
+#               'inputs': [
+#-                 '<(pnacl_dir)/stamp.untar',
+#                  '>!@pymod_do_main(prep_nacl_sdk --inputs --tool pnacl)',
+#               ],
+#               'outputs': ['<(pnacl_dir)/stamp.prep'],

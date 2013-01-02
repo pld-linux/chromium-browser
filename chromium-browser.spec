@@ -97,6 +97,7 @@ Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
 Patch21:	system-srtp.patch
 Patch22:	pulse_fix-157876.patch
+Patch23:	no-pnacl.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -251,6 +252,7 @@ cd src
 %patch22 -p1
 cd ..
 %patch18 -p1
+%patch23 -p1
 
 cd src
 
@@ -328,15 +330,16 @@ test -e Makefile || %{__python} build/gyp_chromium --format=make build/all.gyp \
 	-Dffmpeg_branding=Chrome \
 	-Dproprietary_codecs=1 \
 %if %{with nacl}
-	-Ddisable_glibc=1 \
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
 	-Ddisable_glibc_untar=1 \
 	-Ddisable_newlib_untar=1 \
-	-Ddisable_pnacl_untar=1 \
+	-Ddisable_glibc=1 \
+	-Ddisable_pnacl=1 \
+	-Dbuild_pnacl_newlib=0 \
 %else
+	-Ddisable_pnacl_untar=1 \
 	-Ddisable_nacl=1 \
 %endif
-	-Ddisable_pnacl=1 \
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
 	%{gyp_with cups} \
