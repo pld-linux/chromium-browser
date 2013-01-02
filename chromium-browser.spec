@@ -314,8 +314,18 @@ install -d linux_x86_newlib/x86_64-nacl/nacl/include/sys
 # link newlib toolchain to glibc as well, see gentoo bug #417019
 #ln -s linux_x86_newlib linux_x86
 cd linux_x86_newlib/x86_64-nacl/bin
-ln -s %{_bindir}/x86_64-nacl-gcc gcc
-ln -s %{_bindir}/x86_64-nacl-g++ g++
+
+__cc='%{__cc}'
+if [ "${__cc}#ccache}" != "$__cc" ]; then
+	echo 'exec ccache %{_bindir}/x86_64-nacl-gcc "$@"' > gcc
+	echo 'exec ccache %{_bindir}/x86_64-nacl-g++ "$@"' > g++
+	%{__sed} -i -e '1i#!/bin/sh' gcc g++
+	chmod +x gcc g++
+else
+	ln -s %{_bindir}/x86_64-nacl-gcc gcc
+	ln -s %{_bindir}/x86_64-nacl-g++ g++
+fi
+
 ln -s %{_bindir}/x86_64-nacl-ar ar
 ln -s %{_bindir}/x86_64-nacl-as as
 ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
