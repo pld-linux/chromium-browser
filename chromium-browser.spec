@@ -98,6 +98,7 @@ Patch19:	system-jsoncpp.patch
 Patch21:	system-srtp.patch
 Patch22:	pulse_fix-157876.patch
 Patch23:	no-pnacl.patch
+Patch24:	nacl-verbose.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -253,6 +254,7 @@ cd src
 cd ..
 %patch18 -p1
 %patch23 -p1
+%patch24 -p1
 
 cd src
 
