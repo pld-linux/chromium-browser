@@ -29,6 +29,7 @@ remove_nonessential_dirs() {
 	courgette/testdata \
 	data \
 	native_client/src/trusted/service_runtime/testdata \
+	native_client_sdk \
 	o3d/documentation \
 	o3d/samples \
 	o3d/tests \
@@ -120,6 +121,7 @@ remove_nonessential_dirs() {
 	chrome/tools/test \
 	chrome_frame/test \
 	chrome_frame/tools/test \
+	chrome_frame \
 	content/browser/worker_host/test \
 	content/public/test \
 	content/test \
@@ -458,7 +460,9 @@ strip_system_dirs \
 	third_party/icu \
 	third_party/jsoncpp \
 	third_party/libevent \
+	third_party/libexif \
 	third_party/libjpeg \
+	third_party/libmtp \
 	third_party/libpng \
 	third_party/libsrtp \
 	third_party/libusb \
@@ -466,6 +470,7 @@ strip_system_dirs \
 	third_party/libwebp \
 	third_party/libxml \
 	third_party/libxslt \
+	third_party/opus \
 	third_party/speex \
 	third_party/zlib \
 	v8 \
