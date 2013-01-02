@@ -428,8 +428,7 @@ strip_system_dirs() {
 		# skip already removed dirs
 		test -d $dir || continue
 
-		# here we ignore errors, as some dirs contain README.chromium after removal
-		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -name README.chromium -o -name '*.patch' -o -path $dir/$lib.h \) -print -delete || :
+		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h \) -print -delete
 	done
 }
 
