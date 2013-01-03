@@ -81,7 +81,7 @@ echo "$svnver" > build/LASTCHANGE.in
 cd ../..
 
 tarball=$PACKAGE_NAME-$VERSION.tar.$EXT
-XZ_OPT=-9 tar -cf $tarball --$EXT $PACKAGE_NAME-$VERSION
+XZ_OPT=-e8 tar -cf $tarball --$EXT $PACKAGE_NAME-$VERSION
 ls -lh $tarball
 
 rm -rf $PACKAGE_NAME-$VERSION
@@ -96,6 +96,7 @@ mv $LOGFILE $DIST_DIR
 
 rm -rf $TMP_DIR
 
+set -x
 # create diff patches
 BASEVER=${VERSION%.*}.0
 if [ -e $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT ]; then
@@ -104,6 +105,7 @@ if [ -e $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT ]; then
 	sh -x $WORK_DIR/make-diff-patch.sh $base $current
 	mv $PACKAGE_NAME-$VERSION.patch.$EXT $DIST_DIR
 fi
+set +x
 
 # try updating spec and build it as well
 if [ -x $WORK_DIR/update-source.sh ]; then
