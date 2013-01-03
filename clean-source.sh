@@ -14,170 +14,19 @@ eval "$@"
 remove_nonessential_dirs() {
 	local dir
 	for dir in \
-	chrome/common/extensions/docs \
-	breakpad/src/common/android/testing \
-	chrome/tools/test/reference_build \
-	courgette/testdata \
-	data \
-	native_client/src/trusted/service_runtime/testdata \
-	native_client/src/trusted/validator/x86/testing \
-	native_client_sdk \
-	o3d/documentation \
-	o3d/samples \
-	o3d/tests \
-	third_party/WebKit/LayoutTests \
-	third_party/WebKit/Source/JavaScriptCore/tests \
-	third_party/WebKit/Source/WebCore/testing_ \
-	third_party/angle/samples/gles2_book \
-	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing \
-	third_party/hunspell/tests \
-	third_party/hunspell_dictionaries \
-	third_party/lighttpd \
-	third_party/protobuf/src/google/protobuf/testing \
-	third_party/re2/re2/testing \
-	third_party/safe_browsing/testing \
-	third_party/sqlite/test \
-	third_party/vc_80 \
-	third_party/xdg-utils/tests \
-	third_party/yasm/source/patched-yasm/modules/arch/x86/tests \
-	third_party/yasm/source/patched-yasm/modules/dbgfmts/dwarf2/tests \
-	third_party/yasm/source/patched-yasm/modules/objfmts/bin/tests \
-	third_party/yasm/source/patched-yasm/modules/objfmts/coff/tests \
-	third_party/yasm/source/patched-yasm/modules/objfmts/elf/tests \
-	third_party/yasm/source/patched-yasm/modules/objfmts/macho/tests \
-	third_party/yasm/source/patched-yasm/modules/objfmts/rdf/tests \
-	third_party/yasm/source/patched-yasm/modules/objfmts/win32/tests \
-	third_party/yasm/source/patched-yasm/modules/objfmts/win64/tests \
-	third_party/yasm/source/patched-yasm/modules/objfmts/xdf/tests \
-	\
-	breakpad/src/client/mac/tests \
-	breakpad/src/client/windows/tests \
-	breakpad/src/common/linux/tests \
-	breakpad/src/common/tests \
-	chrome/browser/resources/tracing/tests \
-	chrome/browser/ui/tests \
-	content/test/data/layout_tests/LayoutTests/http/tests \
-	content/test/data/layout_tests/LayoutTests/http/tests/websocket/tests \
-	content/test/data/layout_tests/LayoutTests/platform/chromium-win/http/tests \
-	gpu/command_buffer/tests \
-	native_client/tests \
-	native_client/tools/tests \
-	native_client_sdk/src/build_tools/tests \
-	ppapi/native_client/tests \
-	ppapi/tests \
-	sandbox/tests \
-	seccompsandbox/tests \
-	third_party/WebKit/Source/JavaScriptCore/API/tests \
-	third_party/WebKit/Source/JavaScriptCore/qt/tests \
-	third_party/WebKit/Source/WebKit/chromium/tests \
-	third_party/WebKit/Source/WebKit/gtk/tests \
-	third_party/WebKit/Source/WebKit/qt/tests \
-	third_party/WebKit/Source/WebKit2/UIProcess/API/gtk/tests \
-	third_party/WebKit/Source/WebKit2/UIProcess/API/qt/tests \
-	third_party/angle/tests \
-	third_party/ffmpeg/tests \
-	third_party/harfbuzz/tests \
-	third_party/hyphen/tests \
-	third_party/mesa/MesaLib/src/gallium/tests \
-	third_party/mesa/MesaLib/src/gallium/tests/python/tests \
-	third_party/tcmalloc/chromium/src/tests \
-	third_party/tcmalloc/vendor/src/tests \
-	third_party/yasm/source/patched-yasm/libyasm/tests \
-	third_party/yasm/source/patched-yasm/modules/arch/lc3b/tests \
-	third_party/yasm/source/patched-yasm/modules/dbgfmts/stabs/tests \
-	third_party/yasm/source/patched-yasm/modules/parsers/gas/tests \
-	third_party/yasm/source/patched-yasm/modules/parsers/nasm/tests \
-	third_party/yasm/source/patched-yasm/modules/parsers/tasm/tests \
-	third_party/yasm/source/patched-yasm/modules/preprocs/nasm/tests \
-	third_party/yasm/source/patched-yasm/modules/preprocs/raw/tests \
-	third_party/yasm/source/patched-yasm/tools/python-yasm/tests \
-	tools/clang/plugins/tests \
-	tools/page_cycler/webpagereplay/tests \
-	tools/perf_expectations/tests \
-	\
-	v8/test \
-	webkit/data/layout_tests \
-	webkit/tools/test/reference_build \
-	\
-	tools/site_compare \
-	tools/stats_viewer \
-	tools/symsrc \
-	tools/valgrind \
-	tools/gyp/test \
-	\
 	ash/test \
-	base/android/javatests/src/org/chromium/base/test \
-	base/test \
-	chrome/browser/chromeos/bluetooth/test \
-	chrome/browser/component_updater/test \
-	chrome/browser/printing/cloud_print/test \
-	chrome/browser/resources/gaia_auth/test \
-	chrome/browser/sync/test \
-	chrome/installer/test \
-	chrome/test/webdriver/test \
-	chrome/tools/test \
-	chrome_frame/test \
-	chrome_frame/tools/test \
-	chrome_frame \
-	content/browser/worker_host/test \
-	content/public/test \
-	content/test \
-	media/test \
-	media/tools/layout_tests/test_data \
-	native_client_sdk/src/libraries/c_salt/test \
-	net/test \
-	printing/test \
-	rlz/test \
-	sandbox/linux/seccomp-legacy/tests \
-	sandbox/linux/tests \
-	sandbox/win/tests \
-	sync/internal_api/public/test \
-	sync/internal_api/test \
-	sync/test \
-	testing/gmock/scripts/test \
-	testing/gmock/test \
-	testing/gtest/scripts/test \
-	testing/gtest/test \
-	third_party/WebKit/Source/ThirdParty/gtest/scripts/test \
-	third_party/WebKit/Source/ThirdParty/gtest/test \
-	third_party/WebKit/Source/ThirdParty/gyp/test \
-	third_party/WebKit/Source/ThirdParty/qunit/test \
-	third_party/WebKit/Source/WebCore/bindings/scripts/test \
-	third_party/WebKit/Source/WebKit/efl/tests \
-	third_party/WebKit/Source/WebKit2/UIProcess/API/efl/tests \
-	third_party/WebKit/Tools/Scripts/webkitpy/test \
-	third_party/cacheinvalidation/files/src/google/cacheinvalidation/test \
-	third_party/libexif/sources/test \
-	third_party/libjingle/source/talk/app/webrtc/test \
-	third_party/libphonenumber/src/resources/test \
-	third_party/libphonenumber/src/test \
-	third_party/libsrtp/srtp/crypto/test \
-	third_party/libsrtp/srtp/test \
-	third_party/openssl/openssl/crypto/des/t/test \
-	third_party/openssl/openssl/test \
-	third_party/ots/test \
-	third_party/sfntly/cpp/src/test \
-	third_party/sqlite/src/test \
-	third_party/talloc/libreplace/test \
-	third_party/tlslite/test \
-	third_party/trace-viewer/test_data \
-	third_party/v8-i18n/tests \
-	third_party/webdriver/pylib/test \
-	third_party/webdriver/test_data \
-	ui/app_list/test \
-	ui/aura/test \
-	ui/base/test \
-	ui/compositor/test \
-	ui/gfx/test \
-	ui/test \
-	ui/views/test \
-	webkit/plugins/npapi/test \
-	\
 	base/android \
+	base/android/javatests/src/org/chromium/base/test \
 	base/mac_ \
+	base/test \
 	base/win_ \
 	breakpad/src/client/mac \
+	breakpad/src/client/mac/tests \
+	breakpad/src/client/windows/tests \
+	breakpad/src/common/android/testing \
+	breakpad/src/common/linux/tests \
 	breakpad/src/common/mac \
+	breakpad/src/common/tests \
 	breakpad/src/tools/mac \
 	build/mac \
 	build/win \
@@ -191,27 +40,53 @@ remove_nonessential_dirs() {
 	chrome/app/theme/touch_140_percent/win \
 	chrome/app/theme/touch_180_percent/win \
 	chrome/browser/android \
+	chrome/browser/chromeos/bluetooth/test \
+	chrome/browser/component_updater/test \
 	chrome/browser/history/android \
 	chrome/browser/mac \
+	chrome/browser/printing/cloud_print/test \
+	chrome/browser/resources/gaia_auth/test \
+	chrome/browser/resources/tracing/tests \
+	chrome/browser/sync/test \
+	chrome/browser/ui/tests \
+	chrome/common/extensions/docs \
 	chrome/common/mac \
 	chrome/installer/mac \
 	chrome/installer/mac/third_party/xz/config/mac \
+	chrome/installer/test \
 	chrome/test/logging/win \
+	chrome/test/webdriver/test \
 	chrome/tools/build/mac \
 	chrome/tools/build/win \
+	chrome/tools/test \
+	chrome/tools/test/reference_build \
+	chrome_frame \
+	chrome_frame/test \
+	chrome_frame/tools/test \
 	cloud_print/service/win \
 	cloud_print/virtual_driver/win \
 	content/app/android \
 	content/browser/android \
+	content/browser/worker_host/test \
 	content/common/android \
 	content/common/mac_ \
 	content/public/android \
 	content/public/browser/android \
+	content/public/test \
 	content/renderer/android \
 	content/shell/android \
 	content/shell/mac \
+	content/test \
+	content/test/data/layout_tests/LayoutTests/http/tests \
+	content/test/data/layout_tests/LayoutTests/http/tests/websocket/tests \
+	content/test/data/layout_tests/LayoutTests/platform/chromium-win/http/tests \
+	courgette/testdata \
+	data \
+	gpu/command_buffer/tests \
 	media/audio/mac \
 	media/audio/win \
+	media/test \
+	media/tools/layout_tests/test_data \
 	media/video/capture/mac \
 	media/video/capture/win \
 	native_client/build/mac \
@@ -222,28 +97,64 @@ remove_nonessential_dirs() {
 	native_client/src/trusted/desc/win \
 	native_client/src/trusted/nonnacl_util/win \
 	native_client/src/trusted/platform_qualify/win \
+	native_client/src/trusted/service_runtime/testdata \
 	native_client/src/trusted/service_runtime/win_ \
+	native_client/src/trusted/validator/x86/testing \
+	native_client/tests \
+	native_client/tools/tests \
+	native_client_sdk \
+	native_client_sdk/src/build_tools/tests \
+	native_client_sdk/src/libraries/c_salt/test \
 	native_client_sdk/src/libraries/win \
+	net/test \
+	o3d/documentation \
+	o3d/samples \
+	o3d/tests \
 	ppapi/native_client/src/trusted/plugin/win \
+	ppapi/native_client/tests \
+	ppapi/tests \
+	printing/test \
 	remoting/host/installer/mac \
 	remoting/host/installer/win \
 	remoting/host/mac \
 	remoting/host/setup/win \
 	remoting/host/win \
 	rlz/mac \
+	rlz/test \
 	rlz/win \
+	sandbox/linux/seccomp-legacy/tests \
+	sandbox/linux/tests \
+	sandbox/tests \
+	sandbox/win/tests \
 	sandbox/win_ \
 	sdch/mac \
+	seccompsandbox/tests \
 	skia/config/win \
+	sync/internal_api/public/test \
+	sync/internal_api/test \
+	sync/test \
+	testing/gmock/scripts/test \
+	testing/gmock/test \
+	testing/gtest/scripts/test \
+	testing/gtest/test \
+	third_party/WebKit/LayoutTests \
+	third_party/WebKit/Source/JavaScriptCore/API/tests \
+	third_party/WebKit/Source/JavaScriptCore/qt/tests \
+	third_party/WebKit/Source/JavaScriptCore/tests \
 	third_party/WebKit/Source/Platform/chromium/public/android \
 	third_party/WebKit/Source/Platform/chromium/public/mac \
 	third_party/WebKit/Source/Platform/chromium/public/win \
+	third_party/WebKit/Source/ThirdParty/gtest/scripts/test \
+	third_party/WebKit/Source/ThirdParty/gtest/test \
+	third_party/WebKit/Source/ThirdParty/gyp/test \
+	third_party/WebKit/Source/ThirdParty/qunit/test \
 	third_party/WebKit/Source/WTF/wtf/mac \
 	third_party/WebKit/Source/WTF/wtf/threads/win \
 	third_party/WebKit/Source/WTF/wtf/win \
 	third_party/WebKit/Source/WebCore/WebCore.gyp/mac \
 	third_party/WebKit/Source/WebCore/accessibility/mac \
 	third_party/WebKit/Source/WebCore/accessibility/win \
+	third_party/WebKit/Source/WebCore/bindings/scripts/test \
 	third_party/WebKit/Source/WebCore/editing/android \
 	third_party/WebKit/Source/WebCore/editing/mac \
 	third_party/WebKit/Source/WebCore/history/android \
@@ -276,6 +187,7 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebCore/platform/wx/wxcode/win \
 	third_party/WebKit/Source/WebCore/plugins/mac \
 	third_party/WebKit/Source/WebCore/plugins/win \
+	third_party/WebKit/Source/WebCore/testing_ \
 	third_party/WebKit/Source/WebKit/chromium/public/android \
 	third_party/WebKit/Source/WebKit/chromium/public/mac_ \
 	third_party/WebKit/Source/WebKit/chromium/public/platform/android \
@@ -285,7 +197,11 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebKit/chromium/src/android \
 	third_party/WebKit/Source/WebKit/chromium/src/mac \
 	third_party/WebKit/Source/WebKit/chromium/src/win \
+	third_party/WebKit/Source/WebKit/chromium/tests \
+	third_party/WebKit/Source/WebKit/efl/tests \
+	third_party/WebKit/Source/WebKit/gtk/tests \
 	third_party/WebKit/Source/WebKit/mac \
+	third_party/WebKit/Source/WebKit/qt/tests \
 	third_party/WebKit/Source/WebKit/win \
 	third_party/WebKit/Source/WebKit2/Platform/CoreIPC/mac \
 	third_party/WebKit/Source/WebKit2/Platform/CoreIPC/win \
@@ -302,7 +218,10 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebKit2/Shared/win \
 	third_party/WebKit/Source/WebKit2/UIProcess/API/C/mac \
 	third_party/WebKit/Source/WebKit2/UIProcess/API/C/win \
+	third_party/WebKit/Source/WebKit2/UIProcess/API/efl/tests \
+	third_party/WebKit/Source/WebKit2/UIProcess/API/gtk/tests \
 	third_party/WebKit/Source/WebKit2/UIProcess/API/mac \
+	third_party/WebKit/Source/WebKit2/UIProcess/API/qt/tests \
 	third_party/WebKit/Source/WebKit2/UIProcess/Launcher/mac \
 	third_party/WebKit/Source/WebKit2/UIProcess/Launcher/win \
 	third_party/WebKit/Source/WebKit2/UIProcess/Plugins/mac \
@@ -336,6 +255,7 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Tools/DumpRenderTree/TestNetscapePlugIn/win \
 	third_party/WebKit/Tools/DumpRenderTree/mac \
 	third_party/WebKit/Tools/DumpRenderTree/win \
+	third_party/WebKit/Tools/Scripts/webkitpy/test \
 	third_party/WebKit/Tools/TestWebKitAPI/Tests/TestWebKitAPI/mac \
 	third_party/WebKit/Tools/TestWebKitAPI/Tests/WebKit/win \
 	third_party/WebKit/Tools/TestWebKitAPI/Tests/WebKit2/mac \
@@ -343,7 +263,11 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Tools/TestWebKitAPI/Tests/mac \
 	third_party/WebKit/Tools/TestWebKitAPI/mac \
 	third_party/WebKit/Tools/TestWebKitAPI/win \
+	third_party/angle/samples/gles2_book \
+	third_party/angle/tests \
+	third_party/cacheinvalidation/files/src/google/cacheinvalidation/test \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/external/client/android \
+	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing/android \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/ticl/android \
 	third_party/cld/encodings/compact_lang_det/win_ \
@@ -353,15 +277,36 @@ remove_nonessential_dirs() {
 	third_party/ffmpeg/chromium/config/Chromium/mac \
 	third_party/ffmpeg/chromium/config/Chromium/win \
 	third_party/ffmpeg/chromium/include/win \
+	third_party/ffmpeg/tests \
+	third_party/harfbuzz/tests \
+	third_party/hunspell/tests \
+	third_party/hunspell_dictionaries \
+	third_party/hyphen/tests \
 	third_party/icu/android \
 	third_party/leveldatabase/src/port/win \
+	third_party/libexif/sources/test \
+	third_party/libjingle/source/talk/app/webrtc/test \
 	third_party/libjpeg_turbo/mac \
 	third_party/libjpeg_turbo/win \
+	third_party/libphonenumber/src/resources/test \
+	third_party/libphonenumber/src/test \
+	third_party/libsrtp/srtp/crypto/test \
+	third_party/libsrtp/srtp/test \
 	third_party/libva/va/android \
 	third_party/libvpx/source/config/mac \
 	third_party/libvpx/source/config/win \
 	third_party/libxml/mac \
+	third_party/lighttpd \
+	third_party/mesa/MesaLib/src/gallium/tests \
+	third_party/mesa/MesaLib/src/gallium/tests/python/tests \
 	third_party/openssl/config/android \
+	third_party/openssl/openssl/crypto/des/t/test \
+	third_party/openssl/openssl/test \
+	third_party/ots/test \
+	third_party/protobuf/src/google/protobuf/testing \
+	third_party/re2/re2/testing \
+	third_party/safe_browsing/testing \
+	third_party/sfntly/cpp/src/test \
 	third_party/skia/include/utils/android \
 	third_party/skia/include/utils/mac \
 	third_party/skia/include/utils/win \
@@ -374,6 +319,17 @@ remove_nonessential_dirs() {
 	third_party/skia/src/views/mac \
 	third_party/skia/src/views/win \
 	third_party/snappy/mac \
+	third_party/sqlite/src/test \
+	third_party/sqlite/test \
+	third_party/talloc/libreplace/test \
+	third_party/tcmalloc/chromium/src/tests \
+	third_party/tcmalloc/vendor/src/tests \
+	third_party/tlslite/test \
+	third_party/trace-viewer/test_data \
+	third_party/v8-i18n/tests \
+	third_party/vc_80 \
+	third_party/webdriver/pylib/test \
+	third_party/webdriver/test_data \
 	third_party/webrtc/modules/audio_device/android \
 	third_party/webrtc/modules/audio_device/main/source/mac \
 	third_party/webrtc/modules/audio_device/main/source/win \
@@ -389,16 +345,55 @@ remove_nonessential_dirs() {
 	third_party/webrtc/video_engine/test/android \
 	third_party/webrtc/video_engine/test/auto_test/android \
 	third_party/webrtc/voice_engine/test/android \
+	third_party/xdg-utils/tests \
 	third_party/yasm/source/config/android \
 	third_party/yasm/source/config/mac \
 	third_party/yasm/source/config/win \
+	third_party/yasm/source/patched-yasm/libyasm/tests \
+	third_party/yasm/source/patched-yasm/modules/arch/lc3b/tests \
+	third_party/yasm/source/patched-yasm/modules/arch/x86/tests \
+	third_party/yasm/source/patched-yasm/modules/dbgfmts/dwarf2/tests \
+	third_party/yasm/source/patched-yasm/modules/dbgfmts/stabs/tests \
+	third_party/yasm/source/patched-yasm/modules/objfmts/bin/tests \
+	third_party/yasm/source/patched-yasm/modules/objfmts/coff/tests \
+	third_party/yasm/source/patched-yasm/modules/objfmts/elf/tests \
+	third_party/yasm/source/patched-yasm/modules/objfmts/macho/tests \
+	third_party/yasm/source/patched-yasm/modules/objfmts/rdf/tests \
+	third_party/yasm/source/patched-yasm/modules/objfmts/win32/tests \
+	third_party/yasm/source/patched-yasm/modules/objfmts/win64/tests \
+	third_party/yasm/source/patched-yasm/modules/objfmts/xdf/tests \
+	third_party/yasm/source/patched-yasm/modules/parsers/gas/tests \
+	third_party/yasm/source/patched-yasm/modules/parsers/nasm/tests \
+	third_party/yasm/source/patched-yasm/modules/parsers/tasm/tests \
+	third_party/yasm/source/patched-yasm/modules/preprocs/nasm/tests \
+	third_party/yasm/source/patched-yasm/modules/preprocs/raw/tests \
+	third_party/yasm/source/patched-yasm/tools/python-yasm/tests \
+	tools/clang/plugins/tests \
+	tools/gyp/test \
 	tools/mac \
+	tools/page_cycler/webpagereplay/tests \
+	tools/perf_expectations/tests \
+	tools/site_compare \
+	tools/stats_viewer \
+	tools/symsrc \
+	tools/valgrind \
 	tools/win \
+	ui/app_list/test \
+	ui/aura/test \
 	ui/base/ime/win \
+	ui/base/test \
 	ui/base/win_ \
+	ui/compositor/test \
 	ui/gfx/mac \
+	ui/gfx/test \
+	ui/test \
+	ui/views/test \
 	ui/views/win \
+	v8/test \
+	webkit/data/layout_tests \
 	webkit/media/android \
+	webkit/plugins/npapi/test \
+	webkit/tools/test/reference_build \
 	webkit/tools/test_shell/mac \
 	; do
 		rm -vfr "$dir"
