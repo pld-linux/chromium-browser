@@ -6,11 +6,14 @@ set -xe
 # "v8=0" means "do not remove v8"
 eval "$@"
 
+# Strip tarball from some big directories not needed on the linux platform
 # https://code.google.com/p/chromium/wiki/LinuxPackaging
 # initial list from src/tools/export_tarball/export_tarball.py
 # some scanned with find -name tests -o -name test -o -name test_data
 # and find -iname *test*
 # also removed non-linux files: find -name win -o -name mac -o name android
+# suffix with _ those that we can't remove (just yet) because of the gclient
+# hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
 	local dir
 	for dir in \
@@ -54,8 +57,11 @@ remove_nonessential_dirs() {
 	chrome/installer/mac \
 	chrome/installer/mac/third_party/xz/config/mac \
 	chrome/installer/test \
+	chrome/test/data/firefox2_nss_mac \
+	chrome/test/data/safe_browsing/old \
 	chrome/test/logging/win \
 	chrome/test/webdriver/test \
+	chrome/third_party/wtl/ \
 	chrome/tools/build/mac \
 	chrome/tools/build/win \
 	chrome/tools/test \
@@ -82,7 +88,10 @@ remove_nonessential_dirs() {
 	content/test/data/layout_tests/LayoutTests/platform/chromium-win/http/tests \
 	courgette/testdata \
 	data \
+	gears \
+	google_update \
 	gpu/command_buffer/tests \
+	gpu/demos \
 	media/audio/mac \
 	media/audio/win \
 	media/test \
@@ -107,6 +116,7 @@ remove_nonessential_dirs() {
 	native_client_sdk/src/libraries/c_salt/test \
 	native_client_sdk/src/libraries/win \
 	net/test \
+	o3d \
 	o3d/documentation \
 	o3d/samples \
 	o3d/tests \
@@ -265,12 +275,16 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Tools/TestWebKitAPI/win \
 	third_party/angle/samples/gles2_book \
 	third_party/angle/tests \
+	third_party/boost \
+	third_party/bsdiff \
+	third_party/bspatch \
 	third_party/cacheinvalidation/files/src/google/cacheinvalidation/test \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/external/client/android \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing/android \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/ticl/android \
 	third_party/cld/encodings/compact_lang_det/win_ \
+	third_party/ffmpeg/binaries \
 	third_party/ffmpeg/chromium/binaries/Chromium/win \
 	third_party/ffmpeg/chromium/config/Chrome/mac \
 	third_party/ffmpeg/chromium/config/Chrome/win \
@@ -278,11 +292,17 @@ remove_nonessential_dirs() {
 	third_party/ffmpeg/chromium/config/Chromium/win \
 	third_party/ffmpeg/chromium/include/win \
 	third_party/ffmpeg/tests \
+	third_party/fuzzymatch \
+	third_party/gles_book_examples \
+	third_party/gold \
 	third_party/harfbuzz/tests \
+	third_party/hunspell/dictionaries \
 	third_party/hunspell/tests \
 	third_party/hunspell_dictionaries \
 	third_party/hyphen/tests \
 	third_party/icu/android \
+	third_party/icu/mac \
+	third_party/lcov \
 	third_party/leveldatabase/src/port/win \
 	third_party/libexif/sources/test \
 	third_party/libjingle/source/talk/app/webrtc/test \
@@ -297,16 +317,24 @@ remove_nonessential_dirs() {
 	third_party/libvpx/source/config/win \
 	third_party/libxml/mac \
 	third_party/lighttpd \
+	third_party/lighttpd \
 	third_party/mesa/MesaLib/src/gallium/tests \
 	third_party/mesa/MesaLib/src/gallium/tests/python/tests \
+	third_party/nspr \
+	third_party/nss \
+	third_party/ocmock \
 	third_party/openssl/config/android \
 	third_party/openssl/openssl/crypto/des/t/test \
 	third_party/openssl/openssl/test \
 	third_party/ots/test \
 	third_party/protobuf/src/google/protobuf/testing \
+	third_party/pthread \
+	third_party/pyftpdlib \
 	third_party/re2/re2/testing \
 	third_party/safe_browsing/testing \
+	third_party/scons \
 	third_party/sfntly/cpp/src/test \
+	third_party/simplejson \
 	third_party/skia/include/utils/android \
 	third_party/skia/include/utils/mac \
 	third_party/skia/include/utils/win \
@@ -324,6 +352,7 @@ remove_nonessential_dirs() {
 	third_party/talloc/libreplace/test \
 	third_party/tcmalloc/chromium/src/tests \
 	third_party/tcmalloc/vendor/src/tests \
+	third_party/tcmalloc_ \
 	third_party/tlslite/test \
 	third_party/trace-viewer/test_data \
 	third_party/v8-i18n/tests \
@@ -374,10 +403,15 @@ remove_nonessential_dirs() {
 	tools/page_cycler/webpagereplay/tests \
 	tools/perf_expectations/tests \
 	tools/site_compare \
+	tools/site_compare \
+	tools/stats_viewer \
 	tools/stats_viewer \
 	tools/symsrc \
+	tools/symsrc \
+	tools/valgrind \
 	tools/valgrind \
 	tools/win \
+	tools/wine_valgrind \
 	ui/app_list/test \
 	ui/aura/test \
 	ui/base/ime/win \
@@ -390,56 +424,13 @@ remove_nonessential_dirs() {
 	ui/views/test \
 	ui/views/win \
 	v8/test \
+	v8/test/cctest \
+	webkit/data/layout_tests \
 	webkit/data/layout_tests \
 	webkit/media/android \
 	webkit/plugins/npapi/test \
 	webkit/tools/test/reference_build \
 	webkit/tools/test_shell/mac \
-	; do
-		rm -vfr "$dir"
-	done
-}
-
-# Strip tarball from some big directories not needed on the linux platform
-strip_dirs() {
-	# prefix with _ those that we can't remove (just yet) because of the gclient
-	# hooks (see build/all.gyp) or of some unneeded deps/includes
-
-	local dir
-	for dir in \
-		chrome/test/data/safe_browsing/old \
-		chrome/test/data/firefox2_nss_mac \
-		chrome/third_party/wtl/ \
-		gears \
-		google_update \
-		gpu/demos \
-		o3d \
-		third_party/boost \
-		third_party/bsdiff \
-		third_party/bspatch \
-		third_party/ffmpeg/binaries \
-		third_party/fuzzymatch \
-		third_party/gles_book_examples \
-		third_party/gold \
-		third_party/hunspell/dictionaries \
-		third_party/icu/mac \
-		third_party/lcov \
-		third_party/lighttpd \
-		third_party/nspr \
-		third_party/nss \
-		third_party/ocmock \
-		third_party/pthread \
-		third_party/pyftpdlib \
-		third_party/simplejson \
-		third_party/scons \
-		_third_party/tcmalloc \
-		tools/symsrc \
-		tools/site_compare \
-		tools/stats_viewer \
-		tools/valgrind \
-		tools/wine_valgrind \
-		v8/test/cctest \
-		webkit/data/layout_tests \
 	; do
 		rm -vfr "$dir"
 	done
@@ -485,8 +476,6 @@ almost_strip_dirs() {
 
 remove_nonessential_dirs | tee -a REMOVED-nonessential_dirs.txt
 remove_bin_only | tee -a REMOVED-bin_only.txt
-
-strip_dirs | tee -a REMOVED-stripped.txt
 
 almost_strip_dirs \
 	chrome/test/data \
