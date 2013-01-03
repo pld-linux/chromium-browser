@@ -348,6 +348,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	-Dffmpeg_branding=Chrome \
 	-Dremove_webcore_debug_symbols=1 \
 	-Dproprietary_codecs=1 \
+	-Dinclude_tests=0 \
 %if %{with nacl}
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
 	-Ddisable_glibc_untar=1 \
