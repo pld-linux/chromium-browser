@@ -513,33 +513,33 @@ almost_strip_dirs() {
 # https://aur.archlinux.org/packages/ch/chromium-dev/PKGBUILD
 clean_third_party() {
 	find third_party -type f \! -iname '*.gyp*' \
+		\! -path 'third_party/WebKit/*' \
+		\! -path 'third_party/adobe/flash/*' \
 		\! -path 'third_party/angle/*' \
 		\! -path 'third_party/cacheinvalidation/*' \
 		\! -path 'third_party/cld/*' \
-		\! -path 'third_party/cros_system_api/*'  \
+		\! -path 'third_party/cros_system_api/*' \
 		\! -path 'third_party/ffmpeg/*' \
 		\! -path 'third_party/flac/flac.h' \
 		\! -path 'third_party/flot/*' \
 		\! -path 'third_party/gpsd/*' \
-		\! -path 'third_party/harfbuzz/*' \
 		\! -path 'third_party/harfbuzz-ng/*' \
+		\! -path 'third_party/harfbuzz/*' \
 		\! -path 'third_party/hunspell/*' \
 		\! -path 'third_party/hyphen/*' \
 		\! -path 'third_party/iccjpeg/*' \
 		\! -path 'third_party/jsoncpp/*' \
 		\! -path 'third_party/khronos/*' \
 		\! -path 'third_party/leveldatabase/*' \
+		\! -path 'third_party/libXNVCtrl/*' \
 		\! -path 'third_party/libjingle/*' \
 		\! -path 'third_party/libphonenumber/*' \
-		\! -path 'third_party/libpng/*' \
 		\! -path 'third_party/libsrtp/*' \
 		\! -path 'third_party/libusb/libusb.h' \
 		\! -path 'third_party/libva/*' \
 		\! -path 'third_party/libvpx/libvpx.h' \
 		\! -path 'third_party/libxml/chromium/*' \
-		\! -path 'third_party/libXNVCtrl/*' \
 		\! -path 'third_party/libyuv/*' \
-		\! -path 'third_party/llvm-build/*' \
 		\! -path 'third_party/lss/*' \
 		\! -path 'third_party/mesa/*' \
 		\! -path 'third_party/modp_b64/*' \
@@ -547,9 +547,8 @@ clean_third_party() {
 		\! -path 'third_party/mt19937ar/*' \
 		\! -path 'third_party/npapi/*' \
 		\! -path 'third_party/openmax/*' \
-		\! -path 'third_party/opus/*' \
+		\! -path 'third_party/opus/opus.h*' \
 		\! -path 'third_party/ots/*' \
-		\! -path 'third_party/ply/*' \
 		\! -path 'third_party/protobuf/*' \
 		\! -path 'third_party/pywebsocket/*' \
 		\! -path 'third_party/qcms/*' \
@@ -564,17 +563,11 @@ clean_third_party() {
 		\! -path 'third_party/tlslite/*' \
 		\! -path 'third_party/trace-viewer/*' \
 		\! -path 'third_party/undoview/*' \
-		\! -path 'third_party/usb_ids/*' \
 		\! -path 'third_party/v8-i18n/*' \
 		\! -path 'third_party/v8/*' \
 		\! -path 'third_party/webdriver/*' \
-		\! -path 'third_party/WebKit/*' \
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/widevine/*' \
-		\
-		\! -path 'third_party/adobe/flash/*' \
-		\! -path 'third_party/zlib/*' \
-		\! -path 'third_party/libvpx/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h
