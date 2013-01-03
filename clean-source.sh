@@ -176,7 +176,6 @@ remove_nonessential_dirs() {
 	sync/internal_api/public/test \
 	sync/internal_api/test \
 	sync/test \
-	testing \
 	testing/android \
 	testing/gmock/scripts/test \
 	testing/gmock/test \
@@ -483,6 +482,7 @@ almost_strip_dirs() {
 		breakpad \
 		chrome/test/data \
 		courgette \
+		testing \
 		third_party/cros_dbus_cplusplus \
 		; do
 		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' \) -print -delete || :
@@ -503,9 +503,9 @@ almost_strip_dirs() {
 		'!' -path 'tools/zip2msi.py' \
 		-print -delete
 
-	# clear testing, referred in too many files to patch
-	install -d testing/gtest/include/gtest
-	echo '' > testing/gtest/include/gtest/gtest.h
+	# link headers from system dir. too many files to patch, we don't even build tests
+	install -d testing/gtest/include
+	ln -s /usr/include/gtest testing/gtest/include/gtest
 }
 
 # clean third party
