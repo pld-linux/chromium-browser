@@ -18,6 +18,7 @@ eval "$@"
 remove_nonessential_dirs() {
 	local dir
 	for dir in \
+	android_webview \
 	ash/resources/default_100_percent/cros_ \
 	ash/resources/default_200_percent/cros_ \
 	ash/system/chromeos \
@@ -56,12 +57,15 @@ remove_nonessential_dirs() {
 	chrome/browser/chromeos/bluetooth/test \
 	chrome/browser/chromeos/cros \
 	chrome/browser/chromeos_ \
+	chrome/browser/component/web_contents_delegate_android_ \
 	chrome/browser/component_updater/test \
 	chrome/browser/history/android \
 	chrome/browser/mac \
 	chrome/browser/printing/cloud_print/test \
+	chrome/browser/resources/about_welcome_android \
 	chrome/browser/resources/chromeos_ \
 	chrome/browser/resources/gaia_auth/test \
+	chrome/browser/resources/ntp_android \
 	chrome/browser/resources/options/chromeos_ \
 	chrome/browser/resources/shared/css/chromeos \
 	chrome/browser/resources/shared/js/chromeos_ \
@@ -138,6 +142,7 @@ remove_nonessential_dirs() {
 	native_client/src/trusted/validator/x86/testing \
 	native_client/tests \
 	native_client/tools/tests \
+	native_client/tools/trusted_cross_toolchains \
 	native_client_sdk \
 	native_client_sdk/src/build_tools/tests \
 	native_client_sdk/src/libraries/c_salt/test \
@@ -313,6 +318,7 @@ remove_nonessential_dirs() {
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing/android \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/ticl/android \
 	third_party/cld/encodings/compact_lang_det/win_ \
+	third_party/cros_system_api_ \
 	third_party/ffmpeg/binaries \
 	third_party/ffmpeg/chromium/binaries/Chromium/win \
 	third_party/ffmpeg/chromium/config/Chrome/mac \
@@ -389,6 +395,7 @@ remove_nonessential_dirs() {
 	third_party/vc_80 \
 	third_party/webdriver/pylib/test \
 	third_party/webdriver/test_data \
+	third_party/webgl_conformance/conformance/ogles/GL/cross \
 	third_party/webrtc/modules/audio_device/android \
 	third_party/webrtc/modules/audio_device/main/source/mac \
 	third_party/webrtc/modules/audio_device/main/source/win \
@@ -475,6 +482,7 @@ almost_strip_dirs() {
 	for dir in \
 		chrome/test/data \
 		courgette \
+		third_party/cros_dbus_cplusplus \
 		; do
 		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' \) -print -delete || :
 	done
@@ -581,8 +589,8 @@ strip_system_dirs() {
 }
 
 remove_nonessential_dirs | tee -a REMOVED-nonessential_dirs.txt
-remove_bin_only | tee -a REMOVED-bin_only.txt
 almost_strip_dirs | tee -a REMOVED-stripped.txt
+remove_bin_only | tee -a REMOVED-bin_only.txt
 
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
@@ -622,3 +630,6 @@ if [ "${nacl:-1}" != "0" ]; then
 	# NOTE: here is always x86_64
 	rm -rf native_client/toolchain/linux_x86_newlib
 fi
+
+# cleanup empty dirs
+find -type d -print0 | sort -zr | xargs -0 rmdir -v 2>/dev/null | tee -a REMOVED-dirs.txt
