@@ -6,17 +6,6 @@ set -xe
 # "v8=0" means "do not remove v8"
 eval "$@"
 
-# drop bundled libs, from gentoo
-gyp_clean() {
-	local l lib=$1
-	echo "Removing bundled library $lib ..."
-	l=$(find "$lib" -mindepth 1 ! -iname '*.gyp*' -print -delete | wc -l)
-	if [ $l -eq 0 ]; then
-		echo >&2 "No files matched when removing bundled library $1"
-		exit 1
-	fi
-}
-
 # https://code.google.com/p/chromium/wiki/LinuxPackaging
 # initial list from src/tools/export_tarball/export_tarball.py
 # some scanned with find -name tests -o -name test -o -name test_data
@@ -237,7 +226,9 @@ remove_nonessential_dirs() {
 	native_client_sdk/src/libraries/win \
 	ppapi/native_client/src/trusted/plugin/win \
 	remoting/host/installer/mac \
+	remoting/host/installer/win \
 	remoting/host/mac \
+	remoting/host/setup/win \
 	remoting/host/win \
 	rlz/mac \
 	rlz/win \
@@ -271,6 +262,7 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebCore/platform/graphics/gpu/mac \
 	third_party/WebKit/Source/WebCore/platform/graphics/mac \
 	third_party/WebKit/Source/WebCore/platform/graphics/surfaces/mac \
+	third_party/WebKit/Source/WebCore/platform/graphics/surfaces/win \
 	third_party/WebKit/Source/WebCore/platform/graphics/win \
 	third_party/WebKit/Source/WebCore/platform/mac \
 	third_party/WebKit/Source/WebCore/platform/network/android \
@@ -357,7 +349,9 @@ remove_nonessential_dirs() {
 	third_party/cld/encodings/compact_lang_det/win_ \
 	third_party/ffmpeg/chromium/binaries/Chromium/win \
 	third_party/ffmpeg/chromium/config/Chrome/mac \
+	third_party/ffmpeg/chromium/config/Chrome/win \
 	third_party/ffmpeg/chromium/config/Chromium/mac \
+	third_party/ffmpeg/chromium/config/Chromium/win \
 	third_party/ffmpeg/chromium/include/win \
 	third_party/icu/android \
 	third_party/leveldatabase/src/port/win \
@@ -384,6 +378,7 @@ remove_nonessential_dirs() {
 	third_party/webrtc/modules/audio_device/main/source/mac \
 	third_party/webrtc/modules/audio_device/main/source/win \
 	third_party/webrtc/modules/audio_device/test/android \
+	third_party/webrtc/modules/audio_device/win \
 	third_party/webrtc/modules/audio_processing/test/android \
 	third_party/webrtc/modules/video_capture/main/source/android \
 	third_party/webrtc/modules/video_capture/main/test/android \
@@ -399,6 +394,7 @@ remove_nonessential_dirs() {
 	third_party/yasm/source/config/win \
 	tools/mac \
 	tools/win \
+	ui/base/ime/win \
 	ui/base/win_ \
 	ui/gfx/mac \
 	ui/views/win \
@@ -526,15 +522,13 @@ strip_system_dirs \
 	third_party/libxslt \
 	third_party/opus \
 	third_party/speex \
+	third_party/yasm \
 	third_party/zlib \
 	v8 \
 | tee -a REMOVED-stripped.txt
 
 install -d third_party/libxml
 mv libxml-chromium third_party/libxml/chromium
-
-gyp_clean \
-	third_party/yasm \
 
 # clean third party
 # list based from archlinux PKGBUILD
