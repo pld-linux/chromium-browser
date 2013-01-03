@@ -434,9 +434,6 @@ remove_nonessential_dirs() {
 # list based from archlinux PKGBUILD
 # https://aur.archlinux.org/packages/ch/chromium-dev/PKGBUILD
 clean_third_party() {
-	# move around to keep third_party/libxml/chromium
-	mv third_party/libxml/chromium libxml-chromium
-
 	find third_party -type f \! -iname '*.gyp*' \
 		\! -path 'third_party/angle/*' \
 		\! -path 'third_party/cacheinvalidation/*' \
@@ -502,9 +499,6 @@ clean_third_party() {
 		\! -path 'third_party/libvpx/*' \
 		-print -delete
 
-	install -d third_party/libxml
-	mv libxml-chromium third_party/libxml/chromium
-
 	rm -vf third_party/expat/files/lib/expat.h
 }
 
@@ -555,6 +549,9 @@ almost_strip_dirs \
 	win8 \
 | tee -a REMOVED-stripped.txt
 
+# move around to keep third_party/libxml/chromium
+mv third_party/libxml/chromium libxml-chromium
+
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
@@ -578,6 +575,9 @@ strip_system_dirs \
 	third_party/zlib \
 	v8 \
 | tee -a REMOVED-system_dirs.txt
+
+install -d third_party/libxml
+mv libxml-chromium third_party/libxml/chromium
 
 clean_third_party | tee -a REMOVED-third_party.txt
 
