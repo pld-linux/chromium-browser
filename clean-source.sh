@@ -317,7 +317,6 @@ remove_nonessential_dirs() {
 	third_party/libvpx/source/config/win \
 	third_party/libxml/mac \
 	third_party/lighttpd \
-	third_party/lighttpd \
 	third_party/mesa/MesaLib/src/gallium/tests \
 	third_party/mesa/MesaLib/src/gallium/tests/python/tests \
 	third_party/nspr \
@@ -403,12 +402,8 @@ remove_nonessential_dirs() {
 	tools/page_cycler/webpagereplay/tests \
 	tools/perf_expectations/tests \
 	tools/site_compare \
-	tools/site_compare \
-	tools/stats_viewer \
 	tools/stats_viewer \
 	tools/symsrc \
-	tools/symsrc \
-	tools/valgrind \
 	tools/valgrind \
 	tools/win \
 	tools/wine_valgrind \
@@ -425,7 +420,6 @@ remove_nonessential_dirs() {
 	ui/views/win \
 	v8/test \
 	v8/test/cctest \
-	webkit/data/layout_tests \
 	webkit/data/layout_tests \
 	webkit/media/android \
 	webkit/plugins/npapi/test \
