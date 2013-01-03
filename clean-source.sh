@@ -549,9 +549,6 @@ almost_strip_dirs \
 	win8 \
 | tee -a REMOVED-stripped.txt
 
-# move around to keep third_party/libxml/chromium
-mv third_party/libxml/chromium libxml-chromium
-
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
@@ -567,7 +564,7 @@ strip_system_dirs \
 	third_party/libusb \
 	third_party/libvpx \
 	third_party/libwebp \
-	third_party/libxml \
+	third_party/libxml_ \
 	third_party/libxslt \
 	third_party/opus \
 	third_party/speex \
@@ -575,9 +572,6 @@ strip_system_dirs \
 	third_party/zlib \
 	v8 \
 | tee -a REMOVED-system_dirs.txt
-
-install -d third_party/libxml
-mv libxml-chromium third_party/libxml/chromium
 
 clean_third_party | tee -a REMOVED-third_party.txt
 
