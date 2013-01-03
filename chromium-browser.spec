@@ -49,17 +49,13 @@
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
-# - use_system_libmtp
-# - use_system_libexif
-# - use_system_opus
-# - use_system_libjpeg==1 use_libjpeg_turbo==0
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
 # - space considerations:
-#   - unpacked sources: ~800MiB
-#   - built code: ~1.4GiB (x86_64)
+#   - unpacked sources: ~668MiB
+#   - built code: ~1.4GiB (x86_64/i686)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
@@ -72,10 +68,10 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.8
+Release:	0.15
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.xz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.gz
 # Source0-md5:	2995d5aa3f1ecb470e60e0984229fcce
 Source1:	%{name}.default
 Source2:	%{name}.sh
