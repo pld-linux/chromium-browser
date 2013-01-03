@@ -176,6 +176,7 @@ remove_nonessential_dirs() {
 	sync/internal_api/public/test \
 	sync/internal_api/test \
 	sync/test \
+	testing \
 	testing/android \
 	testing/gmock/scripts/test \
 	testing/gmock/test \
@@ -479,12 +480,32 @@ remove_nonessential_dirs() {
 almost_strip_dirs() {
 	local dir
 	for dir in \
+		breakpad \
 		chrome/test/data \
 		courgette \
 		third_party/cros_dbus_cplusplus \
 		; do
 		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' \) -print -delete || :
 	done
+
+	find tools -type f \
+		'!' -iname '*.gyp*' \
+		'!' -path 'tools/build/*' \
+		'!' -path 'tools/clang/scripts/plugin_flags.sh' \
+		'!' -path 'tools/generate_stubs/*' \
+		'!' -path 'tools/grit/*' \
+		'!' -path 'tools/gritsettings/*' \
+		'!' -path 'tools/gyp/*' \
+		'!' -path 'tools/json_comment_eater.py' \
+		'!' -path 'tools/json_schema_compiler/*' \
+		'!' -path 'tools/protoc_wrapper/*' \
+		'!' -path 'tools/uuidgen.py' \
+		'!' -path 'tools/zip2msi.py' \
+		-print -delete
+
+	# clear testing, referred in too many files to patch
+	install -d testing/gtest/include/gtest
+	echo '' > testing/gtest/include/gtest/gtest.h
 }
 
 # clean third party
