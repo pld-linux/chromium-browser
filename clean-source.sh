@@ -293,6 +293,7 @@ remove_nonessential_dirs() {
 	third_party/ffmpeg/chromium/include/win \
 	third_party/ffmpeg/tests \
 	third_party/fuzzymatch \
+	third_party/gles2_book \
 	third_party/gles_book_examples \
 	third_party/gold \
 	third_party/harfbuzz/tests \
@@ -425,8 +426,21 @@ remove_nonessential_dirs() {
 	webkit/plugins/npapi/test \
 	webkit/tools/test/reference_build \
 	webkit/tools/test_shell/mac \
+	win8 \
 	; do
 		rm -vfr "$dir"
+	done
+}
+
+# There are directories we want to strip, but that are unnecessarily required by the build-system
+# So we drop everything but the gyp/gypi files
+almost_strip_dirs() {
+	local dir
+	for dir in \
+		chrome/test/data \
+		courgette \
+		; do
+		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' \) -print -delete || :
 	done
 }
 
@@ -530,24 +544,9 @@ strip_system_dirs() {
 	done
 }
 
-# There are directories we want to strip, but that are unnecessarily required by the build-system
-# So we drop everything but the gyp/gypi files
-almost_strip_dirs() {
-	local dir
-	for dir in "$@"; do
-		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' \) -print -delete || :
-	done
-}
-
 remove_nonessential_dirs | tee -a REMOVED-nonessential_dirs.txt
 remove_bin_only | tee -a REMOVED-bin_only.txt
-
-almost_strip_dirs \
-	chrome/test/data \
-	courgette \
-	third_party/gles2_book \
-	win8 \
-| tee -a REMOVED-stripped.txt
+almost_strip_dirs | tee -a REMOVED-stripped.txt
 
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
