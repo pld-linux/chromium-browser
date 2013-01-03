@@ -292,25 +292,15 @@ EOF
 
 sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} %{!?with_system_zlib:zlib=0}
 
-rm -rf native_client/toolchain/linux_x86_newlib
-
 %build
 cd src
 
 %if %{with nacl}
 if [ ! -d native_client/toolchain/linux_x86_newlib ]; then
-# Make symlinks for nacl
-cd native_client/toolchain
-install -d linux_x86_newlib/x86_64-nacl/bin
-install -d linux_x86_newlib/x86_64-nacl/lib
-install -d linux_x86_newlib/x86_64-nacl/lib32
-install -d linux_x86_newlib/x86_64-nacl/nacl/include/bits
-install -d linux_x86_newlib/x86_64-nacl/nacl/include/machine
-install -d linux_x86_newlib/x86_64-nacl/nacl/include/sys
-# link newlib toolchain to glibc as well, see gentoo bug #417019
-#ln -s linux_x86_newlib linux_x86
-cd linux_x86_newlib/x86_64-nacl/bin
+# Make symlinks for NaCL
+install -d native_client/toolchain/linux_x86_newlib/x86_64-nacl/{bin,lib,lib32,nacl}
 
+cd native_client/toolchain/linux_x86_newlib/x86_64-nacl/bin
 __cc='%{__cc}'
 if [ "${__cc}#ccache}" != "$__cc" ]; then
 	echo 'exec ccache %{_bindir}/x86_64-nacl-gcc "$@"' > gcc
@@ -321,19 +311,15 @@ else
 	ln -s %{_bindir}/x86_64-nacl-gcc gcc
 	ln -s %{_bindir}/x86_64-nacl-g++ g++
 fi
-
 ln -s %{_bindir}/x86_64-nacl-ar ar
 ln -s %{_bindir}/x86_64-nacl-as as
 ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
 ln -s %{_bindir}/x86_64-nacl-strip x86-64-nacl-strip
 ln -s %{_bindir}/x86_64-nacl-strip strip
-ln -s %{_prefix}/x86_64-nacl/lib/*.a ../lib/
-ln -s %{_prefix}/x86_64-nacl/lib/32/*.a ../lib32/
-cd ../nacl/include
-for i in $(find %{_prefix}/x86_64-nacl/include -type f | grep -v "c++"); do
-	ln -s $i ${i#%{_prefix}/x86_64-nacl/include/}
-done
-cd ../../../../../..
+ln -s %{_prefix}/x86_64-nacl/lib/*.a ../lib
+ln -s %{_prefix}/x86_64-nacl/lib/32/*.a ../lib32
+ln -s %{_prefix}/x86_64-nacl/include ../nacl/include
+cd ../../../../..
 fi
 %endif
 
