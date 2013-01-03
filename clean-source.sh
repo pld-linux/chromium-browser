@@ -395,7 +395,6 @@ remove_nonessential_dirs() {
 	third_party/vc_80 \
 	third_party/webdriver/pylib/test \
 	third_party/webdriver/test_data \
-	third_party/webgl_conformance/conformance/ogles/GL/cross \
 	third_party/webrtc/modules/audio_device/android \
 	third_party/webrtc/modules/audio_device/main/source/mac \
 	third_party/webrtc/modules/audio_device/main/source/win \
@@ -548,10 +547,10 @@ clean_third_party() {
 		\! -path 'third_party/v8-i18n/*' \
 		\! -path 'third_party/v8/*' \
 		\! -path 'third_party/webdriver/*' \
-		\! -path 'third_party/webgl_conformance/*' \
 		\! -path 'third_party/WebKit/*' \
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/widevine/*' \
+		\
 		\! -path 'third_party/adobe/flash/*' \
 		\! -path 'third_party/zlib/*' \
 		\! -path 'third_party/libvpx/*' \
