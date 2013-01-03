@@ -433,11 +433,11 @@ strip_system_dirs() {
 }
 
 # There are directories we want to strip, but that are unnecessarily required by the build-system
-# So we drop everything but the gyp/gypi files and README.chromium (to see what that dir contained)
+# So we drop everything but the gyp/gypi files
 almost_strip_dirs() {
 	local dir
 	for dir in "$@"; do
-		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -name README.chromium \) -print -delete || :
+		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' \) -print -delete || :
 	done
 }
 
