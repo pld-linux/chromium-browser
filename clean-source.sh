@@ -430,9 +430,86 @@ remove_nonessential_dirs() {
 	done
 }
 
+# clean third party
+# list based from archlinux PKGBUILD
+# https://aur.archlinux.org/packages/ch/chromium-dev/PKGBUILD
+clean_third_party() {
+	# move around to keep third_party/libxml/chromium
+	mv third_party/libxml/chromium libxml-chromium
+
+	find third_party -type f \! -iname '*.gyp*' \
+		\! -path 'third_party/angle/*' \
+		\! -path 'third_party/cacheinvalidation/*' \
+		\! -path 'third_party/cld/*' \
+		\! -path 'third_party/cros_system_api/*'  \
+		\! -path 'third_party/ffmpeg/*' \
+		\! -path 'third_party/flac/flac.h' \
+		\! -path 'third_party/flot/*' \
+		\! -path 'third_party/gpsd/*' \
+		\! -path 'third_party/harfbuzz/*' \
+		\! -path 'third_party/harfbuzz-ng/*' \
+		\! -path 'third_party/hunspell/*' \
+		\! -path 'third_party/hyphen/*' \
+		\! -path 'third_party/iccjpeg/*' \
+		\! -path 'third_party/jsoncpp/*' \
+		\! -path 'third_party/khronos/*' \
+		\! -path 'third_party/leveldatabase/*' \
+		\! -path 'third_party/libjingle/*' \
+		\! -path 'third_party/libphonenumber/*' \
+		\! -path 'third_party/libpng/*' \
+		\! -path 'third_party/libsrtp/*' \
+		\! -path 'third_party/libusb/libusb.h' \
+		\! -path 'third_party/libva/*' \
+		\! -path 'third_party/libvpx/libvpx.h' \
+		\! -path 'third_party/libxml/chromium/*' \
+		\! -path 'third_party/libXNVCtrl/*' \
+		\! -path 'third_party/libyuv/*' \
+		\! -path 'third_party/llvm-build/*' \
+		\! -path 'third_party/lss/*' \
+		\! -path 'third_party/mesa/*' \
+		\! -path 'third_party/modp_b64/*' \
+		\! -path 'third_party/mongoose/*' \
+		\! -path 'third_party/mt19937ar/*' \
+		\! -path 'third_party/npapi/*' \
+		\! -path 'third_party/openmax/*' \
+		\! -path 'third_party/opus/*' \
+		\! -path 'third_party/ots/*' \
+		\! -path 'third_party/ply/*' \
+		\! -path 'third_party/protobuf/*' \
+		\! -path 'third_party/pywebsocket/*' \
+		\! -path 'third_party/qcms/*' \
+		\! -path 'third_party/re2/*' \
+		\! -path 'third_party/scons-2.0.1/*' \
+		\! -path 'third_party/sfntly/*' \
+		\! -path 'third_party/skia/*' \
+		\! -path 'third_party/smhasher/*' \
+		\! -path 'third_party/speex/speex.h' \
+		\! -path 'third_party/sqlite/*' \
+		\! -path 'third_party/tcmalloc/*' \
+		\! -path 'third_party/tlslite/*' \
+		\! -path 'third_party/trace-viewer/*' \
+		\! -path 'third_party/undoview/*' \
+		\! -path 'third_party/usb_ids/*' \
+		\! -path 'third_party/v8-i18n/*' \
+		\! -path 'third_party/v8/*' \
+		\! -path 'third_party/webdriver/*' \
+		\! -path 'third_party/webgl_conformance/*' \
+		\! -path 'third_party/WebKit/*' \
+		\! -path 'third_party/webrtc/*' \
+		\! -path 'third_party/widevine/*' \
+		\! -path 'third_party/adobe/flash/*' \
+		\! -path 'third_party/zlib/*' \
+		\! -path 'third_party/libvpx/*' \
+		-print -delete
+
+	install -d third_party/libxml
+	mv libxml-chromium third_party/libxml/chromium
+
+	rm -vf third_party/expat/files/lib/expat.h
+}
+
 # parts based on ubuntu debian/rules
 # http://bazaar.launchpad.net/~chromium-team/chromium-browser/chromium-browser.head/view/head:/debian/rules
-
 remove_bin_only() {
 	find -type f \( \
 		-iname \*.exe -o \
@@ -478,9 +555,6 @@ almost_strip_dirs \
 	win8 \
 | tee -a REMOVED-stripped.txt
 
-# move around to keep third_party/libxml/chromium
-mv third_party/libxml/chromium libxml-chromium
-
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
@@ -503,80 +577,9 @@ strip_system_dirs \
 	third_party/yasm \
 	third_party/zlib \
 	v8 \
-| tee -a REMOVED-stripped.txt
+| tee -a REMOVED-system_dirs.txt
 
-install -d third_party/libxml
-mv libxml-chromium third_party/libxml/chromium
-
-# clean third party
-# list based from archlinux PKGBUILD
-# https://aur.archlinux.org/packages/ch/chromium-dev/PKGBUILD
-find third_party -type f \! -iname '*.gyp*' \
-	\! -path 'third_party/angle/*' \
-	\! -path 'third_party/cacheinvalidation/*' \
-	\! -path 'third_party/cld/*' \
-	\! -path 'third_party/cros_system_api/*'  \
-	\! -path 'third_party/ffmpeg/*' \
-	\! -path 'third_party/flac/flac.h' \
-	\! -path 'third_party/flot/*' \
-	\! -path 'third_party/gpsd/*' \
-	\! -path 'third_party/harfbuzz/*' \
-	\! -path 'third_party/harfbuzz-ng/*' \
-	\! -path 'third_party/hunspell/*' \
-	\! -path 'third_party/hyphen/*' \
-	\! -path 'third_party/iccjpeg/*' \
-	\! -path 'third_party/jsoncpp/*' \
-	\! -path 'third_party/khronos/*' \
-	\! -path 'third_party/leveldatabase/*' \
-	\! -path 'third_party/libjingle/*' \
-	\! -path 'third_party/libphonenumber/*' \
-	\! -path 'third_party/libpng/*' \
-	\! -path 'third_party/libsrtp/*' \
-	\! -path 'third_party/libusb/libusb.h' \
-	\! -path 'third_party/libva/*' \
-	\! -path 'third_party/libvpx/libvpx.h' \
-	\! -path 'third_party/libxml/chromium/*' \
-	\! -path 'third_party/libXNVCtrl/*' \
-	\! -path 'third_party/libyuv/*' \
-	\! -path 'third_party/llvm-build/*' \
-	\! -path 'third_party/lss/*' \
-	\! -path 'third_party/mesa/*' \
-	\! -path 'third_party/modp_b64/*' \
-	\! -path 'third_party/mongoose/*' \
-	\! -path 'third_party/mt19937ar/*' \
-	\! -path 'third_party/npapi/*' \
-	\! -path 'third_party/openmax/*' \
-	\! -path 'third_party/opus/*' \
-	\! -path 'third_party/ots/*' \
-	\! -path 'third_party/ply/*' \
-	\! -path 'third_party/protobuf/*' \
-	\! -path 'third_party/pywebsocket/*' \
-	\! -path 'third_party/qcms/*' \
-	\! -path 'third_party/re2/*' \
-	\! -path 'third_party/scons-2.0.1/*' \
-	\! -path 'third_party/sfntly/*' \
-	\! -path 'third_party/skia/*' \
-	\! -path 'third_party/smhasher/*' \
-	\! -path 'third_party/speex/speex.h' \
-	\! -path 'third_party/sqlite/*' \
-	\! -path 'third_party/tcmalloc/*' \
-	\! -path 'third_party/tlslite/*' \
-	\! -path 'third_party/trace-viewer/*' \
-	\! -path 'third_party/undoview/*' \
-	\! -path 'third_party/usb_ids/*' \
-	\! -path 'third_party/v8-i18n/*' \
-	\! -path 'third_party/v8/*' \
-	\! -path 'third_party/webdriver/*' \
-	\! -path 'third_party/webgl_conformance/*' \
-	\! -path 'third_party/WebKit/*' \
-	\! -path 'third_party/webrtc/*' \
-	\! -path 'third_party/widevine/*' \
-	\! -path 'third_party/adobe/flash/*' \
-	\! -path 'third_party/zlib/*' \
-	\! -path 'third_party/libvpx/*' \
-	-print -delete | tee -a REMOVED-clean.txt
-
-rm -vf third_party/expat/files/lib/expat.h | tee -a REMOVED-clean.txt
+clean_third_party | tee -a REMOVED-third_party.txt
 
 if [ "${v8:-1}" != "0" ]; then
 	# The implementation files include v8 headers with full path,
