@@ -452,6 +452,9 @@ almost_strip_dirs \
 	third_party/gles2_book \
 | tee -a REMOVED-stripped.txt
 
+# move around to keep third_party/libxml/chromium
+mv third_party/libxml/chromium libxml-chromium
+
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
@@ -474,6 +477,9 @@ strip_system_dirs \
 	third_party/zlib \
 	v8 \
 | tee -a REMOVED-stripped.txt
+
+install -d third_party/libxml
+mv libxml-chromium third_party/libxml/chromium
 
 gyp_clean \
 	third_party/yasm \

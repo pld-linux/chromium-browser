@@ -290,7 +290,7 @@ cat > chrome/test/data/nacl/nacl_test_data.gyp <<-EOF
 }
 EOF
 
-sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} libxml=0 %{!?with_system_zlib:zlib=0}
+sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} %{!?with_system_zlib:zlib=0}
 
 rm -rf native_client/toolchain/linux_x86_newlib
 
