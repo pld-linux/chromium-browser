@@ -1,0 +1,33 @@
+--- chromium-23.0.1271.95/base/pr_time_unittest.cc.system-code	2012-11-27 21:01:53.000000000 -0500
++++ chromium-23.0.1271.95/base/pr_time_unittest.cc	2012-12-12 15:22:19.695293771 -0500
+@@ -5,7 +5,7 @@
+ #include <time.h>
+ 
+ #include "base/compiler_specific.h"
+-#include "base/third_party/nspr/prtime.h"
++#include <prtime.h>
+ #include "base/time.h"
+ #include "testing/gtest/include/gtest/gtest.h"
+ 
+--- chromium-23.0.1271.95/chrome/browser/metrics/metrics_log.cc.system-code	2012-11-27 21:02:10.000000000 -0500
++++ chromium-23.0.1271.95/chrome/browser/metrics/metrics_log.cc	2012-12-12 15:22:19.699293773 -0500
+@@ -16,7 +16,7 @@
+ #include "base/string_number_conversions.h"
+ #include "base/string_util.h"
+ #include "base/sys_info.h"
+-#include "base/third_party/nspr/prtime.h"
++#include <prtime.h>
+ #include "base/time.h"
+ #include "base/tracked_objects.h"
+ #include "base/utf_string_conversions.h"
+--- chromium-23.0.1271.95/chrome/common/metrics/metrics_log_base.cc.system-code	2012-11-27 21:02:37.000000000 -0500
++++ chromium-23.0.1271.95/chrome/common/metrics/metrics_log_base.cc	2012-12-12 15:22:19.706293777 -0500
+@@ -11,7 +11,7 @@
+ #include "base/string_number_conversions.h"
+ #include "base/sys_byteorder.h"
+ #include "base/sys_info.h"
+-#include "base/third_party/nspr/prtime.h"
++#include <prtime.h>
+ #include "base/utf_string_conversions.h"
+ #include "chrome/common/chrome_version_info.h"
+ #include "chrome/common/logging_chrome.h"

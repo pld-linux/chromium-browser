@@ -81,8 +81,8 @@ Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
-#Patch10:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
+#Patch2:		system-nspr.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 Patch4:		path-libpdf.patch
 Patch5:		options-support.patch
@@ -243,7 +243,6 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} src
 
-#%patch10 -p1
 %patch1 -p1
 %patch3 -p1
 %patch4 -p1
@@ -253,6 +252,7 @@ ln -s %{SOURCE7} src
 %patch15 -p1
 cd src
 %patch9 -p0
+#%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch16 -p1
 %patch19 -p1
