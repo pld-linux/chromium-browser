@@ -12,31 +12,41 @@ eval "$@"
 # some scanned with find -name tests -o -name test -o -name test_data
 # and find -iname *test*
 # also removed non-linux files: find -name win -o -name mac -o name android
+# find -type d -name 'android' -o -name 'chromeos' -o -name 'cros'
 # suffix with _ those that we can't remove (just yet) because of the gclient
 # hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
 	local dir
 	for dir in \
+	ash/resources/default_100_percent/cros_ \
+	ash/resources/default_200_percent/cros_ \
+	ash/system/chromeos \
 	ash/test \
 	base/android \
 	base/android/javatests/src/org/chromium/base/test \
+	base/chromeos \
 	base/mac_ \
 	base/test \
 	base/win_ \
 	breakpad/src/client/mac \
 	breakpad/src/client/mac/tests \
 	breakpad/src/client/windows/tests \
+	breakpad/src/common/android \
 	breakpad/src/common/android/testing \
 	breakpad/src/common/linux/tests \
 	breakpad/src/common/mac \
 	breakpad/src/common/tests \
 	breakpad/src/tools/mac \
+	build/android \
 	build/mac \
 	build/win \
 	chrome/android \
 	chrome/app/android \
+	chrome/app/resources/terms/chromeos \
+	chrome/app/theme/default_100_percent/cros_ \
 	chrome/app/theme/default_100_percent/mac \
 	chrome/app/theme/default_100_percent/win \
+	chrome/app/theme/default_200_percent/cros_ \
 	chrome/app/theme/default_200_percent/mac \
 	chrome/app/theme/default_200_percent/win \
 	chrome/app/theme/touch_100_percent/win \
@@ -44,24 +54,37 @@ remove_nonessential_dirs() {
 	chrome/app/theme/touch_180_percent/win \
 	chrome/browser/android \
 	chrome/browser/chromeos/bluetooth/test \
+	chrome/browser/chromeos/cros \
+	chrome/browser/chromeos_ \
 	chrome/browser/component_updater/test \
 	chrome/browser/history/android \
 	chrome/browser/mac \
 	chrome/browser/printing/cloud_print/test \
+	chrome/browser/resources/chromeos_ \
 	chrome/browser/resources/gaia_auth/test \
+	chrome/browser/resources/options/chromeos_ \
+	chrome/browser/resources/shared/css/chromeos \
+	chrome/browser/resources/shared/js/chromeos_ \
 	chrome/browser/resources/tracing/tests \
 	chrome/browser/sync/test \
+	chrome/browser/ui/android \
 	chrome/browser/ui/tests \
+	chrome/browser/ui/webui/chromeos \
+	chrome/browser/ui/webui/ntp/android \
+	chrome/browser/ui/webui/options/chromeos \
 	chrome/common/extensions/docs \
 	chrome/common/mac \
 	chrome/installer/mac \
 	chrome/installer/mac/third_party/xz/config/mac \
 	chrome/installer/test \
+	chrome/test/chromeos \
 	chrome/test/data/firefox2_nss_mac \
 	chrome/test/data/safe_browsing/old \
 	chrome/test/logging/win \
+	chrome/test/pyautolib/chromeos \
 	chrome/test/webdriver/test \
 	chrome/third_party/wtl/ \
+	chrome/tools/build/chromeos \
 	chrome/tools/build/mac \
 	chrome/tools/build/win \
 	chrome/tools/test \
@@ -69,6 +92,7 @@ remove_nonessential_dirs() {
 	chrome_frame \
 	chrome_frame/test \
 	chrome_frame/tools/test \
+	chromeos \
 	cloud_print/service/win \
 	cloud_print/virtual_driver/win \
 	content/app/android \
@@ -92,12 +116,15 @@ remove_nonessential_dirs() {
 	google_update \
 	gpu/command_buffer/tests \
 	gpu/demos \
+	media/audio/android \
 	media/audio/mac \
 	media/audio/win \
+	media/base/android \
 	media/test \
 	media/tools/layout_tests/test_data \
 	media/video/capture/mac \
 	media/video/capture/win \
+	media/webm/chromeos \
 	native_client/build/mac \
 	native_client/src/include/win_ \
 	native_client/src/shared/imc/win \
@@ -115,6 +142,7 @@ remove_nonessential_dirs() {
 	native_client_sdk/src/build_tools/tests \
 	native_client_sdk/src/libraries/c_salt/test \
 	native_client_sdk/src/libraries/win \
+	net/android \
 	net/test \
 	o3d \
 	o3d/documentation \
@@ -143,6 +171,7 @@ remove_nonessential_dirs() {
 	sync/internal_api/public/test \
 	sync/internal_api/test \
 	sync/test \
+	testing/android \
 	testing/gmock/scripts/test \
 	testing/gmock/test \
 	testing/gtest/scripts/test \
@@ -320,6 +349,7 @@ remove_nonessential_dirs() {
 	third_party/lighttpd \
 	third_party/mesa/MesaLib/src/gallium/tests \
 	third_party/mesa/MesaLib/src/gallium/tests/python/tests \
+	third_party/mozc/chrome/chromeos_ \
 	third_party/nspr \
 	third_party/nss \
 	third_party/ocmock \
@@ -397,6 +427,7 @@ remove_nonessential_dirs() {
 	third_party/yasm/source/patched-yasm/modules/preprocs/nasm/tests \
 	third_party/yasm/source/patched-yasm/modules/preprocs/raw/tests \
 	third_party/yasm/source/patched-yasm/tools/python-yasm/tests \
+	tools/android \
 	tools/clang/plugins/tests \
 	tools/gyp/test \
 	tools/mac \
@@ -408,19 +439,24 @@ remove_nonessential_dirs() {
 	tools/valgrind \
 	tools/win \
 	tools/wine_valgrind \
+	ui/android \
 	ui/app_list/test \
 	ui/aura/test \
 	ui/base/ime/win \
 	ui/base/test \
 	ui/base/win_ \
 	ui/compositor/test \
+	ui/gfx/android \
 	ui/gfx/mac \
 	ui/gfx/test \
+	ui/resources/default_100_percent/cros_ \
+	ui/resources/default_200_percent/cros_ \
 	ui/test \
 	ui/views/test \
 	ui/views/win \
 	v8/test \
 	v8/test/cctest \
+	webkit/chromeos \
 	webkit/data/layout_tests \
 	webkit/media/android \
 	webkit/plugins/npapi/test \
