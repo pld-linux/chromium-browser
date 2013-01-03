@@ -18,7 +18,13 @@ if [ -z "$VERSION" ]; then
 	exit 1
 fi
 
-VERSION_FILE=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.xz
+# don't use .xz for beta channels, annooying if unpacks that slowly
+if [ "$CHANNEL" = "stable" ]; then
+	EXT=xz
+else
+	EXT=gz
+fi
+VERSION_FILE=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.$EXT
 
 if [ -e $VERSION_FILE -a -z "$FORCE" ]; then
 	# nothing to update
@@ -74,8 +80,8 @@ echo "$svnver" > build/LASTCHANGE.in
 
 cd ../..
 
-tarball=$PACKAGE_NAME-$VERSION.tar.xz
-tar -cf $tarball --xz $PACKAGE_NAME-$VERSION
+tarball=$PACKAGE_NAME-$VERSION.tar.$EXT
+XZ_OPT=-9 tar -cf $tarball --$EXT $PACKAGE_NAME-$VERSION
 ls -lh $tarball
 
 rm -rf $PACKAGE_NAME-$VERSION
