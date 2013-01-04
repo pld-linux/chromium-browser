@@ -1,0 +1,68 @@
+--- chromium-browser-24.0.1312.45/src/third_party/libXNVCtrl/libXNVCtrl.gyp~	2013-01-04 00:45:32.000000000 +0200
++++ chromium-browser-24.0.1312.45/src/third_party/libXNVCtrl/libXNVCtrl.gyp	2013-01-04 00:45:35.620067292 +0200
+@@ -3,16 +3,54 @@
+ # found in the LICENSE file.
+ 
+ {
+-  'targets': [
+-    {
+-      'target_name': 'libXNVCtrl',
+-      'type': 'static_library',
+-      'sources': [
+-        'NVCtrl.c',
+-        'NVCtrl.h',
+-        'NVCtrlLib.h',
+-        'nv_control.h',
++  'variables': {
++    'use_system_libxnvctrl%': 0,
++  },
++  'conditions': [
++    ['use_system_libxnvctrl==0', {
++      'targets': [
++        {
++          'target_name': 'libXNVCtrl',
++          'type': 'static_library',
++          'sources': [
++            'NVCtrl.c',
++            'NVCtrl.h',
++            'NVCtrlLib.h',
++            'nv_control.h',
++          ],
++        },
+       ],
+-    },
+-  ],
++    }, { # use_system_libxnvctrl==1
++      'conditions': [
++        ['sysroot!=""', {
++          'variables': {
++            'pkg-config': '../../build/linux/pkg-config-wrapper "<(sysroot)" "<(target_arch)"',
++          },
++        }, {
++          'variables': {
++            'pkg-config': 'pkg-config'
++          },
++        }],
++      ],
++      'targets': [
++        {
++          'target_name': 'libXNVCtrl',
++          'type': 'none',
++          'direct_dependent_settings': {
++            'cflags': [
++                '<!@(<(pkg-config) --cflags libXNVCtrl)',
++            ],
++          },
++          'link_settings': {
++            'ldflags': [
++              '<!@(<(pkg-config) --libs-only-L --libs-only-other libXNVCtrl)',
++            ],
++            'libraries': [
++              '<!@(<(pkg-config) --libs-only-l libXNVCtrl)',
++            ],
++          },
++        }
++      ],
++    }],
++  ]
+ }

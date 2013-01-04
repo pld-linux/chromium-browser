@@ -19,6 +19,7 @@
 %bcond_without	system_libmtp	# system libmtp
 %bcond_without	system_libusb	# system libusb-1
 %bcond_without	system_libwebp	# system libwebp
+%bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 %bcond_without	system_speex	# system speex
@@ -90,6 +91,7 @@ Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 Patch9:		chromium-ppapi.patch
+Patch10:		system-libxnvctrl.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
@@ -137,6 +139,7 @@ BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
 %{?with_system_libvpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
+%{?with_system_libxvnctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
@@ -369,6 +372,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{gyp_with system_libusb} \
 	%{gyp_with system_libvpx} \
 	%{gyp_with system_libwebp} \
+	%{gyp_with system_libxnvctrl} \
 	%{gyp_with system_minizip} \
 	%{gyp_with system_opus} \
 	%{gyp_with system_speex} \
