@@ -72,6 +72,10 @@ else
 fi
 
 sh -x $WORK_DIR/clean-source.sh v8=$v8
+
+# do not keep REMOVED*.txt in tarball. they are visible in .log anyway
+rm -vf REMOVED-*.txt
+
 du -sh .
 
 # add LASTCHANGE info, take "branch_revision" item

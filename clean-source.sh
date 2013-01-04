@@ -11,12 +11,33 @@ eval "$@"
 # initial list from src/tools/export_tarball/export_tarball.py
 # also removed non-linux files: find -name win -o -name mac -o name android
 # find -type d -name 'android' -o -name 'chromeos' -o -name 'cros'
+# find -type d -name *doc*
+
 # suffix with _ those that we can't remove (just yet) because of the gclient
 # hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
 	local dir
 	for dir in \
+	native_client/documentation \
+	third_party/webdriver/pylib/docs \
+	third_party/mesa/MesaLib/src/gallium/docs \
+	third_party/mesa/MesaLib/docs \
+	third_party/tcmalloc/vendor/doc \
+	third_party/leveldatabase/src/doc \
+	third_party/re2/doc \
+	third_party/WebKit/Source/WebKit/qt/docs \
+	third_party/WebKit/Source/WebKit/gtk/docs \
+	third_party/WebKit/Source/JavaScriptCore/docs \
+	third_party/ffmpeg/doc \
+	third_party/hyphen/doc \
+	third_party/sqlite/src/doc \
+	ppapi/c/documentation \
+	ppapi/cpp/documentation \
+	gpu/command_buffer/docs \
+	chrome/browser/extensions/docs \
+		\
 	android_webview \
+	third_party/mesa/MesaLib/docs \
 	ash/resources/default_100_percent/cros_ \
 	ash/resources/default_200_percent/cros_ \
 	ash/system/chromeos \
@@ -658,4 +679,4 @@ if [ "${nacl:-1}" != "0" ]; then
 fi
 
 # cleanup empty dirs
-find -type d -print0 | sort -zr | xargs -0 rmdir -v 2>/dev/null | tee -a REMOVED-dirs.txt
+find -type d -print0 | sort -zr | xargs -0 rmdir -v --ignore-fail-on-non-empty | tee -a REMOVED-dirs.txt
