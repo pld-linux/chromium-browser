@@ -26,7 +26,7 @@
 %bcond_with		system_protobuf	# system protobuf
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
-%bcond_without	system_srtp		# system srtp (can be used if using bundled libjingle)
+%bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
 %bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
@@ -99,7 +99,6 @@ Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
-Patch21:	system-srtp.patch
 Patch22:	pulse_fix-157876.patch
 Patch23:	no-pnacl.patch
 Patch24:	nacl-verbose.patch
@@ -164,7 +163,7 @@ BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 BuildRequires:	sqlite3-devel >= 3.6.1
-%{?with_system_srtp:BuildRequires:	srtp-devel >= 1.4.4}
+%{?with_system_libsrtp:BuildRequires:	srtp-devel >= 1.4.4}
 BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel
@@ -261,7 +260,6 @@ cd src
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch16 -p1
 %patch19 -p1
-%patch21 -p1
 %patch22 -p1
 %patch25 -p1
 cd ..
@@ -375,6 +373,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{gyp_with system_harfbuzz} \
 	%{gyp_with system_libexif} \
 	%{gyp_with system_libmtp} \
+	%{gyp_with system_libsrtp} \
 	%{gyp_with system_libusb} \
 	%{gyp_with system_libvpx} \
 	%{gyp_with system_libwebp} \
