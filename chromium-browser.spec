@@ -69,7 +69,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.20
+Release:	0.21
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.gz
@@ -350,7 +350,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{!?debug:-Dwerror=} \
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
-	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1 -Dffmpeg_branding=Chrome -Dproprietary_codecs=1} \
+	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1 -Dproprietary_codecs=1} \
 	-Dremove_webcore_debug_symbols=1 \
 	-Dinclude_tests=0 \
 %if %{with nacl}
