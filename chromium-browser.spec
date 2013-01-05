@@ -22,6 +22,7 @@
 %bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
+%bcond_with		system_protobuf	# system protobuf
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_srtp		# system srtp (can be used if using bundled libjingle)
@@ -153,6 +154,7 @@ BuildRequires:	pam-devel
 BuildRequires:	pango-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
+%{?with_system_protobuf:BuildRequires:	protobuf-devel}
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
@@ -289,7 +291,12 @@ cat > chrome/test/data/nacl/nacl_test_data.gyp <<-EOF
 }
 EOF
 
-sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} %{!?with_system_zlib:zlib=0}
+sh -x clean-source.sh \
+	%{!?with_nacl:nacl=0} \
+	%{!?with_system_protobuf:protobuf=0} \
+	%{!?with_system_v8:v8=0} \
+	%{!?with_system_zlib:zlib=0} \
+	%{nil}
 
 %build
 cd src
@@ -375,6 +382,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{gyp_with system_libxnvctrl} \
 	%{gyp_with system_minizip} \
 	%{gyp_with system_opus} \
+	%{gyp_with system_protobuf} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \

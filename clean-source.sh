@@ -657,6 +657,7 @@ strip_system_dirs \
 	third_party/libxml_ \
 	third_party/libxslt \
 	third_party/opus \
+	third_party/protobuf \
 	third_party/speex \
 	third_party/yasm \
 	third_party/zlib \

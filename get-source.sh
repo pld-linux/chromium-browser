@@ -71,7 +71,7 @@ else
 	v8=0
 fi
 
-sh -x $WORK_DIR/clean-source.sh v8=$v8
+sh -x $WORK_DIR/clean-source.sh v8=$v8 protobuf=0
 
 # do not keep REMOVED*.txt in tarball. they are visible in .log anyway
 rm -vf REMOVED-*.txt
