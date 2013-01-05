@@ -55,7 +55,7 @@
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
 # - space considerations:
-#   - unpacked sources: ~654MiB
+#   - unpacked sources: ~649MiB
 #   - built code: ~1.4GiB (x86_64/i686)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
@@ -69,7 +69,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.18
+Release:	0.20
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.gz
@@ -91,7 +91,7 @@ Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 Patch9:		chromium-ppapi.patch
-Patch10:		system-libxnvctrl.patch
+Patch10:	system-libxnvctrl.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
@@ -128,27 +128,27 @@ BuildRequires:	gtk+2-devel
 %{?with_kerberos:BuildRequires:	heimdal-devel}
 BuildRequires:	hicolor-icon-theme
 %{?with_system_jsoncpp:BuildRequires:	jsoncpp-devel}
+%{?with_system_libxvnctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
 BuildRequires:	libevent-devel
+%{?with_system_libexif:BuildRequires:	libexif-devel >= 1:0.6.21}
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
 BuildRequires:	libicu-devel >= 4.6
 %{!?with_libjpegturbo:BuildRequires:	libjpeg-devel}
 %{?with_libjpegturbo:BuildRequires:	libjpeg-turbo-devel >= 1.2.0}
+%{?with_system_libmtp:BuildRequires:	libmtp-devel >= 1.1.3}
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
 %{?with_system_libvpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
-%{?with_system_libxvnctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
 %{?with_system_minizip:BuildRequires:	minizip-devel}
-%{?with_system_libexif:BuildRequires:	libexif-devel >= 1:0.6.21}
-%{?with_system_libmtp:BuildRequires:	libmtp-devel >= 1.1.3}
-%{?with_system_opus:BuildRequires:	opus-devel >= 1.0.2}
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
+%{?with_system_opus:BuildRequires:	opus-devel >= 1.0.2}
 BuildRequires:	pam-devel
 BuildRequires:	pango-devel
 BuildRequires:	perl-modules
