@@ -18,7 +18,7 @@ if [ -z "$VERSION" ]; then
 	exit 1
 fi
 
-# don't use .xz for beta channels, annooying if unpacks that slowly
+# don't use .xz for beta channels, annoying if unpacks that slowly
 if [ "$CHANNEL" = "stable" ]; then
 	EXT=xz
 else
@@ -85,6 +85,7 @@ echo "$svnver" > build/LASTCHANGE.in
 cd ../..
 
 tarball=$PACKAGE_NAME-$VERSION.tar.$EXT
+# xz -9 OOM's on carme
 XZ_OPT=-e8 tar -cf $tarball --$EXT $PACKAGE_NAME-$VERSION
 ls -lh $tarball
 
@@ -100,7 +101,6 @@ mv $LOGFILE $DIST_DIR
 
 rm -rf $TMP_DIR
 
-set -x
 # create diff patches
 BASEVER=${VERSION%.*}.0
 if [ -e $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT ]; then
@@ -109,7 +109,6 @@ if [ -e $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT ]; then
 	sh -x $WORK_DIR/make-diff-patch.sh $base $current
 	mv $PACKAGE_NAME-$VERSION.patch.$EXT $DIST_DIR
 fi
-set +x
 
 # try updating spec and build it as well
 if [ -x $WORK_DIR/update-source.sh ]; then
