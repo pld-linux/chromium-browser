@@ -14,6 +14,7 @@
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
 %bcond_with		system_ffmpeg	# system ffmpeg instead of ffmpegsumo
+%bcond_with		system_harfbuzz	# system harfbuzz
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -69,7 +70,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.22
+Release:	0.23
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.gz
@@ -125,6 +126,7 @@ BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
 BuildRequires:	gtk+2-devel
+%{?with_system_harfbuzz:BuildRequires:	harfbuzz-devel}
 %{?with_kerberos:BuildRequires:	heimdal-devel}
 BuildRequires:	hicolor-icon-theme
 %{?with_system_jsoncpp:BuildRequires:	jsoncpp-devel}
@@ -370,6 +372,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{gyp_with pulseaudio} \
 	%{gyp_with system_ffmpeg} \
 	%{gyp_with system_flac} \
+	%{gyp_with system_harfbuzz} \
 	%{gyp_with system_libexif} \
 	%{gyp_with system_libmtp} \
 	%{gyp_with system_libusb} \
