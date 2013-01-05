@@ -351,7 +351,6 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1 -Dproprietary_codecs=1} \
-	-Dremove_webcore_debug_symbols=1 \
 	-Dinclude_tests=0 \
 %if %{with nacl}
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
