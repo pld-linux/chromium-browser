@@ -2,7 +2,6 @@
 # Conditional build:
 %bcond_without	cups			# with cups
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
-%bcond_without	ffmpegsumo		# build with ffmpegsumo
 %bcond_without	gconf			# with GConf
 %bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
@@ -14,6 +13,7 @@
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
+%bcond_with		system_ffmpeg	# system ffmpeg instead of ffmpegsumo
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -47,7 +47,6 @@
 # - check system sqlite linking problems
 # - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
-# - use_system_ffmpeg && build_ffmpegsumo
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
@@ -120,6 +119,7 @@ BuildRequires:	bzip2-devel
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	dbus-glib-devel
 BuildRequires:	expat-devel
+%{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 1.0}
 %{?with_system_flac:BuildRequires:	flac-devel >= 1.2.1-7}
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
@@ -350,10 +350,8 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{!?debug:-Dwerror=} \
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
-	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
-	-Dffmpeg_branding=Chrome \
+	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1 -Dffmpeg_branding=Chrome -Dproprietary_codecs=1} \
 	-Dremove_webcore_debug_symbols=1 \
-	-Dproprietary_codecs=1 \
 	-Dinclude_tests=0 \
 %if %{with nacl}
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
@@ -373,6 +371,7 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
+	%{gyp_with system_ffmpeg} \
 	%{gyp_with system_flac} \
 	%{gyp_with system_libexif} \
 	%{gyp_with system_libmtp} \
