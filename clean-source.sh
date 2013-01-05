@@ -1,6 +1,8 @@
 #!/bin/sh
 set -xe
 
+export LC_ALL=C
+
 # import options
 # remove everything unless it's remove has been disabled with "0"
 # "v8=0" means "do not remove v8"
