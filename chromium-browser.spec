@@ -69,7 +69,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.21
+Release:	0.22
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.gz
@@ -422,7 +422,7 @@ cp -a *.pak locales resources $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
-%if %{with ffmpegsumo}
+%if %{without system_ffmpeg}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
@@ -508,7 +508,7 @@ fi
 %attr(4555,root,root) %{_libdir}/%{name}/chromium-sandbox
 
 # ffmpeg libs
-%if %{with ffmpegsumo}
+%if %{without system_ffmpeg}
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
 %endif
 
