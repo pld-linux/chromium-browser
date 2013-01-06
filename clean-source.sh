@@ -370,19 +370,16 @@ clean_third_party() {
 		\! -path 'third_party/ffmpeg/*' \
 		\! -path 'third_party/flac/flac.h' \
 		\! -path 'third_party/flot/*' \
-		\! -path 'third_party/gpsd/*' \
 		\! -path 'third_party/harfbuzz-ng/*' \
 		\! -path 'third_party/harfbuzz/*' \
 		\! -path 'third_party/hunspell/*' \
 		\! -path 'third_party/hyphen/*' \
 		\! -path 'third_party/iccjpeg/*' \
-		\! -path 'third_party/jsoncpp/*' \
 		\! -path 'third_party/khronos/*' \
 		\! -path 'third_party/leveldatabase/*' \
 		\! -path 'third_party/libXNVCtrl/*' \
 		\! -path 'third_party/libjingle/*' \
 		\! -path 'third_party/libphonenumber/*' \
-		\! -path 'third_party/libsrtp/*' \
 		\! -path 'third_party/libusb/libusb.h' \
 		\! -path 'third_party/libva/*' \
 		\! -path 'third_party/libvpx/libvpx.h' \
@@ -391,29 +388,23 @@ clean_third_party() {
 		\! -path 'third_party/lss/*' \
 		\! -path 'third_party/mesa/*' \
 		\! -path 'third_party/modp_b64/*' \
-		\! -path 'third_party/mongoose/*' \
 		\! -path 'third_party/mt19937ar/*' \
 		\! -path 'third_party/npapi/*' \
-		\! -path 'third_party/openmax/*' \
 		\! -path 'third_party/opus/opus.h*' \
 		\! -path 'third_party/ots/*' \
 		\! -path 'third_party/protobuf/*' \
-		\! -path 'third_party/pywebsocket/*' \
 		\! -path 'third_party/qcms/*' \
 		\! -path 'third_party/re2/*' \
-		\! -path 'third_party/scons-2.0.1/*' \
 		\! -path 'third_party/sfntly/*' \
 		\! -path 'third_party/skia/*' \
 		\! -path 'third_party/smhasher/*' \
 		\! -path 'third_party/speex/speex.h' \
 		\! -path 'third_party/sqlite/*' \
 		\! -path 'third_party/tcmalloc/*' \
-		\! -path 'third_party/tlslite/*' \
 		\! -path 'third_party/trace-viewer/*' \
 		\! -path 'third_party/undoview/*' \
 		\! -path 'third_party/v8-i18n/*' \
 		\! -path 'third_party/v8/*' \
-		\! -path 'third_party/webdriver/*' \
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/widevine/*' \
 		-print -delete
