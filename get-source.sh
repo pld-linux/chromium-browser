@@ -113,7 +113,7 @@ if [ -e $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT ]; then
 	base=$(readlink -f $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT)
 	current=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.$EXT
 	sh -x $WORK_DIR/make-diff-patch.sh $base $current
-	mv $PACKAGE_NAME-$VERSION.patch.$EXT $DIST_DIR
+	mv $PACKAGE_NAME-$VERSION.patch.xz $DIST_DIR
 fi
 
 # try updating spec and build it as well
