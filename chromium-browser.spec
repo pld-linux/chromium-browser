@@ -31,7 +31,7 @@
 %bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
-%bcond_with		tcmalloc		# use tcmalloc
+%bcond_without	tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
 %if %{with nacl}
@@ -70,7 +70,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	24.0.1312.45
-Release:	0.23
+Release:	0.24
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.gz
@@ -104,6 +104,7 @@ Patch23:	no-pnacl.patch
 Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
+Patch27:	tcmalloc-glibc2.16.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -262,6 +263,7 @@ cd src
 %patch19 -p1
 %patch22 -p1
 %patch25 -p1
+%patch27 -p1
 cd ..
 %patch18 -p1
 %patch23 -p1
