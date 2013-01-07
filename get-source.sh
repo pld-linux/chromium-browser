@@ -46,13 +46,17 @@ LOGFILE=$TMP_DIR/$PACKAGE_NAME-$VERSION.log
 (
 cd "$TMP_DIR"
 srctarball=$PACKAGE_NAME-$VERSION.tar.bz2
-wget -c -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
+if [ "$CHANNEL" = "dev" ]; then
+	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION-lite.tar.bz2"
+else
+	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
+fi
 
 # repackage cleaned up tarball
 test -d $PACKAGE_NAME-$VERSION || {
-	tar xjf $srctarball
+	tar xjvf $srctarball
 	install -d $PACKAGE_NAME-$VERSION
-	# relocate to src dir (needed  to workaround some gyp bug)
+	# relocate to src dir (needed to workaround some gyp bug)
 	mv chromium-$VERSION $PACKAGE_NAME-$VERSION/src
 }
 
@@ -71,7 +75,9 @@ else
 	v8=0
 fi
 
-sh -x $WORK_DIR/clean-source.sh v8=$v8 protobuf=0
+if [ "$CHANNEL" != "dev" ]; then
+	sh -x $WORK_DIR/clean-source.sh v8=$v8 protobuf=0
+fi
 
 # do not keep REMOVED*.txt in tarball. they are visible in .log anyway
 rm -vf REMOVED-*.txt
