@@ -20,31 +20,13 @@ eval "$@"
 remove_nonessential_dirs() {
 	local dir
 	for dir in \
-	native_client/documentation \
-	third_party/webdriver/pylib/docs \
-	third_party/mesa/MesaLib/src/gallium/docs \
-	third_party/mesa/MesaLib/docs \
-	third_party/tcmalloc/vendor/doc \
-	third_party/leveldatabase/src/doc \
-	third_party/re2/doc \
-	third_party/WebKit/Source/WebKit/qt/docs \
-	third_party/WebKit/Source/WebKit/gtk/docs \
-	third_party/WebKit/Source/JavaScriptCore/docs \
-	third_party/ffmpeg/doc \
-	third_party/hyphen/doc \
-	third_party/sqlite/src/doc \
-	ppapi/c/documentation \
-	ppapi/cpp/documentation \
-	gpu/command_buffer/docs \
-	chrome/browser/extensions/docs \
-		\
 	android_webview \
-	third_party/mesa/MesaLib/docs \
 	ash/resources/default_100_percent/cros_ \
 	ash/resources/default_200_percent/cros_ \
 	ash/system/chromeos \
 	base/android \
 	base/chromeos \
+	base/ios \
 	base/mac_ \
 	base/win_ \
 	breakpad/src/client/mac \
@@ -70,6 +52,7 @@ remove_nonessential_dirs() {
 	chrome/browser/chromeos/cros \
 	chrome/browser/chromeos_ \
 	chrome/browser/component/web_contents_delegate_android_ \
+	chrome/browser/extensions/docs \
 	chrome/browser/history/android \
 	chrome/browser/mac \
 	chrome/browser/resources/about_welcome_android \
@@ -106,8 +89,10 @@ remove_nonessential_dirs() {
 	data \
 	gears \
 	google_update \
+	gpu/command_buffer/docs \
 	gpu/demos \
 	media/audio/android \
+	media/audio/ios \
 	media/audio/mac \
 	media/audio/win \
 	media/base/android \
@@ -115,6 +100,7 @@ remove_nonessential_dirs() {
 	media/video/capture/win \
 	media/webm/chromeos \
 	native_client/build/mac \
+	native_client/documentation \
 	native_client/src/include/win_ \
 	native_client/src/shared/imc/win \
 	native_client/src/shared/platform/win \
@@ -130,6 +116,8 @@ remove_nonessential_dirs() {
 	o3d \
 	o3d/documentation \
 	o3d/samples \
+	ppapi/c/documentation \
+	ppapi/cpp/documentation \
 	ppapi/native_client/src/trusted/plugin/win \
 	remoting/host/installer/mac \
 	remoting/host/installer/win \
@@ -139,8 +127,10 @@ remove_nonessential_dirs() {
 	rlz/mac \
 	rlz/win \
 	sandbox/win_ \
+	sdch/ios \
 	sdch/mac \
 	skia/config/win \
+	third_party/WebKit/Source/JavaScriptCore/docs \
 	third_party/WebKit/Source/Platform/chromium/public/android \
 	third_party/WebKit/Source/Platform/chromium/public/mac \
 	third_party/WebKit/Source/Platform/chromium/public/win \
@@ -170,6 +160,7 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebCore/platform/graphics/surfaces/mac \
 	third_party/WebKit/Source/WebCore/platform/graphics/surfaces/win \
 	third_party/WebKit/Source/WebCore/platform/graphics/win \
+	third_party/WebKit/Source/WebCore/platform/ios \
 	third_party/WebKit/Source/WebCore/platform/mac \
 	third_party/WebKit/Source/WebCore/platform/network/android \
 	third_party/WebKit/Source/WebCore/platform/network/mac \
@@ -191,7 +182,9 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebKit/chromium/src/android \
 	third_party/WebKit/Source/WebKit/chromium/src/mac \
 	third_party/WebKit/Source/WebKit/chromium/src/win \
+	third_party/WebKit/Source/WebKit/gtk/docs \
 	third_party/WebKit/Source/WebKit/mac \
+	third_party/WebKit/Source/WebKit/qt/docs \
 	third_party/WebKit/Source/WebKit/win \
 	third_party/WebKit/Source/WebKit2/Platform/CoreIPC/mac \
 	third_party/WebKit/Source/WebKit2/Platform/CoreIPC/win \
@@ -253,15 +246,18 @@ remove_nonessential_dirs() {
 	third_party/ffmpeg/chromium/config/Chromium/mac \
 	third_party/ffmpeg/chromium/config/Chromium/win \
 	third_party/ffmpeg/chromium/include/win \
+	third_party/ffmpeg/doc \
 	third_party/fuzzymatch \
 	third_party/gles2_book \
 	third_party/gles_book_examples \
 	third_party/gold \
 	third_party/hunspell/dictionaries \
 	third_party/hunspell_dictionaries \
+	third_party/hyphen/doc \
 	third_party/icu/android \
 	third_party/icu/mac \
 	third_party/lcov \
+	third_party/leveldatabase/src/doc \
 	third_party/leveldatabase/src/port/win \
 	third_party/libjpeg_turbo/mac \
 	third_party/libjpeg_turbo/win \
@@ -270,6 +266,9 @@ remove_nonessential_dirs() {
 	third_party/libvpx/source/config/win \
 	third_party/libxml/mac \
 	third_party/lighttpd \
+	third_party/mesa/MesaLib/docs \
+	third_party/mesa/MesaLib/docs \
+	third_party/mesa/MesaLib/src/gallium/docs \
 	third_party/mozc/chrome/chromeos_ \
 	third_party/nspr \
 	third_party/nss \
@@ -277,23 +276,31 @@ remove_nonessential_dirs() {
 	third_party/openssl/config/android \
 	third_party/pthread \
 	third_party/pyftpdlib \
+	third_party/re2/doc \
 	third_party/scons \
 	third_party/simplejson \
 	third_party/skia/include/utils/android \
+	third_party/skia/include/utils/ios \
 	third_party/skia/include/utils/mac \
 	third_party/skia/include/utils/win \
 	third_party/skia/include/views/android \
 	third_party/skia/src/gpu/gl/android \
 	third_party/skia/src/gpu/gl/mac \
 	third_party/skia/src/gpu/gl/win \
+	third_party/skia/src/utils/ios \
 	third_party/skia/src/utils/mac \
 	third_party/skia/src/utils/win \
+	third_party/skia/src/views/ios \
 	third_party/skia/src/views/mac \
 	third_party/skia/src/views/win \
 	third_party/snappy/mac \
+	third_party/sqlite/src/doc \
+	third_party/tcmalloc/vendor/doc \
 	third_party/tcmalloc_ \
 	third_party/vc_80 \
+	third_party/webdriver/pylib/docs \
 	third_party/webrtc/modules/audio_device/android \
+	third_party/webrtc/modules/audio_device/ios \
 	third_party/webrtc/modules/audio_device/main/source/mac \
 	third_party/webrtc/modules/audio_device/main/source/win \
 	third_party/webrtc/modules/audio_device/win \
@@ -334,6 +341,7 @@ almost_strip_dirs() {
 	local dir
 	for dir in \
 		breakpad \
+		build/ios \
 		courgette \
 		third_party/cros_dbus_cplusplus \
 		; do
@@ -441,7 +449,7 @@ strip_system_dirs() {
 }
 
 # remove test data and files
-# some scanned with find -name tests -o -name test -o -name test_data
+# some scanned with find -name tests -o -name test -o -name test_data -o name testdata
 # and find -iname *test*
 remove_tests() {
 	local dir
@@ -453,13 +461,18 @@ remove_tests() {
 	breakpad/src/client/windows/tests \
 	breakpad/src/common/linux/tests \
 	breakpad/src/common/tests \
+	cc/test \
 	chrome/browser/chromeos/bluetooth/test \
 	chrome/browser/component_updater/test \
+	chrome/browser/extensions/api/test_ \
 	chrome/browser/printing/cloud_print/test \
 	chrome/browser/resources/gaia_auth/test \
 	chrome/browser/resources/tracing/tests \
 	chrome/browser/sync/test \
+	chrome/browser/ui/cocoa/test \
+	chrome/browser/ui/gtk/test \
 	chrome/browser/ui/tests \
+	chrome/browser/ui/views/test \
 	chrome/installer/test \
 	chrome/test/chromeos \
 	chrome/test/data/firefox2_nss_mac \
@@ -467,19 +480,32 @@ remove_tests() {
 	chrome/test/logging/win \
 	chrome/test/pyautolib/chromeos \
 	chrome/test/webdriver/test \
+	chrome/test_ \
 	chrome/tools/test \
 	chrome_frame/test \
 	chrome_frame/tools/test \
 	content/browser/worker_host/test \
+	content/common/gpu/testdata \
 	content/public/test \
 	content/test \
 	courgette/testdata \
+	device/bluetooth/test \
+	device/test \
 	gpu/command_buffer/tests \
 	media/test \
 	media/tools/layout_tests/test_data \
+	native_client/buildbot \
+	native_client/src/shared/platform/testdata \
+	native_client/src/trusted/gio/testdata \
+	native_client/src/trusted/interval_multiset/testdata \
 	native_client/src/trusted/service_runtime/testdata \
+	native_client/src/trusted/validator/x86/decoder/generator/testdata \
 	native_client/src/trusted/validator/x86/testing \
+	native_client/src/trusted/validator_arm/testdata \
+	native_client/src/trusted/validator_mips/testdata \
+	native_client/src/trusted/validator_x86/testdata \
 	native_client/tests \
+	native_client/tools/testdata \
 	native_client/tools/tests \
 	native_client_sdk/src/build_tools/tests \
 	native_client_sdk/src/libraries/c_salt/test \
@@ -493,6 +519,7 @@ remove_tests() {
 	sandbox/linux/tests \
 	sandbox/tests \
 	sandbox/win/tests \
+	sdch/open-vcdiff/testdata \
 	seccompsandbox/tests \
 	sync/internal_api/public/test \
 	sync/internal_api/test \
@@ -533,6 +560,7 @@ remove_tests() {
 	third_party/WebKit/Tools/TestWebKitAPI/win \
 	third_party/angle/tests \
 	third_party/cacheinvalidation/files/src/google/cacheinvalidation/test \
+	third_party/cacheinvalidation/src/google/cacheinvalidation/test \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing/android \
 	third_party/ffmpeg/tests \
@@ -541,14 +569,17 @@ remove_tests() {
 	third_party/hyphen/tests \
 	third_party/libexif/sources/test \
 	third_party/libjingle/source/talk/app/webrtc/test \
+	third_party/libjingle/source/talk/media/testdata \
 	third_party/libphonenumber/src/resources/test \
 	third_party/libphonenumber/src/test \
 	third_party/libsrtp/srtp/crypto/test \
 	third_party/libsrtp/srtp/test \
+	third_party/libyuv/unit_test/testdata \
 	third_party/mesa/MesaLib/src/gallium/tests \
 	third_party/openssl/openssl/crypto/des/t/test \
 	third_party/openssl/openssl/test \
 	third_party/ots/test \
+	third_party/protobuf/src/google/protobuf/testdata \
 	third_party/protobuf/src/google/protobuf/testing \
 	third_party/re2/re2/testing \
 	third_party/safe_browsing/testing \
@@ -560,12 +591,17 @@ remove_tests() {
 	third_party/tcmalloc/vendor/src/tests \
 	third_party/tlslite/test \
 	third_party/trace-viewer/test_data \
+	third_party/trace-viewer/third_party/pywebsocket/src/test \
+	third_party/trace-viewer/third_party/pywebsocket/src/test/testdata \
 	third_party/v8-i18n/tests \
 	third_party/webdriver/pylib/test \
 	third_party/webdriver/test_data \
 	third_party/webrtc/modules/audio_device/test/android \
 	third_party/webrtc/modules/audio_processing/test/android \
+	third_party/webrtc/modules/utility/test \
 	third_party/webrtc/modules/video_capture/main/test/android \
+	third_party/webrtc/system_wrappers/test \
+	third_party/webrtc/test \
 	third_party/webrtc/test/testsupport/mac \
 	third_party/webrtc/video_engine/test/android \
 	third_party/webrtc/video_engine/test/auto_test/android \
@@ -591,9 +627,12 @@ remove_tests() {
 	third_party/yasm/source/patched-yasm/modules/preprocs/raw/tests \
 	third_party/yasm/source/patched-yasm/tools/python-yasm/tests \
 	tools/clang/plugins/tests \
+	tools/grit/grit/testdata \
 	tools/gyp/test \
+	tools/gyp/tools/emacs/testdata \
 	tools/page_cycler/webpagereplay/tests \
 	tools/perf_expectations/tests \
+	tools/swarm_client/tests \
 	ui/app_list/test \
 	ui/aura/test \
 	ui/base/test \
@@ -602,6 +641,7 @@ remove_tests() {
 	ui/test \
 	ui/views/test \
 	v8/test \
+	webkit/compositor_bindings/test \
 	webkit/data/layout_tests \
 	webkit/plugins/npapi/test \
 	webkit/tools/test/reference_build \
@@ -612,10 +652,33 @@ remove_tests() {
 
 	# partial remove (keep .gyp)
 	for dir in \
+		chrome/browser/nacl_host/test \
 		chrome/test/data \
 		testing \
+		third_party/webrtc/modules/audio_coding/codecs/cng/test \
+		third_party/webrtc/modules/audio_coding/codecs/g711/test \
+		third_party/webrtc/modules/audio_coding/codecs/g722/test \
+		third_party/webrtc/modules/audio_coding/codecs/ilbc/test \
+		third_party/webrtc/modules/audio_coding/codecs/isac/fix/test \
+		third_party/webrtc/modules/audio_coding/codecs/isac/main/test \
+		third_party/webrtc/modules/audio_coding/main/test \
+		third_party/webrtc/modules/audio_coding/neteq/test \
+		third_party/webrtc/modules/audio_conference_mixer/test \
+		third_party/webrtc/modules/audio_device/test \
+		third_party/webrtc/modules/audio_processing/test \
+		third_party/webrtc/modules/rtp_rtcp/test \
+		third_party/webrtc/modules/udp_transport/test \
+		third_party/webrtc/modules/video_capture/main/test \
+		third_party/webrtc/modules/video_coding/codecs/test \
+		third_party/webrtc/modules/video_coding/codecs/vp8/test \
+		third_party/webrtc/modules/video_coding/main/test \
+		third_party/webrtc/modules/video_processing/main/test \
+		third_party/webrtc/modules/video_render/main/test \
+		third_party/webrtc/video_engine/test \
+		third_party/webrtc/voice_engine/test \
+		tools/json_schema_compiler/test \
 		; do
-		find $dir -depth -mindepth 1 '!' '(' -name '*.gyp' -o -name '*.gypi' ')' -print -delete
+		find $dir -depth -mindepth 1 '!' '(' -name '*.gyp' -o -name '*.gypi' ')' -print -delete || :
 	done
 
 	# link headers from system dir. too many files to patch, we don't even build tests
@@ -627,10 +690,10 @@ remove_tests() {
 		-print -delete
 }
 
-remove_nonessential_dirs | tee -a REMOVED-nonessential_dirs.txt
-almost_strip_dirs | tee -a REMOVED-stripped.txt
-remove_bin_only | tee -a REMOVED-bin_only.txt
-remove_tests | tee -a REMOVED-tests.txt
+remove_nonessential_dirs > REMOVED-nonessential_dirs.txt
+almost_strip_dirs > REMOVED-stripped.txt
+remove_bin_only > REMOVED-bin_only.txt
+remove_tests > REMOVED-tests.txt
 
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
@@ -655,9 +718,9 @@ strip_system_dirs \
 	third_party/yasm \
 	third_party/zlib \
 	v8 \
-| tee -a REMOVED-system_dirs.txt
+> REMOVED-system_dirs.txt
 
-clean_third_party | tee -a REMOVED-third_party.txt
+clean_third_party > REMOVED-third_party.txt
 
 if [ "${v8:-1}" != "0" ]; then
 	# The implementation files include v8 headers with full path,
@@ -673,4 +736,9 @@ if [ "${nacl:-1}" != "0" ]; then
 fi
 
 # cleanup empty dirs
-find -type d -print0 | sort -zr | xargs -0 rmdir -v --ignore-fail-on-non-empty | tee -a REMOVED-dirs.txt
+find -type d '!' -name '.' -print0 | sort -zr | xargs -0 rmdir --ignore-fail-on-non-empty > REMOVED-dirs.txt
+
+# report what's in them
+for a in REMOVED-*.txt; do
+	cat $a
+done
