@@ -125,6 +125,7 @@ BuildRequires:	flex
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
+BuildRequires:	gtest-devel
 BuildRequires:	gtk+2-devel
 %{?with_system_harfbuzz:BuildRequires:	harfbuzz-devel}
 %{?with_kerberos:BuildRequires:	heimdal-devel}
