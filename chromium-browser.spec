@@ -308,7 +308,7 @@ install -d native_client/toolchain/linux_x86_newlib/x86_64-nacl/{bin,lib,lib32,n
 
 cd native_client/toolchain/linux_x86_newlib/x86_64-nacl/bin
 __cc='%{__cc}'
-if [ "${__cc}#ccache}" != "$__cc" ]; then
+if [ "${__cc#ccache}" != "$__cc" ]; then
 	echo 'exec ccache %{_bindir}/x86_64-nacl-gcc "$@"' > gcc
 	echo 'exec ccache %{_bindir}/x86_64-nacl-g++ "$@"' > g++
 	%{__sed} -i -e '1i#!/bin/sh' gcc g++
