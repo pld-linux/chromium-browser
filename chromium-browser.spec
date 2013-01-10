@@ -56,7 +56,7 @@
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
 # - space considerations:
-#   - unpacked sources: ~644MiB
+#   - unpacked sources: ~574MiB
 #   - built code: ~1.4GiB (x86_64/i686)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
@@ -69,7 +69,7 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	24.0.1312.49
+Version:	24.0.1312.52
 Release:	0.24
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
