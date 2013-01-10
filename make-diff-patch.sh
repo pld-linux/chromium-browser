@@ -2,7 +2,6 @@
 # Create .patch based on $1 for $2
 src=$1
 dst=$2
-ext=.tar.xz
 
 unpack() {
 	case "$1" in
@@ -25,8 +24,8 @@ done
 
 set -e
 
-srcdir=$(basename $src $ext)
-dstdir=$(basename $dst $ext)
+srcdir=$(basename ${src%.tar.*})
+dstdir=$(basename ${dst%.tar.*})
 patch=$dstdir.patch
 
 test -d $srcdir || unpack $src

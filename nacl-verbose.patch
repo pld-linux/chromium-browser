@@ -1,0 +1,20 @@
+--- chromium-browser-24.0.1312.45/src/native_client/./build/untrusted.gypi~	2013-01-02 00:58:54.000000000 +0200
++++ chromium-browser-24.0.1312.45/src/native_client/./build/untrusted.gypi	2013-01-02 10:47:58.194832395 +0200
+@@ -67,7 +67,7 @@
+           'build_newlib': 0,
+           'build_glibc': 0,
+           'disable_glibc%': 0,
+-          'extra_args': [],
++          'extra_args': ['--verbose'],
+           'enable_x86_32': 1,
+           'enable_x86_64': 1,
+           'extra_deps_newlib64': [],
+@@ -112,7 +112,7 @@
+           'build_newlib': 0,
+           'build_glibc': 0,
+           'disable_glibc%': 1,
+-          'extra_args': [],
++          'extra_args': ['--verbose'],
+           'enable_arm': 1,
+           'extra_deps_newlib_arm': [],
+           'lib_dirs_newlib_arm': [],

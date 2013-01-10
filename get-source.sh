@@ -18,7 +18,13 @@ if [ -z "$VERSION" ]; then
 	exit 1
 fi
 
-VERSION_FILE=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.xz
+# don't use .xz for beta channels, annoying if unpacks that slowly
+if [ "$CHANNEL" = "stable" ]; then
+	EXT=xz
+else
+	EXT=gz
+fi
+VERSION_FILE=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.$EXT
 
 if [ -e $VERSION_FILE -a -z "$FORCE" ]; then
 	# nothing to update
@@ -40,13 +46,17 @@ LOGFILE=$TMP_DIR/$PACKAGE_NAME-$VERSION.log
 (
 cd "$TMP_DIR"
 srctarball=$PACKAGE_NAME-$VERSION.tar.bz2
-wget -c -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
+if [ "$CHANNEL" = "dev" ]; then
+	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION-lite.tar.bz2"
+else
+	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
+fi
 
 # repackage cleaned up tarball
 test -d $PACKAGE_NAME-$VERSION || {
-	tar xjf $srctarball
+	tar xjvf $srctarball
 	install -d $PACKAGE_NAME-$VERSION
-	# relocate to src dir (needed  to workaround some gyp bug)
+	# relocate to src dir (needed to workaround some gyp bug)
 	mv chromium-$VERSION $PACKAGE_NAME-$VERSION/src
 }
 
@@ -65,7 +75,13 @@ else
 	v8=0
 fi
 
-sh -x $WORK_DIR/clean-source.sh v8=$v8 libxml=0 zlib=0
+if [ "$CHANNEL" != "dev" ]; then
+	sh -x $WORK_DIR/clean-source.sh v8=$v8 protobuf=0
+fi
+
+# do not keep REMOVED*.txt in tarball. they are visible in .log anyway
+rm -vf REMOVED-*.txt
+
 du -sh .
 
 # add LASTCHANGE info, take "branch_revision" item
@@ -74,8 +90,9 @@ echo "$svnver" > build/LASTCHANGE.in
 
 cd ../..
 
-tarball=$PACKAGE_NAME-$VERSION.tar.xz
-tar -cf $tarball --xz $PACKAGE_NAME-$VERSION
+tarball=$PACKAGE_NAME-$VERSION.tar.$EXT
+# xz -9 OOM's on carme
+XZ_OPT=-e8 tar -cf $tarball --$EXT $PACKAGE_NAME-$VERSION
 ls -lh $tarball
 
 rm -rf $PACKAGE_NAME-$VERSION
@@ -89,6 +106,15 @@ chmod 644 $LOGFILE
 mv $LOGFILE $DIST_DIR
 
 rm -rf $TMP_DIR
+
+# create diff patches
+BASEVER=${VERSION%.*}.0
+if [ -e $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT ]; then
+	base=$(readlink -f $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT)
+	current=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.$EXT
+	sh -x $WORK_DIR/make-diff-patch.sh $base $current
+	mv $PACKAGE_NAME-$VERSION.patch.xz $DIST_DIR
+fi
 
 # try updating spec and build it as well
 if [ -x $WORK_DIR/update-source.sh ]; then

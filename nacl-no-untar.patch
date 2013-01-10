@@ -1,117 +1,6 @@
---- chromium-browser-23.0.1271.64/src/native_client/tools.gyp~	2012-11-11 16:04:58.000000000 +0200
-+++ chromium-browser-23.0.1271.64/src/native_client/tools.gyp	2012-11-11 16:06:02.252718808 +0200
-@@ -35,7 +35,7 @@
-         'disable_pnacl%': 0,
-       },
-       'conditions': [
--        ['disable_newlib==0', {
-+        ['disable_newlib==0 and disable_newlib_untar==0', {
-           'actions': [
-             {
-               'action_name': 'Untar newlib',
-@@ -58,7 +58,7 @@
-             },
-           ]
-         }],
--        ['disable_glibc==0', {
-+        ['disable_glibc==0 and disable_glibc_untar==0', {
-           'actions': [
-             {
-               'action_name': 'Untar glibc',
-@@ -81,7 +81,7 @@
-             },
-           ]
-         }],
--        ['disable_pnacl==0', {
-+        ['disable_pnacl==0 and disable_pnacl_untar==0', {
-           'actions': [
-             {
-               'action_name': 'Untar pnacl',
---- chromium-browser-23.0.1271.64/src/native_client/build/untrusted.gypi~	2012-11-11 16:04:58.000000000 +0200
-+++ chromium-browser-23.0.1271.64/src/native_client/build/untrusted.gypi	2012-11-11 16:19:15.369299822 +0200
-@@ -168,7 +168,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_newlib64)',
-                     '>(source_list_newlib64)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
-                  ],
-                  'outputs': ['>(out_newlib64)'],
-                  'action': [
-@@ -209,7 +208,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_newlib64)',
-                     '>(source_list_newlib64)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
-                  ],
-                  'outputs': ['>(out_newlib64)'],
-                  'action': [
-@@ -250,7 +248,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_newlib32)',
-                     '>(source_list_newlib32)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
-                  ],
-                  'outputs': ['>(out_newlib32)'],
-                  'action': [
-@@ -291,7 +288,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_newlib32)',
-                     '>(source_list_newlib32)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
-                  ],
-                  'outputs': ['>(out_newlib32)'],
-                  'action': [
-@@ -424,7 +420,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_glibc64)',
-                     '>(source_list_glibc64)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_glibc/stamp.untar',
-                  ],
-                  'outputs': ['>(out_glibc64)'],
-                  'action': [
-@@ -465,7 +460,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_glibc32)',
-                     '>(source_list_glibc32)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_glibc/stamp.untar',
-                  ],
-                  'outputs': ['>(out_glibc32)'],
-                  'action': [
-@@ -506,7 +500,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_glibc64)',
-                     '>(source_list_glibc64)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_glibc/stamp.untar',
-                  ],
-                  'outputs': ['>(out_glibc64)'],
-                  'action': [
-@@ -547,7 +540,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_glibc32)',
-                     '>(source_list_glibc32)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_glibc/stamp.untar',
-                  ],
-                  'outputs': ['>(out_glibc32)'],
-                  'action': [
-@@ -588,7 +580,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_glibc64)',
-                     '>(source_list_glibc64)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
-                  ],
-                  'outputs': ['>(out_glibc64)'],
-                  'action': [
-@@ -629,7 +620,6 @@
-                     '>!@pymod_do_main(>(get_sources) >(sources) >(_sources))',
-                     '>@(extra_deps_glibc32)',
-                     '>(source_list_glibc32)',
--                    '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/stamp.untar',
-                  ],
-                  'outputs': ['>(out_glibc32)'],
-                  'action': [
---- chromium-browser-23.0.1271.64/src/native_client/build/untrusted.gypi~	2012-11-11 16:54:53.000000000 +0000
-+++ chromium-browser-23.0.1271.64/src/native_client/build/untrusted.gypi	2012-11-11 17:00:51.043248254 +0000
-@@ -173,7 +173,7 @@
+--- chromium-browser-24.0.1312.14/./src/native_client/build/untrusted.gypi~	2012-11-14 04:37:51.000000000 +0200
++++ chromium-browser-24.0.1312.14/./src/native_client/build/untrusted.gypi	2012-11-16 22:01:20.476042441 +0200
+@@ -162,7 +162,7 @@
                   'action': [
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
@@ -120,7 +9,7 @@
                     '>@(extra_args)',
                     '--arch', 'x86-64',
                     '--build', 'newlib_nexe',
-@@ -213,7 +213,7 @@
+@@ -203,7 +203,7 @@
                   'action': [
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
@@ -129,7 +18,7 @@
                     '>@(extra_args)',
                     '--arch', 'x86-64',
                     '--build', 'newlib_nlib',
-@@ -253,7 +253,7 @@
+@@ -244,7 +244,7 @@
                   'action': [
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
@@ -138,7 +27,7 @@
                     '>@(extra_args)',
                     '--arch', 'x86-32',
                     '--build', 'newlib_nexe',
-@@ -293,7 +293,7 @@
+@@ -285,7 +285,7 @@
                   'action': [
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
@@ -147,7 +36,7 @@
                     '>@(extra_args)',
                     '--arch', 'x86-32',
                     '--build', 'newlib_nlib',
-@@ -339,7 +339,7 @@
+@@ -331,7 +331,7 @@
                  'action': [
                    '>(python_exe)',
                    '<(DEPTH)/native_client/build/build_nexe.py',
@@ -156,7 +45,7 @@
                    '>@(extra_args)',
                    '--arch', 'arm',
                    '--build', 'newlib_nexe',
-@@ -379,7 +379,7 @@
+@@ -371,7 +371,7 @@
                  'action': [
                    '>(python_exe)',
                    '<(DEPTH)/native_client/build/build_nexe.py',
@@ -165,7 +54,7 @@
                    '>@(extra_args)',
                    '--arch', 'arm',
                    '--build', 'newlib_nlib',
-@@ -425,7 +425,7 @@
+@@ -418,7 +418,7 @@
                   'action': [
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
@@ -174,7 +63,7 @@
                     '>@(extra_args)',
                     '--arch', 'x86-64',
                     '--build', 'glibc_nexe',
-@@ -465,7 +465,7 @@
+@@ -459,7 +459,7 @@
                   'action': [
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
@@ -183,7 +72,7 @@
                     '>@(extra_args)',
                     '--arch', 'x86-32',
                     '--build', 'glibc_nexe',
-@@ -505,7 +505,7 @@
+@@ -500,7 +500,7 @@
                   'action': [
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
@@ -192,7 +81,7 @@
                     '>@(extra_args)',
                     '--arch', 'x86-64',
                     '--build', 'glibc_nlib',
-@@ -545,7 +545,7 @@
+@@ -541,7 +541,7 @@
                   'action': [
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
@@ -201,7 +90,7 @@
                     '>@(extra_args)',
                     '--arch', 'x86-32',
                     '--build', 'glibc_nlib',
-@@ -586,7 +586,7 @@
+@@ -583,7 +583,7 @@
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
                     '>@(extra_args)',
@@ -210,7 +99,7 @@
                     '--arch', 'x86-64',
                     '--build', 'glibc_nso',
                     '--root', '<(DEPTH)',
-@@ -626,7 +626,7 @@
+@@ -624,7 +624,7 @@
                     '>(python_exe)',
                     '<(DEPTH)/native_client/build/build_nexe.py',
                     '>@(extra_args)',
@@ -219,3 +108,179 @@
                     '--arch', 'x86-32',
                     '--build', 'glibc_nso',
                     '--root', '<(DEPTH)',
+@@ -702,7 +702,7 @@
+             'action': [
+               '>(python_exe)',
+               '<(DEPTH)/native_client/build/build_nexe.py',
+-              '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++              '-t', '<(DEPTH)/native_client/toolchain/',
+               '>@(extra_args)',
+               '--arch', 'pnacl',
+               '--build', 'newlib_pexe',
+@@ -743,7 +743,7 @@
+             'action': [
+               '>(python_exe)',
+               '<(DEPTH)/native_client/build/build_nexe.py',
+-              '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++              '-t', '<(DEPTH)/native_client/toolchain/',
+               '>@(extra_args)',
+               '--arch', 'pnacl',
+               '--build', 'newlib_plib',
+--- chromium-browser-24.0.1312.45/src/native_client/tools.gyp~	2012-12-19 10:04:23.000000000 +0200
++++ chromium-browser-24.0.1312.45/src/native_client/tools.gyp	2013-01-01 23:40:30.933802957 +0200
+@@ -44,6 +44,17 @@
+         'pnacl_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_pnacl',
+       },
+       'conditions': [
++        # create stamp.untar that build system depends on
++        ['disable_newlib==0 and disable_newlib_untar==1', {
++          'actions': [
++           {
++              'action_name': 'Touch newlib',
++              'outputs': ['>(newlib_dir)/stamp.untar'],
++              'inputs': [], # input is required. so let it be empty
++              'action': ['touch', '<@(_outputs)'],
++          },
++          ],
++        }],
+         ['disable_newlib==0 and disable_newlib_untar==0', {
+           'actions': [
+             {
+--- chromium-browser-24.0.1312.45/src/native_client/build/untrusted.gypi	2013-01-01 23:08:43.214443900 +0200
++++ chromium-browser-24.0.1312.45-almost-there/src/native_client/build/untrusted.gypi	2013-01-01 22:50:53.863859341 +0200
+@@ -142,6 +142,8 @@
+              'variables': {
+                 'tool_name': 'newlib',
+                 'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++# make semaphore.h visible for base/shared_memory_nacl.cc compilation
++				'newlib_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/x86_64-nacl',
+                 'out_newlib64%': '<(PRODUCT_DIR)/>(nexe_target)_newlib_x64.nexe',
+                 'objdir_newlib64%': '>(INTERMEDIATE_DIR)/<(tool_name)-x86-64/>(_target_name)',
+                 'source_list_newlib64%': '<(tool_name)-x86-64.>(_target_name).source_list.gypcmd',
+@@ -169,11 +171,14 @@
+                    '--root', '<(DEPTH)',
+                    '--name', '>(out_newlib64)',
+                    '--objdir', '>(objdir_newlib64)',
+-                   '--include-dirs=<(inst_dir)/include ^(include_dirs) >(_include_dirs)',
++# FIXED
++                   '--include-dirs=<(inst_dir)/include ^(include_dirs) <(newlib_dir)/include >(_include_dirs)',
+                    '--lib-dirs=>(lib_dirs_newlib64) ',
+                    '--compile_flags=-m64 ^(newlib_tls_flags) ^(gcc_compile_flags) >(_gcc_compile_flags) ^(compile_flags) >(_compile_flags)',
+                    '--defines=^(defines) >(_defines)',
+-                   '--link_flags=-B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib64 ^(link_flags) >(_link_flags)',
++# -B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib64
++# ./src/out/Release/obj/gen/sdk/toolchain/linux_x86_newlib/x86_64-nacl/lib/crt1.o
++                   '--link_flags=-B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib64 -B<(newlib_dir)/lib ^(link_flags) >(_link_flags)',
+                    '--source-list=^|(<(source_list_newlib64) ^(_sources) ^(sources))',
+                  ],
+                },
+@@ -183,6 +188,8 @@
+              'variables': {
+                 'tool_name': 'newlib',
+                 'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++# make semaphore.h visible for base/shared_memory_nacl.cc compilation
++				'newlib_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/x86_64-nacl',
+                 'objdir_newlib64%': '>(INTERMEDIATE_DIR)/<(tool_name)-x86-64/>(_target_name)',
+                 'source_list_newlib64%': '<(tool_name)-x86-64.>(_target_name).source_list.gypcmd',
+                 'out_newlib64%': '<(SHARED_INTERMEDIATE_DIR)/tc_<(tool_name)/lib64/>(nlib_target)',
+@@ -210,7 +217,19 @@
+                    '--root', '<(DEPTH)',
+                    '--name', '>(out_newlib64)',
+                    '--objdir', '>(objdir_newlib64)',
+-                   '--include-dirs=<(inst_dir)/include ^(include_dirs) >(_include_dirs)',
++#XXX
++#glen@carme-pld src/base $ find .. -name semaphore.h
++#../native_client/src/untrusted/pthread/semaphore.h
++#../native_client_sdk/src/libraries/third_party/pthreads-win32/semaphore.h
++#../out/Release/obj/gen/sdk/toolchain/linux_x86_newlib/x86_64-nacl/include/semaphore.h
++#../out/Release/obj/gen/sdk/toolchain/linux_x86_pnacl/newlib/sdk/include/include/semaphore.h
++#
++#-I/home/users/glen/rpm/packages/chromium-browser/autoupdate/beta/BU
++#ILD/chromium-browser-24.0.1312.45/src/out/Release/obj/gen/tc_newlib/include
++#                'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++#				'newlib_dir__': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib',
++
++                   '--include-dirs=<(inst_dir)/include ^(include_dirs) <(newlib_dir)/include >(_include_dirs)',
+                    '--lib-dirs=>(lib_dirs_newlib64) ',
+                    '--compile_flags=-m64 ^(newlib_tls_flags) ^(gcc_compile_flags) >(_gcc_compile_flags) ^(compile_flags) >(_compile_flags)',
+                    '--defines=^(defines) >(_defines)',
+@@ -224,6 +243,8 @@
+              'variables': {
+                 'tool_name': 'newlib',
+                 'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++# make semaphore.h visible for base/shared_memory_nacl.cc compilation
++				'newlib_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/x86_64-nacl',
+                 'out_newlib32%': '<(PRODUCT_DIR)/>(nexe_target)_newlib_x32.nexe',
+                 'objdir_newlib32%': '>(INTERMEDIATE_DIR)/<(tool_name)-x86-32/>(_target_name)',
+                 'source_list_newlib32%': '<(tool_name)-x86-32.>(_target_name).source_list.gypcmd',
+@@ -251,11 +272,12 @@
+                    '--root', '<(DEPTH)',
+                    '--name', '>(out_newlib32)',
+                    '--objdir', '>(objdir_newlib32)',
+-                   '--include-dirs=<(inst_dir)/include ^(include_dirs) >(_include_dirs)',
++# FIXED
++                   '--include-dirs=<(inst_dir)/include ^(include_dirs) <(newlib_dir)/include >(_include_dirs)',
+                    '--lib-dirs=>(lib_dirs_newlib32)',
+                    '--compile_flags=-m32 ^(newlib_tls_flags) ^(gcc_compile_flags) >(_gcc_compile_flags) ^(compile_flags) >(_compile_flags)',
+                    '--defines=^(defines) >(_defines)',
+-                   '--link_flags=-m32 -B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib32 ^(link_flags) >(_link_flags)',
++                   '--link_flags=-m32 -B<(SHARED_INTERMEDIATE_DIR)/tc_newlib/lib32 -B<(newlib_dir)/lib ^(link_flags) >(_link_flags)',
+                    '--source-list=^|(<(source_list_newlib32) ^(_sources) ^(sources))',
+                  ],
+                },
+@@ -265,6 +287,8 @@
+              'variables': {
+                 'tool_name': 'newlib',
+                 'inst_dir': '<(SHARED_INTERMEDIATE_DIR)/tc_newlib',
++# make semaphore.h visible for base/shared_memory_nacl.cc compilation
++				'newlib_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_newlib/x86_64-nacl',
+                 'out_newlib32%': '<(SHARED_INTERMEDIATE_DIR)/tc_<(tool_name)/lib32/>(nlib_target)',
+                 'objdir_newlib32%': '>(INTERMEDIATE_DIR)/<(tool_name)-x86-32/>(_target_name)',
+                 'source_list_newlib32%': '<(tool_name)-x86-32.>(_target_name).source_list.gypcmd',
+@@ -292,7 +316,8 @@
+                    '--root', '<(DEPTH)',
+                    '--name', '>(out_newlib32)',
+                    '--objdir', '>(objdir_newlib32)',
+-                   '--include-dirs=<(inst_dir)/include ^(include_dirs) >(_include_dirs)',
++# FIXED
++                   '--include-dirs=<(inst_dir)/include ^(include_dirs) <(newlib_dir)/include >(_include_dirs)',
+                    '--lib-dirs=>(lib_dirs_newlib32)',
+                    '--compile_flags=-m32 ^(newlib_tls_flags) ^(gcc_compile_flags) >(_gcc_compile_flags) ^(compile_flags) >(_compile_flags)',
+                    '--defines=^(defines) >(_defines)',
+#--- /home/users/glen/rpm/packages/chromium-browser/autoupdate/beta/BUILD/chromium-browser-24.0.1312.45/src/native_client/src/untrusted/nacl/nacl.gyp	2012-12-19 10:03:43.000000000 +0200
+#+++ ../../../chromium-browser-24.0.1312.45-almost-there/src/native_client/src/untrusted/nacl/nacl.gyp	2013-01-01 22:26:15.004609235 +0200
+#@@ -94,7 +94,7 @@
+#         'nlib_target': 'libnacl.a',
+#         'build_glibc': 0,
+#         'build_newlib': 1,
+#-        'build_pnacl_newlib': 1,
+#+        'build_pnacl_newlib': 0,
+#       },
+#       'sources': [
+#         '<@(sources_for_nacl_extensions)',
+#--- chromium-browser-24.0.1312.45/src/native_client/tools.gyp~	2012-12-19 10:04:23.000000000 +0200
+#+++ chromium-browser-24.0.1312.45/src/native_client/tools.gyp	2013-01-01 17:22:30.098261613 +0200
+#@@ -134,7 +134,6 @@
+#               'msvs_cygwin_shell': 0,
+#               'description': 'Prep newlib',
+#               'inputs': [
+#-                 '<(newlib_dir)/stamp.untar',
+#                  '>!@pymod_do_main(prep_nacl_sdk --inputs --tool newlib)',
+#               ],
+#               'outputs': ['<(newlib_dir)/stamp.prep'],
+#@@ -154,7 +153,6 @@
+#               'msvs_cygwin_shell': 0,
+#               'description': 'Prep glibc',
+#               'inputs': [
+#-                 '<(glibc_dir)/stamp.untar',
+#                  '>!@pymod_do_main(prep_nacl_sdk --inputs --tool glibc)',
+#               ],
+#               'outputs': ['<(glibc_dir)/stamp.prep'],
+#@@ -174,7 +172,6 @@
+#               'msvs_cygwin_shell': 0,
+#               'description': 'Prep pnacl',
+#               'inputs': [
+#-                 '<(pnacl_dir)/stamp.untar',
+#                  '>!@pymod_do_main(prep_nacl_sdk --inputs --tool pnacl)',
+#               ],
+#               'outputs': ['<(pnacl_dir)/stamp.prep'],

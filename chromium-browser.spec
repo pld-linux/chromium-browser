@@ -2,7 +2,6 @@
 # Conditional build:
 %bcond_without	cups			# with cups
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
-%bcond_without	ffmpegsumo		# build with ffmpegsumo
 %bcond_without	gconf			# with GConf
 %bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
@@ -14,19 +13,25 @@
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
+%bcond_with		system_ffmpeg	# system ffmpeg instead of ffmpegsumo
+%bcond_with		system_harfbuzz	# system harfbuzz
 %bcond_without	system_jsoncpp	# system jsoncpp
+%bcond_without	system_libexif	# system libexif
+%bcond_without	system_libmtp	# system libmtp
 %bcond_without	system_libusb	# system libusb-1
 %bcond_without	system_libwebp	# system libwebp
+%bcond_without	system_libxnvctrl	# system libxnvctrl
+%bcond_without	system_minizip	# system minizip
+%bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
+%bcond_with		system_protobuf	# system protobuf
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
-%bcond_without	system_srtp		# system srtp (can be used if using bundled libjingle)
+%bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
-%bcond_without	system_vpx		# system vpx
+%bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
-# system zlib disabled because of mixed-source.patch
-# https://code.google.com/p/chromium/issues/detail?id=143623
-%bcond_with		system_zlib		# system zlib
-%bcond_with		tcmalloc		# use tcmalloc
+%bcond_without	system_zlib		# system zlib
+%bcond_without	tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
 %if %{with nacl}
@@ -43,7 +48,6 @@
 # - check system sqlite linking problems
 # - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
-# - use_system_ffmpeg && build_ffmpegsumo
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
@@ -52,8 +56,8 @@
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
 # - space considerations:
-#   - unpacked sources: ~800MiB
-#   - built code: ~1.4GiB (x86_64)
+#   - unpacked sources: ~574MiB
+#   - built code: ~1.4GiB (x86_64/i686)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
@@ -62,14 +66,14 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
-%define		branch		23.0.1271
-%define		basever		64
-%define		patchver	97
+%define		branch		24.0.1312
+%define		basever		52
+#define		patchver	%{nil}
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	%{branch}.%{patchver}
-Release:	2
+Version:	%{branch}.%{!?patchver:%{basever}}%{?patchver}
+Release:	0.24
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -86,28 +90,28 @@ Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
-#Patch10:		system-libs.patch
 Patch1:		plugin-searchdirs.patch
-Patch2:		gyp-system-minizip.patch
+#Patch2:		system-nspr.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 Patch4:		path-libpdf.patch
-Patch5:		options-support.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 Patch9:		chromium-ppapi.patch
+Patch10:	system-libxnvctrl.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
-Patch17:	system-icu.patch
 Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
-Patch20:	system-speex.patch
-Patch21:	system-srtp.patch
-Patch22:	gnome3-volume-control.patch
-Patch23:	master-prefs-path.patch
+Patch22:	pulse_fix-157876.patch
+Patch23:	no-pnacl.patch
+Patch24:	nacl-verbose.patch
+Patch25:	gnome3-volume-control.patch
+Patch26:	master-prefs-path.patch
+Patch27:	tcmalloc-glibc2.16.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 BuildRequires:	OpenGL-GLU-devel
@@ -122,36 +126,44 @@ BuildRequires:	bzip2-devel
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	dbus-glib-devel
 BuildRequires:	expat-devel
+%{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 1.0}
 %{?with_system_flac:BuildRequires:	flac-devel >= 1.2.1-7}
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
+BuildRequires:	gtest-devel
 BuildRequires:	gtk+2-devel
+%{?with_system_harfbuzz:BuildRequires:	harfbuzz-devel}
 %{?with_kerberos:BuildRequires:	heimdal-devel}
 BuildRequires:	hicolor-icon-theme
 %{?with_system_jsoncpp:BuildRequires:	jsoncpp-devel}
+%{?with_system_libxvnctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
 BuildRequires:	libevent-devel
+%{?with_system_libexif:BuildRequires:	libexif-devel >= 1:0.6.21}
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
 BuildRequires:	libicu-devel >= 4.6
 %{!?with_libjpegturbo:BuildRequires:	libjpeg-devel}
 %{?with_libjpegturbo:BuildRequires:	libjpeg-turbo-devel >= 1.2.0}
+%{?with_system_libmtp:BuildRequires:	libmtp-devel >= 1.1.3}
 BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
-%{?with_system_vpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
+%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
-BuildRequires:	minizip-devel
+%{?with_system_minizip:BuildRequires:	minizip-devel}
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
+%{?with_system_opus:BuildRequires:	opus-devel >= 1.0.2}
 BuildRequires:	pam-devel
 BuildRequires:	pango-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
+%{?with_system_protobuf:BuildRequires:	protobuf-devel}
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
@@ -160,7 +172,7 @@ BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 BuildRequires:	sqlite3-devel >= 3.6.1
-%{?with_system_srtp:BuildRequires:	srtp-devel >= 1.4.4}
+%{?with_system_libsrtp:BuildRequires:	srtp-devel >= 1.4.4}
 BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel
@@ -178,7 +190,7 @@ Requires:	desktop-file-utils
 %{?with_system_flac:Requires:	flac >= 1.2.1-7}
 Requires:	hicolor-icon-theme
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
-%{?with_system_vpx:Requires:	libvpx >= 0.9.5-2}
+%{?with_system_libvpx:Requires:	libvpx >= 0.9.5-2}
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
@@ -251,27 +263,26 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} src
 
-#%patch10 -p1
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 %patch6 -p1
 %patch7 -p1
 %patch15 -p1
 cd src
 %patch9 -p0
+#%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch16 -p1
-%patch17 -p0
 %patch19 -p1
-%patch21 -p1
 %patch22 -p1
+%patch25 -p1
+%patch27 -p1
 cd ..
 %patch18 -p1
-%patch20 -p1
 %patch23 -p1
+%patch24 -p1
+%patch26 -p1
 
 cd src
 
@@ -294,29 +305,24 @@ cat > chrome/test/data/nacl/nacl_test_data.gyp <<-EOF
 }
 EOF
 
-sh -x clean-source.sh %{!?with_system_v8:v8=0} %{!?with_nacl:nacl=0} libxml=0 %{!?with_system_zlib:zlib=0}
-
-rm -rf native_client/toolchain/linux_x86_newlib
+sh -x clean-source.sh \
+	%{!?with_nacl:nacl=0} \
+	%{!?with_system_protobuf:protobuf=0} \
+	%{!?with_system_v8:v8=0} \
+	%{!?with_system_zlib:zlib=0} \
+	%{nil}
 
 %build
 cd src
 
 %if %{with nacl}
 if [ ! -d native_client/toolchain/linux_x86_newlib ]; then
-# Make symlinks for nacl
-cd native_client/toolchain
-install -d linux_x86_newlib/x86_64-nacl/bin
-install -d linux_x86_newlib/x86_64-nacl/lib
-install -d linux_x86_newlib/x86_64-nacl/lib32
-install -d linux_x86_newlib/x86_64-nacl/nacl/include/bits
-install -d linux_x86_newlib/x86_64-nacl/nacl/include/machine
-install -d linux_x86_newlib/x86_64-nacl/nacl/include/sys
-# link newlib toolchain to glibc as well, see gentoo bug #417019
-#ln -s linux_x86_newlib linux_x86
-cd linux_x86_newlib/x86_64-nacl/bin
+# Make symlinks for NaCL
+install -d native_client/toolchain/linux_x86_newlib/x86_64-nacl/{bin,lib,lib32,nacl}
 
+cd native_client/toolchain/linux_x86_newlib/x86_64-nacl/bin
 __cc='%{__cc}'
-if [ "${__cc}#ccache}" != "$__cc" ]; then
+if [ "${__cc#ccache}" != "$__cc" ]; then
 	echo 'exec ccache %{_bindir}/x86_64-nacl-gcc "$@"' > gcc
 	echo 'exec ccache %{_bindir}/x86_64-nacl-g++ "$@"' > g++
 	%{__sed} -i -e '1i#!/bin/sh' gcc g++
@@ -325,23 +331,19 @@ else
 	ln -s %{_bindir}/x86_64-nacl-gcc gcc
 	ln -s %{_bindir}/x86_64-nacl-g++ g++
 fi
-
 ln -s %{_bindir}/x86_64-nacl-ar ar
 ln -s %{_bindir}/x86_64-nacl-as as
 ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
 ln -s %{_bindir}/x86_64-nacl-strip x86-64-nacl-strip
 ln -s %{_bindir}/x86_64-nacl-strip strip
-ln -s %{_prefix}/x86_64-nacl/lib/*.a ../lib/
-ln -s %{_prefix}/x86_64-nacl/lib/32/*.a ../lib32/
-cd ../nacl/include
-for i in $(find %{_prefix}/x86_64-nacl/include -type f | grep -v "c++"); do
-	ln -s $i ${i#%{_prefix}/x86_64-nacl/include/}
-done
-cd ../../../../../..
+ln -s %{_prefix}/x86_64-nacl/lib/*.a ../lib
+ln -s %{_prefix}/x86_64-nacl/lib/32/*.a ../lib32
+ln -s %{_prefix}/x86_64-nacl/include ../nacl/include
+cd ../../../../..
 fi
 %endif
 
-test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} Makefile
+test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
 test -e Makefile || %{__python} build/gyp_chromium \
 	--format=make \
 	-Goutput_dir=../out \
@@ -362,37 +364,46 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	%{!?debug:-Dwerror=} \
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
-	-Dbuild_ffmpegsumo=%{?with_ffmpegsumo:1}%{!?with_ffmpegsumo:0} \
-	-Dffmpeg_branding=Chrome \
-	-Dremove_webcore_debug_symbols=1 \
-	-Dproprietary_codecs=1 \
+	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1 -Dproprietary_codecs=1} \
+	-Dinclude_tests=0 \
 %if %{with nacl}
-	-Ddisable_glibc=1 \
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
 	-Ddisable_glibc_untar=1 \
 	-Ddisable_newlib_untar=1 \
-	-Ddisable_pnacl_untar=1 \
+	-Ddisable_glibc=1 \
+	-Ddisable_pnacl=1 \
+	-Dbuild_pnacl_newlib=0 \
 %else
+	-Ddisable_pnacl_untar=1 \
 	-Ddisable_nacl=1 \
 %endif
-	-Ddisable_pnacl=1 \
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
 	%{gyp_with cups} \
-	%{gyp_with gconf} \
+	%{gyp_with gconf} -Dlinux_link_gsettings=0 \
 	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
+	%{gyp_with system_ffmpeg} \
 	%{gyp_with system_flac} \
+	%{gyp_with system_harfbuzz} \
+	%{gyp_with system_libexif} \
+	%{gyp_with system_libmtp} \
+	%{gyp_with system_libsrtp} \
 	%{gyp_with system_libusb} \
+	%{gyp_with system_libvpx} \
 	%{gyp_with system_libwebp} \
+	%{gyp_with system_libxnvctrl} \
+	%{gyp_with system_minizip} \
+	%{gyp_with system_opus} \
+	%{gyp_with system_protobuf} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
-	%{gyp_with system_vpx} \
 	%{gyp_with system_yasm} \
 	%{gyp_with system_zlib} \
 	-Duse_system_bzip2=1 \
+	-Duse_system_expat=1 \
 	-Duse_system_icu=1 \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
@@ -429,7 +440,7 @@ cp -a *.pak locales resources $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
-%if %{with ffmpegsumo}
+%if %{without system_ffmpeg}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
@@ -515,7 +526,7 @@ fi
 %attr(4555,root,root) %{_libdir}/%{name}/chromium-sandbox
 
 # ffmpeg libs
-%if %{with ffmpegsumo}
+%if %{without system_ffmpeg}
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
 %endif
 
