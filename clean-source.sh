@@ -14,7 +14,7 @@ eval "$@"
 # also removed non-linux files: find -name win -o -name mac -o name android
 # find -type d -name 'android' -o -name 'chromeos' -o -name 'cros'
 # find -type d -name *doc*
-
+# find -type d -name *example*
 # suffix with _ those that we can't remove (just yet) because of the gclient
 # hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
@@ -23,6 +23,7 @@ remove_nonessential_dirs() {
 	android_webview \
 	ash/resources/default_100_percent/cros_ \
 	ash/resources/default_200_percent/cros_ \
+	ash/shell/cocoa \
 	ash/system/chromeos \
 	base/android \
 	base/chromeos \
@@ -62,6 +63,7 @@ remove_nonessential_dirs() {
 	chrome/browser/resources/shared/css/chromeos \
 	chrome/browser/resources/shared/js/chromeos_ \
 	chrome/browser/ui/android \
+	chrome/browser/ui/cocoa \
 	chrome/browser/ui/webui/chromeos \
 	chrome/browser/ui/webui/ntp/android \
 	chrome/browser/ui/webui/options/chromeos \
@@ -69,6 +71,8 @@ remove_nonessential_dirs() {
 	chrome/common/mac \
 	chrome/installer/mac \
 	chrome/installer/mac/third_party/xz/config/mac \
+	chrome/third_party/jstemplate/tutorial_examples \
+	chrome/third_party/mock4js/examples \
 	chrome/third_party/wtl/ \
 	chrome/tools/build/chromeos \
 	chrome/tools/build/mac \
@@ -124,6 +128,7 @@ remove_nonessential_dirs() {
 	remoting/host/mac \
 	remoting/host/setup/win \
 	remoting/host/win \
+	rlz/examples \
 	rlz/mac \
 	rlz/win \
 	sandbox/win_ \
@@ -153,8 +158,10 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebCore/platform/android \
 	third_party/WebKit/Source/WebCore/platform/audio/mac \
 	third_party/WebKit/Source/WebCore/platform/cf/win \
+	third_party/WebKit/Source/WebCore/platform/cocoa \
 	third_party/WebKit/Source/WebCore/platform/graphics/ca/mac \
 	third_party/WebKit/Source/WebCore/platform/graphics/ca/win \
+	third_party/WebKit/Source/WebCore/platform/graphics/cocoa \
 	third_party/WebKit/Source/WebCore/platform/graphics/gpu/mac \
 	third_party/WebKit/Source/WebCore/platform/graphics/mac \
 	third_party/WebKit/Source/WebCore/platform/graphics/surfaces/mac \
@@ -185,6 +192,7 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebKit/gtk/docs \
 	third_party/WebKit/Source/WebKit/mac \
 	third_party/WebKit/Source/WebKit/qt/docs \
+	third_party/WebKit/Source/WebKit/qt/examples \
 	third_party/WebKit/Source/WebKit/win \
 	third_party/WebKit/Source/WebKit2/Platform/CoreIPC/mac \
 	third_party/WebKit/Source/WebKit2/Platform/CoreIPC/win \
@@ -259,6 +267,7 @@ remove_nonessential_dirs() {
 	third_party/lcov \
 	third_party/leveldatabase/src/doc \
 	third_party/leveldatabase/src/port/win \
+	third_party/libjingle/source/talk/examples \
 	third_party/libjpeg_turbo/mac \
 	third_party/libjpeg_turbo/win \
 	third_party/libva/va/android \
@@ -297,6 +306,8 @@ remove_nonessential_dirs() {
 	third_party/sqlite/src/doc \
 	third_party/tcmalloc/vendor/doc \
 	third_party/tcmalloc_ \
+	third_party/trace-viewer/examples \
+	third_party/trace-viewer/third_party/pywebsocket/src/example \
 	third_party/vc_80 \
 	third_party/webdriver/pylib/docs \
 	third_party/webrtc/modules/audio_device/android \
@@ -320,12 +331,14 @@ remove_nonessential_dirs() {
 	tools/win \
 	tools/wine_valgrind \
 	ui/android \
+	ui/base/cocoa \
 	ui/base/ime/win \
 	ui/base/win_ \
 	ui/gfx/android \
 	ui/gfx/mac \
 	ui/resources/default_100_percent/cros_ \
 	ui/resources/default_200_percent/cros_ \
+	ui/views/examples \
 	ui/views/win \
 	webkit/chromeos \
 	webkit/media/android \
@@ -686,8 +699,16 @@ remove_tests() {
 	ln -s /usr/include/gtest testing/gtest/include/gtest
 
 	# delete unittest files
-	find -name '*_unittest.*' \
-		-print -delete
+	find . '(' \
+		-name '*_unittest*.*' \
+		-name '*_unittest.*' \
+		-o -name '*_test.*' \
+	')' '!' -name '*.gyp*' \
+		'!' -path './native_client/src/trusted/service_runtime/env_cleanser_test.h' \
+		'!' -path './chrome/browser/diagnostics/diagnostics_test.*' \
+		'!' -path './chrome/test/perf/perf_test.*' \
+		'!' -path './chrome/test/perf/browser_perf_test.*' \
+	-print -delete
 }
 
 remove_nonessential_dirs > REMOVED-nonessential_dirs.txt
