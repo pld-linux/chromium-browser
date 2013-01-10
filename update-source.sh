@@ -20,7 +20,6 @@ dir=$(pwd)
 # extract version components from url
 # exports: $version; $release; $svndate; $svnver
 extract_version() {
-	set -x
 	local url=$1 part
 
 	part=${url#${pkg}[_-]}
@@ -28,7 +27,7 @@ extract_version() {
 		# ubuntu urls
 		version=${part%~*}; part=${part#*${version}~}
 	else
-		version=${part%.tar.xz}; part=${part#*${version}.tar.xz}
+		version=${part%.tar.*}; part=${part#*${version}.tar.*}
 	fi
 
 	# release always 1 :)
@@ -40,6 +39,8 @@ extract_version() {
 		svndate='%{nil}'
 	fi
 	svnver=${part#r}; svnver=${svnver%%.*}
+
+	: version=$version release=$release svnver=$svnver
 }
 
 url2version() {
