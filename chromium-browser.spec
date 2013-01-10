@@ -71,7 +71,7 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	25.0.1364.5
+Version:	25.0.1364.26
 Release:	0.24
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
