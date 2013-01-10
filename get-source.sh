@@ -47,7 +47,7 @@ LOGFILE=$TMP_DIR/$PACKAGE_NAME-$VERSION.log
 cd "$TMP_DIR"
 srctarball=$PACKAGE_NAME-$VERSION.tar.bz2
 if [ "$CHANNEL" = "dev" ]; then
-	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION-lite.tar.bz2"
+	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
 else
 	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
 fi
