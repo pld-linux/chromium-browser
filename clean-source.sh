@@ -33,7 +33,7 @@ remove_nonessential_dirs() {
 	breakpad/src/common/android \
 	breakpad/src/common/mac \
 	breakpad/src/tools/mac \
-	build/android \
+	build/android_ \
 	build/mac \
 	build/win \
 	chrome/android \
@@ -74,7 +74,7 @@ remove_nonessential_dirs() {
 	chrome/tools/build/mac \
 	chrome/tools/build/win \
 	chrome_frame \
-	chromeos \
+	chromeos_ \
 	cloud_print/service/win \
 	cloud_print/virtual_driver/win \
 	content/app/android \
@@ -352,15 +352,19 @@ almost_strip_dirs() {
 		'!' -iname '*.gyp*' \
 		'!' -path 'tools/build/*' \
 		'!' -path 'tools/clang/scripts/plugin_flags.sh' \
+		'!' -path 'tools/generate_library_loader/*' \
+		'!' -path 'tools/generate_shim_headers/generate_shim_headers.py' \
 		'!' -path 'tools/generate_stubs/*' \
 		'!' -path 'tools/grit/*' \
 		'!' -path 'tools/gritsettings/*' \
 		'!' -path 'tools/gyp/*' \
 		'!' -path 'tools/json_comment_eater.py' \
 		'!' -path 'tools/json_schema_compiler/*' \
+		'!' -path 'tools/json_to_struct/*' \
 		'!' -path 'tools/protoc_wrapper/*' \
 		'!' -path 'tools/uuidgen.py' \
 		'!' -path 'tools/zip2msi.py' \
+		'!' -path 'tools/usb_ids/*' \
 		-print -delete
 }
 
@@ -415,6 +419,7 @@ clean_third_party() {
 		\! -path 'third_party/v8/*' \
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/widevine/*' \
+		\! -path 'third_party/usb_ids/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h

@@ -14,7 +14,7 @@
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
 %bcond_with		system_ffmpeg	# system ffmpeg instead of ffmpegsumo
-%bcond_with		system_harfbuzz	# system harfbuzz
+%bcond_without	system_harfbuzz	# system harfbuzz
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -23,7 +23,7 @@
 %bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
-%bcond_with		system_protobuf	# system protobuf
+%bcond_without	system_protobuf	# system protobuf
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
@@ -51,6 +51,8 @@
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
+# - system usb-ids stuff
+# - libpci: link, because xserver loads it anyway
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -69,11 +71,11 @@
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
-Version:	24.0.1312.49
+Version:	25.0.1364.5
 Release:	0.24
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{version}.tar.gz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{version}.tar.gz
 # Source0-md5:	2995d5aa3f1ecb470e60e0984229fcce
 Source1:	%{name}.default
 Source2:	%{name}.sh
@@ -95,11 +97,13 @@ Patch10:	system-libxnvctrl.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
+Patch12:	system-ffmpeg.patch
+Patch13:	system-libpng.patch
+Patch14:	system-opus.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
-Patch22:	pulse_fix-157876.patch
 Patch23:	no-pnacl.patch
 Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
@@ -260,9 +264,11 @@ cd src
 %patch9 -p0
 #%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
+%patch12 -p1
+%patch13 -p0
+%patch14 -p2
 %patch16 -p1
 %patch19 -p1
-%patch22 -p1
 %patch25 -p1
 %patch27 -p1
 cd ..
@@ -303,11 +309,14 @@ sh -x clean-source.sh \
 cd src
 
 %if %{with nacl}
+rm -rf native_client/toolchain/linux_x86_newlib
 if [ ! -d native_client/toolchain/linux_x86_newlib ]; then
 # Make symlinks for NaCL
-install -d native_client/toolchain/linux_x86_newlib/x86_64-nacl/{bin,lib,lib32,nacl}
+install -d native_client/toolchain/linux_x86_newlib/x86_64-nacl/{bin,nacl}
 
-cd native_client/toolchain/linux_x86_newlib/x86_64-nacl/bin
+cd native_client/toolchain/linux_x86_newlib
+ln -s x86_64-nacl/bin bin
+cd x86_64-nacl/bin
 __cc='%{__cc}'
 if [ "${__cc#ccache}" != "$__cc" ]; then
 	echo 'exec ccache %{_bindir}/x86_64-nacl-gcc "$@"' > gcc
@@ -318,13 +327,17 @@ else
 	ln -s %{_bindir}/x86_64-nacl-gcc gcc
 	ln -s %{_bindir}/x86_64-nacl-g++ g++
 fi
+ln -s gcc x86_64-nacl-gcc
+ln -s g++ x86_64-nacl-g++
+ln -s %{_bindir}/x86_64-nacl-ar .
 ln -s %{_bindir}/x86_64-nacl-ar ar
 ln -s %{_bindir}/x86_64-nacl-as as
+ln -s %{_bindir}/x86_64-nacl-ranlib .
 ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
-ln -s %{_bindir}/x86_64-nacl-strip x86-64-nacl-strip
+ln -s %{_bindir}/x86_64-nacl-strip .
 ln -s %{_bindir}/x86_64-nacl-strip strip
-ln -s %{_prefix}/x86_64-nacl/lib/*.a ../lib
-ln -s %{_prefix}/x86_64-nacl/lib/32/*.a ../lib32
+ln -s %{_prefix}/x86_64-nacl/lib ../lib
+ln -s %{_prefix}/x86_64-nacl/lib32 ../lib32
 ln -s %{_prefix}/x86_64-nacl/include ../nacl/include
 cd ../../../../..
 fi
