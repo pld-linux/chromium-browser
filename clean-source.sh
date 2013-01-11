@@ -140,45 +140,59 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/Platform/chromium/public/mac \
 	third_party/WebKit/Source/Platform/chromium/public/win \
 	third_party/WebKit/Source/WTF/wtf/mac \
+	third_party/WebKit/Source/WTF/wtf/qt \
 	third_party/WebKit/Source/WTF/wtf/threads/win \
 	third_party/WebKit/Source/WTF/wtf/win \
 	third_party/WebKit/Source/WebCore/WebCore.gyp/mac \
 	third_party/WebKit/Source/WebCore/accessibility/mac \
+	third_party/WebKit/Source/WebCore/accessibility/qt \
 	third_party/WebKit/Source/WebCore/accessibility/win \
+	third_party/WebKit/Source/WebCore/bridge/qt \
 	third_party/WebKit/Source/WebCore/editing/android \
 	third_party/WebKit/Source/WebCore/editing/mac \
+	third_party/WebKit/Source/WebCore/editing/qt \
 	third_party/WebKit/Source/WebCore/history/android \
 	third_party/WebKit/Source/WebCore/history/mac \
+	third_party/WebKit/Source/WebCore/history/qt \
 	third_party/WebKit/Source/WebCore/loader/mac \
 	third_party/WebKit/Source/WebCore/loader/win \
 	third_party/WebKit/Source/WebCore/page/android \
 	third_party/WebKit/Source/WebCore/page/mac \
+	third_party/WebKit/Source/WebCore/page/qt \
 	third_party/WebKit/Source/WebCore/page/scrolling/mac \
 	third_party/WebKit/Source/WebCore/page/win \
 	third_party/WebKit/Source/WebCore/platform/android \
 	third_party/WebKit/Source/WebCore/platform/audio/mac \
+	third_party/WebKit/Source/WebCore/platform/audio/qt \
 	third_party/WebKit/Source/WebCore/platform/cf/win \
 	third_party/WebKit/Source/WebCore/platform/cocoa \
 	third_party/WebKit/Source/WebCore/platform/graphics/ca/mac \
 	third_party/WebKit/Source/WebCore/platform/graphics/ca/win \
 	third_party/WebKit/Source/WebCore/platform/graphics/cocoa \
 	third_party/WebKit/Source/WebCore/platform/graphics/gpu/mac \
+	third_party/WebKit/Source/WebCore/platform/graphics/gpu/qt \
 	third_party/WebKit/Source/WebCore/platform/graphics/mac \
+	third_party/WebKit/Source/WebCore/platform/graphics/qt \
 	third_party/WebKit/Source/WebCore/platform/graphics/surfaces/mac \
+	third_party/WebKit/Source/WebCore/platform/graphics/surfaces/qt \
 	third_party/WebKit/Source/WebCore/platform/graphics/surfaces/win \
 	third_party/WebKit/Source/WebCore/platform/graphics/win \
 	third_party/WebKit/Source/WebCore/platform/ios \
 	third_party/WebKit/Source/WebCore/platform/mac \
 	third_party/WebKit/Source/WebCore/platform/network/android \
 	third_party/WebKit/Source/WebCore/platform/network/mac \
+	third_party/WebKit/Source/WebCore/platform/network/qt \
 	third_party/WebKit/Source/WebCore/platform/network/win \
+	third_party/WebKit/Source/WebCore/platform/qt \
 	third_party/WebKit/Source/WebCore/platform/text/android \
 	third_party/WebKit/Source/WebCore/platform/text/mac \
+	third_party/WebKit/Source/WebCore/platform/text/qt \
 	third_party/WebKit/Source/WebCore/platform/text/win \
 	third_party/WebKit/Source/WebCore/platform/win \
 	third_party/WebKit/Source/WebCore/platform/wx/wxcode/mac \
 	third_party/WebKit/Source/WebCore/platform/wx/wxcode/win \
 	third_party/WebKit/Source/WebCore/plugins/mac \
+	third_party/WebKit/Source/WebCore/plugins/qt \
 	third_party/WebKit/Source/WebCore/plugins/win \
 	third_party/WebKit/Source/WebKit/chromium/public/android \
 	third_party/WebKit/Source/WebKit/chromium/public/mac_ \
@@ -191,6 +205,7 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebKit/chromium/src/win \
 	third_party/WebKit/Source/WebKit/gtk/docs \
 	third_party/WebKit/Source/WebKit/mac \
+	third_party/WebKit/Source/WebKit/qt \
 	third_party/WebKit/Source/WebKit/qt/docs \
 	third_party/WebKit/Source/WebKit/qt/examples \
 	third_party/WebKit/Source/WebKit/win \
@@ -238,6 +253,7 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebKit2/mac \
 	third_party/WebKit/Source/WebKit2/win \
 	third_party/WebKit/Tools/DumpRenderTree/mac \
+	third_party/WebKit/Tools/DumpRenderTree/qt \
 	third_party/WebKit/Tools/DumpRenderTree/win \
 	third_party/angle/samples/gles2_book \
 	third_party/boost \
@@ -275,7 +291,6 @@ remove_nonessential_dirs() {
 	third_party/libvpx/source/config/win \
 	third_party/libxml/mac \
 	third_party/lighttpd \
-	third_party/mesa/MesaLib/docs \
 	third_party/mesa/MesaLib/docs \
 	third_party/mesa/MesaLib/src/gallium/docs \
 	third_party/mozc/chrome/chromeos_ \

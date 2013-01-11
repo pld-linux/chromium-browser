@@ -58,7 +58,7 @@
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
 # - space considerations:
-#   - unpacked sources: ~574MiB
+#   - unpacked sources: ~566MiB
 #   - built code: ~1.4GiB (x86_64/i686)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
