@@ -713,6 +713,7 @@ remove_tests() {
 		'!' -path './chrome/browser/diagnostics/diagnostics_test.*' \
 		'!' -path './chrome/test/perf/perf_test.*' \
 		'!' -path './chrome/test/perf/browser_perf_test.*' \
+		'!' -path './remoting/base/resources_unittest.*' \
 	-print -delete
 }
 
