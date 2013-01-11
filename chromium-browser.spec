@@ -13,7 +13,7 @@
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
-%bcond_with		system_ffmpeg	# system ffmpeg instead of ffmpegsumo
+%bcond_without	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
 %bcond_without	system_harfbuzz	# system harfbuzz
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
