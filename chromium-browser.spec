@@ -122,6 +122,7 @@ BuildRequires:	bzip2-devel
 %{?with_nacl:BuildRequires:	crossnacl-newlib >= 1.20.0-3}
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	dbus-glib-devel
+BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
 %{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 1.0}
 %{?with_system_flac:BuildRequires:	flac-devel >= 1.2.1-7}
@@ -165,6 +166,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-modules
+BuildRequires:	python-ply
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
