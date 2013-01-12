@@ -34,16 +34,6 @@
 %bcond_without	tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
-%if %{with nacl}
-# temporary hack as seems this does not work: http://codereview.chromium.org/8890043
-# nacl_bootstrap.c:(.text.load_elf_file+0x707): undefined reference to `__stack_chk_fail'
-#14:08:04 @baggins> glen: yes, I added SSP in rpm5, add -lssp to link flags to fix it
-#14:19:42 @baggins> it doesn't hurt to add -lssp here and there, and we'll be a bit more secure
-#14:51:06 @baggins> as-needed will take care of unneeded lib
-#14:52:03 @baggins> -lssp comes with gcc
-%define		_ssp_cflags	%{nil}
-%endif
-
 # TODO
 # - check system sqlite linking problems
 # - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
@@ -346,7 +336,13 @@ fi
 %endif
 
 test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
-test -e Makefile || %{__python} build/gyp_chromium \
+test -e Makefile || \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
+	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
+	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}" \
+%{__python} build/gyp_chromium \
 	--format=make \
 	-Goutput_dir=../out \
 	build/all.gyp \
@@ -417,17 +413,13 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0
 
+# need {CC/CXX/LDFLAGS}.host overrides for v8 build
 %{__make} -r chrome %{?with_sandboxing:chrome_sandbox} \
 	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
 	%{?with_verbose:V=1} \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
 	CC.host="%{__cc}" \
 	CXX.host="%{__cxx}" \
-	LDFLAGS.host="%{rpmldflags}" \
-	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
-	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}"
+	LDFLAGS.host="%{rpmldflags} -fuse-ld=gold" \
 
 %install
 rm -rf $RPM_BUILD_ROOT
