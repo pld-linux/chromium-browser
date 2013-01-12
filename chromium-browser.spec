@@ -251,6 +251,7 @@ ln -s %{SOURCE7} src
 %patch4 -p1
 %patch6 -p1
 %patch7 -p1
+%patch10 -p1
 %patch15 -p1
 cd src
 %patch9 -p0

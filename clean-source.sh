@@ -743,6 +743,7 @@ strip_system_dirs \
 	third_party/flac \
 	third_party/icu \
 	third_party/jsoncpp \
+	third_party/libXNVCtrl \
 	third_party/libevent \
 	third_party/libexif \
 	third_party/libjpeg \
