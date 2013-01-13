@@ -37,6 +37,7 @@ else
 	ls -lh $patch
 	diffstat $patch | tee $patch.diff
 	cat $patch.diff $patch | xz -9 > $patch.xz
+	rm $patch.diff $patch
 fi
 
 rm -rf $dstdir $srcdir
