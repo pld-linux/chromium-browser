@@ -41,7 +41,6 @@
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
-# - system usb-ids stuff
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -160,6 +159,7 @@ BuildRequires:	sqlite3-devel >= 3.6.1
 BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel
+BuildRequires:	usbutils
 BuildRequires:	util-linux
 %{?with_system_v8:BuildRequires:	v8-devel >= 3.7}
 BuildRequires:	which
@@ -372,6 +372,7 @@ test -e Makefile || \
 %endif
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
+	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
 	-Dlinux_link_libpci=1 \
 	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
 	-Dlinux_use_gold_binary=0 \

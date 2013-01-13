@@ -483,7 +483,6 @@ clean_third_party() {
 		\! -path 'third_party/v8/*' \
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/widevine/*' \
-		\! -path 'third_party/usb_ids/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h
