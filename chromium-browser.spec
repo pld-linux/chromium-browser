@@ -101,7 +101,6 @@ Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
-BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -111,12 +110,10 @@ BuildRequires:	bzip2-devel
 %{?with_nacl:BuildRequires:	crossnacl-gcc-c++ >= 4.4.3}
 %{?with_nacl:BuildRequires:	crossnacl-newlib >= 1.20.0-3}
 %{?with_cups:BuildRequires:	cups-devel}
-BuildRequires:	dbus-glib-devel
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
 %{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 1.0}
 %{?with_system_flac:BuildRequires:	flac-devel >= 1.2.1-7}
-BuildRequires:	flex
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
@@ -124,9 +121,8 @@ BuildRequires:	gtest-devel
 BuildRequires:	gtk+2-devel
 %{?with_system_harfbuzz:BuildRequires:	harfbuzz-devel}
 %{?with_kerberos:BuildRequires:	heimdal-devel}
-BuildRequires:	hicolor-icon-theme
 %{?with_system_jsoncpp:BuildRequires:	jsoncpp-devel}
-%{?with_system_libxvnctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
+%{?with_system_libxnvctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
 BuildRequires:	libevent-devel
 %{?with_system_libexif:BuildRequires:	libexif-devel >= 1:0.6.21}
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
@@ -142,13 +138,13 @@ BuildRequires:	libstdc++-devel
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
-BuildRequires:	lzma
 %{?with_system_minizip:BuildRequires:	minizip-devel}
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
 %{?with_system_opus:BuildRequires:	opus-devel >= 1.0.2}
 BuildRequires:	pam-devel
 BuildRequires:	pango-devel
+BuildRequires:	pciutils-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 %{?with_system_protobuf:BuildRequires:	protobuf-devel}
@@ -169,8 +165,6 @@ BuildRequires:	util-linux
 %{?with_system_v8:BuildRequires:	v8-devel >= 3.7}
 BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
-BuildRequires:	xorg-lib-libXt-devel
-BuildRequires:	xorg-lib-libXtst-devel
 BuildRequires:	xz
 %{?with_system_yasm:BuildRequires:	yasm}
 %{?with_system_zlib:BuildRequires:	zlib-devel}
@@ -296,6 +290,7 @@ sh -x clean-source.sh \
 	%{!?with_system_protobuf:protobuf=0} \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_zlib:zlib=0} \
+	%{!?with_system_libxnvctrl:libXNVCtrl=0} \
 	%{nil}
 
 %build
