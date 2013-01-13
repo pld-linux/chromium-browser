@@ -42,7 +42,6 @@
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
 # - system usb-ids stuff
-# - libpci: link, because xserver loads it anyway
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -62,7 +61,7 @@
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
 Version:	25.0.1364.29
-Release:	0.24
+Release:	0.25
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{version}.tar.gz
@@ -373,6 +372,10 @@ test -e Makefile || \
 %endif
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
+	-Dlinux_link_libpci=1 \
+	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
+	-Dlinux_use_gold_binary=0 \
+	-Dlinux_use_gold_flags=0 \
 	%{gyp_with cups} \
 	%{gyp_with gconf} -Dlinux_link_gsettings=0 \
 	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
@@ -405,9 +408,6 @@ test -e Makefile || \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
 	-Duse_system_xdg_utils=1 \
-	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
-	-Dlinux_use_gold_binary=0 \
-	-Dlinux_use_gold_flags=0
 
 # need {CC/CXX/LDFLAGS}.host overrides for v8 build
 %{__make} -r chrome %{?with_sandboxing:chrome_sandbox} \
