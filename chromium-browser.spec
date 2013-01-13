@@ -119,6 +119,7 @@ BuildRequires:	gtest-devel
 BuildRequires:	gtk+2-devel
 %{?with_system_harfbuzz:BuildRequires:	harfbuzz-devel}
 %{?with_kerberos:BuildRequires:	heimdal-devel}
+BuildRequires:	hicolor-icon-theme
 %{?with_system_jsoncpp:BuildRequires:	jsoncpp-devel}
 %{?with_system_libxnvctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
 BuildRequires:	libevent-devel
