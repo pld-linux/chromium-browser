@@ -778,8 +778,10 @@ if [ "${nacl:-1}" != "0" ]; then
 	rm -rf native_client/toolchain/linux_x86_newlib
 fi
 
-# cleanup empty dirs
-find -type d '!' -name '.' -print0 | sort -zr | xargs -0 rmdir --ignore-fail-on-non-empty > REMOVED-dirs.txt
+if [ "${emptydirs:-0}" != "0" ]; then
+	# cleanup empty dirs
+	find -type d '!' -name '.' -print0 | sort -zr | xargs -0 rmdir --ignore-fail-on-non-empty > REMOVED-dirs.txt
+fi
 
 # report what's in them
 for a in REMOVED-*.txt; do

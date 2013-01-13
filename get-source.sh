@@ -76,7 +76,7 @@ else
 fi
 
 if [ "$CHANNEL" != "dev" ]; then
-	sh -x $WORK_DIR/clean-source.sh v8=$v8 protobuf=0
+	sh -x $WORK_DIR/clean-source.sh v8=$v8 emptydirs=1
 fi
 
 # do not keep REMOVED*.txt in tarball. they are visible in .log anyway
