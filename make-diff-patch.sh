@@ -32,6 +32,7 @@ test -d $srcdir || unpack $src
 test -d $dstdir || unpack $dst
 if diff -Nur $srcdir $dstdir > $patch; then
 	echo "No diffs!"
+	rm $patch
 else
 	echo "Patch created"
 	ls -lh $patch
