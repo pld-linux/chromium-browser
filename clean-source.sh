@@ -11,12 +11,13 @@ eval "$@"
 # Strip tarball from some big directories not needed on the linux platform
 # https://code.google.com/p/chromium/wiki/LinuxPackaging
 # initial list from src/tools/export_tarball/export_tarball.py
-# also removed non-linux files: find -name win -o -name mac -o name android
+# also removed non-linux files: find -name win -o -name mac -o name android -o name windows
 # find -type d -name 'android' -o -name 'chromeos' -o -name 'cros'
 # find -type d -name *doc*
 # find -type d -name *example*
 # find -type d -name java
 # find -type d -name tools
+# find -type d -name samples
 # suffix with _ those that we can't remove (just yet) because of the gclient
 # hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
@@ -113,6 +114,7 @@ remove_nonessential_dirs() {
 	media/video/capture/mac \
 	media/video/capture/win \
 	media/webm/chromeos \
+	mesa/MesaLib/src/mesa/drivers/windows \
 	native_client/build/mac \
 	native_client/documentation \
 	native_client/src/include/win_ \
@@ -131,6 +133,7 @@ remove_nonessential_dirs() {
 	net/android \
 	net/tools \
 	net/tools/testserver \
+	npapi/npspy/windows \
 	o3d \
 	o3d/documentation \
 	o3d/samples \
@@ -154,11 +157,16 @@ remove_nonessential_dirs() {
 	sdch/mac \
 	skia/config/win \
 	sync/tools \
+	tcmalloc/chromium/src/windows \
+	tcmalloc/vendor/src/windows \
 	third_party/WebKit/Source/JavaScriptCore/docs \
 	third_party/WebKit/Source/JavaScriptCore/tools \
 	third_party/WebKit/Source/Platform/chromium/public/android \
 	third_party/WebKit/Source/Platform/chromium/public/mac \
 	third_party/WebKit/Source/Platform/chromium/public/win \
+	third_party/WebKit/Source/ThirdParty/gtest/samples \
+	third_party/WebKit/Source/ThirdParty/gyp/samples \
+	third_party/WebKit/Source/ThirdParty/gyp/samples/samples \
 	third_party/WebKit/Source/ThirdParty/gyp/tools \
 	third_party/WebKit/Source/WTF/wtf/mac \
 	third_party/WebKit/Source/WTF/wtf/qt \
@@ -230,6 +238,7 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebKit/qt/docs \
 	third_party/WebKit/Source/WebKit/qt/examples \
 	third_party/WebKit/Source/WebKit/win \
+	third_party/WebKit/Source/WebKit/wx/bindings/python/samples \
 	third_party/WebKit/Source/WebKit2/Platform/CoreIPC/mac \
 	third_party/WebKit/Source/WebKit2/Platform/CoreIPC/win \
 	third_party/WebKit/Source/WebKit2/Platform/mac \
@@ -273,10 +282,12 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebKit2/WebProcess/win \
 	third_party/WebKit/Source/WebKit2/mac \
 	third_party/WebKit/Source/WebKit2/win \
-	third_party/WebKit/Tools_ \
 	third_party/WebKit/Tools/DumpRenderTree/mac \
 	third_party/WebKit/Tools/DumpRenderTree/qt \
 	third_party/WebKit/Tools/DumpRenderTree/win \
+	third_party/WebKit/Tools_ \
+	third_party/angle/extensions \
+	third_party/angle/samples \
 	third_party/angle/samples/gles2_book \
 	third_party/boost \
 	third_party/bsdiff \
@@ -371,6 +382,8 @@ remove_nonessential_dirs() {
 	third_party/yasm/source/config/mac \
 	third_party/yasm/source/config/win \
 	tools/android \
+	tools/gyp/samples \
+	tools/gyp/samples/samples \
 	tools/gyp/tools \
 	tools/mac \
 	tools/site_compare \
@@ -389,10 +402,13 @@ remove_nonessential_dirs() {
 	ui/resources/default_200_percent/cros_ \
 	ui/views/examples \
 	ui/views/win \
+	v8/samples \
 	v8/tools_ \
 	webkit/chromeos \
 	webkit/media/android \
 	webkit/tools_ \
+	webrtc/modules/video_capture/windows \
+	webrtc/modules/video_render/windows \
 	win8 \
 	; do
 		rm -vfr "$dir"
@@ -436,6 +452,28 @@ almost_strip_dirs() {
 # list based from archlinux PKGBUILD
 # https://aur.archlinux.org/packages/ch/chromium-dev/PKGBUILD
 clean_third_party() {
+	local dir
+	for dir in \
+		third_party/ashmem \
+		third_party/npapi/npspy \
+		third_party/re2/benchlog \
+		third_party/eyesfree \
+		third_party/guava \
+		third_party/icon_family \
+		third_party/isimpledom \
+		third_party/jsoncpp \
+		third_party/jsr-305 \
+		third_party/libexif \
+		third_party/mach_override \
+		third_party/snappy \
+		third_party/iaccessible2 \
+		third_party/sudden_motion_sensor \
+		third_party/sqlite/*.patch \
+		third_party/sqlite/src/*.patch \
+		; do
+		rm -vfr "$dir"
+	done
+
 	find third_party -type f \! -iname '*.gyp*' \
 		\! -path 'third_party/WebKit/*' \
 		\! -path 'third_party/adobe/flash/*' \
@@ -443,11 +481,8 @@ clean_third_party() {
 		\! -path 'third_party/cacheinvalidation/*' \
 		\! -path 'third_party/cld/*' \
 		\! -path 'third_party/cros_system_api/*' \
-		\! -path 'third_party/ffmpeg/*' \
 		\! -path 'third_party/flac/flac.h' \
-		\! -path 'third_party/flot/*' \
-		\! -path 'third_party/harfbuzz-ng/*' \
-		\! -path 'third_party/harfbuzz/*' \
+		\! -path 'third_party/flot/*.js' \
 		\! -path 'third_party/hunspell/*' \
 		\! -path 'third_party/hyphen/*' \
 		\! -path 'third_party/iccjpeg/*' \
@@ -461,7 +496,7 @@ clean_third_party() {
 		\! -path 'third_party/libvpx/libvpx.h' \
 		\! -path 'third_party/libxml/chromium/*' \
 		\! -path 'third_party/libyuv/*' \
-		\! -path 'third_party/lss/*' \
+		\! -path 'third_party/lss/*.h' \
 		\! -path 'third_party/mesa/*' \
 		\! -path 'third_party/modp_b64/*' \
 		\! -path 'third_party/mt19937ar/*' \
@@ -759,16 +794,32 @@ remove_tests() {
 	# delete unittest files
 	find . '(' \
 		-name '*_unittest*.*' \
-		-name '*_unittest.*' \
-		-name '*_unittest' \
+		-o -name '*_unittest.*' \
+		-o -name '*_unittest' \
+		-o -name 'test_*.*' \
 		-o -name '*_test.*' \
 	')' '!' -name '*.gyp*' \
-		'!' -path './native_client/src/trusted/service_runtime/env_cleanser_test.h' \
+		'!' -name '*.isolate' \
+		'!' -name '*.grd' \
 		'!' -path './chrome/browser/diagnostics/diagnostics_test.*' \
-		'!' -path './chrome/test/perf/perf_test.*' \
+		'!' -path './chrome/browser/extensions/api/declarative/test_rules_registry.*' \
+		'!' -path './chrome/browser/extensions/api/test/test_api.*' \
+		'!' -path './chrome/browser/resources/net_internals/*' \
+		'!' -path './chrome/browser/ui/webui/test_chrome_web_ui_controller_factory*' \
+		'!' -path './chrome/common/net/test_server_locations.*' \
+		'!' -path './chrome/test/base/test_switches.*' \
 		'!' -path './chrome/test/perf/browser_perf_test.*' \
+		'!' -path './chrome/test/perf/perf_test.*' \
+		'!' -path './native_client/src/trusted/fault_injection/test_injection.*' \
+		'!' -path './native_client/src/trusted/service_runtime/env_cleanser_test.h' \
+		'!' -path './net/base/test_completion_callback.*' \
+		'!' -path './net/base/test_data_stream.*' \
+		'!' -path './net/base/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
-	-print -delete
+		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
+		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
+		'!' -path './webkit/fileapi/test_mount_point_provider.*' \
+	-print -delete || :
 }
 
 remove_nonessential_dirs > REMOVED-nonessential_dirs.txt
