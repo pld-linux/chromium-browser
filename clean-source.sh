@@ -21,6 +21,14 @@ eval "$@"
 # suffix with _ those that we can't remove (just yet) because of the gclient
 # hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
+	find -type f '(' \
+		-name 'Android.mk' -o \
+		-name '*.vcproj' -o \
+		-name '*.sln' -o \
+		-name '*.mm' -o \
+		-name '*.m' \
+	')' | xargs rm -vf
+
 	local dir
 	for dir in \
 	android_webview \
@@ -31,13 +39,10 @@ remove_nonessential_dirs() {
 	base/android \
 	base/chromeos \
 	base/ios \
-	base/mac_ \
-	base/win_ \
 	breakpad/src/client/mac \
 	breakpad/src/common/android \
 	breakpad/src/common/mac \
 	breakpad/src/tools/mac \
-	build/android_ \
 	build/mac \
 	build/win \
 	chrome/android \
@@ -54,8 +59,6 @@ remove_nonessential_dirs() {
 	chrome/app/theme/touch_180_percent/win \
 	chrome/browser/android \
 	chrome/browser/chromeos/cros \
-	chrome/browser/chromeos_ \
-	chrome/browser/component/web_contents_delegate_android_ \
 	chrome/browser/extensions/docs \
 	chrome/browser/history/android \
 	chrome/browser/mac \
@@ -81,22 +84,17 @@ remove_nonessential_dirs() {
 	chrome/tools/build/chromeos \
 	chrome/tools/build/mac \
 	chrome/tools/build/win \
-	chrome/tools_ \
 	chrome_frame \
-	chromeos_ \
 	cloud_print/service/win \
 	cloud_print/virtual_driver/win \
 	content/app/android \
 	content/browser/android \
-	content/browser/renderer_host/java_ \
 	content/common/android \
-	content/common/mac_ \
 	content/components/navigation_interception/java \
 	content/components/web_contents_delegate_android/java \
 	content/public/android \
 	content/public/browser/android \
 	content/renderer/android \
-	content/renderer/java_ \
 	content/shell/android \
 	content/shell/mac \
 	data \
@@ -104,7 +102,6 @@ remove_nonessential_dirs() {
 	google_update \
 	gpu/command_buffer/docs \
 	gpu/demos \
-	gpu/tools_ \
 	media/audio/android \
 	media/audio/ios \
 	media/audio/mac \
@@ -117,7 +114,6 @@ remove_nonessential_dirs() {
 	mesa/MesaLib/src/mesa/drivers/windows \
 	native_client/build/mac \
 	native_client/documentation \
-	native_client/src/include/win_ \
 	native_client/src/shared/imc/win \
 	native_client/src/shared/platform/win \
 	native_client/src/tools \
@@ -125,7 +121,6 @@ remove_nonessential_dirs() {
 	native_client/src/trusted/desc/win \
 	native_client/src/trusted/nonnacl_util/win \
 	native_client/src/trusted/platform_qualify/win \
-	native_client/src/trusted/service_runtime/win_ \
 	native_client/tools \
 	native_client/tools/trusted_cross_toolchains \
 	native_client_sdk \
@@ -147,12 +142,10 @@ remove_nonessential_dirs() {
 	remoting/host/mac \
 	remoting/host/setup/win \
 	remoting/host/win \
-	remoting/tools_ \
 	rlz/examples \
 	rlz/mac \
 	rlz/win \
 	sandbox/win/tools \
-	sandbox/win_ \
 	sdch/ios \
 	sdch/mac \
 	skia/config/win \
@@ -224,7 +217,6 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Source/WebCore/plugins/qt \
 	third_party/WebKit/Source/WebCore/plugins/win \
 	third_party/WebKit/Source/WebKit/chromium/public/android \
-	third_party/WebKit/Source/WebKit/chromium/public/mac_ \
 	third_party/WebKit/Source/WebKit/chromium/public/platform/android \
 	third_party/WebKit/Source/WebKit/chromium/public/platform/mac \
 	third_party/WebKit/Source/WebKit/chromium/public/platform/win \
@@ -285,7 +277,6 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Tools/DumpRenderTree/mac \
 	third_party/WebKit/Tools/DumpRenderTree/qt \
 	third_party/WebKit/Tools/DumpRenderTree/win \
-	third_party/WebKit/Tools_ \
 	third_party/angle/extensions \
 	third_party/angle/samples \
 	third_party/angle/samples/gles2_book \
@@ -296,8 +287,6 @@ remove_nonessential_dirs() {
 	third_party/cacheinvalidation/src/java \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/external/client/android \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/ticl/android \
-	third_party/cld/encodings/compact_lang_det/win_ \
-	third_party/cros_system_api_ \
 	third_party/ffmpeg/binaries \
 	third_party/ffmpeg/chromium/binaries/Chromium/win \
 	third_party/ffmpeg/chromium/config/Chrome/mac \
@@ -329,7 +318,6 @@ remove_nonessential_dirs() {
 	third_party/lighttpd \
 	third_party/mesa/MesaLib/docs \
 	third_party/mesa/MesaLib/src/gallium/docs \
-	third_party/mozc/chrome/chromeos_ \
 	third_party/npapi/npspy/extern/java \
 	third_party/nspr \
 	third_party/nss \
@@ -359,10 +347,8 @@ remove_nonessential_dirs() {
 	third_party/snappy/mac \
 	third_party/sqlite/src/doc \
 	third_party/tcmalloc/vendor/doc \
-	third_party/tcmalloc_ \
 	third_party/trace-viewer/examples \
 	third_party/trace-viewer/third_party/pywebsocket/src/example \
-	third_party/v8-i18n/tools_ \
 	third_party/vc_80 \
 	third_party/webdriver/pylib/docs \
 	third_party/webrtc/modules/audio_device/android \
@@ -372,12 +358,10 @@ remove_nonessential_dirs() {
 	third_party/webrtc/modules/audio_device/win \
 	third_party/webrtc/modules/video_capture/android/java \
 	third_party/webrtc/modules/video_capture/main/source/android \
-	third_party/webrtc/modules/video_coding/codecs/tools_ \
 	third_party/webrtc/modules/video_render/android/java \
 	third_party/webrtc/modules/video_render/main/source/android \
 	third_party/webrtc/modules/video_render/main/source/mac \
 	third_party/webrtc/system_wrappers/source/android \
-	third_party/webrtc/tools_ \
 	third_party/yasm/source/config/android \
 	third_party/yasm/source/config/mac \
 	third_party/yasm/source/config/win \
@@ -395,7 +379,6 @@ remove_nonessential_dirs() {
 	ui/android \
 	ui/base/cocoa \
 	ui/base/ime/win \
-	ui/base/win_ \
 	ui/gfx/android \
 	ui/gfx/mac \
 	ui/resources/default_100_percent/cros_ \
@@ -403,16 +386,84 @@ remove_nonessential_dirs() {
 	ui/views/examples \
 	ui/views/win \
 	v8/samples \
-	v8/tools_ \
 	webkit/chromeos \
 	webkit/media/android \
-	webkit/tools_ \
 	webrtc/modules/video_capture/windows \
 	webrtc/modules/video_render/windows \
 	win8 \
 	; do
 		rm -vfr "$dir"
 	done
+
+	find $(ls -d \
+		base/mac \
+		base/win \
+		build/android \
+		chrome/browser/chromeos \
+		chrome/browser/component/web_contents_delegate_android \
+		chrome/tools \
+		chromeos \
+		content/browser/renderer_host/java \
+		content/common/mac \
+		content/renderer/java \
+		gpu/tools \
+		native_client/src/include/win \
+		native_client/src/trusted/service_runtime/win \
+		remoting/tools \
+		sandbox/win \
+		third_party/WebKit/Source/WebKit/chromium/public/mac \
+		third_party/WebKit/Tools \
+		third_party/cld/encodings/compact_lang_det/win \
+		third_party/cros_system_api \
+		third_party/mozc/chrome/chromeos \
+		third_party/sfntly/cpp/src/sample \
+		third_party/tcmalloc \
+		third_party/v8-i18n/tools \
+		third_party/webrtc/modules/video_coding/codecs/tools \
+		third_party/webrtc/tools \
+		ui/base/win \
+		v8/tools \
+		webkit/tools \
+	) '!' -type d '(' \
+		'!' -name '*.gyp*' \
+		'!' -name '*.grd' \
+		'!' -path 'base/mac/bundle_locations.h' \
+		'!' -path 'base/mac/crash_logging.h' \
+		'!' -path 'base/win/windows_version.h' \
+		'!' -path 'build/android/cpufeatures.gypi' \
+		'!' -path 'chrome/browser/chromeos/contacts/contact.proto' \
+		'!' -path 'chrome/browser/chromeos/settings/cros_settings.h' \
+		'!' -path 'chrome/browser/chromeos/settings/cros_settings_names.h' \
+		'!' -path 'chrome/browser/chromeos/settings/cros_settings_provider.h' \
+		'!' -path 'chrome/tools/build/generate_policy_source.py' \
+		'!' -path 'chrome/tools/build/linux/sed.sh' \
+		'!' -path 'chrome/tools/build/make_version_cc.py' \
+		'!' -path 'chrome/tools/build/repack_locales.py' \
+		'!' -path 'chrome/tools/build/version.py' \
+		'!' -path 'chromeos/chromeos_export.h' \
+		'!' -path 'chromeos/network/onc/onc_constants.h' \
+		'!' -path 'content/browser/renderer_host/java/java_bridge_dispatcher_host_manager.h' \
+		'!' -path 'content/common/mac/attributed_string_coder.h' \
+		'!' -path 'content/common/mac/font_descriptor.h' \
+		'!' -path 'content/renderer/java/java_bridge_dispatcher.h' \
+		'!' -path 'native_client/src/include/win/mman.h' \
+		'!' -path 'native_client/src/trusted/service_runtime/win/debug_exception_handler.h' \
+		'!' -path 'native_client/src/trusted/service_runtime/win/exception_patch/ntdll_patch.h' \
+		'!' -path 'remoting/tools/verify_resources.py' \
+		'!' -path 'sandbox/win/src/sandbox_types.h' \
+		'!' -path 'third_party/WebKit/Source/WebKit/chromium/public/mac/WebSubstringUtil.h' \
+		'!' -path 'third_party/cld/encodings/compact_lang_det/win/cld_*.cc' \
+		'!' -path 'third_party/cld/encodings/compact_lang_det/win/cld_*.h' \
+		'!' -path 'third_party/cros_system_api/dbus/*.proto' \
+		'!' -path 'third_party/cros_system_api/dbus/service_constants.h' \
+		'!' -path 'third_party/sfntly/cpp/src/sample/chromium/*' \
+		'!' -path 'third_party/tcmalloc/chromium/*' \
+		'!' -path 'third_party/v8-i18n/tools/js2c.py' \
+		'!' -path 'ui/base/win/dpi.h' \
+		'!' -path 'v8/tools/js2c.py' \
+		'!' -path 'v8/tools/jsmin.py' \
+		')' \
+	-print -delete
 }
 
 # There are directories we want to strip, but that are unnecessarily required by the build-system
@@ -425,7 +476,7 @@ almost_strip_dirs() {
 		courgette \
 		third_party/cros_dbus_cplusplus \
 		; do
-		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' \) -print -delete || :
+		find $dir -depth -mindepth 1 '!' '(' -name '*.gyp' -o -name '*.gypi' ')' -print -delete || :
 	done
 
 	find tools -type f \
