@@ -194,6 +194,8 @@ BuildRequires:	xz
 Requires:	browser-plugins >= 2.0
 Requires:	desktop-file-utils
 %{?with_system_flac:Requires:	flac >= 1.2.1-7}
+# requires any TTF font actually
+Requires:	fonts-TTF-bitstream-vera
 Requires:	hicolor-icon-theme
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 %{?with_system_libvpx:Requires:	libvpx >= 0.9.5-2}
