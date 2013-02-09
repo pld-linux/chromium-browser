@@ -26,8 +26,16 @@ if [ -z "$m" ]; then
 	EOF
 fi
 
+# lsb_release is slow so try to source the static file /etc/lsb-release
+# instead, and fallback to lsb_release if we didn't get the information we need
+if [ -e /etc/lsb-release ] ; then
+	. /etc/lsb-release
+fi
+DIST=${DISTRIB_ID:-$(lsb_release -si)}
+RELEASE=${DISTRIB_CODENAME:-$(lsb_release -sc)}
+
 # Set CHROME_VERSION_EXTRA visible in the About dialog and in about:version
-export CHROME_VERSION_EXTRA="PLD Linux"
+export CHROME_VERSION_EXTRA="$DIST Linux $RELEASE"
 
 # Let the wrapped binary know that it has been run through the wrapper
 export CHROME_WRAPPER="$(readlink -f "$0")"
