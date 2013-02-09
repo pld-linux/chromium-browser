@@ -199,6 +199,7 @@ Requires:	fonts-TTF-bitstream-vera
 Requires:	hicolor-icon-theme
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 %{?with_system_libvpx:Requires:	libvpx >= 0.9.5-2}
+Requires:	lsb-release
 Requires:	xdg-utils >= 1.0.2-4
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
