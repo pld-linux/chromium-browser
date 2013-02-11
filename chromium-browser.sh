@@ -1,18 +1,36 @@
 #!/bin/sh
+APPNAME=chromium-browser
+LIBDIR=@libdir@
+GDB=/usr/bin/gdb
 
 # Allow the user to override command-line flags, http://bugs.gentoo.org/357629
 # This is based on Debian's chromium-browser package, and is intended
 # to be consistent with Debian.
-if [ -f /etc/chromium-browser/default ] ; then
-	. /etc/chromium-browser/default
+if [ -f /etc/$APPNAME/default ] ; then
+	. /etc/$APPNAME/default
 fi
 
-# Always use our ffmpeg libs.
-CHROMIUM_DIR=@libdir@
-export LD_LIBRARY_PATH=$CHROMIUM_DIR${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}
+die() {
+	echo >&2 "$*"
+	exit 1
+}
+
+usage() {
+	echo "$APPNAME [-h|--help] [-g|--debug] [--temp-profile] [options] [URL]"
+	echo
+	echo "        -g or --debug           Start within $GDB"
+	echo "        -h or --help            This help screen"
+	echo "        --temp-profile          Start with a new and temporary profile"
+	echo
+	echo "Other supported options are:"
+	MANWIDTH=80 man $APPNAME | sed -e '1,/OPTIONS/d; /ENVIRONMENT/,$d'
+	echo "See 'man $APPNAME' for more details"
+}
+
+export LD_LIBRARY_PATH=$LIBDIR${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}
 
 # for to find xdg-settings
-export PATH=@libdir@${PATH:+:"$PATH"}
+export PATH=$LIBDIR${PATH:+:"$PATH"}
 
 # chromium needs /dev/shm being mounted
 m=$(awk '$2 == "/dev/shm" && $3 == "tmpfs" {print}' /proc/mounts)
@@ -58,10 +76,65 @@ CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-"$CHROMIUM_FLAGS"}
 export LC_NUMERIC=C
 
 # load PepperFlash if present
-PEPFLASH=$(readlink -f $CHROMIUM_DIR/../browser-plugins/PepperFlash)
+PEPFLASH=$(readlink -f $LIBDIR/../browser-plugins/PepperFlash)
 if [ -f $PEPFLASH/manifest.ver ]; then
 	. $PEPFLASH/manifest.ver
-	PEPPERFLASH_ARGS="--ppapi-flash-path=$PEPFLASH/libpepflashplayer.so --ppapi-flash-version=$version"
+	CHROMIUM_FLAGS="$CHROMIUM_FLAGS --ppapi-flash-path=$PEPFLASH/libpepflashplayer.so --ppapi-flash-version=$version"
 fi
 
-exec $CHROMIUM_DIR/chromium-browser $PEPPERFLASH_ARGS $CHROMIUM_FLAGS "$@"
+want_debug=0
+want_temp_profile=0
+while [ $# -gt 0 ]; do
+	case "$1" in
+	-h | --help | -help)
+		usage
+		exit 0 ;;
+	-g | --debug)
+		want_debug=1
+		shift ;;
+	--temp-profile)
+		want_temp_profile=1
+		shift ;;
+	-- ) # Stop option prcessing
+		shift
+		break ;;
+	*)
+		break ;;
+	esac
+done
+
+if [ $want_temp_profile -eq 1 ]; then
+	TEMP_PROFILE=$(mktemp -d) || exit 1
+	CHROMIUM_FLAGS="$CHROMIUM_FLAGS --user-data-dir=$TEMP_PROFILE"
+fi
+
+if [ $want_debug -eq 1 ]; then
+	if [ ! -x $GDB ] ; then
+		die "Sorry, can't find usable $GDB. Please install it."
+	fi
+
+	tmpfile=$(mktemp /tmp/chromiumargs.XXXXXX) || die "Cannot create temporary file"
+	trap " [ -f \"$tmpfile\" ] && /bin/rm -f -- \"$tmpfile\"" 0 1 2 3 13 15
+	echo "set args $CHROMIUM_FLAGS ${1+"$@"}" > $tmpfile
+	echo "# Env:"
+	echo "#     LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+	echo "#                PATH=$PATH"
+	echo "#            GTK_PATH=$GTK_PATH"
+	echo "# CHROMIUM_USER_FLAGS=$CHROMIUM_USER_FLAGS"
+	echo "#      CHROMIUM_FLAGS=$CHROMIUM_FLAGS"
+	echo "$GDB $LIBDIR/$APPNAME -x $tmpfile"
+	$GDB "$LIBDIR/$APPNAME" -x $tmpfile
+	rc=$?
+	if [ $want_temp_profile -eq 1 ]; then
+		rm -rf $TEMP_PROFILE
+	fi
+	exit $rc
+else
+	if [ $want_temp_profile -eq 0 ]; then
+		exec $LIBDIR/$APPNAME $CHROMIUM_FLAGS "$@"
+	else
+		# we can't exec here as we need to clean-up the temporary profile
+		$LIBDIR/$APPNAME $CHROMIUM_FLAGS "$@"
+		rm -rf $TEMP_PROFILE
+	fi
+fi
