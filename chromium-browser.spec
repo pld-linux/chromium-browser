@@ -160,6 +160,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lzma
+BuildRequires:	man-db
 %{?with_system_minizip:BuildRequires:	minizip-devel}
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
@@ -437,6 +438,10 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
 	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}"
 
+cd ../out/%{!?debug:Release}%{?debug:Debug}
+MANWIDTH=80 man ./chrome.1 > man.out
+%{__sed} -e '1,/OPTIONS/d; /ENVIRONMENT/,$d' man.out > options.txt
+
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
@@ -445,7 +450,14 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
 cd out/%{!?debug:Release}%{?debug:Debug}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
-%{__sed} -i -e 's,@libdir@,%{_libdir}/%{name},' $RPM_BUILD_ROOT%{_bindir}/%{name}
+%{__sed} -i -e '
+	s,@libdir@,%{_libdir}/%{name},
+
+	/@OPTIONS@/ {
+		r options.txt
+		d
+	}
+' $RPM_BUILD_ROOT%{_bindir}/%{name}
 cp -a *.pak locales resources $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}

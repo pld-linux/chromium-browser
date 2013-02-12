@@ -6,7 +6,7 @@ GDB=/usr/bin/gdb
 # Allow the user to override command-line flags, http://bugs.gentoo.org/357629
 # This is based on Debian's chromium-browser package, and is intended
 # to be consistent with Debian.
-if [ -f /etc/$APPNAME/default ] ; then
+if [ -f /etc/$APPNAME/default ]; then
 	. /etc/$APPNAME/default
 fi
 
@@ -16,15 +16,18 @@ die() {
 }
 
 usage() {
-	echo "$APPNAME [-h|--help] [-g|--debug] [--temp-profile] [options] [URL]"
-	echo
-	echo "        -g or --debug           Start within $GDB"
-	echo "        -h or --help            This help screen"
-	echo "        --temp-profile          Start with a new and temporary profile"
-	echo
-	echo "Other supported options are:"
-	MANWIDTH=80 man $APPNAME | sed -e '1,/OPTIONS/d; /ENVIRONMENT/,$d'
-	echo "See 'man $APPNAME' for more details"
+	cat <<EOF
+$APPNAME [-h|--help] [-g|--debug] [--temp-profile] [options] [URL]
+
+		-g or --debug           Start within $GDB
+		-h or --help            This help screen
+		--temp-profile          Start with a new and temporary profile
+
+Other supported options are:
+
+@OPTIONS@
+See 'man $APPNAME' for more details
+EOF
 }
 
 export LD_LIBRARY_PATH=$LIBDIR${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}
@@ -46,7 +49,7 @@ fi
 
 # lsb_release is slow so try to source the static file /etc/lsb-release
 # instead, and fallback to lsb_release if we didn't get the information we need
-if [ -e /etc/lsb-release ] ; then
+if [ -e /etc/lsb-release ]; then
 	. /etc/lsb-release
 fi
 DIST=${DISTRIB_ID:-$(lsb_release -si)}
@@ -109,7 +112,7 @@ if [ $want_temp_profile -eq 1 ]; then
 fi
 
 if [ $want_debug -eq 1 ]; then
-	if [ ! -x $GDB ] ; then
+	if [ ! -x $GDB ]; then
 		die "Sorry, can't find usable $GDB. Please install it."
 	fi
 
