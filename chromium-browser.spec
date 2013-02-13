@@ -195,8 +195,8 @@ BuildRequires:	xz
 Requires:	browser-plugins >= 2.0
 Requires:	desktop-file-utils
 %{?with_system_flac:Requires:	flac >= 1.2.1-7}
-# requires any TTF font actually
-Requires:	fonts-TTF-bitstream-vera
+# crashes if no fontconfig font present
+Requires:	fonts-Type1-urw
 Requires:	hicolor-icon-theme
 Requires:	libevent >= 2.0.21
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
