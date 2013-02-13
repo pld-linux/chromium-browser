@@ -204,6 +204,7 @@ Requires:	libevent >= 2.0.21
 Requires:	lsb-release
 Requires:	shared-mime-info
 Requires:	xdg-utils >= 1.0.2-4
+Requires:	xorg-lib-libX11 >= 1.4.99.1
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
 Obsoletes:	chromium-browser-inspector < 15.0.863.0
