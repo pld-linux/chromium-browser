@@ -32,11 +32,13 @@ test -d $srcdir || unpack $src
 test -d $dstdir || unpack $dst
 if diff -Nur $srcdir $dstdir > $patch; then
 	echo "No diffs!"
+	rm $patch
 else
 	echo "Patch created"
 	ls -lh $patch
 	diffstat $patch | tee $patch.diff
 	cat $patch.diff $patch | xz -9 > $patch.xz
+	rm $patch.diff $patch
 fi
 
 rm -rf $dstdir $srcdir

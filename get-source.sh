@@ -47,7 +47,7 @@ LOGFILE=$TMP_DIR/$PACKAGE_NAME-$VERSION.log
 cd "$TMP_DIR"
 srctarball=$PACKAGE_NAME-$VERSION.tar.bz2
 if [ "$CHANNEL" = "dev" ]; then
-	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION-lite.tar.bz2"
+	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
 else
 	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
 fi
@@ -76,7 +76,7 @@ else
 fi
 
 if [ "$CHANNEL" != "dev" ]; then
-	sh -x $WORK_DIR/clean-source.sh v8=$v8 protobuf=0
+	sh -x $WORK_DIR/clean-source.sh v8=$v8 emptydirs=1
 fi
 
 # do not keep REMOVED*.txt in tarball. they are visible in .log anyway
@@ -92,7 +92,7 @@ cd ../..
 
 tarball=$PACKAGE_NAME-$VERSION.tar.$EXT
 # xz -9 OOM's on carme
-XZ_OPT=-e8 tar -cf $tarball --$EXT $PACKAGE_NAME-$VERSION
+XZ_OPT=-e8 tar -caf $tarball $PACKAGE_NAME-$VERSION
 ls -lh $tarball
 
 rm -rf $PACKAGE_NAME-$VERSION
@@ -114,6 +114,10 @@ if [ -e $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT ]; then
 	current=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.$EXT
 	sh -x $WORK_DIR/make-diff-patch.sh $base $current
 	mv $PACKAGE_NAME-$VERSION.patch.xz $DIST_DIR
+	# for beta and dev channels, move the diff pointer
+	if [ "$CHANNEL" != "stable" ]; then
+		ln -sf $PACKAGE_NAME-$VERSION.tar.$EXT $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT
+	fi
 fi
 
 # try updating spec and build it as well

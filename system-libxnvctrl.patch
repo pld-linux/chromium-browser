@@ -1,8 +1,8 @@
---- chromium-browser-24.0.1312.45/src/third_party/libXNVCtrl/libXNVCtrl.gyp~	2013-01-04 00:45:32.000000000 +0200
-+++ chromium-browser-24.0.1312.45/src/third_party/libXNVCtrl/libXNVCtrl.gyp	2013-01-04 00:45:35.620067292 +0200
-@@ -3,16 +3,54 @@
- # found in the LICENSE file.
- 
+todo use generate_shim_headers script
+
+--- chromium-browser-24.0.1312.45/src/third_party/libXNVCtrl/libXNVCtrl.gyp	2013-01-04 00:45:35.620067292 +0200
++++ chromium-browser-25.0.1364.29/src/third_party/libXNVCtrl/libXNVCtrl.gyp	2013-01-12 16:17:25.440747088 +0200
+@@ -5,14 +5,55 @@
  {
 -  'targets': [
 -    {
@@ -52,6 +52,9 @@
 +            'cflags': [
 +                '<!@(<(pkg-config) --cflags libXNVCtrl)',
 +            ],
++            'defines': [
++                'USE_SYSTEM_LIBXNVCTRL',
++            ],
 +          },
 +          'link_settings': {
 +            'ldflags': [
@@ -66,3 +69,35 @@
 +    }],
 +  ]
  }
+--- chromium-browser-25.0.1364.29/src/content/gpu/gpu_info_collector_linux.cc	2013-01-12 16:11:48.998635662 +0200
++++ chromium-browser-25.0.1364.29/src/content/gpu/gpu_info_collector_linux.cc	2013-01-12 16:29:12.273316708 +0200
+@@ -18,8 +18,7 @@
+ #include "base/string_tokenizer.h"
+ #include "base/string_util.h"
+ #include "library_loaders/libpci.h"
+-#include "third_party/libXNVCtrl/NVCtrl.h"
+-#include "third_party/libXNVCtrl/NVCtrlLib.h"
++#include "third_party/libXNVCtrl/libXNVCtrl.h"
+ #include "ui/gl/gl_bindings.h"
+ #include "ui/gl/gl_context.h"
+ #include "ui/gl/gl_implementation.h"
+--- /dev/null	2007-02-13 18:29:53.000000000 +0200
++++ hromium-browser-25.0.1364.29/src/third_party/libXNVCtrl/libXNVCtrl.h	2013-01-12 16:27:55.676465329 +0200
+@@ -0,0 +1,17 @@
++// Copyright (c) 2013 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++// This is a shim header to include the right opus header.
++// Use this instead of referencing the opus header directly.
++
++#if !defined(THIRD_PARTY_LIBXNVCTRL_LIBXNVCTRL_H)
++#define THIRD_PARTY_LIBXNVCTRL_LIBXNVCTRL_H
++#if defined(USE_SYSTEM_LIBXNVCTRL)
++#include <NVCtrl.h>
++#include <NVCtrlLib.h>
++#else
++#include "third_party/libXNVCtrl/NVCtrl.h"
++#include "third_party/libXNVCtrl/NVCtrlLib.h"
++#endif
++#endif

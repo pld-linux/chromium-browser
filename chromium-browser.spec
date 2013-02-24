@@ -13,8 +13,8 @@
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
-%bcond_with		system_ffmpeg	# system ffmpeg instead of ffmpegsumo
-%bcond_with		system_harfbuzz	# system harfbuzz
+%bcond_without	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
+%bcond_without	system_harfbuzz	# system harfbuzz
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -23,7 +23,7 @@
 %bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
-%bcond_with		system_protobuf	# system protobuf
+%bcond_without	system_protobuf	# system protobuf
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
@@ -33,16 +33,6 @@
 %bcond_without	system_zlib		# system zlib
 %bcond_without	tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
-
-%if %{with nacl}
-# temporary hack as seems this does not work: http://codereview.chromium.org/8890043
-# nacl_bootstrap.c:(.text.load_elf_file+0x707): undefined reference to `__stack_chk_fail'
-#14:08:04 @baggins> glen: yes, I added SSP in rpm5, add -lssp to link flags to fix it
-#14:19:42 @baggins> it doesn't hurt to add -lssp here and there, and we'll be a bit more secure
-#14:51:06 @baggins> as-needed will take care of unneeded lib
-#14:52:03 @baggins> -lssp comes with gcc
-%define		_ssp_cflags	%{nil}
-%endif
 
 # TODO
 # - check system sqlite linking problems
@@ -56,7 +46,7 @@
 # - mute BEEP mixer if you do not want to hear horrible system bell when
 #   pressing home/end in url bar or more ^F search results on page.
 # - space considerations:
-#   - unpacked sources: ~574MiB
+#   - unpacked sources: ~490MiB
 #   - built code: ~1.4GiB (x86_64/i686)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
@@ -66,9 +56,9 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
-%define		branch		24.0.1312
-%define		basever		52
-%define		patchver	70
+%define		branch		25.0.1364
+%define		basever		97
+#define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -81,7 +71,7 @@ Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	bcc3976e61b9ce715ba9c85d46df72f1
+# Source0-md5:	07a041c89f2e44219fff4e3553ae8c02
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	37675cd75c578d26d6210259877f3947
@@ -106,11 +96,13 @@ Patch10:	system-libxnvctrl.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
+Patch12:	system-ffmpeg.patch
+Patch13:	system-libpng.patch
+Patch14:	system-opus.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
-Patch22:	pulse_fix-157876.patch
 Patch23:	no-pnacl.patch
 Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
@@ -118,7 +110,6 @@ Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
-BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -128,12 +119,10 @@ BuildRequires:	bzip2-devel
 %{?with_nacl:BuildRequires:	crossnacl-gcc-c++ >= 4.4.3}
 %{?with_nacl:BuildRequires:	crossnacl-newlib >= 1.20.0-3}
 %{?with_cups:BuildRequires:	cups-devel}
-BuildRequires:	dbus-glib-devel
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
 %{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 1.0}
 %{?with_system_flac:BuildRequires:	flac-devel >= 1.2.1-7}
-BuildRequires:	flex
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
@@ -143,7 +132,7 @@ BuildRequires:	gtk+2-devel
 %{?with_kerberos:BuildRequires:	heimdal-devel}
 BuildRequires:	hicolor-icon-theme
 %{?with_system_jsoncpp:BuildRequires:	jsoncpp-devel}
-%{?with_system_libxvnctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
+%{?with_system_libxnvctrl:BuildRequires:	libXNVCtrl-devel >= 310.19}
 BuildRequires:	libevent-devel
 %{?with_system_libexif:BuildRequires:	libexif-devel >= 1:0.6.21}
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
@@ -159,7 +148,6 @@ BuildRequires:	libstdc++-devel
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
-BuildRequires:	lzma
 BuildRequires:	man-db
 %{?with_system_minizip:BuildRequires:	minizip-devel}
 BuildRequires:	nspr-devel
@@ -167,6 +155,7 @@ BuildRequires:	nss-devel >= 1:3.12.3
 %{?with_system_opus:BuildRequires:	opus-devel >= 1.0.2}
 BuildRequires:	pam-devel
 BuildRequires:	pango-devel
+BuildRequires:	pciutils-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 %{?with_system_protobuf:BuildRequires:	protobuf-devel}
@@ -183,12 +172,11 @@ BuildRequires:	sqlite3-devel >= 3.6.1
 BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel
+BuildRequires:	usbutils
 BuildRequires:	util-linux
 %{?with_system_v8:BuildRequires:	v8-devel >= 3.7}
 BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
-BuildRequires:	xorg-lib-libXt-devel
-BuildRequires:	xorg-lib-libXtst-devel
 BuildRequires:	xz
 %{?with_system_yasm:BuildRequires:	yasm}
 %{?with_system_zlib:BuildRequires:	zlib-devel}
@@ -281,14 +269,17 @@ ln -s %{SOURCE7} src
 %patch4 -p1
 %patch6 -p1
 %patch7 -p1
+%patch10 -p1
 %patch15 -p1
 cd src
 %patch9 -p0
 #%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
+%patch12 -p1
+%patch13 -p0
+%patch14 -p2
 %patch16 -p1
 %patch19 -p1
-%patch22 -p1
 %patch25 -p1
 %patch27 -p1
 cd ..
@@ -323,17 +314,21 @@ sh -x clean-source.sh \
 	%{!?with_system_protobuf:protobuf=0} \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_zlib:zlib=0} \
+	%{!?with_system_libxnvctrl:libXNVCtrl=0} \
 	%{nil}
 
 %build
 cd src
 
 %if %{with nacl}
+rm -rf native_client/toolchain/linux_x86_newlib
 if [ ! -d native_client/toolchain/linux_x86_newlib ]; then
 # Make symlinks for NaCL
-install -d native_client/toolchain/linux_x86_newlib/x86_64-nacl/{bin,lib,lib32,nacl}
+install -d native_client/toolchain/linux_x86_newlib/x86_64-nacl/{bin,nacl}
 
-cd native_client/toolchain/linux_x86_newlib/x86_64-nacl/bin
+cd native_client/toolchain/linux_x86_newlib
+ln -s x86_64-nacl/bin bin
+cd x86_64-nacl/bin
 __cc='%{__cc}'
 if [ "${__cc#ccache}" != "$__cc" ]; then
 	echo 'exec ccache %{_bindir}/x86_64-nacl-gcc "$@"' > gcc
@@ -344,20 +339,30 @@ else
 	ln -s %{_bindir}/x86_64-nacl-gcc gcc
 	ln -s %{_bindir}/x86_64-nacl-g++ g++
 fi
+ln -s gcc x86_64-nacl-gcc
+ln -s g++ x86_64-nacl-g++
+ln -s %{_bindir}/x86_64-nacl-ar .
 ln -s %{_bindir}/x86_64-nacl-ar ar
 ln -s %{_bindir}/x86_64-nacl-as as
+ln -s %{_bindir}/x86_64-nacl-ranlib .
 ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
-ln -s %{_bindir}/x86_64-nacl-strip x86-64-nacl-strip
+ln -s %{_bindir}/x86_64-nacl-strip .
 ln -s %{_bindir}/x86_64-nacl-strip strip
-ln -s %{_prefix}/x86_64-nacl/lib/*.a ../lib
-ln -s %{_prefix}/x86_64-nacl/lib/32/*.a ../lib32
+ln -s %{_prefix}/x86_64-nacl/lib ../lib
+ln -s %{_prefix}/x86_64-nacl/lib32 ../lib32
 ln -s %{_prefix}/x86_64-nacl/include ../nacl/include
 cd ../../../../..
 fi
 %endif
 
 test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
-test -e Makefile || %{__python} build/gyp_chromium \
+test -e Makefile || \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
+	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
+	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}" \
+%{__python} build/gyp_chromium \
 	--format=make \
 	-Goutput_dir=../out \
 	build/all.gyp \
@@ -392,6 +397,11 @@ test -e Makefile || %{__python} build/gyp_chromium \
 %endif
 	%{!?with_sse2:-Ddisable_sse2=1} \
 	%{?with_selinux:-Dselinux=1} \
+	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
+	-Dlinux_link_libpci=1 \
+	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
+	-Dlinux_use_gold_binary=0 \
+	-Dlinux_use_gold_flags=0 \
 	%{gyp_with cups} \
 	%{gyp_with gconf} -Dlinux_link_gsettings=0 \
 	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
@@ -424,21 +434,14 @@ test -e Makefile || %{__python} build/gyp_chromium \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
 	-Duse_system_xdg_utils=1 \
-	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
-	-Dlinux_use_gold_binary=0 \
-	-Dlinux_use_gold_flags=0
 
+# need {CC/CXX/LDFLAGS}.host overrides for v8 build
 %{__make} -r chrome %{?with_sandboxing:chrome_sandbox} \
 	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
 	%{?with_verbose:V=1} \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
 	CC.host="%{__cc}" \
 	CXX.host="%{__cxx}" \
-	LDFLAGS.host="%{rpmldflags}" \
-	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
-	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}"
+	LDFLAGS.host="%{rpmldflags} -fuse-ld=gold" \
 
 cd ../out/%{!?debug:Release}%{?debug:Debug}
 MANWIDTH=80 man ./chrome.1 > man.out
