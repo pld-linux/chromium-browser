@@ -47,17 +47,15 @@ LOGFILE=$TMP_DIR/$PACKAGE_NAME-$VERSION.log
 cd "$TMP_DIR"
 if [ "$CHANNEL" = "dev" ]; then
 	srctarball=$PACKAGE_NAME-$VERSION.tar.xz
-	unpack=J
 	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.xz"
 else
 	srctarball=$PACKAGE_NAME-$VERSION.tar.bz2
-	unpack=j
 	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.bz2"
 fi
 
 # repackage cleaned up tarball
 test -d $PACKAGE_NAME-$VERSION || {
-	tar x${unpack}vf $srctarball
+	tar xvf $srctarball
 	install -d $PACKAGE_NAME-$VERSION
 	# relocate to src dir (needed to workaround some gyp bug)
 	mv chromium-$VERSION $PACKAGE_NAME-$VERSION/src
