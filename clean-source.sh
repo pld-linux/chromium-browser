@@ -532,9 +532,8 @@ clean_third_party() {
 		rm -vfr "$dir"
 	done
 
-return
-
-	find third_party -type f \! -iname '*.gyp*' \
+	find third_party -type f \
+		'!' -iname '*.gyp*' \
 		\! -path 'third_party/WebKit/*' \
 		\! -path 'third_party/adobe/flash/*' \
 		\! -path 'third_party/angle/*' \
@@ -546,7 +545,7 @@ return
 		\! -path 'third_party/hunspell/*' \
 		\! -path 'third_party/hyphen/*' \
 		\! -path 'third_party/iccjpeg/*' \
-		\! -path 'third_party/jstemplate/* '\
+		\! -path 'third_party/jstemplate/*' \
 		\! -path 'third_party/khronos/*' \
 		\! -path 'third_party/leveldatabase/*' \
 		\! -path 'third_party/libXNVCtrl/*' \
@@ -554,7 +553,7 @@ return
 		\! -path 'third_party/libphonenumber/*' \
 		\! -path 'third_party/libusb/libusb.h' \
 		\! -path 'third_party/libva/*' \
-		\! -path 'third_party/libvpx/libvpx.h' \
+		\! -path 'third_party/libvpx/*' \
 		\! -path 'third_party/libxml/chromium/*' \
 		\! -path 'third_party/libyuv/*' \
 		\! -path 'third_party/lss/*.h' \
@@ -579,6 +578,7 @@ return
 		\! -path 'third_party/v8/*' \
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/widevine/*' \
+		\! -path 'third_party/x86inc/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h
@@ -891,6 +891,7 @@ remove_tests > REMOVED-tests.txt
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
+	third_party/ffmpeg \
 	third_party/flac \
 	third_party/icu \
 	third_party/jsoncpp \
@@ -904,10 +905,10 @@ strip_system_dirs \
 	third_party/libusb \
 	third_party/libvpx \
 	third_party/libwebp \
-	third_party/libxml_ \
 	third_party/libxslt \
 	third_party/opus \
 	third_party/protobuf \
+	third_party/re2 \
 	third_party/speex \
 	third_party/yasm \
 	third_party/zlib \
