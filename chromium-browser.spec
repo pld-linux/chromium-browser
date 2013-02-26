@@ -28,6 +28,7 @@
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
+# system vpx broken currently due unreleased VP9 codec: https://code.google.com/p/chromium/issues/detail?id=174287
 %bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
@@ -56,8 +57,8 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
-%define		branch		25.0.1364
-%define		basever		97
+%define		branch		26.0.1410
+%define		basever		12
 #define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -70,7 +71,7 @@ Version:	%{branch}.%{basever}
 Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
 # Source0-md5:	d005fc9e50c28a2e3c71eee7310417f4
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
@@ -97,13 +98,10 @@ Patch10:	system-libxnvctrl.patch
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch12:	system-ffmpeg.patch
-Patch13:	system-libpng.patch
-Patch14:	system-opus.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
-Patch23:	no-pnacl.patch
 Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
@@ -276,44 +274,23 @@ cd src
 #%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p1
-%patch13 -p0
-%patch14 -p2
 %patch16 -p1
 %patch19 -p1
-%patch25 -p1
 %patch27 -p1
 cd ..
+%patch25 -p1
 %patch18 -p1
-%patch23 -p1
 %patch24 -p1
 %patch26 -p1
 
 cd src
-
-# Missing gyp files in tarball.
-# https://code.google.com/p/chromium/issues/detail?id=144823
-if [ -e chrome/test/data/nacl/nacl_test_data.gyp ]; then
-	echo "tarball fixed, please remove workaround"
-	exit 1
-fi
-
-install -d chrome/test/data/nacl
-cat > chrome/test/data/nacl/nacl_test_data.gyp <<-EOF
-{
- 'targets': [
-   {
-     'target_name': 'nacl_tests',
-     'type': 'none',
-   },
- ],
-}
-EOF
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
 	%{!?with_system_protobuf:protobuf=0} \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_zlib:zlib=0} \
+	%{!?with_system_libvpx:libvpx=0} \
 	%{!?with_system_libxnvctrl:libXNVCtrl=0} \
 	%{nil}
 

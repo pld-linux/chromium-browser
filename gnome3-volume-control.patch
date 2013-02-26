@@ -1,12 +1,12 @@
-diff -up chromium-14.0.835.186/media/audio/linux/audio_manager_linux.cc.gnome3 chromium-14.0.835.186/media/audio/linux/audio_manager_linux.cc
---- chromium-14.0.835.186/media/audio/linux/audio_manager_linux.cc.gnome3	2011-09-20 04:26:05.000000000 -0400
-+++ chromium-14.0.835.186/media/audio/linux/audio_manager_linux.cc	2011-09-27 10:06:22.987780465 -0400
-@@ -191,7 +191,7 @@ void AudioManagerLinux::ShowAudioInputSe
-   base::nix::DesktopEnvironment desktop = base::nix::GetDesktopEnvironment(
-       env.get());
-   std::string command((desktop == base::nix::DESKTOP_ENVIRONMENT_GNOME) ?
--                      "gnome-volume-control" : "kmix");
-+                      "gnome-control-center sound" : "kmix");
-   base::LaunchProcess(CommandLine(FilePath(command)), base::LaunchOptions(),
-                       NULL);
- }
+--- chromium-browser-26.0.1410.12/src/media/audio/linux/audio_manager_linux.cc~	2013-02-21 12:02:26.000000000 +0200
++++ chromium-browser-26.0.1410.12/src/media/audio/linux/audio_manager_linux.cc	2013-02-25 15:16:54.634665398 +0200
+@@ -92,7 +92,8 @@
+   CommandLine command_line(CommandLine::NO_PROGRAM);
+   switch (base::nix::GetDesktopEnvironment(env.get())) {
+     case base::nix::DESKTOP_ENVIRONMENT_GNOME:
+-      command_line.SetProgram(base::FilePath("gnome-volume-control"));
++      command_line.SetProgram(base::FilePath("gnome-control-center"));
++      command_line.AppendArg("sound");
+       break;
+     case base::nix::DESKTOP_ENVIRONMENT_KDE3:
+     case base::nix::DESKTOP_ENVIRONMENT_KDE4:
