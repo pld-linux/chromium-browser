@@ -24,6 +24,7 @@
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 %bcond_without	system_protobuf	# system protobuf
+%bcond_with		system_re2		# system re2
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
@@ -68,7 +69,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	1
+Release:	0.26
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
@@ -157,6 +158,7 @@ BuildRequires:	pciutils-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 %{?with_system_protobuf:BuildRequires:	protobuf-devel}
+%{?with_system_re2:BuildRequires:	re2-devel}
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
@@ -287,11 +289,12 @@ cd src
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
-	%{!?with_system_protobuf:protobuf=0} \
-	%{!?with_system_v8:v8=0} \
-	%{!?with_system_zlib:zlib=0} \
 	%{!?with_system_libvpx:libvpx=0} \
 	%{!?with_system_libxnvctrl:libXNVCtrl=0} \
+	%{!?with_system_protobuf:protobuf=0} \
+	%{!?with_system_re2:re2=0} \
+	%{!?with_system_v8:v8=0} \
+	%{!?with_system_zlib:zlib=0} \
 	%{nil}
 
 %build
@@ -397,6 +400,7 @@ test -e Makefile || \
 	%{gyp_with system_minizip} \
 	%{gyp_with system_opus} \
 	%{gyp_with system_protobuf} \
+	%{gyp_with system_re2} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
