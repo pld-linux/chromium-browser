@@ -489,6 +489,7 @@ almost_strip_dirs() {
 		'!' -iname '*.gyp*' \
 		'!' -path 'tools/build/*' \
 		'!' -path 'tools/clang/scripts/plugin_flags.sh' \
+		'!' -path 'tools/compile_test/compile_test.py' \
 		'!' -path 'tools/generate_library_loader/*' \
 		'!' -path 'tools/generate_shim_headers/generate_shim_headers.py' \
 		'!' -path 'tools/generate_stubs/*' \
@@ -540,7 +541,6 @@ clean_third_party() {
 		\! -path 'third_party/cacheinvalidation/*' \
 		\! -path 'third_party/cld/*' \
 		\! -path 'third_party/cros_system_api/*' \
-		\! -path 'third_party/flac/flac.h' \
 		\! -path 'third_party/flot/*.js' \
 		\! -path 'third_party/hunspell/*' \
 		\! -path 'third_party/hyphen/*' \
@@ -551,7 +551,6 @@ clean_third_party() {
 		\! -path 'third_party/libXNVCtrl/*' \
 		\! -path 'third_party/libjingle/*' \
 		\! -path 'third_party/libphonenumber/*' \
-		\! -path 'third_party/libusb/libusb.h' \
 		\! -path 'third_party/libva/*' \
 		\! -path 'third_party/libvpx/*' \
 		\! -path 'third_party/libxml/chromium/*' \
@@ -561,7 +560,6 @@ clean_third_party() {
 		\! -path 'third_party/modp_b64/*' \
 		\! -path 'third_party/mt19937ar/*' \
 		\! -path 'third_party/npapi/*' \
-		\! -path 'third_party/opus/opus.h*' \
 		\! -path 'third_party/ots/*' \
 		\! -path 'third_party/protobuf/*' \
 		\! -path 'third_party/qcms/*' \
@@ -569,7 +567,6 @@ clean_third_party() {
 		\! -path 'third_party/sfntly/*' \
 		\! -path 'third_party/skia/*' \
 		\! -path 'third_party/smhasher/*' \
-		\! -path 'third_party/speex/speex.h' \
 		\! -path 'third_party/sqlite/*' \
 		\! -path 'third_party/tcmalloc/*' \
 		\! -path 'third_party/trace-viewer/*' \
@@ -878,6 +875,7 @@ remove_tests() {
 		'!' -path './net/base/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
+		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
 		'!' -path './webkit/fileapi/test_mount_point_provider.*' \
 	-print -delete || :

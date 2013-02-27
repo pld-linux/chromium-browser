@@ -50,51 +50,71 @@ index 81b770c..7b6d673 100644
  namespace media {
  
  // Why FF_INPUT_BUFFER_PADDING_SIZE? FFmpeg assumes all input buffers are
-@@ -84,8 +86,10 @@
+Index: build/common.gypi
+diff --git a/build/common.gypi b/build/common.gypi
+index 34c6a15e0add1001e4a24712c9c809e3b698a390..521decfa19d102263086ebf4de7c8bac74c95e30 100644
+--- a/build/common.gypi
++++ b/build/common.gypi
+@@ -741,6 +741,9 @@
+     'google_default_client_secret%': '<(google_default_client_secret)',
+     'enable_managed_users%': '<(enable_managed_users)',
+ 
++    # Use system ffmpeg instead of bundled one.
++    'use_system_ffmpeg%': 0,
++
+     # Use system mesa instead of bundled one.
+     'use_system_mesa%': 0,
+ 
+Index: media/ffmpeg/ffmpeg_common.cc
+diff --git a/media/ffmpeg/ffmpeg_common.cc b/media/ffmpeg/ffmpeg_common.cc
+index 26953efc699a0dc1ce9cd951eb47b04713974b44..bf234304aa2b26fb7e0f729a4e75257099c00358 100644
+--- a/media/ffmpeg/ffmpeg_common.cc
++++ b/media/ffmpeg/ffmpeg_common.cc
+@@ -84,8 +84,10 @@ AudioCodec CodecIDToAudioCodec(CodecID codec_id) {
        return kCodecGSM_MS;
      case CODEC_ID_PCM_MULAW:
        return kCodecPCM_MULAW;
-+#ifdef CODEC_ID_OPUS
++#ifndef CHROMIUM_OMIT_CODEC_ID_OPUS
      case CODEC_ID_OPUS:
        return kCodecOpus;
 +#endif
      default:
        DVLOG(1) << "Unknown audio CodecID: " << codec_id;
    }
-@@ -129,8 +133,10 @@
+@@ -129,8 +131,10 @@ static CodecID AudioCodecToCodecID(AudioCodec audio_codec,
        return CODEC_ID_GSM_MS;
      case kCodecPCM_MULAW:
        return CODEC_ID_PCM_MULAW;
-+#ifdef CODEC_ID_OPUS
++#ifndef CHROMIUM_OMIT_CODEC_ID_OPUS
      case kCodecOpus:
        return CODEC_ID_OPUS;
 +#endif
      default:
        DVLOG(1) << "Unknown AudioCodec: " << audio_codec;
    }
-@@ -153,8 +153,10 @@
+@@ -147,8 +151,10 @@ VideoCodec CodecIDToVideoCodec(CodecID codec_id) {
        return kCodecMPEG4;
      case CODEC_ID_VP8:
        return kCodecVP8;
-+#ifdef AV_CODEC_ID_VP9:
++#ifndef CHROMIUM_OMIT_AV_CODEC_ID_VP9
      case AV_CODEC_ID_VP9:
        return kCodecVP9;
 +#endif
      default:
        DVLOG(1) << "Unknown video CodecID: " << codec_id;
    }
-@@ -171,8 +173,10 @@
+@@ -165,8 +171,10 @@ static CodecID VideoCodecToCodecID(VideoCodec video_codec) {
        return CODEC_ID_MPEG4;
      case kCodecVP8:
        return CODEC_ID_VP8;
-+#ifdef AV_CODEC_ID_VP9:
++#ifndef CHROMIUM_OMIT_AV_CODEC_ID_VP9
      case kCodecVP9:
        return AV_CODEC_ID_VP9;
 +#endif
      default:
        DVLOG(1) << "Unknown VideoCodec: " << video_codec;
    }
-@@ -423,8 +429,10 @@
+@@ -468,8 +476,10 @@ ChannelLayout ChannelLayoutToChromeChannelLayout(int64_t layout, int channels) {
        return CHANNEL_LAYOUT_6_1_FRONT;
      case AV_CH_LAYOUT_7POINT0_FRONT:
        return CHANNEL_LAYOUT_7_0_FRONT;
@@ -105,3 +125,91 @@ index 81b770c..7b6d673 100644
      case AV_CH_LAYOUT_OCTAGONAL:
        return CHANNEL_LAYOUT_OCTAGONAL;
      default:
+Index: media/media.gyp
+diff --git a/media/media.gyp b/media/media.gyp
+index f514dec48e5cc78567d141f20e2cb970a8707e92..75b62bebb503e2d9488bf0fc5cec3fd0a7e1916d 100644
+--- a/media/media.gyp
++++ b/media/media.gyp
+@@ -469,6 +469,18 @@
+             'filters/vpx_video_decoder.h',
+           ],
+         }],
++        ['use_system_ffmpeg == 1', {
++          'defines': [
++            '<!(python <(DEPTH)/tools/compile_test/compile_test.py '
++                '--code "#include <libavcodec/avcodec.h>\n'
++                'int test() { return CODEC_ID_OPUS; }" '
++                '--on-failure CHROMIUM_OMIT_CODEC_ID_OPUS)',
++            '<!(python <(DEPTH)/tools/compile_test/compile_test.py '
++                '--code "#include <libavcodec/avcodec.h>\n'
++                'int test() { return AV_CODEC_ID_VP9; }" '
++                '--on-failure CHROMIUM_OMIT_AV_CODEC_ID_VP9)',
++          ],
++        }],
+         ['OS == "ios"', {
+           'includes': [
+             # For shared_memory_support_sources variable.
+Index: tools/compile_test/compile_test.py
+diff --git a/tools/compile_test/compile_test.py b/tools/compile_test/compile_test.py
+new file mode 100755
+index 0000000000000000000000000000000000000000..a52c0720209142af858d656a071ca43328dd3b16
+--- /dev/null
++++ b/tools/compile_test/compile_test.py
+@@ -0,0 +1,57 @@
++#!/usr/bin/env python
++# Copyright (c) 2013 The Chromium Authors. All rights reserved.
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++
++"""
++Tries to compile given code, produces different output depending on success.
++
++This is similar to checks done by ./configure scripts.
++"""
++
++
++import optparse
++import os
++import shutil
++import subprocess
++import sys
++import tempfile
++
++
++def DoMain(argv):
++  parser = optparse.OptionParser()
++  parser.add_option('--code')
++  parser.add_option('--on-success', default='')
++  parser.add_option('--on-failure', default='')
++
++  options, args = parser.parse_args(argv)
++
++  if not options.code:
++    parser.error('Missing required --code switch.')
++
++  cxx = os.environ.get('CXX', 'g++')
++
++  tmpdir = tempfile.mkdtemp()
++  try:
++    cxx_path = os.path.join(tmpdir, 'test.cc')
++    with open(cxx_path, 'w') as f:
++      f.write(options.code.decode('string-escape'))
++
++    o_path = os.path.join(tmpdir, 'test.o')
++
++    cxx_popen = subprocess.Popen([cxx, cxx_path, '-o', o_path, '-c'], shell=True,
++                                 stdout=subprocess.PIPE,
++                                 stderr=subprocess.PIPE)
++    cxx_stdout, cxx_stderr = cxx_popen.communicate()
++    if cxx_popen.returncode == 0:
++      print options.on_success
++    else:
++      print options.on_failure
++  finally:
++    shutil.rmtree(tmpdir)
++
++  return 0
++
++
++if __name__ == '__main__':
++  sys.exit(DoMain(sys.argv[1:]))
