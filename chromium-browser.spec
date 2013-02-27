@@ -22,6 +22,7 @@
 %bcond_without	system_libusb	# system libusb-1
 %bcond_without	system_libwebp	# system libwebp
 %bcond_without	system_libxnvctrl	# system libxnvctrl
+%bcond_with		system_mesa		# system Mesa
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 %bcond_without	system_protobuf	# system protobuf
@@ -30,8 +31,7 @@
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
-# system vpx broken currently due unreleased VP9 codec: https://code.google.com/p/chromium/issues/detail?id=174287
-%bcond_without	system_libvpx	# system libvpx
+%bcond_with		system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
 %bcond_without	tcmalloc		# use tcmalloc
@@ -44,6 +44,9 @@
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
+# - mesa https://code.google.com/p/chromium/issues/detail?id=161389
+#   missing packages for GL/glfbdev.h GL/vms_x_fix.h GL/wglext.h GL/wmesa.h
+# - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -70,7 +73,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.26
+Release:	0.27
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
@@ -110,6 +113,9 @@ Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
+%{?with_system_mesa:BuildRequires:	Mesa-libGL-devel}
+%{?with_system_mesa:BuildRequires:	Mesa-libGLU-devel}
+%{?with_system_mesa:BuildRequires:	Mesa-libOSMesa-devel}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -400,6 +406,7 @@ test -e Makefile || \
 	%{gyp_with system_libvpx} \
 	%{gyp_with system_libwebp} \
 	%{gyp_with system_libxnvctrl} \
+	%{gyp_with system_mesa} \
 	%{gyp_with system_minizip} \
 	%{gyp_with system_opus} \
 	%{gyp_with system_protobuf} \
