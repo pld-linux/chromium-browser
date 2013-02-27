@@ -5,6 +5,7 @@
 %bcond_without	gconf			# with GConf
 %bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
+%bcond_with		gps 			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_without	nacl			# build Native Client support
 %bcond_without	pulseaudio		# with pulseaudio
@@ -125,6 +126,7 @@ BuildRequires:	expat-devel
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
+%{?with_gps:BuildRequires:	gpsd-devel}
 BuildRequires:	gtest-devel
 BuildRequires:	gtk+2-devel
 %{?with_system_harfbuzz:BuildRequires:	harfbuzz-devel}
@@ -158,12 +160,12 @@ BuildRequires:	pciutils-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 %{?with_system_protobuf:BuildRequires:	protobuf-devel}
-%{?with_system_re2:BuildRequires:	re2-devel}
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-modules
 BuildRequires:	python-ply
+%{?with_system_re2:BuildRequires:	re2-devel}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
@@ -380,6 +382,7 @@ test -e Makefile || \
 	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
 	-Dlinux_link_libpci=1 \
 	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
+	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0 \
 	%{gyp_with cups} \
