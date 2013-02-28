@@ -18,7 +18,7 @@ cd "$dir"
 dir=$(pwd)
 
 # extract version components from url
-# exports: $version; $release; $svndate; $svnver
+# exports: $version; $release; $svndate; $svnver; $branch; $basever
 extract_version() {
 	local url=$1 part
 
@@ -27,7 +27,9 @@ extract_version() {
 		# ubuntu urls
 		version=${part%~*}; part=${part#*${version}~}
 	else
-		version=${part%.tar.*}; part=${part#*${version}.tar.*}
+		version=${part%.tar.*}; part=${part#*${version}}
+		part=${part#.tar.xz}
+		part=${part#.tar.gz}
 	fi
 
 	# release always 1 :)
@@ -40,7 +42,10 @@ extract_version() {
 	fi
 	svnver=${part#r}; svnver=${svnver%%.*}
 
-	: version=$version release=$release svnver=$svnver
+	branch=${version%.*}
+	basever=${version#${branch}.}
+
+	: EXTRACTED: version=$version release=$release svnver=$svnver branch=$branch basever=$basever
 }
 
 url2version() {
@@ -61,6 +66,8 @@ version2url() {
 	echo "${url}" | sed -e "
 		s,%{version},$version,g
 		s,%{release},$release,g
+		s,%{basever},$basever,g
+		s,%{branch},$branch,g
 		s,%{svndate},$svndate,g
 		s,%{svnver},$svnver,g
 	"
@@ -114,7 +121,7 @@ url_tpl=$(url2version $tarball)
 
 svndate=$(awk '/^%define[ 	]+svndate[ 	]+/{print $NF}' $specfile)
 svnver=$(awk '/^%define[ 	]+svnver[ 	]+/{print $NF}' $specfile)
-version=$(awk '/^Version:[ 	]+/{print $NF}' $specfile)
+version=$(awk '/^Version:[ 	]+/{print $NF}' $specfile | tail -n1)
 rel=$(awk '/^%define[ 	]+rel[ 	]+/{print $NF}' $specfile)
 if [ "$svndate" = "%{nil}" ]; then
 	svndate=
@@ -136,6 +143,8 @@ else
 	sed -i -e "
 		s/^\(%define[ \t]\+svnver[ \t]\+\)[0-9]\+\$/\1$svnver/
 		s/^\(%define[ \t]\+svndate[ \t]\+\).\+\$/\1$svndate/
+		s/^\(%define[ \t]\+branch[ \t]\+\).\+\$/\1$branch/
+		s/^\(%define[ \t]\+basever[ \t]\+\).\+\$/\1$basever/
 		s/^\(%define[ \t]\+rel[ \t]\+\)[0-9]\+\$/\1$release/
 		s/^\(Version:[ \t]\+\)[.0-9]\+\$/\1$version/
 	" $specfile
@@ -166,7 +175,7 @@ fi
 
 command=-bp
 test "$build_package" = 1 && command=-bb
-	rpmbuild $command --clean \
+rpmbuild $command --clean \
 	--define "_unpackaged_files_terminate_build 1" \
 	--define '_enable_debug_packages 0' \
 	--define "_topdir $dir" \
