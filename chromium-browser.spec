@@ -22,7 +22,7 @@
 %bcond_without	system_libusb	# system libusb-1
 %bcond_without	system_libwebp	# system libwebp
 %bcond_without	system_libxnvctrl	# system libxnvctrl
-%bcond_with		system_mesa		# system Mesa
+%bcond_without	system_mesa		# system Mesa
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 %bcond_without	system_protobuf	# system protobuf
@@ -44,8 +44,6 @@
 # - use_system_hunspell
 # - use_system_stlport
 # - other defaults: src/build/common.gypi
-# - mesa https://code.google.com/p/chromium/issues/detail?id=161389
-#   missing packages for GL/glfbdev.h GL/vms_x_fix.h GL/wglext.h GL/wmesa.h
 # - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
 
 # NOTES:
@@ -73,10 +71,10 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.27
+Release:	0.29
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
 # Source0-md5:	d005fc9e50c28a2e3c71eee7310417f4
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
@@ -111,9 +109,11 @@ Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
+Patch28:	system-mesa.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel}
+%{?with_system_mesa:BuildRequires:	Mesa-libGLES-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGLU-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libOSMesa-devel}
 BuildRequires:	alsa-lib-devel
@@ -265,9 +265,9 @@ v8_ver=$(awk 'NR=1 {print $NF; exit}' src/v8/ChangeLog || :)
 # add chromium and pld to useragent
 %define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
 sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
-    -e 's/@BUILD_DIST_NAME@/PLD/g' \
-    -e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
-    < %{PATCH8} | %{__patch} -p1
+	-e 's/@BUILD_DIST_NAME@/PLD/g' \
+	-e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
+	< %{PATCH8} | %{__patch} -p1
 
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} src
@@ -292,6 +292,7 @@ cd ..
 %patch18 -p1
 %patch24 -p1
 %patch26 -p1
+%patch28 -p1
 
 cd src
 
@@ -299,6 +300,7 @@ sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
 	%{!?with_system_libvpx:libvpx=0} \
 	%{!?with_system_libxnvctrl:libXNVCtrl=0} \
+	%{!?with_system_mesa:mesa=0} \
 	%{!?with_system_protobuf:protobuf=0} \
 	%{!?with_system_re2:re2=0} \
 	%{!?with_system_v8:v8=0} \

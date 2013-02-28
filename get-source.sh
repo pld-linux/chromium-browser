@@ -45,7 +45,7 @@ LOGFILE=$TMP_DIR/$PACKAGE_NAME-$VERSION.log
 
 (
 cd "$TMP_DIR"
-if [ "$CHANNEL" = "dev" ]; then
+if [ "$CHANNEL" != "stable" ]; then
 	srctarball=$PACKAGE_NAME-$VERSION.tar.xz
 	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.xz"
 else

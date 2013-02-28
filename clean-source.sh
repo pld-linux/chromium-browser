@@ -904,6 +904,7 @@ strip_system_dirs \
 	third_party/libvpx \
 	third_party/libwebp \
 	third_party/libxslt \
+	third_party/mesa \
 	third_party/opus \
 	third_party/protobuf \
 	third_party/re2 \
