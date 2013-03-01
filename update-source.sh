@@ -121,6 +121,8 @@ url_tpl=$(url2version $tarball)
 
 svndate=$(awk '/^%define[ 	]+svndate[ 	]+/{print $NF}' $specfile)
 svnver=$(awk '/^%define[ 	]+svnver[ 	]+/{print $NF}' $specfile)
+branch=$(awk '/^%define[ 	]+branch[ 	]+/{print $NF}' $specfile)
+basever=$(awk '/^%define[ 	]+basever[ 	]+/{print $NF}' $specfile)
 version=$(awk '/^Version:[ 	]+/{print $NF}' $specfile | tail -n1)
 rel=$(awk '/^%define[ 	]+rel[ 	]+/{print $NF}' $specfile)
 if [ "$svndate" = "%{nil}" ]; then
