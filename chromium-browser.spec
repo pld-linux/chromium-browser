@@ -37,6 +37,11 @@
 %bcond_without	tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
+%ifarch %{ix86}
+# GLsizeiptr different size, track: http://bugs.gentoo.org/457130
+%undefine	with_system_mesa
+%endif
+
 # TODO
 # - find system deps: find -type f -name '*.gyp*' | xargs grep -oh 'use_system_.*%' | sort -u
 # - use_system_icu
