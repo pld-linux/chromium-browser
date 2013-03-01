@@ -38,12 +38,11 @@
 %bcond_without	verbose			# verbose build (V=1)
 
 # TODO
-# - check system sqlite linking problems
-# - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
+# - find system deps: find -type f -name '*.gyp*' | xargs grep -oh 'use_system_.*%' | sort -u
+# - use_system_icu
+# - use_system_skia
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
-# - use_system_hunspell
-# - use_system_stlport
-# - other defaults: src/build/common.gypi
+# - use_system_stlport (android specific)
 # - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
 
 # NOTES:
@@ -61,7 +60,7 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
 %define		branch		26.0.1410
-%define		basever		12
+%define		basever		19
 #define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -427,6 +426,7 @@ test -e Makefile || \
 	-Duse_system_libpng=1 \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
+	-Duse_system_nspr=1 \
 	-Duse_system_xdg_utils=1 \
 
 # need {CC/CXX/LDFLAGS}.host overrides for v8 build
