@@ -69,15 +69,8 @@ du -sh .
 
 awk 'NR=1 {print $NF; exit}' v8/ChangeLog | tee -a v8.txt
 
-# keep v8 in sources if branch is not stable
-if [ "$CHANNEL" = "stable" ]; then
-	v8=0
-else
-	v8=0
-fi
-
 if [ "$CHANNEL" != "dev" ]; then
-	sh -x $WORK_DIR/clean-source.sh v8=$v8 emptydirs=1
+	sh -x $WORK_DIR/clean-source.sh emptydirs=1 v8=0 libvpx=0 mesa=0 re2=0
 fi
 
 # do not keep REMOVED*.txt in tarball. they are visible in .log anyway
