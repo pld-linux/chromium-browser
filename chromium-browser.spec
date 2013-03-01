@@ -174,6 +174,7 @@ BuildRequires:	python-ply
 %{?with_system_re2:BuildRequires:	re2-devel}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
+BuildRequires:	speech-dispatcher-devel
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 BuildRequires:	sqlite3-devel >= 3.6.1
 %{?with_system_libsrtp:BuildRequires:	srtp-devel >= 1.4.4}
