@@ -537,7 +537,11 @@ clean_third_party() {
 		'!' -iname '*.gyp*' \
 		\! -path 'third_party/WebKit/*' \
 		\! -path 'third_party/adobe/flash/*' \
-		\! -path 'third_party/angle/*' \
+		\! -path 'third_party/angle/include/EGL/*' \
+		\! -path 'third_party/angle/include/GLSLANG/*' \
+		\! -path 'third_party/angle/src/common/*' \
+		\! -path 'third_party/angle/src/compiler/*' \
+		\! -path 'third_party/angle/src/third_party/compiler/*' \
 		\! -path 'third_party/cacheinvalidation/*' \
 		\! -path 'third_party/cld/*' \
 		\! -path 'third_party/cros_system_api/*' \
