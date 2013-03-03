@@ -560,7 +560,11 @@ clean_third_party() {
 		\! -path 'third_party/libxml/chromium/*' \
 		\! -path 'third_party/libyuv/*' \
 		\! -path 'third_party/lss/*.h' \
-		\! -path 'third_party/mesa/*' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/gl.h' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/glext.h' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/glx.h' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/glxext.h' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/osmesa.h' \
 		\! -path 'third_party/modp_b64/*' \
 		\! -path 'third_party/mt19937ar/*' \
 		\! -path 'third_party/npapi/*' \
