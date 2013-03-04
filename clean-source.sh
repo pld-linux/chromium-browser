@@ -29,6 +29,10 @@ remove_nonessential_dirs() {
 		-name '*.m' \
 	')' | xargs rm -vf
 
+	find -regextype posix-extended \
+		-regex '.*_(win|cros|mac)_.*.xtb' \
+	-print -delete
+
 	local dir
 	for dir in \
 	android_webview \
