@@ -44,7 +44,6 @@
 
 # TODO
 # - find system deps: find -type f -name '*.gyp*' | xargs grep -oh 'use_system_.*%' | sort -u
-# - use_system_icu
 # - use_system_skia
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_stlport (android specific)
@@ -75,7 +74,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.29
+Release:	0.31
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
@@ -114,6 +113,7 @@ Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
 Patch28:	system-mesa.patch
+Patch29:	speechd-0.8.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel}
@@ -178,7 +178,7 @@ BuildRequires:	python-ply
 %{?with_system_re2:BuildRequires:	re2-devel}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
-BuildRequires:	speech-dispatcher-devel
+BuildRequires:	speech-dispatcher-devel >= 0.8
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 BuildRequires:	sqlite3-devel >= 3.6.1
 %{?with_system_libsrtp:BuildRequires:	srtp-devel >= 1.4.4}
@@ -298,6 +298,7 @@ cd ..
 %patch24 -p1
 %patch26 -p1
 %patch28 -p1
+%patch29 -p1
 
 cd src
 
