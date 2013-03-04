@@ -395,13 +395,14 @@ test -e Makefile || \
 	%{?with_selinux:-Dselinux=1} \
 	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
 	-Dlinux_link_libpci=1 \
+	-Dlinux_link_libspeechd=1 \
 	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0 \
 	%{gyp_with cups} \
 	%{gyp_with gconf} -Dlinux_link_gsettings=0 \
-	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
+	%{gyp_with kerberos} -Dlinux_link_kerberos=1 \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
 	%{gyp_with system_ffmpeg} \
