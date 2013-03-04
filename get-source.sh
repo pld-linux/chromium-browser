@@ -12,6 +12,9 @@ LOCKFILE=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.lock
 OFFICIAL_URL=http://commondatastorage.googleapis.com/chromium-browser-official
 DIST_DIR=$HOME/public_html/chromium-browser/src/$CHANNEL
 
+# skip package build if interactive
+tty -s && build_package=0
+
 VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')
 if [ -z "$VERSION" ]; then
 	echo >&2 "Can't figure out version for $CHANNEL"
@@ -112,8 +115,8 @@ set -x
 
 	# try updating spec and build it as well
 	if [ -x $WORK_DIR/update-source.sh ]; then
-		build_package=1 \
-		publish_packages=1 \
+		build_package=${build_package-1} \
+		publish_packages=${publish_packages-1} \
 		sh -x $WORK_DIR/update-source.sh
 	fi
 
