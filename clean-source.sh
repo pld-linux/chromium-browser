@@ -432,6 +432,7 @@ remove_nonessential_dirs() {
 		'!' -path 'base/win/windows_version.h' \
 		'!' -path 'build/android/cpufeatures.gypi' \
 		'!' -path 'chrome/browser/chromeos/contacts/contact.proto' \
+		'!' -path 'chrome/browser/chromeos/login/*.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_names.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_provider.h' \
@@ -569,6 +570,7 @@ clean_third_party() {
 		\! -path 'third_party/v8/*' \
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/widevine/*' \
+		\! -path 'third_party/x86inc/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h
