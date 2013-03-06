@@ -31,7 +31,7 @@
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
-%bcond_with		system_libvpx	# system libvpx
+%bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
 %bcond_without	tcmalloc		# use tcmalloc
@@ -74,7 +74,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.31
+Release:	0.32
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
@@ -114,6 +114,7 @@ Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
+Patch30:	system-libvpx.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel}
@@ -292,13 +293,14 @@ cd src
 %patch16 -p1
 %patch19 -p1
 %patch27 -p1
+%patch28 -p1
 cd ..
 %patch25 -p1
 %patch18 -p1
 %patch24 -p1
 %patch26 -p1
-%patch28 -p1
 %patch29 -p1
+%patch30 -p2
 
 cd src
 
@@ -405,14 +407,14 @@ test -e Makefile || \
 	%{gyp_with kerberos} -Dlinux_link_kerberos=1 \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
-	%{gyp_with system_ffmpeg} \
+	%{gyp_with system_ffmpeg} -Dmedia_use_ffmpeg=1 \
 	%{gyp_with system_flac} \
 	%{gyp_with system_harfbuzz} \
 	%{gyp_with system_libexif} \
 	%{gyp_with system_libmtp} \
 	%{gyp_with system_libsrtp} \
 	%{gyp_with system_libusb} \
-	%{gyp_with system_libvpx} \
+	%{gyp_with system_libvpx} -Dmedia_use_libvpx=0 \
 	%{gyp_with system_libwebp} \
 	%{gyp_with system_libxnvctrl} \
 	%{gyp_with system_mesa} \
