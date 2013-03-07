@@ -13,18 +13,16 @@ index 17241b9..8a92312 100644
  
  namespace media {
  
-diff --git a/media/media.gyp b/media/media.gyp
-index df217d2..fde3830 100644
---- a/media/media.gyp
-+++ b/media/media.gyp
-@@ -363,6 +363,9 @@
+--- chromium-browser-26.0.1410.28/media/media.gyp~	2013-03-07 10:20:52.000000000 +0200
++++ chromium-browser-26.0.1410.28/media/media.gyp	2013-03-07 10:22:28.357340017 +0200
+@@ -430,6 +430,9 @@
            'dependencies': [
              '../third_party/ffmpeg/ffmpeg.gyp:ffmpeg',
            ],
 +          'export_dependent_settings': [
 +            '../third_party/ffmpeg/ffmpeg.gyp:ffmpeg',
 +          ],
-         }, {  # use_ffmpeg == 0
+         }, {  # media_use_ffmpeg == 0
            # Exclude the sources that depend on ffmpeg.
            'sources!': [
 --- a/media/ffmpeg/ffmpeg_common.cc.orig	2013-01-17 00:07:51.635057013 +0000

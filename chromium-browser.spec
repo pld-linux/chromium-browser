@@ -64,7 +64,7 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
 %define		branch		26.0.1410
-%define		basever		19
+%define		basever		28
 #define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -114,7 +114,6 @@ Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
-Patch30:	system-libvpx.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -300,7 +299,6 @@ cd ..
 %patch24 -p1
 %patch26 -p1
 %patch29 -p1
-%patch30 -p2
 
 cd src
 
