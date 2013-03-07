@@ -117,10 +117,10 @@ Patch29:	speechd-0.8.patch
 Patch30:	system-libvpx.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
-%{?with_system_mesa:BuildRequires:	Mesa-libGL-devel}
-%{?with_system_mesa:BuildRequires:	Mesa-libGLES-devel}
+%{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
+%{?with_system_mesa:BuildRequires:	Mesa-libGLES-devel >= 9.1}
 %{?with_system_mesa:BuildRequires:	Mesa-libGLU-devel}
-%{?with_system_mesa:BuildRequires:	Mesa-libOSMesa-devel}
+%{?with_system_mesa:BuildRequires:	Mesa-libOSMesa-devel >= 9.1}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
