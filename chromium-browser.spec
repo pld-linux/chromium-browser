@@ -64,7 +64,7 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
 %define		branch		26.0.1410
-%define		basever		28
+%define		basever		33
 #define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -78,7 +78,7 @@ Release:	0.32
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
-# Source0-md5:	d005fc9e50c28a2e3c71eee7310417f4
+# Source0-md5:	e42f86208205701bd23b34ba963e7d83
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	37675cd75c578d26d6210259877f3947
