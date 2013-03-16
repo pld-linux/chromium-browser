@@ -1,106 +1,18 @@
-diff -up chromium-20.0.1132.47/build/linux/system.gyp.system-jsoncpp chromium-20.0.1132.47/build/linux/system.gyp
---- chromium-20.0.1132.47/build/linux/system.gyp.system-jsoncpp	2012-07-07 21:09:14.954006176 -0400
-+++ chromium-20.0.1132.47/build/linux/system.gyp	2012-07-07 21:09:15.088006176 -0400
-@@ -468,6 +468,27 @@
-       ],
-     },
-     {
-+      'target_name': 'jsoncpp',
-+      'type': 'none',
-+      'conditions': [
-+        ['_toolset=="target"', {
+Adjust include path for system jsoncpp
+
+https://src.chromium.org/viewvc/chrome?view=rev&revision=183190
+
+--- a/src/third_party/jsoncpp/jsoncpp.gyp
++++ b/src/third_party/jsoncpp/jsoncpp.gyp
+@@ -66,6 +66,11 @@
+           'includes': [
+             '../../build/shim_headers.gypi',
+           ],
 +          'direct_dependent_settings': {
-+            'cflags': [
-+              '<!@(pkg-config --cflags jsoncpp)',
++            'include_dirs': [
++              '/usr/include/jsoncpp',
 +            ],
 +          },
-+          'link_settings': {
-+            'ldflags': [
-+              '<!@(pkg-config --libs-only-L --libs-only-other jsoncpp)',
-+            ],
-+            'libraries': [
-+              '<!@(pkg-config --libs-only-l jsoncpp)',
-+            ],
-+          },
-+	}],
-+      ],
-+    },
-+    {
-       'target_name': 'gnome_keyring',
-       'type': 'none',
-       'conditions': [
-diff -up chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/json_manifest.cc.system-jsoncpp chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/json_manifest.cc
---- chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/json_manifest.cc.system-jsoncpp	2012-06-28 09:01:22.000000000 -0400
-+++ chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/json_manifest.cc	2012-07-07 21:09:15.090006176 -0400
-@@ -19,7 +19,7 @@
- #include "native_client/src/trusted/plugin/utility.h"
- #include "ppapi/cpp/dev/url_util_dev.h"
- #include "ppapi/cpp/var.h"
--#include "third_party/jsoncpp/source/include/json/reader.h"
-+#include <json/reader.h>
- 
- namespace plugin {
- 
-diff -up chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/json_manifest.h.system-jsoncpp chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/json_manifest.h
---- chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/json_manifest.h.system-jsoncpp	2012-06-28 09:01:22.000000000 -0400
-+++ chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/json_manifest.h	2012-07-07 21:09:15.090006176 -0400
-@@ -16,7 +16,7 @@
- #include "native_client/src/include/nacl_macros.h"
- #include "native_client/src/include/nacl_string.h"
- #include "native_client/src/trusted/plugin/manifest.h"
--#include "third_party/jsoncpp/source/include/json/value.h"
-+#include <json/value.h>
- 
- namespace pp {
- class URLUtil_Dev;
-diff -up chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/manifest.h.system-jsoncpp chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/manifest.h
---- chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/manifest.h.system-jsoncpp	2012-06-28 09:01:22.000000000 -0400
-+++ chromium-20.0.1132.47/ppapi/native_client/src/trusted/plugin/manifest.h	2012-07-07 21:09:15.091006176 -0400
-@@ -15,7 +15,7 @@
- 
- #include "native_client/src/include/nacl_macros.h"
- #include "native_client/src/include/nacl_string.h"
--#include "third_party/jsoncpp/source/include/json/value.h"
-+#include <json/value.h>
- 
- namespace pp {
- class URLUtil_Dev;
---- chromium-browser-24.0.1312.14/ppapi/native_client/src/trusted/plugin/plugin.gyp~	2012-11-14 04:35:12.000000000 +0200
-+++ chromium-browser-24.0.1312.14/ppapi/native_client/src/trusted/plugin/plugin.gyp	2012-11-16 00:01:34.889848810 +0200
-@@ -76,7 +76,7 @@
-         '<(DEPTH)/native_client/src/trusted/weak_ref/weak_ref.gyp:weak_ref',
-         '<(DEPTH)/ppapi/native_client/src/shared/ppapi_proxy/ppapi_proxy.gyp:nacl_ppapi_browser',
-         '<(DEPTH)/ppapi/ppapi.gyp:ppapi_cpp',
--        '<(DEPTH)/third_party/jsoncpp/jsoncpp.gyp:jsoncpp',
-+        '<(DEPTH)/build/linux/system.gyp:jsoncpp',
-       ],
-       'conditions': [
-         ['OS=="mac"', {
-diff -up chromium-20.0.1132.47/third_party/libjingle/libjingle.gyp.system-jsoncpp chromium-20.0.1132.47/third_party/libjingle/libjingle.gyp
---- chromium-20.0.1132.47/third_party/libjingle/libjingle.gyp.system-jsoncpp	2012-07-07 21:09:54.042990761 -0400
-+++ chromium-20.0.1132.47/third_party/libjingle/libjingle.gyp	2012-07-07 21:10:37.294008997 -0400
-@@ -349,10 +349,10 @@
-         'source/talk/xmpp/xmpptask.h',
-       ],
-       'dependencies': [
--        '<(DEPTH)/third_party/jsoncpp/jsoncpp.gyp:jsoncpp',
-+        '<(DEPTH)/build/linux/system.gyp:jsoncpp',
-       ],
-       'export_dependent_settings': [
--        '<(DEPTH)/third_party/jsoncpp/jsoncpp.gyp:jsoncpp',
-+        '<(DEPTH)/build/linux/system.gyp:jsoncpp',
-       ],
-       'conditions': [
-         ['OS=="win"', {
-diff -up chromium-20.0.1132.47/third_party/libjingle/source/talk/base/json.h.system-jsoncpp chromium-20.0.1132.47/third_party/libjingle/source/talk/base/json.h
---- chromium-20.0.1132.47/third_party/libjingle/source/talk/base/json.h.system-jsoncpp	2012-07-07 21:11:19.579006082 -0400
-+++ chromium-20.0.1132.47/third_party/libjingle/source/talk/base/json.h	2012-07-07 21:11:31.392987497 -0400
-@@ -32,7 +32,7 @@
- #include <vector>
- 
- #ifdef JSONCPP_RELATIVE_PATH
--#include "json/json.h"
-+#include <json/json.h>
- #else
- #include "third_party/jsoncpp/json.h"
- #endif
+           'link_settings': {
+             'libraries': [
+               '-ljsoncpp',

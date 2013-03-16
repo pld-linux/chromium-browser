@@ -523,7 +523,6 @@ clean_third_party() {
 		third_party/iaccessible2 \
 		third_party/icon_family \
 		third_party/isimpledom \
-		third_party/jsoncpp \
 		third_party/jsr-305 \
 		third_party/libexif \
 		third_party/mach_override \

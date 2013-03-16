@@ -290,7 +290,7 @@ cd src
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p1
 %patch16 -p1
-%patch19 -p1
+%patch19 -p2
 %patch27 -p1
 %patch28 -p1
 cd ..
@@ -408,6 +408,7 @@ test -e Makefile || \
 	%{gyp_with system_ffmpeg} -Dmedia_use_ffmpeg=1 \
 	%{gyp_with system_flac} \
 	%{gyp_with system_harfbuzz} \
+	%{gyp_with system_jsoncpp} \
 	%{gyp_with system_libexif} \
 	%{gyp_with system_libmtp} \
 	%{gyp_with system_libsrtp} \
