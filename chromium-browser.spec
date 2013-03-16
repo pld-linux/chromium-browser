@@ -26,7 +26,7 @@
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 %bcond_without	system_protobuf	# system protobuf
-%bcond_with		system_re2		# system re2
+%bcond_without	system_re2		# system re2
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
@@ -74,7 +74,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.32
+Release:	0.33
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
@@ -175,7 +175,7 @@ BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-modules
 BuildRequires:	python-ply
-%{?with_system_re2:BuildRequires:	re2-devel}
+%{?with_system_re2:BuildRequires:	re2-devel >= 20130115-2}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	speech-dispatcher-devel >= 0.8
