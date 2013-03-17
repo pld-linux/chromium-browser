@@ -55,15 +55,13 @@ set -x
 	# repackage cleaned up tarball
 	test -d $PACKAGE_NAME-$VERSION || {
 		tar xvf $srctarball
-		install -d $PACKAGE_NAME-$VERSION
-		# relocate to src dir (needed to workaround some gyp bug)
-		mv chromium-$VERSION $PACKAGE_NAME-$VERSION/src
+		mv chromium-$VERSION $PACKAGE_NAME-$VERSION
 	}
 
 	ls -lh $srctarball
 	rm $srctarball
 
-	cd $PACKAGE_NAME-$VERSION/src
+	cd $PACKAGE_NAME-$VERSION
 	du -sh .
 
 	awk 'NR=1 {print $NF; exit}' v8/ChangeLog | tee -a v8.txt
@@ -81,7 +79,7 @@ set -x
 	svnver=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $8}')
 	echo "$svnver" > build/LASTCHANGE.in
 
-	cd ../..
+	cd ..
 
 	tarball=$PACKAGE_NAME-$VERSION.tar.$EXT
 	# xz -9 OOM's on carme

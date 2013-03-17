@@ -3,7 +3,7 @@
 %bcond_without	cups			# with cups
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
 %bcond_without	gconf			# with GConf
-%bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
+%bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
 %bcond_with		gps 			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
@@ -74,7 +74,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.33
+Release:	0.34
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
@@ -254,37 +254,36 @@ cd %{name}-%{branch}.%{basever}
 %patch0 -p1
 cd ..
 %endif
-mv %{name}-%{branch}.%{basever}/src .
+mv %{name}-%{branch}.%{basever}/* .
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
-. ./src/chrome/VERSION
+. ./chrome/VERSION
 ver=$MAJOR.$MINOR.$BUILD.$PATCH
 test "$ver" = %{version}
 
-gyp_rev=$(grep googlecode_url.*gyp src/DEPS | cut -d'"' -f6 | cut -d@ -f2)
+gyp_rev=$(grep googlecode_url.*gyp DEPS | cut -d'"' -f6 | cut -d@ -f2)
 test "$gyp_rev" = %{gyp_rev} || :
 
-v8_ver=$(awk 'NR=1 {print $NF; exit}' src/v8/ChangeLog || :)
+v8_ver=$(awk 'NR=1 {print $NF; exit}' v8/ChangeLog || :)
 
 # add chromium and pld to useragent
 %define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
 sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 	-e 's/@BUILD_DIST_NAME@/PLD/g' \
 	-e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
-	< %{PATCH8} | %{__patch} -p1
+	< %{PATCH8} | %{__patch} -p2
 
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
-ln -s %{SOURCE7} src
+ln -s %{SOURCE7} .
 
-%patch1 -p1
-%patch3 -p1
-%patch4 -p1
-%patch6 -p1
-%patch7 -p1
-%patch10 -p1
-%patch15 -p1
-cd src
+%patch1 -p2
+%patch3 -p2
+%patch4 -p3
+%patch6 -p2
+%patch7 -p2
+%patch10 -p2
+%patch15 -p2
 %patch9 -p0
 #%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
@@ -293,14 +292,11 @@ cd src
 %patch19 -p2
 %patch27 -p1
 %patch28 -p1
-cd ..
-%patch25 -p1
-%patch18 -p1
-%patch24 -p1
-%patch26 -p1
-%patch29 -p1
-
-cd src
+%patch25 -p2
+%patch18 -p2
+%patch24 -p2
+%patch26 -p2
+%patch29 -p2
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
@@ -314,8 +310,6 @@ sh -x clean-source.sh \
 	%{nil}
 
 %build
-cd src
-
 %if %{with nacl}
 rm -rf native_client/toolchain/linux_x86_newlib
 if [ ! -d native_client/toolchain/linux_x86_newlib ]; then
@@ -360,7 +354,7 @@ test -e Makefile || \
 	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}" \
 %{__python} build/gyp_chromium \
 	--format=make \
-	-Goutput_dir=../out \
+	--depth=. \
 	build/all.gyp \
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \
@@ -445,7 +439,7 @@ test -e Makefile || \
 	CXX.host="%{__cxx}" \
 	LDFLAGS.host="%{rpmldflags} -fuse-ld=gold" \
 
-cd ../out/%{!?debug:Release}%{?debug:Debug}
+cd out/%{!?debug:Release}%{?debug:Debug}
 MANWIDTH=80 man ./chrome.1 > man.out
 %{__sed} -e '1,/OPTIONS/d; /ENVIRONMENT/,$d' man.out > options.txt
 
@@ -491,7 +485,7 @@ install -p nacl_irt_x86_32.nexe $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 cd -
 
-for icon in src/chrome/app/theme/chromium/product_logo_[0-9]*.png; do
+for icon in chrome/app/theme/chromium/product_logo_[0-9]*.png; do
 	size=${icon##*/product_logo_}
 	size=${size%.png}
 
@@ -529,7 +523,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc src/{AUTHORS,LICENSE}
+%doc AUTHORS LICENSE
 %{_browserpluginsconfdir}/browsers.d/%{name}.*
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 %dir %{_sysconfdir}/%{name}
