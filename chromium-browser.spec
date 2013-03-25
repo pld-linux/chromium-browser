@@ -74,7 +74,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.34
+Release:	0.35
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
@@ -203,6 +203,7 @@ Requires:	libevent >= 2.0.21
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 %{?with_system_libvpx:Requires:	libvpx >= 0.9.5-2}
 Requires:	lsb-release
+%{?with_system_re2:Requires:	re2 >= 20130115-2}
 Requires:	shared-mime-info
 Requires:	xdg-utils >= 1.0.2-4
 Requires:	xorg-lib-libX11 >= 1.4.99.1
