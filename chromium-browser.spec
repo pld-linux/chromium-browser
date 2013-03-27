@@ -210,6 +210,7 @@ Requires:	xorg-lib-libX11 >= 1.4.99.1
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
 Obsoletes:	chromium-browser-inspector < 15.0.863.0
+%{?with_system_harfbuzz:Conflicts:	harfbuzz >= 0.9.13}
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
