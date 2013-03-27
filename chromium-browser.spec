@@ -3,8 +3,9 @@
 %bcond_without	cups			# with cups
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
 %bcond_without	gconf			# with GConf
-%bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in src/net/http/http_auth_gssapi_posix.cc)
+%bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
+%bcond_with		gps 			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_without	nacl			# build Native Client support
 %bcond_without	pulseaudio		# with pulseaudio
@@ -21,9 +22,11 @@
 %bcond_without	system_libusb	# system libusb-1
 %bcond_without	system_libwebp	# system libwebp
 %bcond_without	system_libxnvctrl	# system libxnvctrl
+%bcond_without	system_mesa		# system Mesa
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 %bcond_without	system_protobuf	# system protobuf
+%bcond_without	system_re2		# system re2
 %bcond_without	system_speex	# system speex
 %bcond_with		system_sqlite	# system sqlite
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
@@ -34,13 +37,17 @@
 %bcond_without	tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
+%ifarch %{ix86}
+# GLsizeiptr different size, track: http://bugs.gentoo.org/457130
+%undefine	with_system_mesa
+%endif
+
 # TODO
-# - check system sqlite linking problems
-# - find system deps: find -name '*.gyp*' | xargs grep 'use_system.*=='
+# - find system deps: find -type f -name '*.gyp*' | xargs grep -oh 'use_system_.*%' | sort -u
+# - use_system_skia
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
-# - use_system_hunspell
-# - use_system_stlport
-# - other defaults: src/build/common.gypi
+# - use_system_stlport (android specific)
+# - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -56,9 +63,9 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
-%define		branch		25.0.1364
-%define		basever		97
-%define		patchver	172
+%define		branch		26.0.1410
+%define		basever		43
+#define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -71,7 +78,7 @@ Release:	1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	d005fc9e50c28a2e3c71eee7310417f4
+# Source0-md5:	eafd6a919faadc8a7446cd673f460c4c
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	7e2f26d76ca6241961276a328a9230cf
@@ -97,19 +104,22 @@ Patch10:	system-libxnvctrl.patch
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
 Patch12:	system-ffmpeg.patch
-Patch13:	system-libpng.patch
-Patch14:	system-opus.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch18:	nacl-no-untar.patch
 Patch19:	system-jsoncpp.patch
-Patch23:	no-pnacl.patch
 Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
+Patch28:	system-mesa.patch
+Patch29:	speechd-0.8.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
+%{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
+%{?with_system_mesa:BuildRequires:	Mesa-libGLES-devel >= 9.1}
+%{?with_system_mesa:BuildRequires:	Mesa-libGLU-devel}
+%{?with_system_mesa:BuildRequires:	Mesa-libOSMesa-devel >= 9.1}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -126,6 +136,7 @@ BuildRequires:	expat-devel
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
 BuildRequires:	gperf
+%{?with_gps:BuildRequires:	gpsd-devel}
 BuildRequires:	gtest-devel
 BuildRequires:	gtk+2-devel
 %{?with_system_harfbuzz:BuildRequires:	harfbuzz-devel}
@@ -164,8 +175,10 @@ BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-modules
 BuildRequires:	python-ply
+%{?with_system_re2:BuildRequires:	re2-devel >= 20130115-2}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
+BuildRequires:	speech-dispatcher-devel >= 0.8
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 BuildRequires:	sqlite3-devel >= 3.6.1
 %{?with_system_libsrtp:BuildRequires:	srtp-devel >= 1.4.4}
@@ -190,6 +203,7 @@ Requires:	libevent >= 2.0.21
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 %{?with_system_libvpx:Requires:	libvpx >= 0.9.5-2}
 Requires:	lsb-release
+%{?with_system_re2:Requires:	re2 >= 20130115-2}
 Requires:	shared-mime-info
 Requires:	xdg-utils >= 1.0.2-4
 Requires:	xorg-lib-libX11 >= 1.4.99.1
@@ -241,85 +255,62 @@ cd %{name}-%{branch}.%{basever}
 %patch0 -p1
 cd ..
 %endif
-mv %{name}-%{branch}.%{basever}/src .
+mv %{name}-%{branch}.%{basever}/* .
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
-. ./src/chrome/VERSION
+. ./chrome/VERSION
 ver=$MAJOR.$MINOR.$BUILD.$PATCH
 test "$ver" = %{version}
 
-gyp_rev=$(grep googlecode_url.*gyp src/DEPS | cut -d'"' -f6 | cut -d@ -f2)
+gyp_rev=$(grep googlecode_url.*gyp DEPS | cut -d'"' -f6 | cut -d@ -f2)
 test "$gyp_rev" = %{gyp_rev} || :
 
-v8_ver=$(awk 'NR=1 {print $NF; exit}' src/v8/ChangeLog || :)
+v8_ver=$(awk 'NR=1 {print $NF; exit}' v8/ChangeLog || :)
 
 # add chromium and pld to useragent
 %define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
 sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
-    -e 's/@BUILD_DIST_NAME@/PLD/g' \
-    -e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
-    < %{PATCH8} | %{__patch} -p1
+	-e 's/@BUILD_DIST_NAME@/PLD/g' \
+	-e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
+	< %{PATCH8} | %{__patch} -p2
 
 %{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
-ln -s %{SOURCE7} src
+ln -s %{SOURCE7} .
 
-%patch1 -p1
-%patch3 -p1
-%patch4 -p1
-%patch6 -p1
-%patch7 -p1
-%patch10 -p1
-%patch15 -p1
-cd src
+%patch1 -p2
+%patch3 -p2
+%patch4 -p3
+%patch6 -p2
+%patch7 -p2
+%patch10 -p2
+%patch15 -p2
 %patch9 -p0
 #%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p1
-%patch13 -p0
-%patch14 -p2
 %patch16 -p1
-%patch19 -p1
-%patch25 -p1
+%patch19 -p2
 %patch27 -p1
-cd ..
-%patch18 -p1
-%patch23 -p1
-%patch24 -p1
-%patch26 -p1
-
-cd src
-
-# Missing gyp files in tarball.
-# https://code.google.com/p/chromium/issues/detail?id=144823
-if [ -e chrome/test/data/nacl/nacl_test_data.gyp ]; then
-	echo "tarball fixed, please remove workaround"
-	exit 1
-fi
-
-install -d chrome/test/data/nacl
-cat > chrome/test/data/nacl/nacl_test_data.gyp <<-EOF
-{
- 'targets': [
-   {
-     'target_name': 'nacl_tests',
-     'type': 'none',
-   },
- ],
-}
-EOF
+%patch28 -p1
+%patch25 -p2
+%patch18 -p2
+%patch24 -p2
+%patch26 -p2
+%patch29 -p2
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
+	%{!?with_system_libvpx:libvpx=0} \
+	%{!?with_system_libxnvctrl:libXNVCtrl=0} \
+	%{!?with_system_mesa:mesa=0} \
 	%{!?with_system_protobuf:protobuf=0} \
+	%{!?with_system_re2:re2=0} \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_zlib:zlib=0} \
-	%{!?with_system_libxnvctrl:libXNVCtrl=0} \
 	%{nil}
 
 %build
-cd src
-
 %if %{with nacl}
 rm -rf native_client/toolchain/linux_x86_newlib
 if [ ! -d native_client/toolchain/linux_x86_newlib ]; then
@@ -364,7 +355,7 @@ test -e Makefile || \
 	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}" \
 %{__python} build/gyp_chromium \
 	--format=make \
-	-Goutput_dir=../out \
+	--depth=. \
 	build/all.gyp \
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \
@@ -399,27 +390,32 @@ test -e Makefile || \
 	%{?with_selinux:-Dselinux=1} \
 	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
 	-Dlinux_link_libpci=1 \
+	-Dlinux_link_libspeechd=1 \
 	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
+	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0 \
 	%{gyp_with cups} \
 	%{gyp_with gconf} -Dlinux_link_gsettings=0 \
-	%{gyp_with kerberos} -Dlinux_link_kerberos=0 \
+	%{gyp_with kerberos} -Dlinux_link_kerberos=1 \
 	%{gyp_with keyring gnome_keyring} -Dlinux_link_gnome_keyring=0 \
 	%{gyp_with pulseaudio} \
-	%{gyp_with system_ffmpeg} \
+	%{gyp_with system_ffmpeg} -Dmedia_use_ffmpeg=1 \
 	%{gyp_with system_flac} \
 	%{gyp_with system_harfbuzz} \
+	%{gyp_with system_jsoncpp} \
 	%{gyp_with system_libexif} \
 	%{gyp_with system_libmtp} \
 	%{gyp_with system_libsrtp} \
 	%{gyp_with system_libusb} \
-	%{gyp_with system_libvpx} \
+	%{gyp_with system_libvpx} -Dmedia_use_libvpx=0 \
 	%{gyp_with system_libwebp} \
 	%{gyp_with system_libxnvctrl} \
+	%{gyp_with system_mesa} \
 	%{gyp_with system_minizip} \
 	%{gyp_with system_opus} \
 	%{gyp_with system_protobuf} \
+	%{gyp_with system_re2} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} \
 	%{gyp_with system_v8} \
@@ -433,6 +429,7 @@ test -e Makefile || \
 	-Duse_system_libpng=1 \
 	-Duse_system_libxml=1 \
 	-Duse_system_libxslt=1 \
+	-Duse_system_nspr=1 \
 	-Duse_system_xdg_utils=1 \
 
 # need {CC/CXX/LDFLAGS}.host overrides for v8 build
@@ -443,7 +440,7 @@ test -e Makefile || \
 	CXX.host="%{__cxx}" \
 	LDFLAGS.host="%{rpmldflags} -fuse-ld=gold" \
 
-cd ../out/%{!?debug:Release}%{?debug:Debug}
+cd out/%{!?debug:Release}%{?debug:Debug}
 MANWIDTH=80 man ./chrome.1 > man.out
 %{__sed} -e '1,/OPTIONS/d; /ENVIRONMENT/,$d' man.out > options.txt
 
@@ -489,7 +486,7 @@ install -p nacl_irt_x86_32.nexe $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 cd -
 
-for icon in src/chrome/app/theme/chromium/product_logo_[0-9]*.png; do
+for icon in chrome/app/theme/chromium/product_logo_[0-9]*.png; do
 	size=${icon##*/product_logo_}
 	size=${size%.png}
 
@@ -527,7 +524,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc src/{AUTHORS,LICENSE}
+%doc AUTHORS LICENSE
 %{_browserpluginsconfdir}/browsers.d/%{name}.*
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 %dir %{_sysconfdir}/%{name}

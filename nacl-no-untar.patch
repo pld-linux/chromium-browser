@@ -1,5 +1,5 @@
---- chromium-browser-24.0.1312.14/./src/native_client/build/untrusted.gypi~	2012-11-14 04:37:51.000000000 +0200
-+++ chromium-browser-24.0.1312.14/./src/native_client/build/untrusted.gypi	2012-11-16 22:01:20.476042441 +0200
+--- chromium-browser-24.0.1312.14/src/native_client/build/untrusted.gypi~	2012-11-14 04:37:51.000000000 +0200
++++ chromium-browser-24.0.1312.14/src/native_client/build/untrusted.gypi	2012-11-16 22:01:20.476042441 +0200
 @@ -162,7 +162,7 @@
                   'action': [
                     '>(python_exe)',

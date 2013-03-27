@@ -29,6 +29,10 @@ remove_nonessential_dirs() {
 		-name '*.m' \
 	')' | xargs rm -vf
 
+	find -regextype posix-extended \
+		-regex '.*_(win|cros|mac)_.*.xtb' \
+	-print -delete
+
 	local dir
 	for dir in \
 	android_webview \
@@ -79,6 +83,7 @@ remove_nonessential_dirs() {
 	chrome/installer/mac/third_party/xz/config/mac \
 	chrome/installer/tools \
 	chrome/third_party/jstemplate/tutorial_examples \
+	third_party/jstemplate/tutorial_examples \
 	chrome/third_party/mock4js/examples \
 	chrome/third_party/wtl/ \
 	chrome/tools/build/chromeos \
@@ -425,23 +430,27 @@ remove_nonessential_dirs() {
 		v8/tools \
 		webkit/tools \
 	) '!' -type d '(' \
-		'!' -name '*.gyp*' \
 		'!' -name '*.grd' \
+		'!' -name '*.gyp*' \
 		'!' -path 'base/mac/bundle_locations.h' \
 		'!' -path 'base/mac/crash_logging.h' \
 		'!' -path 'base/win/windows_version.h' \
 		'!' -path 'build/android/cpufeatures.gypi' \
 		'!' -path 'chrome/browser/chromeos/contacts/contact.proto' \
-		'!' -path 'chrome/browser/chromeos/login/*.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/file_browser_handler_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/networking_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_names.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_provider.h' \
+		'!' -path 'chrome/browser/chromeos/settings/device_settings_service.h' \
 		'!' -path 'chrome/tools/build/generate_policy_source.py' \
 		'!' -path 'chrome/tools/build/linux/sed.sh' \
 		'!' -path 'chrome/tools/build/make_version_cc.py' \
 		'!' -path 'chrome/tools/build/repack_locales.py' \
 		'!' -path 'chrome/tools/build/version.py' \
 		'!' -path 'chromeos/chromeos_export.h' \
+		'!' -path 'chromeos/dbus/dbus_client_implementation_type.h' \
+		'!' -path 'chromeos/dbus/session_manager_client.h' \
 		'!' -path 'chromeos/network/onc/onc_constants.h' \
 		'!' -path 'content/browser/renderer_host/java/java_bridge_dispatcher_host_manager.h' \
 		'!' -path 'content/common/mac/attributed_string_coder.h' \
@@ -472,7 +481,7 @@ remove_nonessential_dirs() {
 almost_strip_dirs() {
 	local dir
 	for dir in \
-		breakpad \
+		breakpad_ \
 		build/ios \
 		courgette \
 		third_party/cros_dbus_cplusplus \
@@ -484,6 +493,7 @@ almost_strip_dirs() {
 		'!' -iname '*.gyp*' \
 		'!' -path 'tools/build/*' \
 		'!' -path 'tools/clang/scripts/plugin_flags.sh' \
+		'!' -path 'tools/compile_test/compile_test.py' \
 		'!' -path 'tools/generate_library_loader/*' \
 		'!' -path 'tools/generate_shim_headers/generate_shim_headers.py' \
 		'!' -path 'tools/generate_stubs/*' \
@@ -493,10 +503,11 @@ almost_strip_dirs() {
 		'!' -path 'tools/json_comment_eater.py' \
 		'!' -path 'tools/json_schema_compiler/*' \
 		'!' -path 'tools/json_to_struct/*' \
+		'!' -path 'tools/licenses.py' \
 		'!' -path 'tools/protoc_wrapper/*' \
+		'!' -path 'tools/usb_ids/*' \
 		'!' -path 'tools/uuidgen.py' \
 		'!' -path 'tools/zip2msi.py' \
-		'!' -path 'tools/usb_ids/*' \
 		-print -delete
 }
 
@@ -507,53 +518,59 @@ clean_third_party() {
 	local dir
 	for dir in \
 		third_party/ashmem \
-		third_party/npapi/npspy \
-		third_party/re2/benchlog \
 		third_party/eyesfree \
 		third_party/guava \
+		third_party/iaccessible2 \
 		third_party/icon_family \
 		third_party/isimpledom \
-		third_party/jsoncpp \
 		third_party/jsr-305 \
 		third_party/libexif \
 		third_party/mach_override \
+		third_party/npapi/npspy \
+		third_party/re2/benchlog \
 		third_party/snappy \
-		third_party/iaccessible2 \
-		third_party/sudden_motion_sensor \
 		third_party/sqlite/*.patch \
 		third_party/sqlite/src/*.patch \
+		third_party/sudden_motion_sensor \
 		; do
 		rm -vfr "$dir"
 	done
 
-	find third_party -type f \! -iname '*.gyp*' \
+	find third_party -type f \
+		'!' -iname '*.gyp*' \
 		\! -path 'third_party/WebKit/*' \
 		\! -path 'third_party/adobe/flash/*' \
-		\! -path 'third_party/angle/*' \
+		\! -path 'third_party/angle/include/EGL/*' \
+		\! -path 'third_party/angle/include/GLSLANG/*' \
+		\! -path 'third_party/angle/src/common/*' \
+		\! -path 'third_party/angle/src/compiler/*' \
+		\! -path 'third_party/angle/src/third_party/compiler/*' \
 		\! -path 'third_party/cacheinvalidation/*' \
 		\! -path 'third_party/cld/*' \
 		\! -path 'third_party/cros_system_api/*' \
-		\! -path 'third_party/flac/flac.h' \
 		\! -path 'third_party/flot/*.js' \
 		\! -path 'third_party/hunspell/*' \
 		\! -path 'third_party/hyphen/*' \
 		\! -path 'third_party/iccjpeg/*' \
+		\! -path 'third_party/jstemplate/*' \
 		\! -path 'third_party/khronos/*' \
 		\! -path 'third_party/leveldatabase/*' \
 		\! -path 'third_party/libXNVCtrl/*' \
 		\! -path 'third_party/libjingle/*' \
 		\! -path 'third_party/libphonenumber/*' \
-		\! -path 'third_party/libusb/libusb.h' \
 		\! -path 'third_party/libva/*' \
-		\! -path 'third_party/libvpx/libvpx.h' \
+		\! -path 'third_party/libvpx/*' \
 		\! -path 'third_party/libxml/chromium/*' \
 		\! -path 'third_party/libyuv/*' \
 		\! -path 'third_party/lss/*.h' \
-		\! -path 'third_party/mesa/*' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/gl.h' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/glext.h' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/glx.h' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/glxext.h' \
+		\! -path 'third_party/mesa/MesaLib/include/GL/osmesa.h' \
 		\! -path 'third_party/modp_b64/*' \
 		\! -path 'third_party/mt19937ar/*' \
 		\! -path 'third_party/npapi/*' \
-		\! -path 'third_party/opus/opus.h*' \
 		\! -path 'third_party/ots/*' \
 		\! -path 'third_party/protobuf/*' \
 		\! -path 'third_party/qcms/*' \
@@ -561,7 +578,6 @@ clean_third_party() {
 		\! -path 'third_party/sfntly/*' \
 		\! -path 'third_party/skia/*' \
 		\! -path 'third_party/smhasher/*' \
-		\! -path 'third_party/speex/speex.h' \
 		\! -path 'third_party/sqlite/*' \
 		\! -path 'third_party/tcmalloc/*' \
 		\! -path 'third_party/trace-viewer/*' \
@@ -870,6 +886,7 @@ remove_tests() {
 		'!' -path './net/base/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
+		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
 		'!' -path './webkit/fileapi/test_mount_point_provider.*' \
 	-print -delete || :
@@ -883,6 +900,7 @@ remove_tests > REMOVED-tests.txt
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
+	third_party/ffmpeg \
 	third_party/flac \
 	third_party/icu \
 	third_party/jsoncpp \
@@ -896,10 +914,11 @@ strip_system_dirs \
 	third_party/libusb \
 	third_party/libvpx \
 	third_party/libwebp \
-	third_party/libxml_ \
 	third_party/libxslt \
+	third_party/mesa \
 	third_party/opus \
 	third_party/protobuf \
+	third_party/re2 \
 	third_party/speex \
 	third_party/yasm \
 	third_party/zlib \
