@@ -1,0 +1,15 @@
+http://crbug.com/223500
+http://trac.webkit.org/changeset/143337/trunk/Source/WebCore/platform/graphics/harfbuzz/HarfBuzzShaper.cpp
+
+Index: trunk/Source/WebCore/platform/graphics/harfbuzz/HarfBuzzShaper.cpp
+===================================================================
+--- trunk/Source/WebCore/platform/graphics/harfbuzz/HarfBuzzShaper.cpp	(revision 142928)
++++ trunk/Source/WebCore/platform/graphics/harfbuzz/HarfBuzzShaper.cpp	(revision 143337)
+@@ -330,4 +330,7 @@
+         if (shouldSetDirection)
+             hb_buffer_set_direction(harfBuzzBuffer.get(), currentRun->rtl() ? HB_DIRECTION_RTL : HB_DIRECTION_LTR);
++        else
++            // Leaving direction to HarfBuzz to guess is *really* bad, but will do for now.
++            hb_buffer_guess_segment_properties(harfBuzzBuffer.get());
+ 
+         // Add a space as pre-context to the buffer. This prevents showing dotted-circle

@@ -114,6 +114,7 @@ Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
+Patch30:	harfbuzz-0.13.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -210,7 +211,6 @@ Requires:	xorg-lib-libX11 >= 1.4.99.1
 Provides:	wwwbrowser
 Obsoletes:	chromium-browser-bookmark_manager < 5.0.388.0
 Obsoletes:	chromium-browser-inspector < 15.0.863.0
-%{?with_system_harfbuzz:Conflicts:	harfbuzz >= 0.9.13}
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -299,6 +299,9 @@ ln -s %{SOURCE7} .
 %patch24 -p2
 %patch26 -p2
 %patch29 -p2
+cd third_party/WebKit
+%patch30 -p1
+cd -
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
