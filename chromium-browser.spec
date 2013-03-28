@@ -77,7 +77,7 @@ Version:	%{branch}.%{basever}
 Release:	0.1
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.xz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
 # Source0-md5:	eafd6a919faadc8a7446cd673f460c4c
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
@@ -92,13 +92,11 @@ Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
 Patch1:		plugin-searchdirs.patch
-#Patch2:		system-nspr.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 Patch4:		path-libpdf.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
-Patch9:		chromium-ppapi.patch
 Patch10:	system-libxnvctrl.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
@@ -107,14 +105,12 @@ Patch12:	system-ffmpeg.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch18:	nacl-no-untar.patch
-Patch19:	system-jsoncpp.patch
 Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch27:	tcmalloc-glibc2.16.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
-Patch30:	harfbuzz-0.13.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -286,12 +282,9 @@ ln -s %{SOURCE7} .
 %patch7 -p2
 %patch10 -p2
 %patch15 -p2
-%patch9 -p0
-#%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p1
 %patch16 -p1
-%patch19 -p2
 %patch27 -p1
 %patch28 -p1
 %patch25 -p2
@@ -299,9 +292,6 @@ ln -s %{SOURCE7} .
 %patch24 -p2
 %patch26 -p2
 %patch29 -p2
-cd third_party/WebKit
-%patch30 -p1
-cd -
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
