@@ -108,7 +108,6 @@ Patch18:	nacl-no-untar.patch
 Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
-Patch27:	tcmalloc-glibc2.16.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
 URL:		http://www.chromium.org/Home
@@ -285,7 +284,6 @@ ln -s %{SOURCE7} .
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p1
 %patch16 -p1
-%patch27 -p1
 %patch28 -p1
 %patch25 -p2
 %patch18 -p2
