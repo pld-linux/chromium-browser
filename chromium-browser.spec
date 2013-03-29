@@ -48,6 +48,7 @@
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_stlport (android specific)
 # - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
+# - nacl. watch https://code.google.com/p/chromium/issues/detail?id=224169
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -57,11 +58,6 @@
 #   - built code: ~1.4GiB (x86_64/i686)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
-
-# NOTE TO USERS:
-# To use chromium nightly beta builds for pld-th save to /etc/poldek/repos.d (as chromium-nightly.conf):
-# http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
-# http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
 %define		branch		27.0.1453
 %define		basever		6
