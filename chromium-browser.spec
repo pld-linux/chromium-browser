@@ -64,7 +64,7 @@
 # http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
 
 %define		branch		27.0.1453
-%define		basever		3
+%define		basever		6
 #define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
