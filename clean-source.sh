@@ -35,6 +35,9 @@ remove_nonessential_dirs() {
 
 	local dir
 	for dir in \
+	v8/benchmarks \
+	v8/src/arm \
+	v8/src/d8* \
 	android_webview \
 	ash/resources/default_100_percent/cros_ \
 	ash/resources/default_200_percent/cros_ \
@@ -437,8 +440,12 @@ remove_nonessential_dirs() {
 		'!' -path 'base/win/windows_version.h' \
 		'!' -path 'build/android/cpufeatures.gypi' \
 		'!' -path 'chrome/browser/chromeos/contacts/contact.proto' \
+		'!' -path 'chrome/browser/chromeos/extensions/echo_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/file_browser_handler_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/info_private_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/media_player_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/networking_private_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/wallpaper_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_names.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_provider.h' \
@@ -449,6 +456,7 @@ remove_nonessential_dirs() {
 		'!' -path 'chrome/tools/build/repack_locales.py' \
 		'!' -path 'chrome/tools/build/version.py' \
 		'!' -path 'chromeos/chromeos_export.h' \
+		'!' -path 'chromeos/chromeos_switches.h' \
 		'!' -path 'chromeos/dbus/dbus_client_implementation_type.h' \
 		'!' -path 'chromeos/dbus/session_manager_client.h' \
 		'!' -path 'chromeos/network/onc/onc_constants.h' \
@@ -472,6 +480,7 @@ remove_nonessential_dirs() {
 		'!' -path 'ui/base/win/dpi.h' \
 		'!' -path 'v8/tools/js2c.py' \
 		'!' -path 'v8/tools/jsmin.py' \
+		'!' -path 'webkit/tools/test_shell/*.h' \
 		')' \
 	-print -delete
 }
@@ -776,7 +785,7 @@ remove_tests() {
 	third_party/webrtc/modules/utility/test \
 	third_party/webrtc/modules/video_capture/main/test/android \
 	third_party/webrtc/system_wrappers/test \
-	third_party/webrtc/test \
+	third_party/webrtc/test/manual \
 	third_party/webrtc/test/testsupport/mac \
 	third_party/webrtc/video_engine/test/android \
 	third_party/webrtc/video_engine/test/auto_test/android \
@@ -876,6 +885,7 @@ remove_tests() {
 		'!' -path './chrome/browser/resources/net_internals/*' \
 		'!' -path './chrome/browser/ui/webui/test_chrome_web_ui_controller_factory*' \
 		'!' -path './chrome/common/net/test_server_locations.*' \
+		'!' -path './chrome/renderer/resources/extensions/test_custom_bindings.js' \
 		'!' -path './chrome/test/base/test_switches.*' \
 		'!' -path './chrome/test/perf/browser_perf_test.*' \
 		'!' -path './chrome/test/perf/perf_test.*' \
@@ -889,6 +899,9 @@ remove_tests() {
 		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
 		'!' -path './webkit/fileapi/test_mount_point_provider.*' \
+		'!' -path './webkit/gpu/test_context_provider_factory.*' \
+		'!' -path './webkit/support/test_webkit_platform_support.h' \
+		'!' -path './webkit/tools/test_shell/*.h' \
 	-print -delete || :
 }
 
