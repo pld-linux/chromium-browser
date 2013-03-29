@@ -28,7 +28,7 @@
 %bcond_without	system_protobuf	# system protobuf
 %bcond_without	system_re2		# system re2
 %bcond_without	system_speex	# system speex
-%bcond_with		system_sqlite	# system sqlite
+%bcond_without	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
 %bcond_without	system_libvpx	# system libvpx
@@ -74,7 +74,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.3
+Release:	0.4
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
@@ -411,7 +411,7 @@ test -e Makefile || \
 	%{gyp_with system_protobuf} \
 	%{gyp_with system_re2} \
 	%{gyp_with system_speex} \
-	%{gyp_with system_sqlite} \
+	%{gyp_with system_sqlite} %{?with_system_sqlite:-Denable_sql_database=0} \
 	%{gyp_with system_v8} \
 	%{gyp_with system_yasm} \
 	%{gyp_with system_zlib} \
