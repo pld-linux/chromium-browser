@@ -48,7 +48,6 @@
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_stlport (android specific)
 # - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
-# - nacl. watch https://code.google.com/p/chromium/issues/detail?id=224169
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -70,7 +69,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.4
+Release:	0.6
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
@@ -106,6 +105,7 @@ Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
+Patch30:	no-pnacl.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -286,6 +286,7 @@ ln -s %{SOURCE7} .
 %patch24 -p2
 %patch26 -p2
 %patch29 -p2
+%patch30 -p0
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
