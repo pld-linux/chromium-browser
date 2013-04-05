@@ -115,6 +115,7 @@ Patch27:	tcmalloc-glibc2.16.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
 Patch30:	harfbuzz-0.13.patch
+Patch31:	%{name}-whitelist-gpu.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -302,6 +303,7 @@ ln -s %{SOURCE7} .
 cd third_party/WebKit
 %patch30 -p1
 cd -
+%patch31 -p1
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
