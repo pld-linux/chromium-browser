@@ -252,13 +252,14 @@ mv %{name}-%{branch}.%{basever}/* .
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
 . ./chrome/VERSION
-ver=$MAJOR.$MINOR.$BUILD.$PATCH
-test "$ver" = %{version}
+chrome=$MAJOR.$MINOR.$BUILD.$PATCH
+test "$chrome" = %{version}
 
 gyp_rev=$(grep googlecode_url.*gyp DEPS | cut -d'"' -f6 | cut -d@ -f2)
 test "$gyp_rev" = %{gyp_rev} || :
 
-v8_ver=$(awk 'NR=1 {print $NF; exit}' v8/ChangeLog || :)
+. ./v8.sh
+v8=$MAJOR_VERSION.$MINOR_VERSION.$BUILD_NUMBER.$PATCH_LEVEL
 
 # add chromium and pld to useragent
 %define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
