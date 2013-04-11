@@ -38,6 +38,7 @@ remove_nonessential_dirs() {
 	v8/benchmarks \
 	v8/src/arm \
 	v8/src/d8* \
+	third_party/chromite \
 	android_webview \
 	ash/resources/default_100_percent/cros_ \
 	ash/resources/default_200_percent/cros_ \
@@ -933,6 +934,7 @@ strip_system_dirs \
 	third_party/protobuf \
 	third_party/re2 \
 	third_party/speex \
+	third_party/sqlite \
 	third_party/yasm \
 	third_party/zlib \
 	v8 \

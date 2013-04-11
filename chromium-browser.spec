@@ -59,7 +59,7 @@
 # - to look for new tarball, use update-source.sh script
 
 %define		branch		27.0.1453
-%define		basever		15
+%define		basever		47
 #define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -172,7 +172,7 @@ BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	speech-dispatcher-devel >= 0.8
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
-BuildRequires:	sqlite3-devel >= 3.6.1
+%{?with_system_sqlite:BuildRequires:	sqlite3-devel >= 3.7}
 %{?with_system_libsrtp:BuildRequires:	srtp-devel >= 1.4.4}
 BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
@@ -296,6 +296,7 @@ sh -x clean-source.sh \
 	%{!?with_system_mesa:mesa=0} \
 	%{!?with_system_protobuf:protobuf=0} \
 	%{!?with_system_re2:re2=0} \
+	%{!?with_system_sqlite:sqlite=0} \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_zlib:zlib=0} \
 	%{nil}
