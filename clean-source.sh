@@ -629,7 +629,7 @@ strip_system_dirs() {
 		# skip already removed dirs
 		test -d $dir || continue
 
-		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h \) -print -delete
+		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h -o -path third_party/sqlite/sqlite3.h \) -print -delete
 	done
 }
 
