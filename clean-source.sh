@@ -629,7 +629,7 @@ strip_system_dirs() {
 		# skip already removed dirs
 		test -d $dir || continue
 
-		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h -o -path third_party/sqlite/sqlite3.h \) -print -delete
+		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h \) -print -delete
 	done
 }
 
@@ -939,6 +939,11 @@ strip_system_dirs \
 	third_party/zlib \
 	v8 \
 > REMOVED-system_dirs.txt
+
+if [ "${sqlite:-1}" = 1 ]; then
+	# some code does not pass -DUSE_SYSTEM_SQLITE properly
+	ln -sf /usr/include/sqlite3.h third_party/sqlite/sqlite3.h
+fi
 
 clean_third_party > REMOVED-third_party.txt
 
