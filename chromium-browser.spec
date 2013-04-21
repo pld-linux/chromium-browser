@@ -69,7 +69,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.6
+Release:	0.7
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
@@ -227,6 +227,9 @@ tracking and an auto-updater system.
 Summary:	chromium-browser language packages
 Group:		I18n
 Requires:	%{name} = %{version}-%{release}
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description l10n
 Chromium is an open-source browser project that aims to build a safer,
@@ -268,7 +271,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 	-e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
 	< %{PATCH8} | %{__patch} -p2
 
-%{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
+%{__sed} -e 's,@localedir@,%{_datadir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} .
 
 %patch1 -p2
@@ -437,7 +440,8 @@ MANWIDTH=80 man ./chrome.1 > man.out
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
+install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins \
+	$RPM_BUILD_ROOT%{_datadir}/%{name}/{locales,resources} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sysconfdir}/%{name},%{_mandir}/man1,%{_desktopdir}}
 
 cd out/%{!?debug:Release}%{?debug:Debug}
@@ -451,7 +455,10 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 		d
 	}
 ' $RPM_BUILD_ROOT%{_bindir}/%{name}
-cp -a *.pak locales resources $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -a locales resources $RPM_BUILD_ROOT%{_datadir}/%{name}
+cp -a *.pak $RPM_BUILD_ROOT%{_libdir}/%{name}
+ln -s %{_datadir}/%{name}/locales $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
+ln -s %{_datadir}/%{name}/resources $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
@@ -461,7 +468,7 @@ install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/master_preferences
 
-%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/resources/extension/demo
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/%{name}/resources/extension/demo
 
 %if %{with nacl}
 # Install Native Client files on platforms that support it.
@@ -502,6 +509,15 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pretrans
+for d in locales resources; do
+	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
+		install -d %{_datadir}/%{name}
+		mv %{_libdir}/%{name}/$d %{_datadir}/%{name}/$d
+	fi
+done
+exit 0
+
 %post
 %update_icon_cache hicolor
 %update_desktop_database
@@ -529,12 +545,15 @@ fi
 %{_libdir}/%{name}/chrome*.pak
 %{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/resources.pak
-%dir %{_libdir}/%{name}/locales
-%{_libdir}/%{name}/locales/en-US.pak
-%dir %{_libdir}/%{name}/resources
-%{_libdir}/%{name}/resources/inspector
-%dir %{_libdir}/%{name}/themes
-%dir %{_libdir}/%{name}/extensions
+%{_libdir}/%{name}/locales
+%{_libdir}/%{name}/resources
+
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/locales
+%{_datadir}/%{name}/locales/en-US.pak
+%dir %{_datadir}/%{name}/resources
+%{_datadir}/%{name}/resources/inspector
+
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/%{name}
 # These unique permissions are intentional and necessary for the sandboxing
