@@ -588,7 +588,9 @@ clean_third_party() {
 		\! -path 'third_party/sfntly/*' \
 		\! -path 'third_party/skia/*' \
 		\! -path 'third_party/smhasher/*' \
-		\! -path 'third_party/sqlite/*' \
+		\! -path 'third_party/sqlite/amalgamation/*' \
+		\! -path 'third_party/sqlite/sqlite3.h' \
+		\! -path 'third_party/sqlite/src/ext/*' \
 		\! -path 'third_party/tcmalloc/*' \
 		\! -path 'third_party/trace-viewer/*' \
 		\! -path 'third_party/undoview/*' \
