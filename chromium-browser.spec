@@ -69,7 +69,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.7
+Release:	0.10
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
@@ -106,6 +106,7 @@ Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
 Patch30:	no-pnacl.patch
+Patch31:	sync-session-name.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -291,6 +292,7 @@ ln -s %{SOURCE7} .
 %patch26 -p2
 %patch29 -p2
 %patch30 -p0
+%patch31 -p1
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \

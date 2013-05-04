@@ -1,0 +1,17 @@
+https://code.google.com/p/chromium/issues/detail?id=123827
+--- chromium-browser-27.0.1453.73/sync/util/get_session_name.cc~	2013-04-30 10:20:51.000000000 +0300
++++ chromium-browser-27.0.1453.73/sync/util/get_session_name.cc	2013-05-04 16:47:18.472330715 +0300
+@@ -60,7 +60,12 @@
+   // "CHROMEOS_RELEASE_BOARD" line in chrome://system.
+   session_name = board.substr(0, 6) == "stumpy" ? "Chromebox" : "Chromebook";
+ #elif defined(OS_LINUX)
+-  session_name = base::GetLinuxDistro();
++  const char* env_session_name = getenv("SYNC_SESSION_NAME");
++  if (env_session_name && *env_session_name) {
++    session_name = std::string(env_session_name);
++  } else {
++    session_name = base::GetLinuxDistro();
++  }
+ #elif defined(OS_IOS)
+   session_name = internal::GetComputerName();
+ #elif defined(OS_MACOSX)
