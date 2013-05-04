@@ -28,7 +28,7 @@
 %bcond_without	system_protobuf	# system protobuf
 %bcond_without	system_re2		# system re2
 %bcond_without	system_speex	# system speex
-%bcond_without	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
+%bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
 %bcond_without	system_libvpx	# system libvpx
@@ -69,7 +69,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.10
+Release:	0.13
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
