@@ -198,6 +198,7 @@ Requires:	libevent >= 2.0.21
 Requires:	lsb-release
 %{?with_system_re2:Requires:	re2 >= 20130115-2}
 Requires:	shared-mime-info
+%{?with_system_sqlite:Requires:	sqlite3(icu)}
 Requires:	xdg-utils >= 1.0.2-4
 Requires:	xorg-lib-libX11 >= 1.4.99.1
 Provides:	wwwbrowser
