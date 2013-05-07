@@ -69,7 +69,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.13
+Release:	0.16
 License:	BSD, LGPL v2+ (ffmpeg)
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
@@ -293,7 +293,7 @@ ln -s %{SOURCE7} .
 %patch26 -p2
 %patch29 -p2
 %patch30 -p0
-%patch31 -p1
+%patch31 -p0
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \

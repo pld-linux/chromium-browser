@@ -1,17 +1,104 @@
 https://code.google.com/p/chromium/issues/detail?id=123827
---- chromium-browser-27.0.1453.73/sync/util/get_session_name.cc~	2013-04-30 10:20:51.000000000 +0300
-+++ chromium-browser-27.0.1453.73/sync/util/get_session_name.cc	2013-05-04 16:47:18.472330715 +0300
-@@ -60,7 +60,12 @@
+
+Index: sync/sync_core.gypi
+===================================================================
+--- sync/sync_core.gypi	(revision 198703)
++++ sync/sync_core.gypi	(revision 198704)
+@@ -181,6 +181,8 @@
+     'util/get_session_name.h',
+     'util/get_session_name_ios.mm',
+     'util/get_session_name_ios.h',
++    'util/get_session_name_linux.cc',
++    'util/get_session_name_linux.h',
+     'util/get_session_name_mac.mm',
+     'util/get_session_name_mac.h',
+     'util/get_session_name_win.cc',
+Index: sync/util/get_session_name_linux.h
+===================================================================
+--- sync/util/get_session_name_linux.h	(revision 0)
++++ sync/util/get_session_name_linux.h	(revision 198704)
+@@ -0,0 +1,19 @@
++// Copyright (c) 2013 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef SYNC_UTIL_GET_SESSION_NAME_LINUX_H_
++#define SYNC_UTIL_GET_SESSION_NAME_LINUX_H_
++
++#include <string>
++
++namespace syncer {
++namespace internal {
++
++std::string GetHostname();
++
++}  // namespace internal
++}  // namespace syncer
++
++#endif  // SYNC_UTIL_GET_SESSION_NAME_LINUX_H_
++
+
+Property changes on: sync/util/get_session_name_linux.h
+___________________________________________________________________
+Added: svn:eol-style
+## -0,0 +1 ##
++LF
+\ No newline at end of property
+Index: sync/util/get_session_name.cc
+===================================================================
+--- sync/util/get_session_name.cc	(revision 198703)
++++ sync/util/get_session_name.cc	(revision 198704)
+@@ -15,7 +15,7 @@
+ #include "base/command_line.h"
+ #include "chromeos/chromeos_switches.h"
+ #elif defined(OS_LINUX)
+-#include "base/linux_util.h"
++#include "sync/util/get_session_name_linux.h"
+ #elif defined(OS_IOS)
+ #include "sync/util/get_session_name_ios.h"
+ #elif defined(OS_MACOSX)
+@@ -60,7 +60,7 @@
    // "CHROMEOS_RELEASE_BOARD" line in chrome://system.
    session_name = board.substr(0, 6) == "stumpy" ? "Chromebox" : "Chromebook";
  #elif defined(OS_LINUX)
 -  session_name = base::GetLinuxDistro();
-+  const char* env_session_name = getenv("SYNC_SESSION_NAME");
-+  if (env_session_name && *env_session_name) {
-+    session_name = std::string(env_session_name);
-+  } else {
-+    session_name = base::GetLinuxDistro();
-+  }
++  session_name = internal::GetHostname();
  #elif defined(OS_IOS)
    session_name = internal::GetComputerName();
  #elif defined(OS_MACOSX)
+Index: sync/util/get_session_name_linux.cc
+===================================================================
+--- sync/util/get_session_name_linux.cc	(revision 0)
++++ sync/util/get_session_name_linux.cc	(revision 198704)
+@@ -0,0 +1,24 @@
++// Copyright (c) 2013 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include "sync/util/get_session_name_linux.h"
++
++#include <limits.h>  // for HOST_NAME_MAX
++#include <unistd.h>  // for gethostname()
++
++#include "base/linux_util.h"
++
++namespace syncer {
++namespace internal {
++
++std::string GetHostname() {
++  char hostname[HOST_NAME_MAX];
++  if (gethostname(hostname, HOST_NAME_MAX) == 0)  // Success.
++    return hostname;
++  return base::GetLinuxDistro();
++}
++
++}  // namespace internal
++}  // namespace syncer
++
+
+Property changes on: sync/util/get_session_name_linux.cc
+___________________________________________________________________
+Added: svn:eol-style
+## -0,0 +1 ##
++LF
+\ No newline at end of property
