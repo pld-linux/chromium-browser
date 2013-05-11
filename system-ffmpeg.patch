@@ -1,10 +1,25 @@
---- chromium-browser-27.0.1453.3/tools/compile_test/compile_test.py~	2013-03-27 03:14:02.000000000 +0200
-+++ chromium-browser-27.0.1453.3/tools/compile_test/compile_test.py	2013-03-27 23:48:09.802791538 +0200
-@@ -40,6 +40,7 @@
+Index: tools/compile_test/compile_test.py
+diff --git a/tools/compile_test/compile_test.py b/tools/compile_test/compile_test.py
+index 79371a1fd05d2e03e098340527fc897faadad54c..bbda4abfe54f327aabede26f400bebd5e1376d82 100755
+--- a/tools/compile_test/compile_test.py
++++ b/tools/compile_test/compile_test.py
+@@ -30,7 +30,9 @@ def DoMain(argv):
+   if not options.code:
+     parser.error('Missing required --code switch.')
+ 
+-  cxx = os.environ.get('CXX', 'g++')
++  # The environment variable might expand to a string with spaces,
++  # e.g. "ccache g++". Convert it to a list suitable for argv.
++  cxx = os.environ.get('CXX', 'g++').split()
+ 
+   tmpdir = tempfile.mkdtemp()
+   try:
+@@ -41,7 +41,7 @@
+ 
      o_path = os.path.join(tmpdir, 'test.o')
  
-     cxx_popen = subprocess.Popen([cxx, cxx_path, '-o', o_path, '-c'],
-+                                 shell=True,
+-    cxx_popen = subprocess.Popen([cxx, cxx_path, '-o', o_path, '-c'],
++    cxx_popen = subprocess.Popen(cxx + [cxx_path, '-o', o_path, '-c'],
                                   stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE)
      cxx_stdout, cxx_stderr = cxx_popen.communicate()
