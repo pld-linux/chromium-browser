@@ -59,10 +59,10 @@ set -x
 	cd $PACKAGE_NAME-$VERSION
 	du -sh .
 
-	awk 'NR=1 {print $NF; exit}' v8/ChangeLog | tee -a v8.txt
+	awk '/^#define/ && /(MAJOR|MINOR)_VERSION|BUILD_NUMBER|PATCH_LEVEL/ { printf("%s=%s\n", $2, $3) }' v8/src/version.cc | tee -a v8.sh
 
 	if [ "$CHANNEL" != "dev" ]; then
-		sh -x $WORK_DIR/clean-source.sh emptydirs=1 v8=0 libvpx=0 mesa=0 re2=0
+		sh -x $WORK_DIR/clean-source.sh emptydirs=1 v8=0 mesa=0 sqlite=0
 	fi
 
 	# do not keep REMOVED*.txt in tarball. they are visible in .log anyway

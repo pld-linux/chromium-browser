@@ -28,7 +28,7 @@
 %bcond_without	system_protobuf	# system protobuf
 %bcond_without	system_re2		# system re2
 %bcond_without	system_speex	# system speex
-%bcond_with		system_sqlite	# system sqlite
+%bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
 %bcond_without	system_libvpx	# system libvpx
@@ -58,14 +58,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-# NOTE TO USERS:
-# To use chromium nightly beta builds for pld-th save to /etc/poldek/repos.d (as chromium-nightly.conf):
-# http://carme.pld-linux.org/~glen/chromium-browser/th/x86_64/chromium-nightly.conf
-# http://carme.pld-linux.org/~glen/chromium-browser/th/i686/chromium-nightly.conf
-
-%define		branch		26.0.1410
-%define		basever		43
-%define		patchver	63
+%define		branch		27.0.1453
+%define		basever		93
+#define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -78,7 +73,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	eafd6a919faadc8a7446cd673f460c4c
+# Source0-md5:	6bb4fc8f0c437b447a76c3bd91cf9f81
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	8eaaa7eb2866d1b3b5536074853de998
@@ -92,13 +87,11 @@ Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
 Patch1:		plugin-searchdirs.patch
-#Patch2:		system-nspr.patch
 Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 Patch4:		path-libpdf.patch
 Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
-Patch9:		chromium-ppapi.patch
 Patch10:	system-libxnvctrl.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
@@ -107,15 +100,13 @@ Patch12:	system-ffmpeg.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch18:	nacl-no-untar.patch
-Patch19:	system-jsoncpp.patch
 Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
-Patch27:	tcmalloc-glibc2.16.patch
 Patch28:	system-mesa.patch
 Patch29:	speechd-0.8.patch
-Patch30:	harfbuzz-0.13.patch
-Patch31:	%{name}-whitelist-gpu.patch
+Patch30:	no-pnacl.patch
+Patch31:	sync-session-name.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -182,7 +173,7 @@ BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	speech-dispatcher-devel >= 0.8
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
-BuildRequires:	sqlite3-devel >= 3.6.1
+%{?with_system_sqlite:BuildRequires:	sqlite3-devel >= 3.7}
 %{?with_system_libsrtp:BuildRequires:	srtp-devel >= 1.4.4}
 BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
@@ -207,6 +198,7 @@ Requires:	libevent >= 2.0.21
 Requires:	lsb-release
 %{?with_system_re2:Requires:	re2 >= 20130115-2}
 Requires:	shared-mime-info
+%{?with_system_sqlite:Requires:	sqlite3(icu)}
 Requires:	xdg-utils >= 1.0.2-4
 Requires:	xorg-lib-libX11 >= 1.4.99.1
 Provides:	wwwbrowser
@@ -237,6 +229,9 @@ tracking and an auto-updater system.
 Summary:	chromium-browser language packages
 Group:		I18n
 Requires:	%{name} = %{version}-%{release}
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description l10n
 Chromium is an open-source browser project that aims to build a safer,
@@ -262,13 +257,14 @@ mv %{name}-%{branch}.%{basever}/* .
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
 . ./chrome/VERSION
-ver=$MAJOR.$MINOR.$BUILD.$PATCH
-test "$ver" = %{version}
+chrome=$MAJOR.$MINOR.$BUILD.$PATCH
+test "$chrome" = %{version}
 
 gyp_rev=$(grep googlecode_url.*gyp DEPS | cut -d'"' -f6 | cut -d@ -f2)
 test "$gyp_rev" = %{gyp_rev} || :
 
-v8_ver=$(awk 'NR=1 {print $NF; exit}' v8/ChangeLog || :)
+. ./v8.sh
+v8=$MAJOR_VERSION.$MINOR_VERSION.$BUILD_NUMBER.$PATCH_LEVEL
 
 # add chromium and pld to useragent
 %define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
@@ -277,7 +273,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 	-e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
 	< %{PATCH8} | %{__patch} -p2
 
-%{__sed} -e 's,@localedir@,%{_libdir}/%{name},' %{SOURCE5} > find-lang.sh
+%{__sed} -e 's,@localedir@,%{_datadir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} .
 
 %patch1 -p2
@@ -287,23 +283,17 @@ ln -s %{SOURCE7} .
 %patch7 -p2
 %patch10 -p2
 %patch15 -p2
-%patch9 -p0
-#%patch2 -p1
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p1
 %patch16 -p1
-%patch19 -p2
-%patch27 -p1
 %patch28 -p1
 %patch25 -p2
 %patch18 -p2
 %patch24 -p2
 %patch26 -p2
 %patch29 -p2
-cd third_party/WebKit
-%patch30 -p1
-cd -
-%patch31 -p1
+%patch30 -p0
+%patch31 -p0
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
@@ -312,6 +302,7 @@ sh -x clean-source.sh \
 	%{!?with_system_mesa:mesa=0} \
 	%{!?with_system_protobuf:protobuf=0} \
 	%{!?with_system_re2:re2=0} \
+	%{!?with_system_sqlite:sqlite=0} \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_zlib:zlib=0} \
 	%{nil}
@@ -423,7 +414,7 @@ test -e Makefile || \
 	%{gyp_with system_protobuf} \
 	%{gyp_with system_re2} \
 	%{gyp_with system_speex} \
-	%{gyp_with system_sqlite} \
+	%{gyp_with system_sqlite} %{?with_system_sqlite:-Denable_sql_database=0} \
 	%{gyp_with system_v8} \
 	%{gyp_with system_yasm} \
 	%{gyp_with system_zlib} \
@@ -452,7 +443,8 @@ MANWIDTH=80 man ./chrome.1 > man.out
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/{themes,plugins,extensions} \
+install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins \
+	$RPM_BUILD_ROOT%{_datadir}/%{name}/{locales,resources} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sysconfdir}/%{name},%{_mandir}/man1,%{_desktopdir}}
 
 cd out/%{!?debug:Release}%{?debug:Debug}
@@ -466,7 +458,10 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 		d
 	}
 ' $RPM_BUILD_ROOT%{_bindir}/%{name}
-cp -a *.pak locales resources $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -a locales resources $RPM_BUILD_ROOT%{_datadir}/%{name}
+cp -a *.pak $RPM_BUILD_ROOT%{_libdir}/%{name}
+ln -s %{_datadir}/%{name}/locales $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
+ln -s %{_datadir}/%{name}/resources $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
@@ -476,7 +471,7 @@ install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/master_preferences
 
-%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/resources/extension/demo
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/%{name}/resources/extension/demo
 
 %if %{with nacl}
 # Install Native Client files on platforms that support it.
@@ -517,6 +512,15 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pretrans
+for d in locales resources; do
+	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
+		install -d %{_datadir}/%{name}
+		mv %{_libdir}/%{name}/$d %{_datadir}/%{name}/$d
+	fi
+done
+exit 0
+
 %post
 %update_icon_cache hicolor
 %update_desktop_database
@@ -544,12 +548,15 @@ fi
 %{_libdir}/%{name}/chrome*.pak
 %{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/resources.pak
-%dir %{_libdir}/%{name}/locales
-%{_libdir}/%{name}/locales/en-US.pak
-%dir %{_libdir}/%{name}/resources
-%{_libdir}/%{name}/resources/inspector
-%dir %{_libdir}/%{name}/themes
-%dir %{_libdir}/%{name}/extensions
+%{_libdir}/%{name}/locales
+%{_libdir}/%{name}/resources
+
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/locales
+%{_datadir}/%{name}/locales/en-US.pak
+%dir %{_datadir}/%{name}/resources
+%{_datadir}/%{name}/resources/inspector
+
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/%{name}
 # These unique permissions are intentional and necessary for the sandboxing
