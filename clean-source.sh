@@ -623,8 +623,13 @@ remove_bin_only() {
 
 # removes dir, if the bcond is not turned off
 strip_system_dirs() {
-	local dir lib bcond
+	local dir lib bcond args
+	# prevent "*" from being expanded in $args
+	set -f
 	for dir in "$@"; do
+		args=${dir#* }
+		test "$args" = "$dir" && args=
+		dir=${dir%% *}
 		lib=${dir##*/}
 		bcond=$(eval echo \$$lib)
 		[ "${bcond:-1}" = 0 ] && continue
@@ -632,8 +637,9 @@ strip_system_dirs() {
 		# skip already removed dirs
 		test -d $dir || continue
 
-		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h \) -print -delete
+		find $dir -depth -mindepth 1 '!' '(' -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h $args ')' -print -delete || :
 	done
+	set +f
 }
 
 # remove test data and files
@@ -935,7 +941,7 @@ strip_system_dirs \
 	third_party/speex \
 	third_party/sqlite \
 	third_party/yasm \
-	third_party/zlib_ \
+	"third_party/zlib -o -path third_party/zlib/google/*" \
 	v8 \
 > REMOVED-system_dirs.txt
 remove_nonessential_dirs > REMOVED-nonessential_dirs.txt
