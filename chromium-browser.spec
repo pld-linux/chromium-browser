@@ -58,8 +58,8 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		27.0.1453
-%define		basever		93
+%define		branch		28.0.1500
+%define		basever		20
 #define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -69,14 +69,14 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	1
+Release:	0.16
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	6bb4fc8f0c437b447a76c3bd91cf9f81
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
+# Source0-md5:	eafd6a919faadc8a7446cd673f460c4c
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	8eaaa7eb2866d1b3b5536074853de998
+# Patch0-md5:	7e2f26d76ca6241961276a328a9230cf
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
@@ -104,8 +104,6 @@ Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
-Patch29:	speechd-0.8.patch
-Patch30:	no-pnacl.patch
 Patch31:	sync-session-name.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
@@ -280,8 +278,8 @@ ln -s %{SOURCE7} .
 %patch3 -p2
 %patch4 -p3
 %patch6 -p2
-%patch7 -p2
-%patch10 -p2
+%patch7 -p1
+%patch10 -p1
 %patch15 -p2
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p1
@@ -291,8 +289,6 @@ ln -s %{SOURCE7} .
 %patch18 -p2
 %patch24 -p2
 %patch26 -p2
-%patch29 -p2
-%patch30 -p0
 %patch31 -p0
 
 sh -x clean-source.sh \
@@ -343,17 +339,7 @@ cd ../../../../..
 fi
 %endif
 
-test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
-test -e Makefile || \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
-	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
-	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}" \
-%{__python} build/gyp_chromium \
-	--format=make \
-	--depth=. \
-	build/all.gyp \
+flags="
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \
 %endif
@@ -387,7 +373,7 @@ test -e Makefile || \
 	%{?with_selinux:-Dselinux=1} \
 	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
 	-Dlinux_link_libpci=1 \
-	-Dlinux_link_libspeechd=1 \
+	-Dlinux_link_libspeechd=1 -Dlibspeechd_h_prefix=speech-dispatcher/ \
 	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
 	-Dlinux_use_gold_binary=0 \
@@ -428,6 +414,25 @@ test -e Makefile || \
 	-Duse_system_libxslt=1 \
 	-Duse_system_nspr=1 \
 	-Duse_system_xdg_utils=1 \
+"
+
+build/linux/unbundle/replace_gyp_files.py $flags
+
+test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
+test -e Makefile || \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
+	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
+	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}" \
+	CC_host="%{__cc}" \
+	CXX_host="%{__cxx}" \
+	LD_host="%{__cxx}" \
+%{__python} build/gyp_chromium \
+	--format=make \
+	--depth=. \
+	build/all.gyp \
+	$flags
 
 # need {CC/CXX/LDFLAGS}.host overrides for v8 build
 %{__make} -r chrome %{?with_sandboxing:chrome_sandbox} \

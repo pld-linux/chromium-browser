@@ -1,79 +1,51 @@
-todo use generate_shim_headers script
+TODO: use generate_shim_headers script
 
---- chromium-browser-24.0.1312.45/src/third_party/libXNVCtrl/libXNVCtrl.gyp	2013-01-04 00:45:35.620067292 +0200
-+++ chromium-browser-25.0.1364.29/src/third_party/libXNVCtrl/libXNVCtrl.gyp	2013-01-12 16:17:25.440747088 +0200
-@@ -5,14 +5,55 @@
- {
--  'targets': [
--    {
--      'target_name': 'libXNVCtrl',
--      'type': 'static_library',
--      'sources': [
--        'NVCtrl.c',
--        'NVCtrl.h',
--        'NVCtrlLib.h',
--        'nv_control.h',
-+  'variables': {
-+    'use_system_libxnvctrl%': 0,
-+  },
-+  'conditions': [
-+    ['use_system_libxnvctrl==0', {
-+      'targets': [
-+        {
-+          'target_name': 'libXNVCtrl',
-+          'type': 'static_library',
-+          'sources': [
-+            'NVCtrl.c',
-+            'NVCtrl.h',
-+            'NVCtrlLib.h',
-+            'nv_control.h',
-+          ],
-+        },
-       ],
--    },
--  ],
-+    }, { # use_system_libxnvctrl==1
-+      'conditions': [
-+        ['sysroot!=""', {
-+          'variables': {
-+            'pkg-config': '../../build/linux/pkg-config-wrapper "<(sysroot)" "<(target_arch)"',
-+          },
-+        }, {
-+          'variables': {
-+            'pkg-config': 'pkg-config'
-+          },
-+        }],
-+      ],
-+      'targets': [
-+        {
-+          'target_name': 'libXNVCtrl',
-+          'type': 'none',
-+          'direct_dependent_settings': {
-+            'cflags': [
-+                '<!@(<(pkg-config) --cflags libXNVCtrl)',
-+            ],
-+            'defines': [
-+                'USE_SYSTEM_LIBXNVCTRL',
-+            ],
-+          },
-+          'link_settings': {
-+            'ldflags': [
-+              '<!@(<(pkg-config) --libs-only-L --libs-only-other libXNVCtrl)',
-+            ],
-+            'libraries': [
-+              '<!@(<(pkg-config) --libs-only-l libXNVCtrl)',
-+            ],
-+          },
-+        }
-+      ],
-+    }],
-+  ]
- }
---- chromium-browser-25.0.1364.29/src/content/gpu/gpu_info_collector_linux.cc	2013-01-12 16:11:48.998635662 +0200
-+++ chromium-browser-25.0.1364.29/src/content/gpu/gpu_info_collector_linux.cc	2013-01-12 16:29:12.273316708 +0200
+--- /dev/null	2007-02-13 18:29:53.000000000 +0200
++++ chromium-browser-28.0.1500.20/build/linux/unbundle/libXNVCtrl.gyp	2013-05-28 00:31:04.522225050 +0300
+@@ -0,0 +1,28 @@
++# Copyright (c) 2013 The Chromium Authors. All rights reserved.
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++
++{
++  'targets': [
++    {
++      'target_name': 'libXNVCtrl',
++      'type': 'none',
++      'direct_dependent_settings': {
++        'cflags': [
++            '<!@(pkg-config --cflags libXNVCtrl)',
++        ],
++        'defines': [
++            'USE_SYSTEM_LIBXNVCTRL',
++        ],
++      },
++      'link_settings': {
++        'ldflags': [
++          '<!@(pkg-config --libs-only-L --libs-only-other libXNVCtrl)',
++        ],
++        'libraries': [
++          '<!@(pkg-config --libs-only-l libXNVCtrl)',
++        ],
++      },
++    }
++  ],
++}
+--- chromium-browser-28.0.1500.20/build/linux/unbundle/replace_gyp_files.py~	2013-05-21 05:47:31.000000000 +0300
++++ chromium-browser-28.0.1500.20/build/linux/unbundle/replace_gyp_files.py	2013-05-29 23:15:43.738468072 +0300
+@@ -29,6 +29,7 @@
+   'use_system_libvpx': 'third_party/libvpx/libvpx.gyp',
+   'use_system_libwebp': 'third_party/libwebp/libwebp.gyp',
+   'use_system_libxml': 'third_party/libxml/libxml.gyp',
++  'use_system_libxnvctrl' : 'third_party/libXNVCtrl/libXNVCtrl.gyp',
+   'use_system_libxslt': 'third_party/libxslt/libxslt.gyp',
+   'use_system_opus': 'third_party/opus/opus.gyp',
+   'use_system_re2': 'third_party/re2/re2.gyp',
+--- chromium-browser-28.0.1500.20/content/gpu/gpu_info_collector_x11.cc~	2013-05-21 05:47:09.000000000 +0300
++++ chromium-browser-28.0.1500.20/content/gpu/gpu_info_collector_x11.cc	2013-05-28 21:17:34.045674426 +0300
 @@ -18,8 +18,7 @@
- #include "base/string_tokenizer.h"
- #include "base/string_util.h"
+ #include "base/strings/string_split.h"
+ #include "base/strings/string_tokenizer.h"
  #include "library_loaders/libpci.h"
 -#include "third_party/libXNVCtrl/NVCtrl.h"
 -#include "third_party/libXNVCtrl/NVCtrlLib.h"
@@ -82,7 +54,7 @@ todo use generate_shim_headers script
  #include "ui/gl/gl_context.h"
  #include "ui/gl/gl_implementation.h"
 --- /dev/null	2007-02-13 18:29:53.000000000 +0200
-+++ hromium-browser-25.0.1364.29/src/third_party/libXNVCtrl/libXNVCtrl.h	2013-01-12 16:27:55.676465329 +0200
++++ chromium-browser-25.0.1364.29/src/third_party/libXNVCtrl/libXNVCtrl.h	2013-01-12 16:27:55.676465329 +0200
 @@ -0,0 +1,17 @@
 +// Copyright (c) 2013 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
