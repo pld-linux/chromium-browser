@@ -288,7 +288,7 @@ ln -s %{SOURCE7} .
 %patch16 -p1
 %patch28 -p1
 %patch25 -p2
-%patch18 -p2
+%patch18 -p1
 %patch24 -p2
 %patch26 -p2
 %patch31 -p0
@@ -335,6 +335,7 @@ ln -s %{_bindir}/x86_64-nacl-ranlib .
 ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
 ln -s %{_bindir}/x86_64-nacl-strip .
 ln -s %{_bindir}/x86_64-nacl-strip strip
+ln -s %{_bindir}/x86_64-nacl-objcopy .
 ln -s %{_prefix}/x86_64-nacl/lib ../lib
 ln -s %{_prefix}/x86_64-nacl/lib32 ../lib32
 ln -s %{_prefix}/x86_64-nacl/include ../nacl/include
