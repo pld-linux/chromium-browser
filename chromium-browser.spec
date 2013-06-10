@@ -207,6 +207,13 @@ Obsoletes:	chromium-browser-inspector < 15.0.863.0
 ExclusiveArch:	%{ix86} %{x8664} arm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# Set up Google API keys, see http://www.chromium.org/developers/how-tos/api-keys
+# Note: these are for PLD Linux use ONLY.
+# For your own distribution, please get your own set of keys.
+%define		google_api_key AIzaSyD1tTgDbP-N6BGXKZ7VqSos_IU1QflGbyg
+%define		google_default_client_id 724288223830.apps.googleusercontent.com
+%define		google_default_client_secret rHmKOPygcI6G-clFHb-RfuHb
+
 %define		find_lang 	sh find-lang.sh %{buildroot}
 
 # Usage: gyp_with BCOND_NAME [OPTION_NAME]
@@ -392,6 +399,9 @@ test -e Makefile || \
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0 \
+	-Dgoogle_api_key=%{google_api_key} \
+	-Dgoogle_default_client_id=%{google_default_client_id} \
+	-Dgoogle_default_client_secret=%{google_default_client_secret} \
 	%{gyp_with cups} \
 	%{gyp_with gconf} -Dlinux_link_gsettings=0 \
 	%{gyp_with kerberos} -Dlinux_link_kerberos=1 \
