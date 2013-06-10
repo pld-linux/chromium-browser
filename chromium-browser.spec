@@ -60,7 +60,7 @@
 # - to look for new tarball, use update-source.sh script
 
 %define		branch		28.0.1500
-%define		basever		29
+%define		basever		36
 #define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
