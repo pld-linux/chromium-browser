@@ -27,6 +27,7 @@
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 %bcond_without	system_protobuf	# system protobuf
 %bcond_without	system_re2		# system re2
+%bcond_without	system_snappy	# system snappy
 %bcond_without	system_speex	# system speex
 %bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
@@ -58,9 +59,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		27.0.1453
-%define		basever		93
-%define		patchver	110
+%define		branch		28.0.1500
+%define		basever		45
+#define		patchver	70
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -73,10 +74,10 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	6bb4fc8f0c437b447a76c3bd91cf9f81
+# Source0-md5:	040b9e7d8ae75d20d63621aca84962bf
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	7fc182ced7e1b7c73d988cd8cdd3ace4
+# Patch0-md5:	7e2f26d76ca6241961276a328a9230cf
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
@@ -104,8 +105,6 @@ Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
-Patch29:	speechd-0.8.patch
-Patch30:	no-pnacl.patch
 Patch31:	sync-session-name.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
@@ -169,6 +168,7 @@ BuildRequires:	python
 BuildRequires:	python-modules
 BuildRequires:	python-ply
 %{?with_system_re2:BuildRequires:	re2-devel >= 20130115-2}
+%{?with_system_snappy:BuildRequires:	snappy-devel}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	speech-dispatcher-devel >= 0.8
@@ -287,19 +287,17 @@ ln -s %{SOURCE7} .
 %patch3 -p2
 %patch4 -p3
 %patch6 -p2
-%patch7 -p2
-%patch10 -p2
+%patch7 -p1
+%patch10 -p1
 %patch15 -p2
 %{!?with_libjpegturbo:%patch11 -p0}
 %patch12 -p1
 %patch16 -p1
 %patch28 -p1
 %patch25 -p2
-%patch18 -p2
+%patch18 -p1
 %patch24 -p2
 %patch26 -p2
-%patch29 -p2
-%patch30 -p0
 %patch31 -p0
 
 sh -x clean-source.sh \
@@ -309,6 +307,7 @@ sh -x clean-source.sh \
 	%{!?with_system_mesa:mesa=0} \
 	%{!?with_system_protobuf:protobuf=0} \
 	%{!?with_system_re2:re2=0} \
+	%{!?with_system_snappy:snappy=0} \
 	%{!?with_system_sqlite:sqlite=0} \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_zlib:zlib=0} \
@@ -343,6 +342,7 @@ ln -s %{_bindir}/x86_64-nacl-ranlib .
 ln -s %{_bindir}/x86_64-nacl-ranlib ranlib
 ln -s %{_bindir}/x86_64-nacl-strip .
 ln -s %{_bindir}/x86_64-nacl-strip strip
+ln -s %{_bindir}/x86_64-nacl-objcopy .
 ln -s %{_prefix}/x86_64-nacl/lib ../lib
 ln -s %{_prefix}/x86_64-nacl/lib32 ../lib32
 ln -s %{_prefix}/x86_64-nacl/include ../nacl/include
@@ -350,17 +350,7 @@ cd ../../../../..
 fi
 %endif
 
-test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
-test -e Makefile || \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
-	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
-	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}" \
-%{__python} build/gyp_chromium \
-	--format=make \
-	--depth=. \
-	build/all.gyp \
+flags="
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \
 %endif
@@ -394,7 +384,7 @@ test -e Makefile || \
 	%{?with_selinux:-Dselinux=1} \
 	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
 	-Dlinux_link_libpci=1 \
-	-Dlinux_link_libspeechd=1 \
+	-Dlinux_link_libspeechd=1 -Dlibspeechd_h_prefix=speech-dispatcher/ \
 	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
 	-Dlinux_use_gold_binary=0 \
@@ -423,6 +413,7 @@ test -e Makefile || \
 	%{gyp_with system_opus} \
 	%{gyp_with system_protobuf} \
 	%{gyp_with system_re2} \
+	%{gyp_with system_snappy} \
 	%{gyp_with system_speex} \
 	%{gyp_with system_sqlite} %{?with_system_sqlite:-Denable_sql_database=0} \
 	%{gyp_with system_v8} \
@@ -438,6 +429,25 @@ test -e Makefile || \
 	-Duse_system_libxslt=1 \
 	-Duse_system_nspr=1 \
 	-Duse_system_xdg_utils=1 \
+"
+
+build/linux/unbundle/replace_gyp_files.py $flags
+
+test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
+test -e Makefile || \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
+	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
+	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags}" \
+	CC_host="%{__cc}" \
+	CXX_host="%{__cxx}" \
+	LD_host="%{__cxx}" \
+%{__python} build/gyp_chromium \
+	--format=make \
+	--depth=. \
+	build/all.gyp \
+	$flags
 
 # need {CC/CXX/LDFLAGS}.host overrides for v8 build
 %{__make} -r chrome %{?with_sandboxing:chrome_sandbox} \

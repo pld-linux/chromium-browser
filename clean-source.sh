@@ -52,12 +52,12 @@ remove_nonessential_dirs() {
 	breakpad/src/common/mac \
 	breakpad/src/tools/mac \
 	build/mac \
-	build/win \
+	build/win_ \
 	chrome/android \
 	chrome/app/android \
 	chrome/app/resources/terms/chromeos \
 	chrome/app/theme/default_100_percent/cros_ \
-	chrome/app/theme/default_100_percent/mac \
+	chrome/app/theme/default_100_percent/mac_ \
 	chrome/app/theme/default_100_percent/win \
 	chrome/app/theme/default_200_percent/cros_ \
 	chrome/app/theme/default_200_percent/mac \
@@ -94,7 +94,6 @@ remove_nonessential_dirs() {
 	chrome/tools/build/mac \
 	chrome/tools/build/win \
 	chrome_frame \
-	cloud_print/service/win \
 	cloud_print/virtual_driver/win \
 	content/app/android \
 	content/browser/android \
@@ -412,6 +411,7 @@ remove_nonessential_dirs() {
 		chrome/browser/component/web_contents_delegate_android \
 		chrome/tools \
 		chromeos \
+		cloud_print/service/win \
 		content/browser/renderer_host/java \
 		content/common/mac \
 		content/renderer/java \
@@ -442,7 +442,7 @@ remove_nonessential_dirs() {
 		'!' -path 'build/android/cpufeatures.gypi' \
 		'!' -path 'chrome/browser/chromeos/contacts/contact.proto' \
 		'!' -path 'chrome/browser/chromeos/extensions/echo_private_api.h' \
-		'!' -path 'chrome/browser/chromeos/extensions/file_browser_handler_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/file_manager/file_browser_handler_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/info_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/media_player_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/networking_private_api.h' \
@@ -510,7 +510,7 @@ almost_strip_dirs() {
 		'!' -path 'tools/grit/*' \
 		'!' -path 'tools/gritsettings/*' \
 		'!' -path 'tools/gyp/*' \
-		'!' -path 'tools/json_comment_eater.py' \
+		'!' -path 'tools/json_comment_eater/json_comment_eater.py' \
 		'!' -path 'tools/json_schema_compiler/*' \
 		'!' -path 'tools/json_to_struct/*' \
 		'!' -path 'tools/licenses.py' \
@@ -538,7 +538,6 @@ clean_third_party() {
 		third_party/mach_override \
 		third_party/npapi/npspy \
 		third_party/re2/benchlog \
-		third_party/snappy \
 		third_party/sqlite/*.patch \
 		third_party/sqlite/src/*.patch \
 		third_party/sudden_motion_sensor \
@@ -588,6 +587,7 @@ clean_third_party() {
 		\! -path 'third_party/sfntly/*' \
 		\! -path 'third_party/skia/*' \
 		\! -path 'third_party/smhasher/*' \
+		\! -path 'third_party/snappy/*' \
 		\! -path 'third_party/sqlite/amalgamation/*' \
 		\! -path 'third_party/sqlite/sqlite3.h' \
 		\! -path 'third_party/sqlite/src/ext/*' \
@@ -599,6 +599,7 @@ clean_third_party() {
 		\! -path 'third_party/webrtc/*' \
 		\! -path 'third_party/widevine/*' \
 		\! -path 'third_party/x86inc/*' \
+		\! -path 'third_party/zlib/google/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h
@@ -622,8 +623,13 @@ remove_bin_only() {
 
 # removes dir, if the bcond is not turned off
 strip_system_dirs() {
-	local dir lib bcond
+	local dir lib bcond args
+	# prevent "*" from being expanded in $args
+	set -f
 	for dir in "$@"; do
+		args=${dir#* }
+		test "$args" = "$dir" && args=
+		dir=${dir%% *}
 		lib=${dir##*/}
 		bcond=$(eval echo \$$lib)
 		[ "${bcond:-1}" = 0 ] && continue
@@ -631,8 +637,9 @@ strip_system_dirs() {
 		# skip already removed dirs
 		test -d $dir || continue
 
-		find $dir -depth -mindepth 1 \! \( -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h \) -print -delete
+		find $dir -depth -mindepth 1 '!' '(' -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h $args ')' -print -delete || :
 	done
+	set +f
 }
 
 # remove test data and files
@@ -790,7 +797,6 @@ remove_tests() {
 	third_party/webrtc/system_wrappers/test \
 	third_party/webrtc/test/manual \
 	third_party/webrtc/test/testsupport/mac \
-	third_party/webrtc/video_engine/test/android \
 	third_party/webrtc/video_engine/test/auto_test/android \
 	third_party/webrtc/voice_engine/test/android \
 	third_party/xdg-utils/tests \
@@ -886,6 +892,7 @@ remove_tests() {
 		'!' -path './chrome/browser/extensions/api/declarative/test_rules_registry.*' \
 		'!' -path './chrome/browser/extensions/api/test/test_api.*' \
 		'!' -path './chrome/browser/resources/net_internals/*' \
+		'!' -path './chrome/browser/storage_monitor/test_media_transfer_protocol_manager_linux.*' \
 		'!' -path './chrome/browser/ui/webui/test_chrome_web_ui_controller_factory*' \
 		'!' -path './chrome/common/net/test_server_locations.*' \
 		'!' -path './chrome/renderer/resources/extensions/test_custom_bindings.js' \
@@ -896,7 +903,7 @@ remove_tests() {
 		'!' -path './native_client/src/trusted/service_runtime/env_cleanser_test.h' \
 		'!' -path './net/base/test_completion_callback.*' \
 		'!' -path './net/base/test_data_stream.*' \
-		'!' -path './net/base/test_root_certs*' \
+		'!' -path './net/cert/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
 		'!' -path './tools/compile_test/compile_test.py' \
@@ -907,11 +914,6 @@ remove_tests() {
 		'!' -path './webkit/tools/test_shell/*.h' \
 	-print -delete || :
 }
-
-remove_nonessential_dirs > REMOVED-nonessential_dirs.txt
-almost_strip_dirs > REMOVED-stripped.txt
-remove_bin_only > REMOVED-bin_only.txt
-remove_tests > REMOVED-tests.txt
 
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
@@ -935,12 +937,17 @@ strip_system_dirs \
 	third_party/opus \
 	third_party/protobuf \
 	third_party/re2 \
+	third_party/snappy \
 	third_party/speex \
 	third_party/sqlite \
 	third_party/yasm \
-	third_party/zlib \
+	"third_party/zlib -o -path third_party/zlib/google/*" \
 	v8 \
 > REMOVED-system_dirs.txt
+remove_nonessential_dirs > REMOVED-nonessential_dirs.txt
+almost_strip_dirs > REMOVED-stripped.txt
+remove_bin_only > REMOVED-bin_only.txt
+remove_tests > REMOVED-tests.txt
 
 if [ "${sqlite:-1}" = 1 ]; then
 	# some code does not pass -DUSE_SYSTEM_SQLITE properly

@@ -98,11 +98,13 @@ set -x
 	if [ -e $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT ]; then
 		base=$(readlink -f $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT)
 		current=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.$EXT
-		sh -x $WORK_DIR/make-diff-patch.sh $base $current
-		mv $PACKAGE_NAME-$VERSION.patch.xz $DIST_DIR
-		# for beta and dev channels, move the diff pointer
-		if [ "$CHANNEL" != "stable" ]; then
-			ln -sf $PACKAGE_NAME-$VERSION.tar.$EXT $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT
+		if [ "$(basename $base)" != "$(basename $current)" ]; then
+			sh -x $WORK_DIR/make-diff-patch.sh $base $current
+			mv $PACKAGE_NAME-$VERSION.patch.xz $DIST_DIR
+			# for beta and dev channels, update the diff pointer
+			if [ "$CHANNEL" != "stable" ]; then
+				ln -sf $PACKAGE_NAME-$VERSION.tar.$EXT $DIST_DIR/$PACKAGE_NAME-$BASEVER.tar.$EXT
+			fi
 		fi
 	fi
 
