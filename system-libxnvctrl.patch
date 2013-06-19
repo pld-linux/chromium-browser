@@ -1,6 +1,6 @@
 --- /dev/null	2008-07-21 16:46:52.000000000 +0300
 +++ chromium-browser-28.0.1500.20/build/linux/unbundle/libXNVCtrl.gyp	2013-05-31 13:26:23.840330832 +0300
-@@ -0,0 +1,38 @@
+@@ -0,0 +1,35 @@
 +# Copyright (c) 2013 The Chromium Authors. All rights reserved.
 +# Use of this source code is governed by a BSD-style license that can be
 +# found in the LICENSE file.
@@ -23,9 +23,6 @@
 +      'direct_dependent_settings': {
 +        'cflags': [
 +            '<!@(pkg-config --cflags libXNVCtrl)',
-+        ],
-+        'defines': [
-+            'USE_SYSTEM_LIBXNVCTRL',
 +        ],
 +      },
 +      'link_settings': {
