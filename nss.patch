@@ -1,18 +1,30 @@
---- /home/users/baggins/rpm/BUILD/chromium-browser-28.0.1500.52/net/third_party/nss/ssl/bodge/secitem_array.c~	2013-06-12 09:28:13.000000000 +0200
-+++ /home/users/baggins/rpm/BUILD/chromium-browser-28.0.1500.52/net/third_party/nss/ssl/bodge/secitem_array.c	2013-07-15 11:05:45.089057968 +0200
-@@ -11,13 +11,14 @@
- #include "secerr.h"
- #include "secport.h"
+Linux: fix compatibility with nss-3.15.
+
+https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/Jwz20yLB_7E
+https://src.chromium.org/viewvc/chrome?revision=206184&view=revision
+--- trunk/src/net/third_party/nss/ssl/bodge/secitem_array.c	2013/06/13 22:43:39	206183
++++ trunk/src/net/third_party/nss/ssl/bodge/secitem_array.c	2013/06/13 22:44:52	206184
+@@ -6,6 +6,7 @@
+  * Support routines for SECItemArray data structure.
+  */
  
-+/*
++#include "nssutil.h"
+ #include "seccomon.h"
+ #include "secitem.h"
+ #include "secerr.h"
+@@ -13,10 +14,15 @@
+ 
  typedef struct SECItemArrayStr SECItemArray;
  
++#define NSSUTIL_VERSION_NUM \
++    (NSSUTIL_VMAJOR * 10000 + NSSUTIL_VMINOR * 100 + NSSUTIL_VPATCH)
++#if NSSUTIL_VERSION_NUM < 31500
++// Added in NSS 3.15.
  struct SECItemArrayStr {
      SECItem *items;
      unsigned int len;
  };
--
-+*/
++#endif
+ 
  SECItemArray *
  SECITEM_AllocArray(PLArenaPool *arena, SECItemArray *array, unsigned int len)
- {

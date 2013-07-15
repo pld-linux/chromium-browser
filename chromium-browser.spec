@@ -170,9 +170,9 @@ BuildRequires:	python
 BuildRequires:	python-modules
 BuildRequires:	python-ply
 %{?with_system_re2:BuildRequires:	re2-devel >= 20130115-2}
-%{?with_system_snappy:BuildRequires:	snappy-devel}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
+%{?with_system_snappy:BuildRequires:	snappy-devel}
 BuildRequires:	speech-dispatcher-devel >= 0.8
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 %{?with_system_sqlite:BuildRequires:	sqlite3-devel >= 3.7}
@@ -301,7 +301,7 @@ ln -s %{SOURCE7} .
 %patch24 -p2
 %patch26 -p2
 %patch31 -p0
-%patch32 -p1
+%patch32 -p2
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
