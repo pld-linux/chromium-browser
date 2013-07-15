@@ -106,6 +106,7 @@ Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
 Patch31:	sync-session-name.patch
+Patch32:	nss.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -132,6 +133,7 @@ BuildRequires:	gperf
 BuildRequires:	gtest-devel
 BuildRequires:	gtk+2-devel
 %{?with_system_harfbuzz:BuildRequires:	harfbuzz-devel}
+%{?with_system_harfbuzz:BuildRequires:	harfbuzz-icu-devel}
 %{?with_kerberos:BuildRequires:	heimdal-devel}
 BuildRequires:	hicolor-icon-theme
 %{?with_system_jsoncpp:BuildRequires:	jsoncpp-devel}
@@ -214,7 +216,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		google_default_client_id 724288223830.apps.googleusercontent.com
 %define		google_default_client_secret rHmKOPygcI6G-clFHb-RfuHb
 
-%define		find_lang 	sh find-lang.sh %{buildroot}
+%define		find_lang	sh find-lang.sh %{buildroot}
 
 # Usage: gyp_with BCOND_NAME [OPTION_NAME]
 %define		gyp_with() %{expand:%%{?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=1}%%{!?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=0}}
@@ -299,6 +301,7 @@ ln -s %{SOURCE7} .
 %patch24 -p2
 %patch26 -p2
 %patch31 -p0
+%patch32 -p1
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
