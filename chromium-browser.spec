@@ -107,6 +107,7 @@ Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
 Patch31:	sync-session-name.patch
 Patch32:	nss.patch
+Patch33:	harfbuzz-icu.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -302,6 +303,7 @@ ln -s %{SOURCE7} .
 %patch26 -p2
 %patch31 -p0
 %patch32 -p2
+%patch33 -p2
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
