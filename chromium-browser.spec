@@ -61,7 +61,7 @@
 
 %define		branch		28.0.1500
 %define		basever		45
-%define		patchver	71
+%define		patchver	95
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -77,7 +77,7 @@ Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{
 # Source0-md5:	040b9e7d8ae75d20d63621aca84962bf
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	428b800c3179f5abae541fe639f90e1b
+# Patch0-md5:	120491e7e2df40182793081b7ea7e41a
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
