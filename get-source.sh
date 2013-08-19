@@ -9,13 +9,14 @@ PACKAGE_NAME=chromium-browser
 PROGRAM=${0##*/}
 WORK_DIR=$(cd "$(dirname "$0")"; pwd)
 LOCKFILE=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.lock
+# Browse URL: http://gsdview.appspot.com/chromium-browser-official/
 OFFICIAL_URL=http://commondatastorage.googleapis.com/chromium-browser-official
 DIST_DIR=$HOME/public_html/chromium-browser/src/$CHANNEL
 
 # skip package build if interactive
 tty -s && build_package=0
 
-VERSION=$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')
+VERSION=${2:-$(wget -qO - "$CHANNELS_URL?os=linux&channel=$CHANNEL" | awk -F, 'NR > 1{print $3}')}
 if [ -z "$VERSION" ]; then
 	echo >&2 "Can't figure out version for $CHANNEL"
 	exit 1
