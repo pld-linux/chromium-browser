@@ -59,9 +59,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		28.0.1500
-%define		basever		45
-%define		patchver	95
+%define		branch		29.0.1547
+%define		basever		57
+#define		patchver	95
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -74,7 +74,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	040b9e7d8ae75d20d63621aca84962bf
+# Source0-md5:	fcdeb8cb650d64e326d4ae84ca491432
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	120491e7e2df40182793081b7ea7e41a
@@ -88,9 +88,7 @@ Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
 Patch1:		plugin-searchdirs.patch
-Patch3:		disable_dlog_and_dcheck_in_release_builds.patch
 Patch4:		path-libpdf.patch
-Patch6:		get-webkit_revision.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 Patch10:	system-libxnvctrl.patch
@@ -105,9 +103,6 @@ Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
-Patch31:	sync-session-name.patch
-Patch32:	nss.patch
-Patch33:	harfbuzz-icu.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -115,6 +110,7 @@ URL:		http://www.chromium.org/Home
 %{?with_system_mesa:BuildRequires:	Mesa-libGLU-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libOSMesa-devel >= 9.1}
 BuildRequires:	alsa-lib-devel
+BuildRequires:	perl-JSON
 BuildRequires:	atk-devel
 BuildRequires:	bison
 BuildRequires:	bzip2-devel
@@ -281,15 +277,13 @@ v8=$MAJOR_VERSION.$MINOR_VERSION.$BUILD_NUMBER.$PATCH_LEVEL
 sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 	-e 's/@BUILD_DIST_NAME@/PLD/g' \
 	-e 's/@BUILD_DIST_VERSION@/%{pld_version}/g' \
-	< %{PATCH8} | %{__patch} -p2
+	< %{PATCH8} | %{__patch} -p1
 
 %{__sed} -e 's,@localedir@,%{_datadir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} .
 
 %patch1 -p2
-%patch3 -p2
 %patch4 -p3
-%patch6 -p2
 %patch7 -p1
 %patch10 -p1
 %patch15 -p2
@@ -301,9 +295,6 @@ ln -s %{SOURCE7} .
 %patch18 -p1
 %patch24 -p2
 %patch26 -p2
-%patch31 -p0
-%patch32 -p2
-%patch33 -p2
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
@@ -394,6 +385,7 @@ flags="
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
 	-Dlinux_use_gold_binary=0 \
 	-Dlinux_use_gold_flags=0 \
+	-Dlogging_like_official_build=1 \
 	-Dgoogle_api_key=%{google_api_key} \
 	-Dgoogle_default_client_id=%{google_default_client_id} \
 	-Dgoogle_default_client_secret=%{google_default_client_secret} \

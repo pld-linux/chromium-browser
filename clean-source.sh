@@ -134,7 +134,6 @@ remove_nonessential_dirs() {
 	native_client_sdk \
 	native_client_sdk/src/libraries/win \
 	net/android \
-	net/tools \
 	net/tools/testserver \
 	npapi/npspy/windows \
 	o3d \
@@ -285,9 +284,9 @@ remove_nonessential_dirs() {
 	third_party/WebKit/Tools/DumpRenderTree/mac \
 	third_party/WebKit/Tools/DumpRenderTree/qt \
 	third_party/WebKit/Tools/DumpRenderTree/win \
-	third_party/angle/extensions \
-	third_party/angle/samples \
-	third_party/angle/samples/gles2_book \
+	third_party/angle_dx11/extensions \
+	third_party/angle_dx11/samples \
+	third_party/angle_dx11/samples/gles2_book \
 	third_party/boost \
 	third_party/bsdiff \
 	third_party/bspatch \
@@ -418,6 +417,7 @@ remove_nonessential_dirs() {
 		gpu/tools \
 		native_client/src/include/win \
 		native_client/src/trusted/service_runtime/win \
+		net/tools \
 		remoting/tools \
 		sandbox/win \
 		third_party/WebKit/Source/WebKit/chromium/public/mac \
@@ -456,6 +456,7 @@ remove_nonessential_dirs() {
 		'!' -path 'chrome/tools/build/make_version_cc.py' \
 		'!' -path 'chrome/tools/build/repack_locales.py' \
 		'!' -path 'chrome/tools/build/version.py' \
+		'!' -path 'chromeos/chromeos_constants.h' \
 		'!' -path 'chromeos/chromeos_export.h' \
 		'!' -path 'chromeos/chromeos_switches.h' \
 		'!' -path 'chromeos/dbus/dbus_client_implementation_type.h' \
@@ -468,6 +469,7 @@ remove_nonessential_dirs() {
 		'!' -path 'native_client/src/include/win/mman.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/debug_exception_handler.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/exception_patch/ntdll_patch.h' \
+		'!' -path 'net/tools/tld_cleanup/*' \
 		'!' -path 'remoting/tools/verify_resources.py' \
 		'!' -path 'sandbox/win/src/sandbox_types.h' \
 		'!' -path 'third_party/WebKit/Source/WebKit/chromium/public/mac/WebSubstringUtil.h' \
@@ -549,11 +551,11 @@ clean_third_party() {
 		'!' -iname '*.gyp*' \
 		\! -path 'third_party/WebKit/*' \
 		\! -path 'third_party/adobe/flash/*' \
-		\! -path 'third_party/angle/include/EGL/*' \
-		\! -path 'third_party/angle/include/GLSLANG/*' \
-		\! -path 'third_party/angle/src/common/*' \
-		\! -path 'third_party/angle/src/compiler/*' \
-		\! -path 'third_party/angle/src/third_party/compiler/*' \
+		\! -path 'third_party/angle_dx11/include/EGL/*' \
+		\! -path 'third_party/angle_dx11/include/GLSLANG/*' \
+		\! -path 'third_party/angle_dx11/src/common/*' \
+		\! -path 'third_party/angle_dx11/src/compiler/*' \
+		\! -path 'third_party/angle_dx11/src/third_party/compiler/*' \
 		\! -path 'third_party/cacheinvalidation/*' \
 		\! -path 'third_party/cld/*' \
 		\! -path 'third_party/cros_system_api/*' \
@@ -572,11 +574,12 @@ clean_third_party() {
 		\! -path 'third_party/libxml/chromium/*' \
 		\! -path 'third_party/libyuv/*' \
 		\! -path 'third_party/lss/*.h' \
-		\! -path 'third_party/mesa/MesaLib/include/GL/gl.h' \
-		\! -path 'third_party/mesa/MesaLib/include/GL/glext.h' \
-		\! -path 'third_party/mesa/MesaLib/include/GL/glx.h' \
-		\! -path 'third_party/mesa/MesaLib/include/GL/glxext.h' \
-		\! -path 'third_party/mesa/MesaLib/include/GL/osmesa.h' \
+		\! -path 'third_party/lzma_sdk/*' \
+		\! -path 'third_party/mesa/src/include/GL/gl.h' \
+		\! -path 'third_party/mesa/src/include/GL/glext.h' \
+		\! -path 'third_party/mesa/src/include/GL/glx.h' \
+		\! -path 'third_party/mesa/src/include/GL/glxext.h' \
+		\! -path 'third_party/mesa/src/include/GL/osmesa.h' \
 		\! -path 'third_party/modp_b64/*' \
 		\! -path 'third_party/mt19937ar/*' \
 		\! -path 'third_party/npapi/*' \
@@ -594,6 +597,7 @@ clean_third_party() {
 		\! -path 'third_party/tcmalloc/*' \
 		\! -path 'third_party/trace-viewer/*' \
 		\! -path 'third_party/undoview/*' \
+		\! -path 'third_party/usrsctp/*' \
 		\! -path 'third_party/v8-i18n/*' \
 		\! -path 'third_party/v8/*' \
 		\! -path 'third_party/webrtc/*' \
@@ -660,7 +664,7 @@ remove_tests() {
 	chrome/browser/component_updater/test \
 	chrome/browser/extensions/api/test_ \
 	chrome/browser/printing/cloud_print/test \
-	chrome/browser/resources/gaia_auth/test \
+	chrome/browser/resources/gaia_auth/test_ \
 	chrome/browser/resources/tracing/tests \
 	chrome/browser/sync/test \
 	chrome/browser/ui/cocoa/test \
@@ -752,7 +756,7 @@ remove_tests() {
 	third_party/WebKit/Tools/TestWebKitAPI/Tests/mac \
 	third_party/WebKit/Tools/TestWebKitAPI/mac \
 	third_party/WebKit/Tools/TestWebKitAPI/win \
-	third_party/angle/tests \
+	third_party/angle_dx11/tests \
 	third_party/cacheinvalidation/files/src/google/cacheinvalidation/test \
 	third_party/cacheinvalidation/src/google/cacheinvalidation/test \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing \
@@ -891,6 +895,7 @@ remove_tests() {
 		'!' -path './chrome/browser/diagnostics/diagnostics_test.*' \
 		'!' -path './chrome/browser/extensions/api/declarative/test_rules_registry.*' \
 		'!' -path './chrome/browser/extensions/api/test/test_api.*' \
+		'!' -path './chrome/browser/resources/gaia_auth/manifest_test.json' \
 		'!' -path './chrome/browser/resources/net_internals/*' \
 		'!' -path './chrome/browser/storage_monitor/test_media_transfer_protocol_manager_linux.*' \
 		'!' -path './chrome/browser/ui/webui/test_chrome_web_ui_controller_factory*' \
@@ -908,7 +913,8 @@ remove_tests() {
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
 		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
-		'!' -path './webkit/fileapi/test_mount_point_provider.*' \
+		'!' -path './webkit/browser/fileapi/test_mount_point_provider.*' \
+		'!' -path './webkit/common/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/support/test_webkit_platform_support.h' \
 		'!' -path './webkit/tools/test_shell/*.h' \
