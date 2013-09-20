@@ -175,7 +175,6 @@ BuildRequires:	speech-dispatcher-devel >= 0.8
 %{?with_system_speex:BuildRequires:	speex-devel >= 1:1.2-rc1}
 %{?with_system_sqlite:BuildRequires:	sqlite3-devel >= 3.7}
 %{?with_system_libsrtp:BuildRequires:	srtp-devel >= 1.4.4}
-BuildRequires:	subversion
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel
 BuildRequires:	usbutils
