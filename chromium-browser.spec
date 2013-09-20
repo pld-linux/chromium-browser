@@ -106,11 +106,10 @@ Patch28:	system-mesa.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
-%{?with_system_mesa:BuildRequires:	Mesa-libGLES-devel >= 9.1}
+BuildRequires:	Mesa-libGLES-devel >= 9.1
 %{?with_system_mesa:BuildRequires:	Mesa-libGLU-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libOSMesa-devel >= 9.1}
 BuildRequires:	alsa-lib-devel
-BuildRequires:	perl-JSON
 BuildRequires:	atk-devel
 BuildRequires:	bison
 BuildRequires:	bzip2-devel
@@ -158,6 +157,7 @@ BuildRequires:	nss-devel >= 1:3.12.3
 BuildRequires:	pam-devel
 BuildRequires:	pango-devel
 BuildRequires:	pciutils-devel
+BuildRequires:	perl-JSON
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 %{?with_system_protobuf:BuildRequires:	protobuf-devel}
@@ -182,6 +182,7 @@ BuildRequires:	util-linux
 %{?with_system_v8:BuildRequires:	v8-devel >= 3.7}
 BuildRequires:	which
 BuildRequires:	xorg-lib-libXScrnSaver-devel
+BuildRequires:	xorg-lib-libXtst-devel
 BuildRequires:	xz
 %{?with_system_yasm:BuildRequires:	yasm}
 %{?with_system_zlib:BuildRequires:	zlib-devel}
