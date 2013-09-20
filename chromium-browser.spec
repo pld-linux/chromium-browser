@@ -164,6 +164,7 @@ BuildRequires:	pkgconfig
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
+BuildRequires:	python-jinja2
 BuildRequires:	python-modules
 BuildRequires:	python-ply
 %{?with_system_re2:BuildRequires:	re2-devel >= 20130115-2}
