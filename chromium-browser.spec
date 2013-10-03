@@ -19,7 +19,7 @@
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
-%bcond_without	system_libusb	# system libusb-1
+%bcond_with	system_libusb	# system libusb-1, disabled: http://crbug.com/266149
 %bcond_without	system_libwebp	# system libwebp
 %bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_with	system_mesa		# system Mesa
