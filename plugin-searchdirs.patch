@@ -3,8 +3,8 @@
 2. $MOZ_PLUGIN_PATH (colon separated)
 3. ~/.mozilla/plugins
 
---- chromium-browser-10.0.632.0~svn20110107r70714/src/webkit/plugins/npapi/plugin_list_posix.cc~	2010-12-22 04:02:37.000000000 +0100
-+++ chromium-browser-10.0.632.0~svn20110107r70714/src/webkit/plugins/npapi/plugin_list_posix.cc	2011-01-07 17:41:38.193692743 +0100
+--- chromium-browser-10.0.632.0~svn20110107r70714/content/common/plugin_list_posix.cc~	2010-12-22 04:02:37.000000000 +0100
++++ chromium-browser-10.0.632.0~svn20110107r70714/content/common/plugin_list_posix.cc	2011-01-07 17:41:38.193692743 +0100
 @@ -146,6 +146,8 @@
    if (!home.empty())
      plugin_dirs->push_back(home.Append(".mozilla/plugins"));

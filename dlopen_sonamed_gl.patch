@@ -1,17 +1,16 @@
 dlopen the sonamed libs directly, like it has already been done for libGL.so.1,
 as we don't want to Depend on the -dev packages for the .so files:
-- libosmesa.so.7: Mesa-libOSMesa-7.10-1
-- libGLESv2.so.2: Mesa-libGLES-7.11-0.20110227.1
-- libEGL.so.1: Mesa-libEGL-7.10-1
-
---- chromium-browser-28.0.1500.20/ui/gl/gl_implementation_x11.cc~	2013-05-21 05:45:59.000000000 +0300
-+++ chromium-browser-28.0.1500.20/ui/gl/gl_implementation_x11.cc	2013-05-28 00:21:02.745914853 +0300
-@@ -79,7 +79,7 @@
-       }
+- libOSMesa.so.8: Mesa-libOSMesa-9.2.0-2
+- libGLESv2.so.2: Mesa-libGLES-9.2.0-2
+- libEGL.so.1: Mesa-libEGL-9.2.0-2
+--- chromium-browser-30.0.1599.66/./ui/gl/gl_implementation_linux.cc~	2013-09-28 20:10:53.000000000 +0300
++++ chromium-browser-30.0.1599.66/./ui/gl/gl_implementation_linux.cc	2013-10-02 20:06:36.152324746 +0300
+@@ -37,7 +37,7 @@
+     return false;
+   }
  
-       base::NativeLibrary library = LoadLibrary(
--          module_path.Append("libosmesa.so"));
-+          module_path.Append("libosmesa.so.7"));
-       if (!library)
-         return false;
+-  base::NativeLibrary library = LoadLibrary(module_path.Append("libosmesa.so"));
++  base::NativeLibrary library = LoadLibrary(module_path.Append("libOSMesa.so.8"));
+   if (!library)
+     return false;
  
