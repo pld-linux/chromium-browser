@@ -591,7 +591,6 @@ clean_third_party() {
 		\! -path 'third_party/mt19937ar/*' \
 		\! -path 'third_party/npapi/*' \
 		\! -path 'third_party/ots/*' \
-		\! -path 'third_party/ply/*' \
 		\! -path 'third_party/protobuf/*' \
 		\! -path 'third_party/qcms/*' \
 		\! -path 'third_party/re2/*' \

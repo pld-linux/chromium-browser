@@ -49,7 +49,6 @@
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_stlport (android specific)
 # - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
-# - system ply (3.4)
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -105,6 +104,7 @@ Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
 Patch29:	system-icu.patch
+Patch30:	system-ply.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -168,7 +168,7 @@ BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-jinja2
 BuildRequires:	python-modules
-BuildRequires:	python-ply
+BuildRequires:	python-ply >= 3.4
 %{?with_system_re2:BuildRequires:	re2-devel >= 20130115-2}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
@@ -299,6 +299,7 @@ ln -s %{SOURCE7} .
 %patch24 -p2
 %patch26 -p2
 %patch29 -p0
+%patch30 -p0
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
