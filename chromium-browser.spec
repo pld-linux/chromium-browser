@@ -49,6 +49,7 @@
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_stlport (android specific)
 # - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
+# - system ply (3.4)
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -299,7 +300,6 @@ ln -s %{SOURCE7} .
 %patch26 -p2
 %patch29 -p0
 
-exit 0
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
 	%{!?with_system_libvpx:libvpx=0} \

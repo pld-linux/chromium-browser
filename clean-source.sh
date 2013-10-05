@@ -21,11 +21,12 @@ eval "$@"
 # suffix with _ those that we can't remove (just yet) because of the gclient
 # hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
+	# need to keep remoting/host/continue_window_mac.mm
 	find -type f '(' \
 		-name 'Android.mk' -o \
 		-name '*.vcproj' -o \
 		-name '*.sln' -o \
-		-name '*.mm' -o \
+		-name '*.mm_' -o \
 		-name '*.m' \
 	')' | xargs rm -vf
 
@@ -76,7 +77,7 @@ remove_nonessential_dirs() {
 	chrome/browser/resources/options/chromeos_ \
 	chrome/browser/resources/shared/css/chromeos \
 	chrome/browser/resources/shared/js/chromeos_ \
-	chrome/browser/ui/android \
+	chrome/browser/ui/android_ \
 	chrome/browser/ui/cocoa \
 	chrome/browser/ui/webui/chromeos \
 	chrome/browser/ui/webui/ntp/android \
@@ -144,11 +145,11 @@ remove_nonessential_dirs() {
 	ppapi/native_client/src/tools \
 	ppapi/native_client/src/trusted/plugin/win \
 	ppapi/native_client/tools \
-	remoting/host/installer/mac \
+	remoting/host/installer/mac_ \
 	remoting/host/installer/win \
-	remoting/host/mac \
+	remoting/host/mac_ \
 	remoting/host/setup/win \
-	remoting/host/win \
+	remoting/host/win_ \
 	rlz/examples \
 	rlz/mac \
 	rlz/win \
@@ -451,6 +452,7 @@ remove_nonessential_dirs() {
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_names.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_provider.h' \
 		'!' -path 'chrome/browser/chromeos/settings/device_settings_service.h' \
+		'!' -path 'chrome/browser/chromeos/system_logs/*.h' \
 		'!' -path 'chrome/tools/build/generate_policy_source.py' \
 		'!' -path 'chrome/tools/build/linux/sed.sh' \
 		'!' -path 'chrome/tools/build/make_version_cc.py' \
@@ -460,7 +462,9 @@ remove_nonessential_dirs() {
 		'!' -path 'chromeos/chromeos_export.h' \
 		'!' -path 'chromeos/chromeos_switches.h' \
 		'!' -path 'chromeos/dbus/dbus_client_implementation_type.h' \
+		'!' -path 'chromeos/dbus/dbus_method_call_status.h' \
 		'!' -path 'chromeos/dbus/session_manager_client.h' \
+		'!' -path 'chromeos/network/network_state_handler_observer.h' \
 		'!' -path 'chromeos/network/onc/onc_constants.h' \
 		'!' -path 'content/browser/renderer_host/java/java_bridge_dispatcher_host_manager.h' \
 		'!' -path 'content/common/mac/attributed_string_coder.h' \
@@ -470,6 +474,7 @@ remove_nonessential_dirs() {
 		'!' -path 'native_client/src/trusted/service_runtime/win/debug_exception_handler.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/exception_patch/ntdll_patch.h' \
 		'!' -path 'net/tools/tld_cleanup/*' \
+		'!' -path 'remoting/tools/build/*' \
 		'!' -path 'remoting/tools/verify_resources.py' \
 		'!' -path 'sandbox/win/src/sandbox_types.h' \
 		'!' -path 'third_party/WebKit/Source/WebKit/chromium/public/mac/WebSubstringUtil.h' \
@@ -512,6 +517,7 @@ almost_strip_dirs() {
 		'!' -path 'tools/grit/*' \
 		'!' -path 'tools/gritsettings/*' \
 		'!' -path 'tools/gyp/*' \
+		'!' -path 'tools/idl_parser/*' \
 		'!' -path 'tools/json_comment_eater/json_comment_eater.py' \
 		'!' -path 'tools/json_schema_compiler/*' \
 		'!' -path 'tools/json_to_struct/*' \
@@ -569,6 +575,7 @@ clean_third_party() {
 		\! -path 'third_party/libXNVCtrl/*' \
 		\! -path 'third_party/libjingle/*' \
 		\! -path 'third_party/libphonenumber/*' \
+		\! -path 'third_party/libusb/*' \
 		\! -path 'third_party/libva/*' \
 		\! -path 'third_party/libvpx/*' \
 		\! -path 'third_party/libxml/chromium/*' \
@@ -584,6 +591,7 @@ clean_third_party() {
 		\! -path 'third_party/mt19937ar/*' \
 		\! -path 'third_party/npapi/*' \
 		\! -path 'third_party/ots/*' \
+		\! -path 'third_party/ply/*' \
 		\! -path 'third_party/protobuf/*' \
 		\! -path 'third_party/qcms/*' \
 		\! -path 'third_party/re2/*' \
@@ -911,9 +919,12 @@ remove_tests() {
 		'!' -path './net/cert/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
+		'!' -path './third_party/trace-viewer/src/base/unittest/test_error.js' \
+		'!' -path './third_party/trace-viewer/src/tracing/test_utils.js' \
 		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
-		'!' -path './webkit/browser/fileapi/test_mount_point_provider.*' \
+		'!' -path './webkit/browser/fileapi/*.h' \
+		'!' -path './webkit/browser/fileapi/*.cc' \
 		'!' -path './webkit/common/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/support/test_webkit_platform_support.h' \
@@ -935,7 +946,7 @@ strip_system_dirs \
 	third_party/libmtp \
 	third_party/libpng \
 	third_party/libsrtp \
-	third_party/libusb \
+	third_party/libusb_ \
 	third_party/libvpx \
 	third_party/libwebp \
 	third_party/libxslt \
