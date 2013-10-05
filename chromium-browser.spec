@@ -7,7 +7,7 @@
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
 %bcond_with		gps 			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
-%bcond_without	nacl			# build Native Client support
+%bcond_with	nacl			# build Native Client support, disabled: http://crbug.com/269560
 %bcond_without	pulseaudio		# with pulseaudio
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
@@ -294,7 +294,7 @@ ln -s %{SOURCE7} .
 %patch16 -p1
 %patch28 -p1
 %patch25 -p2
-%patch18 -p1
+%{?with_nacl:%patch18 -p1}
 %patch24 -p2
 %patch26 -p2
 %patch29 -p0
