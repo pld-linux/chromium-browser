@@ -101,6 +101,7 @@ set -x
 		current=$DIST_DIR/$PACKAGE_NAME-$VERSION.tar.$EXT
 		if [ "$(basename $base)" != "$(basename $current)" ]; then
 			sh -x $WORK_DIR/make-diff-patch.sh $base $current
+			chmod 644 $PACKAGE_NAME-$VERSION.patch.xz
 			mv $PACKAGE_NAME-$VERSION.patch.xz $DIST_DIR
 			# for beta and dev channels, update the diff pointer
 			if [ "$CHANNEL" != "stable" ]; then
