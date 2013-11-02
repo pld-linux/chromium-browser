@@ -70,7 +70,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	2
+Release:	3
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -361,10 +361,6 @@ flags="
 %if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
 	-Dno_strict_aliasing=1 -Dgcc_version=44 \
 %endif
-%if %{with sandboxing}
-	-Dlinux_sandbox_path=%{_libdir}/%{name}/chromium-sandbox \
-	-Dlinux_sandbox_chrome_path=%{_libdir}/%{name}/%{name} \
-%endif
 	%{!?debug:-Dwerror=} \
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
@@ -486,7 +482,7 @@ ln -s %{_datadir}/%{name}/locales $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
 ln -s %{_datadir}/%{name}/resources $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
-install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chromium-sandbox
+install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
 %if %{without system_ffmpeg}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
@@ -582,7 +578,7 @@ fi
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/%{name}
 # These unique permissions are intentional and necessary for the sandboxing
-%attr(4555,root,root) %{_libdir}/%{name}/chromium-sandbox
+%attr(4555,root,root) %{_libdir}/%{name}/chrome-sandbox
 
 # ffmpeg libs
 %if %{without system_ffmpeg}
