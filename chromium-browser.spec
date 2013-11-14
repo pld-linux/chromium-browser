@@ -20,7 +20,7 @@
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
 %bcond_with	system_libusb	# system libusb-1, disabled: http://crbug.com/266149
-%bcond_without	system_libwebp	# system libwebp
+%bcond_with	system_libwebp	# system libwebp, disabled: http://crbug.com/288019
 %bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_with	system_mesa		# system Mesa
 %bcond_without	system_minizip	# system minizip
@@ -59,9 +59,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		30.0.1599
-%define		basever		66
-%define		patchver	114
+%define		branch		31.0.1650
+%define		basever		48
+#define		patchver	114
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -70,10 +70,10 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	3
+Release:	0.2
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.gz
 # Source0-md5:	065e908d4b4a7ca44026a8234b336cf1
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
@@ -299,7 +299,7 @@ ln -s %{SOURCE7} .
 %patch24 -p2
 %patch26 -p2
 %patch29 -p0
-%patch30 -p0
+%patch30 -p1
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
