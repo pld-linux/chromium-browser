@@ -105,6 +105,7 @@ Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
 Patch29:	system-icu.patch
 Patch30:	system-ply.patch
+Patch31:	system-jinja.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -166,7 +167,7 @@ BuildRequires:	pkgconfig
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	python
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
-BuildRequires:	python-jinja2
+BuildRequires:	python-jinja2 >= 2.7
 BuildRequires:	python-modules
 BuildRequires:	python-ply >= 3.4
 %{?with_system_re2:BuildRequires:	re2-devel >= 20130115-2}
@@ -300,6 +301,7 @@ ln -s %{SOURCE7} .
 %patch26 -p2
 %patch29 -p0
 %patch30 -p1
+%patch31 -p0
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
