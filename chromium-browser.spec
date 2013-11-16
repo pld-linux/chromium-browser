@@ -313,6 +313,7 @@ sh -x clean-source.sh \
 	%{!?with_system_snappy:snappy=0} \
 	%{!?with_system_sqlite:sqlite=0} \
 	%{!?with_system_v8:v8=0} \
+	%{!?with_system_libwebp:libwebp=0} \
 	%{!?with_system_zlib:zlib=0} \
 	%{nil}
 

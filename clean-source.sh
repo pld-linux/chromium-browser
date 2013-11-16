@@ -578,6 +578,7 @@ clean_third_party() {
 		\! -path 'third_party/libusb/*' \
 		\! -path 'third_party/libva/*' \
 		\! -path 'third_party/libvpx/*' \
+		\! -path 'third_party/libwebp/*' \
 		\! -path 'third_party/libxml/chromium/*' \
 		\! -path 'third_party/libyuv/*' \
 		\! -path 'third_party/lss/*.h' \
