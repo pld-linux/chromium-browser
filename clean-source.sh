@@ -115,7 +115,6 @@ remove_nonessential_dirs() {
 	media/audio/ios \
 	media/audio/mac \
 	media/audio/win \
-	media/base/android \
 	media/tools \
 	media/video/capture/mac \
 	media/video/capture/win \
@@ -416,6 +415,7 @@ remove_nonessential_dirs() {
 		content/common/mac \
 		content/renderer/java \
 		gpu/tools \
+		media/base/android_ \
 		native_client/src/include/win \
 		native_client/src/trusted/service_runtime/win \
 		net/tools \
@@ -441,12 +441,16 @@ remove_nonessential_dirs() {
 		'!' -path 'base/mac/crash_logging.h' \
 		'!' -path 'base/win/windows_version.h' \
 		'!' -path 'build/android/cpufeatures.gypi' \
+		'!' -path 'chrome/browser/chromeos/attestation/platform_verification_flow.h' \
 		'!' -path 'chrome/browser/chromeos/contacts/contact.proto' \
+		'!' -path 'chrome/browser/chromeos/extensions/*.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/echo_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/file_manager/file_browser_handler_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/file_manager/file_browser_private_api_functions.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/info_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/media_player_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/networking_private_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/wallpaper_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/wallpaper_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_names.h' \
@@ -470,6 +474,7 @@ remove_nonessential_dirs() {
 		'!' -path 'content/common/mac/attributed_string_coder.h' \
 		'!' -path 'content/common/mac/font_descriptor.h' \
 		'!' -path 'content/renderer/java/java_bridge_dispatcher.h' \
+		'!' -path 'media/base/android/demuxer_android.h' \
 		'!' -path 'native_client/src/include/win/mman.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/debug_exception_handler.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/exception_patch/ntdll_patch.h' \
@@ -485,7 +490,9 @@ remove_nonessential_dirs() {
 		'!' -path 'third_party/sfntly/cpp/src/sample/chromium/*' \
 		'!' -path 'third_party/tcmalloc/chromium/*' \
 		'!' -path 'third_party/v8-i18n/tools/js2c.py' \
+		'!' -path 'third_party/webrtc/tools/tools_unittests.isolate' \
 		'!' -path 'ui/base/win/dpi.h' \
+		'!' -path 'ui/webui/resources/js/webui_resource_test.js' \
 		'!' -path 'v8/tools/js2c.py' \
 		'!' -path 'v8/tools/jsmin.py' \
 		'!' -path 'webkit/tools/test_shell/*.h' \
@@ -663,7 +670,7 @@ remove_tests() {
 	# full remove
 	for dir in \
 	ash/test \
-	base/test \
+	base/test_ \
 	breakpad/src/client/windows/tests \
 	breakpad/src/common/linux/tests \
 	breakpad/src/common/tests \
@@ -859,7 +866,7 @@ remove_tests() {
 	for dir in \
 		chrome/browser/nacl_host/test \
 		chrome/test/data \
-		testing \
+		testing_ \
 		third_party/webrtc/modules/audio_coding/codecs/cng/test \
 		third_party/webrtc/modules/audio_coding/codecs/g711/test \
 		third_party/webrtc/modules/audio_coding/codecs/g722/test \
@@ -879,7 +886,7 @@ remove_tests() {
 		third_party/webrtc/modules/video_coding/main/test \
 		third_party/webrtc/modules/video_processing/main/test \
 		third_party/webrtc/modules/video_render/main/test \
-		third_party/webrtc/video_engine/test \
+		third_party/webrtc/video_engine/test_ \
 		third_party/webrtc/voice_engine/test \
 		tools/json_schema_compiler/test \
 		; do
@@ -900,6 +907,9 @@ remove_tests() {
 	')' '!' -name '*.gyp*' \
 		'!' -name '*.isolate' \
 		'!' -name '*.grd' \
+		'!' -path './cc/debug/test_context_provider.h' \
+		'!' -path './cc/debug/test_web_graphics_context_3d.h' \
+		'!' -path './cc/debug/*' \
 		'!' -path './chrome/browser/diagnostics/diagnostics_test.*' \
 		'!' -path './chrome/browser/extensions/api/declarative/test_rules_registry.*' \
 		'!' -path './chrome/browser/extensions/api/test/test_api.*' \
@@ -918,13 +928,15 @@ remove_tests() {
 		'!' -path './net/base/test_data_stream.*' \
 		'!' -path './net/cert/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
+		'!' -path './testing/perf/perf_test.*' \
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
 		'!' -path './third_party/trace-viewer/src/base/unittest/test_error.js' \
 		'!' -path './third_party/trace-viewer/src/tracing/test_utils.js' \
 		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
-		'!' -path './webkit/browser/fileapi/*.h' \
+		'!' -path './ui/webui/resources/js/webui_resource_test.js' \
 		'!' -path './webkit/browser/fileapi/*.cc' \
+		'!' -path './webkit/browser/fileapi/*.h' \
 		'!' -path './webkit/common/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/support/test_webkit_platform_support.h' \
