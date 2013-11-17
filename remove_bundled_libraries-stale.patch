@@ -12,7 +12,7 @@
  
        if options.do_remove:
          # Delete the file - best way to ensure it's not used during build.
-+        if not options.do_print:
++        if options.do_print:
 +            print path
          os.remove(path)
        else:
