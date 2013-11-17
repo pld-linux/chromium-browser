@@ -106,6 +106,7 @@ Patch28:	system-mesa.patch
 Patch29:	system-icu.patch
 Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
+Patch32:	remove_bundled_libraries-stale.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -302,6 +303,7 @@ ln -s %{SOURCE7} .
 %patch29 -p0
 %patch30 -p1
 %patch31 -p0
+%patch32 -p1
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
