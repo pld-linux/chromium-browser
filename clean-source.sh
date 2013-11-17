@@ -21,14 +21,17 @@ eval "$@"
 # suffix with _ those that we can't remove (just yet) because of the gclient
 # hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
-	# need to keep remoting/host/continue_window_mac.mm
 	find -type f '(' \
 		-name 'Android.mk' -o \
 		-name '*.vcproj' -o \
 		-name '*.sln' -o \
-		-name '*.mm_' -o \
+		-name '*.mm' -o \
 		-name '*.m' \
-	')' | xargs rm -vf
+	')' '!' -type d '(' \
+		'!' -path './remoting/host/continue_window_mac.mm' \
+		'!' -path './remoting/host/disconnect_window_mac.mm' \
+	')' \
+		-print -delete
 
 	find -regextype posix-extended \
 		-regex '.*_(win|cros|mac)_.*.xtb' \
@@ -866,7 +869,9 @@ remove_tests() {
 	for dir in \
 		chrome/browser/nacl_host/test \
 		chrome/test/data \
-		testing_ \
+		testing/gtest \
+		testing/gtest_ios \
+		testing/gmock \
 		third_party/webrtc/modules/audio_coding/codecs/cng/test \
 		third_party/webrtc/modules/audio_coding/codecs/g711/test \
 		third_party/webrtc/modules/audio_coding/codecs/g722/test \
@@ -904,6 +909,7 @@ remove_tests() {
 		-o -name '*_unittest' \
 		-o -name 'test_*.*' \
 		-o -name '*_test.*' \
+		-o -path './testing/' \
 	')' '!' -name '*.gyp*' \
 		'!' -name '*.isolate' \
 		'!' -name '*.grd' \
