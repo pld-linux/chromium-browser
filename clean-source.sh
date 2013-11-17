@@ -950,6 +950,76 @@ remove_tests() {
 	-print -delete || :
 }
 
+# Remove most bundled libraries. Some are still needed.
+# Sync this with gentoo/chromium-*.ebuild
+remove_bundled_libraries() {
+	build/linux/unbundle/remove_bundled_libraries.py \
+		third_party/adobe/flash/flapper_version.h \
+		'base/third_party/dmg_fp' \
+		'base/third_party/dynamic_annotations' \
+		'base/third_party/icu' \
+		'base/third_party/nspr' \
+		'base/third_party/symbolize' \
+		'base/third_party/valgrind' \
+		'base/third_party/xdg_mime' \
+		'base/third_party/xdg_user_dirs' \
+		'breakpad/src/third_party/curl' \
+		'chrome/third_party/mozilla_security_manager' \
+		'crypto/third_party/nss' \
+		'net/third_party/mozilla_security_manager' \
+		'net/third_party/nss' \
+		'third_party/WebKit' \
+		'third_party/angle_dx11' \
+		'third_party/cacheinvalidation' \
+		'third_party/cld' \
+		'third_party/cros_system_api' \
+		'third_party/ffmpeg' \
+		'third_party/flot' \
+		'third_party/hunspell' \
+		'third_party/iccjpeg' \
+		'third_party/jstemplate' \
+		'third_party/khronos' \
+		'third_party/leveldatabase' \
+		'third_party/libjingle' \
+		'third_party/libphonenumber' \
+		'third_party/libsrtp' \
+		'third_party/libusb' \
+		'third_party/libvpx' \
+		'third_party/libwebp' \
+		'third_party/libxml/chromium' \
+		'third_party/libXNVCtrl' \
+		'third_party/libyuv' \
+		'third_party/lss' \
+		'third_party/lzma_sdk' \
+		'third_party/mesa' \
+		'third_party/modp_b64' \
+		'third_party/mt19937ar' \
+		'third_party/npapi' \
+		'third_party/ots' \
+		'third_party/pywebsocket' \
+		'third_party/qcms' \
+		'third_party/sfntly' \
+		'third_party/skia' \
+		'third_party/smhasher' \
+		'third_party/sqlite' \
+		'third_party/tcmalloc' \
+		'third_party/tlslite' \
+		'third_party/trace-viewer' \
+		'third_party/undoview' \
+		'third_party/usrsctp' \
+		'third_party/webdriver' \
+		'third_party/webrtc' \
+		'third_party/widevine' \
+		'third_party/x86inc' \
+		'third_party/zlib/google' \
+		'url/third_party/mozilla' \
+		'v8/src/third_party/valgrind' \
+		--do-print \
+		--do-remove
+}
+
+remove_bundled_libraries > REMOVED-bundled_libraries.txt
+
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
