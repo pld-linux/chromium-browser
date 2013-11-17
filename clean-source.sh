@@ -21,14 +21,17 @@ eval "$@"
 # suffix with _ those that we can't remove (just yet) because of the gclient
 # hooks (see build/all.gyp) or of some unneeded deps/includes
 remove_nonessential_dirs() {
-	# need to keep remoting/host/continue_window_mac.mm
 	find -type f '(' \
 		-name 'Android.mk' -o \
 		-name '*.vcproj' -o \
 		-name '*.sln' -o \
-		-name '*.mm_' -o \
+		-name '*.mm' -o \
 		-name '*.m' \
-	')' | xargs rm -vf
+	')' '!' -type d '(' \
+		'!' -path './remoting/host/continue_window_mac.mm' \
+		'!' -path './remoting/host/disconnect_window_mac.mm' \
+	')' \
+		-print -delete
 
 	find -regextype posix-extended \
 		-regex '.*_(win|cros|mac)_.*.xtb' \
@@ -115,7 +118,6 @@ remove_nonessential_dirs() {
 	media/audio/ios \
 	media/audio/mac \
 	media/audio/win \
-	media/base/android \
 	media/tools \
 	media/video/capture/mac \
 	media/video/capture/win \
@@ -416,6 +418,7 @@ remove_nonessential_dirs() {
 		content/common/mac \
 		content/renderer/java \
 		gpu/tools \
+		media/base/android_ \
 		native_client/src/include/win \
 		native_client/src/trusted/service_runtime/win \
 		net/tools \
@@ -441,12 +444,16 @@ remove_nonessential_dirs() {
 		'!' -path 'base/mac/crash_logging.h' \
 		'!' -path 'base/win/windows_version.h' \
 		'!' -path 'build/android/cpufeatures.gypi' \
+		'!' -path 'chrome/browser/chromeos/attestation/platform_verification_flow.h' \
 		'!' -path 'chrome/browser/chromeos/contacts/contact.proto' \
+		'!' -path 'chrome/browser/chromeos/extensions/*.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/echo_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/file_manager/file_browser_handler_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/file_manager/file_browser_private_api_functions.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/info_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/media_player_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/networking_private_api.h' \
+		'!' -path 'chrome/browser/chromeos/extensions/wallpaper_api.h' \
 		'!' -path 'chrome/browser/chromeos/extensions/wallpaper_private_api.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings.h' \
 		'!' -path 'chrome/browser/chromeos/settings/cros_settings_names.h' \
@@ -470,6 +477,7 @@ remove_nonessential_dirs() {
 		'!' -path 'content/common/mac/attributed_string_coder.h' \
 		'!' -path 'content/common/mac/font_descriptor.h' \
 		'!' -path 'content/renderer/java/java_bridge_dispatcher.h' \
+		'!' -path 'media/base/android/demuxer_android.h' \
 		'!' -path 'native_client/src/include/win/mman.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/debug_exception_handler.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/exception_patch/ntdll_patch.h' \
@@ -485,7 +493,9 @@ remove_nonessential_dirs() {
 		'!' -path 'third_party/sfntly/cpp/src/sample/chromium/*' \
 		'!' -path 'third_party/tcmalloc/chromium/*' \
 		'!' -path 'third_party/v8-i18n/tools/js2c.py' \
+		'!' -path 'third_party/webrtc/tools/tools_unittests.isolate' \
 		'!' -path 'ui/base/win/dpi.h' \
+		'!' -path 'ui/webui/resources/js/webui_resource_test.js' \
 		'!' -path 'v8/tools/js2c.py' \
 		'!' -path 'v8/tools/jsmin.py' \
 		'!' -path 'webkit/tools/test_shell/*.h' \
@@ -578,6 +588,7 @@ clean_third_party() {
 		\! -path 'third_party/libusb/*' \
 		\! -path 'third_party/libva/*' \
 		\! -path 'third_party/libvpx/*' \
+		\! -path 'third_party/libwebp/*' \
 		\! -path 'third_party/libxml/chromium/*' \
 		\! -path 'third_party/libyuv/*' \
 		\! -path 'third_party/lss/*.h' \
@@ -662,7 +673,7 @@ remove_tests() {
 	# full remove
 	for dir in \
 	ash/test \
-	base/test \
+	base/test_ \
 	breakpad/src/client/windows/tests \
 	breakpad/src/common/linux/tests \
 	breakpad/src/common/tests \
@@ -858,7 +869,9 @@ remove_tests() {
 	for dir in \
 		chrome/browser/nacl_host/test \
 		chrome/test/data \
-		testing \
+		testing/gtest \
+		testing/gtest_ios \
+		testing/gmock \
 		third_party/webrtc/modules/audio_coding/codecs/cng/test \
 		third_party/webrtc/modules/audio_coding/codecs/g711/test \
 		third_party/webrtc/modules/audio_coding/codecs/g722/test \
@@ -878,7 +891,7 @@ remove_tests() {
 		third_party/webrtc/modules/video_coding/main/test \
 		third_party/webrtc/modules/video_processing/main/test \
 		third_party/webrtc/modules/video_render/main/test \
-		third_party/webrtc/video_engine/test \
+		third_party/webrtc/video_engine/test_ \
 		third_party/webrtc/voice_engine/test \
 		tools/json_schema_compiler/test \
 		; do
@@ -896,9 +909,13 @@ remove_tests() {
 		-o -name '*_unittest' \
 		-o -name 'test_*.*' \
 		-o -name '*_test.*' \
+		-o -path './testing/' \
 	')' '!' -name '*.gyp*' \
 		'!' -name '*.isolate' \
 		'!' -name '*.grd' \
+		'!' -path './cc/debug/test_context_provider.h' \
+		'!' -path './cc/debug/test_web_graphics_context_3d.h' \
+		'!' -path './cc/debug/*' \
 		'!' -path './chrome/browser/diagnostics/diagnostics_test.*' \
 		'!' -path './chrome/browser/extensions/api/declarative/test_rules_registry.*' \
 		'!' -path './chrome/browser/extensions/api/test/test_api.*' \
@@ -917,19 +934,91 @@ remove_tests() {
 		'!' -path './net/base/test_data_stream.*' \
 		'!' -path './net/cert/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
+		'!' -path './testing/perf/perf_test.*' \
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
 		'!' -path './third_party/trace-viewer/src/base/unittest/test_error.js' \
 		'!' -path './third_party/trace-viewer/src/tracing/test_utils.js' \
 		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
-		'!' -path './webkit/browser/fileapi/*.h' \
+		'!' -path './ui/webui/resources/js/webui_resource_test.js' \
 		'!' -path './webkit/browser/fileapi/*.cc' \
+		'!' -path './webkit/browser/fileapi/*.h' \
 		'!' -path './webkit/common/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/support/test_webkit_platform_support.h' \
 		'!' -path './webkit/tools/test_shell/*.h' \
 	-print -delete || :
 }
+
+# Remove most bundled libraries. Some are still needed.
+# Sync this with gentoo/chromium-*.ebuild
+remove_bundled_libraries() {
+	build/linux/unbundle/remove_bundled_libraries.py \
+		third_party/adobe/flash/flapper_version.h \
+		'base/third_party/dmg_fp' \
+		'base/third_party/dynamic_annotations' \
+		'base/third_party/icu' \
+		'base/third_party/nspr' \
+		'base/third_party/symbolize' \
+		'base/third_party/valgrind' \
+		'base/third_party/xdg_mime' \
+		'base/third_party/xdg_user_dirs' \
+		'breakpad/src/third_party/curl' \
+		'chrome/third_party/mozilla_security_manager' \
+		'crypto/third_party/nss' \
+		'net/third_party/mozilla_security_manager' \
+		'net/third_party/nss' \
+		'third_party/WebKit' \
+		'third_party/angle_dx11' \
+		'third_party/cacheinvalidation' \
+		'third_party/cld' \
+		'third_party/cros_system_api' \
+		'third_party/ffmpeg' \
+		'third_party/flot' \
+		'third_party/hunspell' \
+		'third_party/iccjpeg' \
+		'third_party/jstemplate' \
+		'third_party/khronos' \
+		'third_party/leveldatabase' \
+		'third_party/libjingle' \
+		'third_party/libphonenumber' \
+		'third_party/libsrtp' \
+		'third_party/libusb' \
+		'third_party/libvpx' \
+		'third_party/libwebp' \
+		'third_party/libxml/chromium' \
+		'third_party/libXNVCtrl' \
+		'third_party/libyuv' \
+		'third_party/lss' \
+		'third_party/lzma_sdk' \
+		'third_party/mesa' \
+		'third_party/modp_b64' \
+		'third_party/mt19937ar' \
+		'third_party/npapi' \
+		'third_party/ots' \
+		'third_party/pywebsocket' \
+		'third_party/qcms' \
+		'third_party/sfntly' \
+		'third_party/skia' \
+		'third_party/smhasher' \
+		'third_party/sqlite' \
+		'third_party/tcmalloc' \
+		'third_party/tlslite' \
+		'third_party/trace-viewer' \
+		'third_party/undoview' \
+		'third_party/usrsctp' \
+		'third_party/webdriver' \
+		'third_party/webrtc' \
+		'third_party/widevine' \
+		'third_party/x86inc' \
+		'third_party/zlib/google' \
+		'url/third_party/mozilla' \
+		'v8/src/third_party/valgrind' \
+		--do-print \
+		--do-remove
+}
+
+remove_bundled_libraries > REMOVED-bundled_libraries.txt
 
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
