@@ -13,7 +13,7 @@
        if options.do_remove:
          # Delete the file - best way to ensure it's not used during build.
 +        if options.do_print:
-+            print path
++            print relpath
          os.remove(path)
        else:
          # By default just print paths that would be removed.
