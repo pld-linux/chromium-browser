@@ -359,9 +359,11 @@ fi
 flags="
 %ifarch %{ix86}
 	-Dtarget_arch=ia32 \
+	-Dpython_arch=ia32 \
 %endif
 %ifarch %{x8664}
 	-Dtarget_arch=x64 \
+	-Dpython_arch=x64 \
 %endif
 %if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
 	-Dno_strict_aliasing=1 -Dgcc_version=44 \
