@@ -365,6 +365,7 @@ flags="
 	-Dtarget_arch=x64 \
 	-Dpython_arch=x64 \
 %endif
+	-Dsystem_libdir=%{_lib} \
 	-Dpython_ver=2.7 \
 %if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
 	-Dno_strict_aliasing=1 -Dgcc_version=44 \
