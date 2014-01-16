@@ -59,9 +59,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		31.0.1650
-%define		basever		57
-%define		patchver	63
+%define		branch		32.0.1700
+%define		basever		77
+#define		patchver	63
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -70,11 +70,11 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	3
+Release:	0.2
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	8fcdee6bdefad83dedaecc7ca2a1cf5f
+# Source0-md5:	591fde5a952808fe06cb24030e6c29f1
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	f17f75a65414167cf822c6aaf409a537
@@ -103,7 +103,6 @@ Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
-Patch29:	system-icu.patch
 Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
@@ -300,7 +299,6 @@ ln -s %{SOURCE7} .
 %{?with_nacl:%patch18 -p1}
 %patch24 -p2
 %patch26 -p2
-%patch29 -p0
 %patch30 -p1
 %patch31 -p0
 %patch32 -p1

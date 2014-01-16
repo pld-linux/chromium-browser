@@ -62,10 +62,10 @@ remove_nonessential_dirs() {
 	chrome/app/resources/terms/chromeos \
 	chrome/app/theme/default_100_percent/cros_ \
 	chrome/app/theme/default_100_percent/mac_ \
-	chrome/app/theme/default_100_percent/win \
+	chrome/app/theme/default_100_percent/win_ \
 	chrome/app/theme/default_200_percent/cros_ \
 	chrome/app/theme/default_200_percent/mac \
-	chrome/app/theme/default_200_percent/win \
+	chrome/app/theme/default_200_percent/win_ \
 	chrome/app/theme/touch_100_percent/win \
 	chrome/app/theme/touch_140_percent/win \
 	chrome/app/theme/touch_180_percent/win \
