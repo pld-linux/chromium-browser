@@ -1,11 +1,9 @@
---- third_party/WebKit/Source/bindings/derived_sources.gyp.orig	2013-11-06 18:36:38.369949986 +0000
-+++ third_party/WebKit/Source/bindings/derived_sources.gyp	2013-11-06 18:37:06.980134563 +0000
-@@ -53,11 +53,6 @@
+--- third_party/WebKit/Source/bindings/derived_sources.gyp~	2014-01-18 20:26:07.000000000 +0200
++++ third_party/WebKit/Source/bindings/derived_sources.gyp	2014-01-19 22:00:26.276535989 +0200
+@@ -53,9 +53,6 @@
      ],
      'compiler_module_files': [
          'scripts/idl_compiler.py',
--        '<(DEPTH)/third_party/ply/lex.py',
--        '<(DEPTH)/third_party/ply/yacc.py',
 -        # jinja2/__init__.py contains version string, so sufficient for package
 -        '<(DEPTH)/third_party/jinja2/__init__.py',
 -        '<(DEPTH)/third_party/markupsafe/__init__.py',  # jinja2 dep
