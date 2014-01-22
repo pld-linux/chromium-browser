@@ -412,7 +412,7 @@ remove_nonessential_dirs() {
 		chrome/browser/chromeos \
 		chrome/browser/component/web_contents_delegate_android \
 		chrome/tools \
-		chromeos \
+		chromeos_ \
 		cloud_print/service/win \
 		content/browser/renderer_host/java \
 		content/common/mac \
@@ -574,6 +574,7 @@ clean_third_party() {
 		\! -path 'third_party/angle_dx11/src/third_party/compiler/*' \
 		\! -path 'third_party/cacheinvalidation/*' \
 		\! -path 'third_party/cld/*' \
+		\! -path 'third_party/cld_2/*' \
 		\! -path 'third_party/cros_system_api/*' \
 		\! -path 'third_party/flot/*.js' \
 		\! -path 'third_party/hunspell/*' \
@@ -869,9 +870,9 @@ remove_tests() {
 	for dir in \
 		chrome/browser/nacl_host/test \
 		chrome/test/data \
-		testing/gtest \
+		testing/gtest_ \
 		testing/gtest_ios \
-		testing/gmock \
+		testing/gmock_ \
 		third_party/webrtc/modules/audio_coding/codecs/cng/test \
 		third_party/webrtc/modules/audio_coding/codecs/g711/test \
 		third_party/webrtc/modules/audio_coding/codecs/g722/test \
@@ -899,8 +900,8 @@ remove_tests() {
 	done
 
 	# link headers from system dir. too many files to patch, we don't even build tests
-	install -d testing/gtest/include
-	ln -s /usr/include/gtest testing/gtest/include/gtest
+#	install -d testing/gtest/include
+#	ln -s /usr/include/gtest testing/gtest/include/gtest
 
 	# delete unittest files
 	find . '(' \
@@ -913,9 +914,13 @@ remove_tests() {
 	')' '!' -name '*.gyp*' \
 		'!' -name '*.isolate' \
 		'!' -name '*.grd' \
+		'!' -path './base/test/*' \
+		'!' -path './base/test/launcher/*' \
+		'!' -path './base/test/launcher/test_launcher.*' \
+		'!' -path './base/test/launcher/test_result.*' \
+		'!' -path './cc/debug/*' \
 		'!' -path './cc/debug/test_context_provider.h' \
 		'!' -path './cc/debug/test_web_graphics_context_3d.h' \
-		'!' -path './cc/debug/*' \
 		'!' -path './chrome/browser/diagnostics/diagnostics_test.*' \
 		'!' -path './chrome/browser/extensions/api/declarative/test_rules_registry.*' \
 		'!' -path './chrome/browser/extensions/api/test/test_api.*' \
@@ -928,12 +933,14 @@ remove_tests() {
 		'!' -path './chrome/test/base/test_switches.*' \
 		'!' -path './chrome/test/perf/browser_perf_test.*' \
 		'!' -path './chrome/test/perf/perf_test.*' \
+		'!' -path './media/cast/rtcp/test_rtcp_packet_builder.*' \
 		'!' -path './native_client/src/trusted/fault_injection/test_injection.*' \
 		'!' -path './native_client/src/trusted/service_runtime/env_cleanser_test.h' \
 		'!' -path './net/base/test_completion_callback.*' \
 		'!' -path './net/base/test_data_stream.*' \
 		'!' -path './net/cert/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
+		'!' -path './testing/*' \
 		'!' -path './testing/perf/perf_test.*' \
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
 		'!' -path './third_party/trace-viewer/src/base/unittest/test_error.js' \
