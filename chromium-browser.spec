@@ -14,7 +14,7 @@
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
-%bcond_without	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
+%bcond_with	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
 %bcond_without	system_harfbuzz	# system harfbuzz
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
@@ -59,9 +59,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		32.0.1700
-%define		basever		77
-%define		patchver	107
+%define		branch		33.0.1750
+%define		basever		117
+#define		patchver	107
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -73,8 +73,8 @@ Version:	%{branch}.%{basever}
 Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	80f2651040917887c8a7b42010c2ba6c
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
+# Source0-md5:	1b273c1a80983ca7679a7031855a9b41
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	82e3012b5510187907bba50dadbe7137
@@ -106,6 +106,7 @@ Patch28:	system-mesa.patch
 Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
+Patch33:	gn.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -222,6 +223,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # Usage: gyp_with BCOND_NAME [OPTION_NAME]
 %define		gyp_with() %{expand:%%{?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=1}%%{!?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=0}}
 
+%ifarch %{ix86}
+%define		target_arch ia32
+%endif
+%ifarch %{x8664}
+%define		target_arch x64
+%endif
+
 %if %{without debuginfo}
 %define		_enable_debug_packages	0
 %endif
@@ -295,14 +303,16 @@ ln -s %{SOURCE7} .
 %patch12 -p1
 %patch16 -p1
 %patch28 -p1
-%patch25 -p2
+%patch25 -p1
 %{?with_nacl:%patch18 -p1}
 %patch24 -p2
 %patch26 -p2
 %patch30 -p1
 %patch31 -p0
 %patch32 -p1
+%patch33 -p0
 
+exit 0
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
 	%{!?with_system_libvpx:libvpx=0} \
@@ -354,17 +364,19 @@ cd ../../../../..
 fi
 %endif
 
+%if %{without system_ffmpeg}
+# Re-configure bundled ffmpeg
+cd third_party/ffmpeg
+chromium/scripts/build_ffmpeg.sh linux %{target_arch} "$PWD" config-only
+chromium/scripts/copy_config.sh
+cd -
+%endif
+
 flags="
-%ifarch %{ix86}
-	-Dtarget_arch=ia32 \
-	-Dpython_arch=ia32 \
-%endif
-%ifarch %{x8664}
-	-Dtarget_arch=x64 \
-	-Dpython_arch=x64 \
-%endif
+	-Dtarget_arch=%{target_arch} \
+	-Dpython_arch=%{target_arch} \
 	-Dsystem_libdir=%{_lib} \
-	-Dpython_ver=2.7 \
+	-Dpython_ver=%{py_ver} \
 %if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
 	-Dno_strict_aliasing=1 -Dgcc_version=44 \
 %endif
