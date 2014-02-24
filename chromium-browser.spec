@@ -73,8 +73,8 @@ Version:	%{branch}.%{basever}
 Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/dev/%{name}-%{branch}.%{basever}.tar.gz
-# Source0-md5:	1b273c1a80983ca7679a7031855a9b41
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
+# Source0-md5:	c14a4bcb8bed66ea2204cd698d938250
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	82e3012b5510187907bba50dadbe7137
@@ -312,7 +312,6 @@ ln -s %{SOURCE7} .
 %patch32 -p1
 %patch33 -p0
 
-exit 0
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
 	%{!?with_system_libvpx:libvpx=0} \
@@ -325,6 +324,7 @@ sh -x clean-source.sh \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_libwebp:libwebp=0} \
 	%{!?with_system_zlib:zlib=0} \
+	%{!?with_system_ffmpeg:ffmpeg=0} \
 	%{nil}
 
 %build
