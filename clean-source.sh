@@ -409,7 +409,7 @@ remove_nonessential_dirs() {
 		base/mac \
 		base/win \
 		build/android \
-		chrome/browser/chromeos \
+		chrome/browser/chromeos_ \
 		chrome/browser/component/web_contents_delegate_android \
 		chrome/tools \
 		chromeos_ \
@@ -435,7 +435,7 @@ remove_nonessential_dirs() {
 		third_party/webrtc/modules/video_coding/codecs/tools \
 		third_party/webrtc/tools \
 		ui/base/win \
-		v8/tools \
+		v8/tools_ \
 		webkit/tools \
 	) '!' -type d '(' \
 		'!' -name '*.grd' \
@@ -567,15 +567,16 @@ clean_third_party() {
 		'!' -iname '*.gyp*' \
 		\! -path 'third_party/WebKit/*' \
 		\! -path 'third_party/adobe/flash/*' \
-		\! -path 'third_party/angle_dx11/include/EGL/*' \
-		\! -path 'third_party/angle_dx11/include/GLSLANG/*' \
-		\! -path 'third_party/angle_dx11/src/common/*' \
-		\! -path 'third_party/angle_dx11/src/compiler/*' \
-		\! -path 'third_party/angle_dx11/src/third_party/compiler/*' \
+		\! -path 'third_party/angle/include/EGL/*' \
+		\! -path 'third_party/angle/include/GLSLANG/*' \
+		\! -path 'third_party/angle/src/common/*' \
+		\! -path 'third_party/angle/src/compiler/*' \
+		\! -path 'third_party/angle/src/third_party/compiler/*' \
 		\! -path 'third_party/cacheinvalidation/*' \
 		\! -path 'third_party/cld/*' \
 		\! -path 'third_party/cld_2/*' \
 		\! -path 'third_party/cros_system_api/*' \
+		\! -path 'third_party/ffmpeg/*' \
 		\! -path 'third_party/flot/*.js' \
 		\! -path 'third_party/hunspell/*' \
 		\! -path 'third_party/hyphen/*' \
@@ -584,6 +585,7 @@ clean_third_party() {
 		\! -path 'third_party/khronos/*' \
 		\! -path 'third_party/leveldatabase/*' \
 		\! -path 'third_party/libXNVCtrl/*' \
+		\! -path 'third_party/libaddressinput/*' \
 		\! -path 'third_party/libjingle/*' \
 		\! -path 'third_party/libphonenumber/*' \
 		\! -path 'third_party/libusb/*' \
@@ -606,6 +608,7 @@ clean_third_party() {
 		\! -path 'third_party/protobuf/*' \
 		\! -path 'third_party/qcms/*' \
 		\! -path 'third_party/re2/*' \
+		\! -path 'third_party/readability/*' \
 		\! -path 'third_party/sfntly/*' \
 		\! -path 'third_party/skia/*' \
 		\! -path 'third_party/smhasher/*' \
@@ -959,9 +962,11 @@ remove_tests() {
 
 # Remove most bundled libraries. Some are still needed.
 # Sync this with gentoo/chromium-*.ebuild
+# NOTE: argument list to script specifies paths to preserve
 remove_bundled_libraries() {
 	build/linux/unbundle/remove_bundled_libraries.py \
 		third_party/adobe/flash/flapper_version.h \
+		third_party/libwebp \
 		'base/third_party/dmg_fp' \
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
@@ -976,7 +981,7 @@ remove_bundled_libraries() {
 		'net/third_party/mozilla_security_manager' \
 		'net/third_party/nss' \
 		'third_party/WebKit' \
-		'third_party/angle_dx11' \
+		'third_party/angle' \
 		'third_party/cacheinvalidation' \
 		'third_party/cld' \
 		'third_party/cros_system_api' \
@@ -987,12 +992,11 @@ remove_bundled_libraries() {
 		'third_party/jstemplate' \
 		'third_party/khronos' \
 		'third_party/leveldatabase' \
+		'third_party/libaddressinput' \
 		'third_party/libjingle' \
 		'third_party/libphonenumber' \
 		'third_party/libsrtp' \
 		'third_party/libusb' \
-		'third_party/libvpx' \
-		'third_party/libwebp' \
 		'third_party/libxml/chromium' \
 		'third_party/libXNVCtrl' \
 		'third_party/libyuv' \
@@ -1003,8 +1007,10 @@ remove_bundled_libraries() {
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
 		'third_party/ots' \
+		'third_party/polymer' \
 		'third_party/pywebsocket' \
 		'third_party/qcms' \
+		'third_party/readability' \
 		'third_party/sfntly' \
 		'third_party/skia' \
 		'third_party/smhasher' \
@@ -1030,7 +1036,7 @@ remove_bundled_libraries > REMOVED-bundled_libraries.txt
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
-	third_party/ffmpeg \
+	third_party/ffmpeg_ \
 	third_party/flac \
 	third_party/icu \
 	third_party/jsoncpp \
@@ -1043,7 +1049,7 @@ strip_system_dirs \
 	third_party/libsrtp \
 	third_party/libusb_ \
 	third_party/libvpx \
-	third_party/libwebp \
+	third_party/libwebp_ \
 	third_party/libxslt \
 	third_party/mesa \
 	third_party/opus \
