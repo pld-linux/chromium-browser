@@ -1,6 +1,6 @@
---- chromium-browser-26.0.1410.12/src/media/audio/linux/audio_manager_linux.cc~	2013-02-21 12:02:26.000000000 +0200
-+++ chromium-browser-26.0.1410.12/src/media/audio/linux/audio_manager_linux.cc	2013-02-25 15:16:54.634665398 +0200
-@@ -92,7 +92,8 @@
+--- chromium-browser-33.0.1750.117/media/audio/alsa/audio_manager_alsa.cc~	2014-02-20 22:27:58.000000000 +0200
++++ chromium-browser-33.0.1750.117/media/audio/alsa/audio_manager_alsa.cc	2014-02-23 10:24:29.610111342 +0200
+@@ -53,7 +53,8 @@
    CommandLine command_line(CommandLine::NO_PROGRAM);
    switch (base::nix::GetDesktopEnvironment(env.get())) {
      case base::nix::DESKTOP_ENVIRONMENT_GNOME:

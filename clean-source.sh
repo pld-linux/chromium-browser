@@ -299,12 +299,34 @@ remove_nonessential_dirs() {
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/ticl/android \
 	third_party/ffmpeg/binaries \
 	third_party/ffmpeg/chromium/binaries/Chromium/win \
+	third_party/ffmpeg/chromium/config/Chrome/linux/arm \
 	third_party/ffmpeg/chromium/config/Chrome/mac \
 	third_party/ffmpeg/chromium/config/Chrome/win \
+	third_party/ffmpeg/chromium/config/ChromeOS/linux/arm \
+	third_party/ffmpeg/chromium/config/Chromium/linux/arm \
 	third_party/ffmpeg/chromium/config/Chromium/mac \
 	third_party/ffmpeg/chromium/config/Chromium/win \
+	third_party/ffmpeg/chromium/config/ChromiumOS/linux/arm \
 	third_party/ffmpeg/chromium/include/win \
 	third_party/ffmpeg/doc \
+	third_party/ffmpeg/libavcodec/alpha \
+	third_party/ffmpeg/libavcodec/arm \
+	third_party/ffmpeg/libavcodec/avr32 \
+	third_party/ffmpeg/libavcodec/bfin \
+	third_party/ffmpeg/libavcodec/mips \
+	third_party/ffmpeg/libavcodec/ppc \
+	third_party/ffmpeg/libavcodec/sh4 \
+	third_party/ffmpeg/libavcodec/sparc \
+	third_party/ffmpeg/libavresample/arm \
+	third_party/ffmpeg/libavutil/avr32 \
+	third_party/ffmpeg/libavutil/bfin \
+	third_party/ffmpeg/libavutil/mips \
+	third_party/ffmpeg/libavutil/ppc \
+	third_party/ffmpeg/libavutil/sh4 \
+	third_party/ffmpeg/libswresample/arm \
+	third_party/ffmpeg/libswscale/bfin \
+	third_party/ffmpeg/libswscale/ppc \
+	third_party/ffmpeg/libswscale/sparc \
 	third_party/ffmpeg/tools \
 	third_party/fuzzymatch \
 	third_party/gles2_book \
@@ -409,7 +431,7 @@ remove_nonessential_dirs() {
 		base/mac \
 		base/win \
 		build/android \
-		chrome/browser/chromeos \
+		chrome/browser/chromeos_ \
 		chrome/browser/component/web_contents_delegate_android \
 		chrome/tools \
 		chromeos_ \
@@ -435,7 +457,7 @@ remove_nonessential_dirs() {
 		third_party/webrtc/modules/video_coding/codecs/tools \
 		third_party/webrtc/tools \
 		ui/base/win \
-		v8/tools \
+		v8/tools_ \
 		webkit/tools \
 	) '!' -type d '(' \
 		'!' -name '*.grd' \
@@ -565,64 +587,67 @@ clean_third_party() {
 
 	find third_party -type f \
 		'!' -iname '*.gyp*' \
-		\! -path 'third_party/WebKit/*' \
-		\! -path 'third_party/adobe/flash/*' \
-		\! -path 'third_party/angle_dx11/include/EGL/*' \
-		\! -path 'third_party/angle_dx11/include/GLSLANG/*' \
-		\! -path 'third_party/angle_dx11/src/common/*' \
-		\! -path 'third_party/angle_dx11/src/compiler/*' \
-		\! -path 'third_party/angle_dx11/src/third_party/compiler/*' \
-		\! -path 'third_party/cacheinvalidation/*' \
-		\! -path 'third_party/cld/*' \
-		\! -path 'third_party/cld_2/*' \
-		\! -path 'third_party/cros_system_api/*' \
-		\! -path 'third_party/flot/*.js' \
-		\! -path 'third_party/hunspell/*' \
-		\! -path 'third_party/hyphen/*' \
-		\! -path 'third_party/iccjpeg/*' \
-		\! -path 'third_party/jstemplate/*' \
-		\! -path 'third_party/khronos/*' \
-		\! -path 'third_party/leveldatabase/*' \
-		\! -path 'third_party/libXNVCtrl/*' \
-		\! -path 'third_party/libjingle/*' \
-		\! -path 'third_party/libphonenumber/*' \
-		\! -path 'third_party/libusb/*' \
-		\! -path 'third_party/libva/*' \
-		\! -path 'third_party/libvpx/*' \
-		\! -path 'third_party/libwebp/*' \
-		\! -path 'third_party/libxml/chromium/*' \
-		\! -path 'third_party/libyuv/*' \
-		\! -path 'third_party/lss/*.h' \
-		\! -path 'third_party/lzma_sdk/*' \
-		\! -path 'third_party/mesa/src/include/GL/gl.h' \
-		\! -path 'third_party/mesa/src/include/GL/glext.h' \
-		\! -path 'third_party/mesa/src/include/GL/glx.h' \
-		\! -path 'third_party/mesa/src/include/GL/glxext.h' \
-		\! -path 'third_party/mesa/src/include/GL/osmesa.h' \
-		\! -path 'third_party/modp_b64/*' \
-		\! -path 'third_party/mt19937ar/*' \
-		\! -path 'third_party/npapi/*' \
-		\! -path 'third_party/ots/*' \
-		\! -path 'third_party/protobuf/*' \
-		\! -path 'third_party/qcms/*' \
-		\! -path 'third_party/re2/*' \
-		\! -path 'third_party/sfntly/*' \
-		\! -path 'third_party/skia/*' \
-		\! -path 'third_party/smhasher/*' \
-		\! -path 'third_party/snappy/*' \
-		\! -path 'third_party/sqlite/amalgamation/*' \
-		\! -path 'third_party/sqlite/sqlite3.h' \
-		\! -path 'third_party/sqlite/src/ext/*' \
-		\! -path 'third_party/tcmalloc/*' \
-		\! -path 'third_party/trace-viewer/*' \
-		\! -path 'third_party/undoview/*' \
-		\! -path 'third_party/usrsctp/*' \
-		\! -path 'third_party/v8-i18n/*' \
-		\! -path 'third_party/v8/*' \
-		\! -path 'third_party/webrtc/*' \
-		\! -path 'third_party/widevine/*' \
-		\! -path 'third_party/x86inc/*' \
-		\! -path 'third_party/zlib/google/*' \
+		'!' -path 'third_party/WebKit/*' \
+		'!' -path 'third_party/adobe/flash/*' \
+		'!' -path 'third_party/angle/include/EGL/*' \
+		'!' -path 'third_party/angle/include/GLSLANG/*' \
+		'!' -path 'third_party/angle/src/common/*' \
+		'!' -path 'third_party/angle/src/compiler/*' \
+		'!' -path 'third_party/angle/src/third_party/compiler/*' \
+		'!' -path 'third_party/cacheinvalidation/*' \
+		'!' -path 'third_party/cld/*' \
+		'!' -path 'third_party/cld_2/*' \
+		'!' -path 'third_party/cros_system_api/*' \
+		'!' -path 'third_party/ffmpeg/*' \
+		'!' -path 'third_party/flot/*.js' \
+		'!' -path 'third_party/hunspell/*' \
+		'!' -path 'third_party/hyphen/*' \
+		'!' -path 'third_party/iccjpeg/*' \
+		'!' -path 'third_party/jstemplate/*' \
+		'!' -path 'third_party/khronos/*' \
+		'!' -path 'third_party/leveldatabase/*' \
+		'!' -path 'third_party/libXNVCtrl/*' \
+		'!' -path 'third_party/libaddressinput/*' \
+		'!' -path 'third_party/libjingle/*' \
+		'!' -path 'third_party/libphonenumber/*' \
+		'!' -path 'third_party/libusb/*' \
+		'!' -path 'third_party/libva/*' \
+		'!' -path 'third_party/libvpx/*' \
+		'!' -path 'third_party/libwebp/*' \
+		'!' -path 'third_party/libxml/chromium/*' \
+		'!' -path 'third_party/libyuv/*' \
+		'!' -path 'third_party/lss/*.h' \
+		'!' -path 'third_party/lzma_sdk/*' \
+		'!' -path 'third_party/mesa/src/include/GL/gl.h' \
+		'!' -path 'third_party/mesa/src/include/GL/glext.h' \
+		'!' -path 'third_party/mesa/src/include/GL/glx.h' \
+		'!' -path 'third_party/mesa/src/include/GL/glxext.h' \
+		'!' -path 'third_party/mesa/src/include/GL/osmesa.h' \
+		'!' -path 'third_party/modp_b64/*' \
+		'!' -path 'third_party/mt19937ar/*' \
+		'!' -path 'third_party/npapi/*' \
+		'!' -path 'third_party/ots/*' \
+		'!' -path 'third_party/protobuf/*' \
+		'!' -path 'third_party/qcms/*' \
+		'!' -path 'third_party/re2/*' \
+		'!' -path 'third_party/readability/*' \
+		'!' -path 'third_party/sfntly/*' \
+		'!' -path 'third_party/skia/*' \
+		'!' -path 'third_party/smhasher/*' \
+		'!' -path 'third_party/snappy/*' \
+		'!' -path 'third_party/sqlite/amalgamation/*' \
+		'!' -path 'third_party/sqlite/sqlite3.h' \
+		'!' -path 'third_party/sqlite/src/ext/*' \
+		'!' -path 'third_party/tcmalloc/*' \
+		'!' -path 'third_party/trace-viewer/*' \
+		'!' -path 'third_party/undoview/*' \
+		'!' -path 'third_party/usrsctp/*' \
+		'!' -path 'third_party/v8-i18n/*' \
+		'!' -path 'third_party/v8/*' \
+		'!' -path 'third_party/webrtc/*' \
+		'!' -path 'third_party/widevine/*' \
+		'!' -path 'third_party/x86inc/*' \
+		'!' -path 'third_party/zlib/google/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h
@@ -842,6 +867,7 @@ remove_tests() {
 	third_party/yasm/source/patched-yasm/modules/preprocs/nasm/tests \
 	third_party/yasm/source/patched-yasm/modules/preprocs/raw/tests \
 	third_party/yasm/source/patched-yasm/tools/python-yasm/tests \
+	third_party/zlib/google/test \
 	tools/clang/plugins/tests \
 	tools/grit/grit/testdata \
 	tools/gyp/test \
@@ -959,6 +985,7 @@ remove_tests() {
 
 # Remove most bundled libraries. Some are still needed.
 # Sync this with gentoo/chromium-*.ebuild
+# NOTE: argument list to script specifies paths to preserve
 remove_bundled_libraries() {
 	build/linux/unbundle/remove_bundled_libraries.py \
 		third_party/adobe/flash/flapper_version.h \
@@ -976,7 +1003,7 @@ remove_bundled_libraries() {
 		'net/third_party/mozilla_security_manager' \
 		'net/third_party/nss' \
 		'third_party/WebKit' \
-		'third_party/angle_dx11' \
+		'third_party/angle' \
 		'third_party/cacheinvalidation' \
 		'third_party/cld' \
 		'third_party/cros_system_api' \
@@ -987,12 +1014,11 @@ remove_bundled_libraries() {
 		'third_party/jstemplate' \
 		'third_party/khronos' \
 		'third_party/leveldatabase' \
+		'third_party/libaddressinput' \
 		'third_party/libjingle' \
 		'third_party/libphonenumber' \
 		'third_party/libsrtp' \
 		'third_party/libusb' \
-		'third_party/libvpx' \
-		'third_party/libwebp' \
 		'third_party/libxml/chromium' \
 		'third_party/libXNVCtrl' \
 		'third_party/libyuv' \
@@ -1003,8 +1029,10 @@ remove_bundled_libraries() {
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
 		'third_party/ots' \
+		'third_party/polymer' \
 		'third_party/pywebsocket' \
 		'third_party/qcms' \
+		'third_party/readability' \
 		'third_party/sfntly' \
 		'third_party/skia' \
 		'third_party/smhasher' \
@@ -1030,7 +1058,7 @@ remove_bundled_libraries > REMOVED-bundled_libraries.txt
 strip_system_dirs \
 	native_client/src/third_party_mod/jsoncpp \
 	third_party/bzip2 \
-	third_party/ffmpeg \
+	third_party/ffmpeg_ \
 	third_party/flac \
 	third_party/icu \
 	third_party/jsoncpp \

@@ -14,13 +14,13 @@
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
-%bcond_without	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
+%bcond_with	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
 %bcond_without	system_harfbuzz	# system harfbuzz
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
 %bcond_with	system_libusb	# system libusb-1, disabled: http://crbug.com/266149
-%bcond_with	system_libwebp	# system libwebp, disabled: http://crbug.com/288019
+%bcond_without	system_libwebp	# system libwebp
 %bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_with	system_mesa		# system Mesa
 %bcond_without	system_minizip	# system minizip
@@ -59,9 +59,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		32.0.1700
-%define		basever		77
-%define		patchver	107
+%define		branch		33.0.1750
+%define		basever		117
+#define		patchver	107
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -74,7 +74,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	80f2651040917887c8a7b42010c2ba6c
+# Source0-md5:	0811b1c65f2b8d1ebf00664ddb2f5e05
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	82e3012b5510187907bba50dadbe7137
@@ -106,6 +106,7 @@ Patch28:	system-mesa.patch
 Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
+Patch33:	gn.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -148,8 +149,8 @@ BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
-%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
-%{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
+%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.3.0}
+%{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.4.0}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	man-db
@@ -197,7 +198,7 @@ Requires:	fonts-Type1-urw
 Requires:	hicolor-icon-theme
 Requires:	libevent >= 2.0.21
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
-%{?with_system_libvpx:Requires:	libvpx >= 0.9.5-2}
+%{?with_system_libvpx:Requires:	libvpx >= 1.3.0}
 Requires:	lsb-release
 %{?with_system_re2:Requires:	re2 >= 20130115-2}
 Requires:	shared-mime-info
@@ -221,6 +222,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # Usage: gyp_with BCOND_NAME [OPTION_NAME]
 %define		gyp_with() %{expand:%%{?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=1}%%{!?with_%{1}:-D%{?2:use_%{2}}%{!?2:use_%{1}}=0}}
+
+%ifarch %{ix86}
+%define		target_arch ia32
+%endif
+%ifarch %{x8664}
+%define		target_arch x64
+%endif
 
 %if %{without debuginfo}
 %define		_enable_debug_packages	0
@@ -295,13 +303,14 @@ ln -s %{SOURCE7} .
 %patch12 -p1
 %patch16 -p1
 %patch28 -p1
-%patch25 -p2
+%patch25 -p1
 %{?with_nacl:%patch18 -p1}
 %patch24 -p2
 %patch26 -p2
 %patch30 -p1
 %patch31 -p0
 %patch32 -p1
+%patch33 -p0
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
@@ -315,6 +324,7 @@ sh -x clean-source.sh \
 	%{!?with_system_v8:v8=0} \
 	%{!?with_system_libwebp:libwebp=0} \
 	%{!?with_system_zlib:zlib=0} \
+	%{!?with_system_ffmpeg:ffmpeg=0} \
 	%{nil}
 
 %build
@@ -354,17 +364,19 @@ cd ../../../../..
 fi
 %endif
 
+%if %{without system_ffmpeg}
+# Re-configure bundled ffmpeg
+cd third_party/ffmpeg
+chromium/scripts/build_ffmpeg.sh linux %{target_arch} "$PWD" config-only
+chromium/scripts/copy_config.sh
+cd -
+%endif
+
 flags="
-%ifarch %{ix86}
-	-Dtarget_arch=ia32 \
-	-Dpython_arch=ia32 \
-%endif
-%ifarch %{x8664}
-	-Dtarget_arch=x64 \
-	-Dpython_arch=x64 \
-%endif
+	-Dtarget_arch=%{target_arch} \
+	-Dpython_arch=%{target_arch} \
 	-Dsystem_libdir=%{_lib} \
-	-Dpython_ver=2.7 \
+	-Dpython_ver=%{py_ver} \
 %if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
 	-Dno_strict_aliasing=1 -Dgcc_version=44 \
 %endif
@@ -410,7 +422,7 @@ flags="
 	%{gyp_with system_libmtp} \
 	%{gyp_with system_libsrtp} \
 	%{gyp_with system_libusb} \
-	%{gyp_with system_libvpx} -Dmedia_use_libvpx=0 \
+	%{gyp_with system_libvpx} -Dmedia_use_libvpx=1 \
 	%{gyp_with system_libwebp} \
 	%{gyp_with system_libxnvctrl} \
 	%{gyp_with system_mesa} \
