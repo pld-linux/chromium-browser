@@ -20,7 +20,7 @@
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
 %bcond_with	system_libusb	# system libusb-1, disabled: http://crbug.com/266149
-%bcond_with	system_libwebp	# system libwebp, disabled: http://crbug.com/288019
+%bcond_without	system_libwebp	# system libwebp
 %bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_with	system_mesa		# system Mesa
 %bcond_without	system_minizip	# system minizip
@@ -149,8 +149,8 @@ BuildRequires:	libpng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
-%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 0.9.5-2}
-%{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.1.99}
+%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.3.0}
+%{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.4.0}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	man-db
@@ -198,7 +198,7 @@ Requires:	fonts-Type1-urw
 Requires:	hicolor-icon-theme
 Requires:	libevent >= 2.0.21
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
-%{?with_system_libvpx:Requires:	libvpx >= 0.9.5-2}
+%{?with_system_libvpx:Requires:	libvpx >= 1.3.0}
 Requires:	lsb-release
 %{?with_system_re2:Requires:	re2 >= 20130115-2}
 Requires:	shared-mime-info
@@ -422,7 +422,7 @@ flags="
 	%{gyp_with system_libmtp} \
 	%{gyp_with system_libsrtp} \
 	%{gyp_with system_libusb} \
-	%{gyp_with system_libvpx} -Dmedia_use_libvpx=0 \
+	%{gyp_with system_libvpx} -Dmedia_use_libvpx=1 \
 	%{gyp_with system_libwebp} \
 	%{gyp_with system_libxnvctrl} \
 	%{gyp_with system_mesa} \
