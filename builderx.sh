@@ -1,4 +1,6 @@
 #!/bin/sh
+# Some notes:
+# https://code.google.com/p/chromium/wiki/LinuxFasterBuilds
 set -x
 
 dir=$(dirname "$0")
@@ -11,6 +13,8 @@ export CCACHE_DIR=$outdir/ccache
 export CCACHE_LOGFILE=$CCACHE_DIR/log
 export CCACHE_NLEVELS=1
 export CCACHE_HARDLINK=1
+#export CCACHE_BASEDIR
+#export CCACHE_SLOPPINESS=include_file_mtime
 
 install -d $outdir $rpmdir $logs
 
@@ -45,5 +49,6 @@ time $dir/teeboth '' rpmbuild \
 	--define "_sourcedir $dir" \
 	--define "_builddir $outdir" \
 	--define "_rpmdir $rpmdir" \
+	--without debuginfo \
 	--with verbose \
 	"$@"
