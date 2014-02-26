@@ -8,6 +8,7 @@
 %bcond_with		gps 			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_with	nacl			# build Native Client support, disabled: http://crbug.com/269560
+%bcond_without	ninja			# use Ninja instead of make to build
 %bcond_without	pulseaudio		# with pulseaudio
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
@@ -155,6 +156,7 @@ BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	man-db
 %{?with_system_minizip:BuildRequires:	minizip-devel}
+%{?with_ninja:BuildRequires:	ninja >= 1.3.0}
 BuildRequires:	nspr-devel
 BuildRequires:	nss-devel >= 1:3.12.3
 %{?with_system_opus:BuildRequires:	opus-devel >= 1.0.2}
@@ -229,6 +231,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %ifarch %{x8664}
 %define		target_arch x64
 %endif
+
+%define		buildtype	%{?debug:Debug}%{!?debug:Release}
+%define		builddir	out/%{buildtype}
 
 %if %{without debuginfo}
 %define		_enable_debug_packages	0
@@ -365,11 +370,13 @@ fi
 %endif
 
 %if %{without system_ffmpeg}
-# Re-configure bundled ffmpeg
-cd third_party/ffmpeg
-chromium/scripts/build_ffmpeg.sh linux %{target_arch} "$PWD" config-only
-chromium/scripts/copy_config.sh
-cd -
+if [ ! -d third_party/ffmpeg/build.%{target_arch}.linux ]; then
+	# Re-configure bundled ffmpeg
+	cd third_party/ffmpeg
+	chromium/scripts/build_ffmpeg.sh linux %{target_arch} "$PWD" config-only
+	chromium/scripts/copy_config.sh
+	cd -
+fi
 %endif
 
 flags="
@@ -450,8 +457,13 @@ flags="
 
 build/linux/unbundle/replace_gyp_files.py $flags
 
-test %{_specdir}/%{name}.spec -nt Makefile && %{__rm} -f Makefile
-test -e Makefile || \
+%if %{with ninja}
+chkfile=%{builddir}/build.ninja
+%else
+chkfile=Makefile
+%endif
+test %{_specdir}/%{name}.spec -nt $chkfile && %{__rm} -f $chkfile
+test -e $chkfile || \
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
 	LDFLAGS="%{rpmldflags} -fuse-ld=gold" \
@@ -461,20 +473,26 @@ test -e Makefile || \
 	CXX_host="%{__cxx}" \
 	LD_host="%{__cxx}" \
 %{__python} build/gyp_chromium \
-	--format=make \
+	--format=%{?with_ninja:ninja}%{!?with_ninja:make} \
 	--depth=. \
 	build/all.gyp \
 	$flags
 
+%if %{with ninja}
+ninja %{?_smp_mflags} %{?with_verbose:-v} -C %{builddir} \
+%else
 # need {CC/CXX/LDFLAGS}.host overrides for v8 build
-%{__make} -r chrome %{?with_sandboxing:chrome_sandbox} \
-	BUILDTYPE=%{!?debug:Release}%{?debug:Debug} \
+%{__make} -r \
+	BUILDTYPE=%{buildtype} \
 	%{?with_verbose:V=1} \
 	CC.host="%{__cc}" \
 	CXX.host="%{__cxx}" \
 	LDFLAGS.host="%{rpmldflags} -fuse-ld=gold" \
+%endif
+	chrome %{?with_sandboxing:chrome_sandbox} \
+	%{nil}
 
-cd out/%{!?debug:Release}%{?debug:Debug}
+cd %{builddir}
 MANWIDTH=80 man ./chrome.1 > man.out
 %{__sed} -e '1,/OPTIONS/d; /ENVIRONMENT/,$d' man.out > options.txt
 
@@ -484,7 +502,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins \
 	$RPM_BUILD_ROOT%{_datadir}/%{name}/{locales,resources} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sysconfdir}/%{name},%{_mandir}/man1,%{_desktopdir}}
 
-cd out/%{!?debug:Release}%{?debug:Debug}
+cd %{builddir}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 %{__sed} -i -e '
