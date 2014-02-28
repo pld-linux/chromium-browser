@@ -754,7 +754,7 @@ remove_tests() {
 	net/test \
 	o3d/tests \
 	ppapi/native_client/tests \
-	ppapi/tests \
+	ppapi/tests_ \
 	printing/test \
 	rlz/test \
 	sandbox/linux/seccomp-legacy/tests \
