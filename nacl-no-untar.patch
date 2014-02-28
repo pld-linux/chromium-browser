@@ -1,97 +1,196 @@
---- chromium-browser-24.0.1312.14/native_client/build/untrusted.gypi~	2012-11-14 04:37:51.000000000 +0200
-+++ chromium-browser-24.0.1312.14/native_client/build/untrusted.gypi	2012-11-16 22:01:20.476042441 +0200
-@@ -162,7 +162,7 @@
+--- chromium-browser-33.0.1750.117/native_client/build/untrusted.gypi	2014-02-28 09:05:36.555378590 +0200
++++ chromium-browser-33.0.1750.117.patched/native_client/build/untrusted.gypi	2014-02-27 23:15:49.506025570 +0200
+@@ -246,7 +246,7 @@
                   'action': [
-                    '>(python_exe)',
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                   '-t', '<(DEPTH)/native_client/toolchain/',
                     '>@(extra_args)',
                     '--arch', 'x86-64',
                     '--build', 'newlib_nexe',
-@@ -203,7 +203,7 @@
+@@ -289,7 +289,7 @@
                   'action': [
-                    '>(python_exe)',
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                   '-t', '<(DEPTH)/native_client/toolchain/',
                     '>@(extra_args)',
                     '--arch', 'x86-64',
                     '--build', 'newlib_nlib',
-@@ -244,7 +244,7 @@
+@@ -332,7 +332,7 @@
                   'action': [
-                    '>(python_exe)',
+                    'python',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-64',
+                    '--build', 'newlib_nexe_pnacl',
+@@ -376,7 +376,7 @@
+                  'action': [
+                    'python',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-64',
+                    '--build', 'newlib_nlib_pnacl',
+@@ -420,7 +420,7 @@
+                  'action': [
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                   '-t', '<(DEPTH)/native_client/toolchain/',
                     '>@(extra_args)',
                     '--arch', 'x86-32',
                     '--build', 'newlib_nexe',
-@@ -285,7 +285,7 @@
+@@ -463,7 +463,7 @@
                   'action': [
-                    '>(python_exe)',
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                   '-t', '<(DEPTH)/native_client/toolchain/',
                     '>@(extra_args)',
                     '--arch', 'x86-32',
                     '--build', 'newlib_nlib',
-@@ -331,7 +331,7 @@
+@@ -506,7 +506,7 @@
+                  'action': [
+                    'python',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-32',
+                    '--build', 'newlib_nexe',
+@@ -549,7 +549,7 @@
+                  'action': [
+                    'python',
+                    '<(DEPTH)/native_client/build/build_nexe.py',
+-                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                   '-t', '<(DEPTH)/native_client/toolchain/',
+                    '>@(extra_args)',
+                    '--arch', 'x86-32',
+                    '--build', 'newlib_nlib',
+@@ -598,7 +598,7 @@
                  'action': [
-                   '>(python_exe)',
+                   'python',
                    '<(DEPTH)/native_client/build/build_nexe.py',
 -                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                  '-t', '<(DEPTH)/native_client/toolchain/',
                    '>@(extra_args)',
                    '--arch', 'arm',
                    '--build', 'newlib_nexe',
-@@ -371,7 +371,7 @@
+@@ -641,7 +641,7 @@
                  'action': [
-                   '>(python_exe)',
+                   'python',
                    '<(DEPTH)/native_client/build/build_nexe.py',
 -                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                  '-t', '<(DEPTH)/native_client/toolchain/',
                    '>@(extra_args)',
                    '--arch', 'arm',
                    '--build', 'newlib_nlib',
-@@ -418,7 +418,7 @@
+@@ -684,7 +684,7 @@
+                 'action': [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'arm',
+                   '--build', 'newlib_nexe',
+@@ -727,7 +727,7 @@
+                 'action': [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'arm',
+                   '--build', 'newlib_nlib',
+@@ -772,7 +772,7 @@
+                 'action': [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'arm',
+                   '--build', 'newlib_nlib_pnacl',
+@@ -821,7 +821,7 @@
+                 'action': [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'mips',
+                   '--build', 'newlib_nexe',
+@@ -864,7 +864,7 @@
+                 'action': [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'mips',
+                   '--build', 'newlib_nlib',
+@@ -907,7 +907,7 @@
+                 'action': [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'mips',
+                   '--build', 'newlib_nexe',
+@@ -950,7 +950,7 @@
+                 'action': [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '>@(extra_args)',
+                   '--arch', 'mips',
+                   '--build', 'newlib_nlib',
+@@ -999,7 +999,7 @@
                   'action': [
-                    '>(python_exe)',
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                   '-t', '<(DEPTH)/native_client/toolchain/',
                     '>@(extra_args)',
                     '--arch', 'x86-64',
                     '--build', 'glibc_nexe',
-@@ -459,7 +459,7 @@
+@@ -1042,7 +1042,7 @@
                   'action': [
-                    '>(python_exe)',
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                   '-t', '<(DEPTH)/native_client/toolchain/',
                     '>@(extra_args)',
                     '--arch', 'x86-32',
                     '--build', 'glibc_nexe',
-@@ -500,7 +500,7 @@
+@@ -1085,7 +1085,7 @@
                   'action': [
-                    '>(python_exe)',
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                   '-t', '<(DEPTH)/native_client/toolchain/',
                     '>@(extra_args)',
                     '--arch', 'x86-64',
                     '--build', 'glibc_nlib',
-@@ -541,7 +541,7 @@
+@@ -1128,7 +1128,7 @@
                   'action': [
-                    '>(python_exe)',
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +                   '-t', '<(DEPTH)/native_client/toolchain/',
                     '>@(extra_args)',
                     '--arch', 'x86-32',
                     '--build', 'glibc_nlib',
-@@ -583,7 +583,7 @@
-                    '>(python_exe)',
+@@ -1172,7 +1172,7 @@
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
                     '>@(extra_args)',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
@@ -99,8 +198,8 @@
                     '--arch', 'x86-64',
                     '--build', 'glibc_nso',
                     '--root', '<(DEPTH)',
-@@ -624,7 +624,7 @@
-                    '>(python_exe)',
+@@ -1215,7 +1215,7 @@
+                    'python',
                     '<(DEPTH)/native_client/build/build_nexe.py',
                     '>@(extra_args)',
 -                   '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
@@ -108,28 +207,55 @@
                     '--arch', 'x86-32',
                     '--build', 'glibc_nso',
                     '--root', '<(DEPTH)',
-@@ -702,7 +702,7 @@
+@@ -1304,7 +1304,7 @@
              'action': [
-               '>(python_exe)',
+               'python',
                '<(DEPTH)/native_client/build/build_nexe.py',
 -              '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +              '-t', '<(DEPTH)/native_client/toolchain/',
                '>@(extra_args)',
                '--arch', 'pnacl',
                '--build', 'newlib_pexe',
-@@ -743,7 +743,7 @@
+@@ -1335,7 +1335,7 @@
+                 'action' : [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '--arch', 'x86-32',
+                   '--build', 'newlib_translate',
+                   '--root', '<(DEPTH)',
+@@ -1360,7 +1360,7 @@
+                 'action' : [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '--arch', 'x86-64',
+                   '--build', 'newlib_translate',
+                   '--root', '<(DEPTH)',
+@@ -1385,7 +1385,7 @@
+                 'action' : [
+                   'python',
+                   '<(DEPTH)/native_client/build/build_nexe.py',
+-                  '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
++                  '-t', '<(DEPTH)/native_client/toolchain/',
+                   '--arch', 'arm',
+                   '--build', 'newlib_translate',
+                   '--root', '<(DEPTH)',
+@@ -1423,7 +1423,7 @@
              'action': [
-               '>(python_exe)',
+               'python',
                '<(DEPTH)/native_client/build/build_nexe.py',
 -              '-t', '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/',
 +              '-t', '<(DEPTH)/native_client/toolchain/',
                '>@(extra_args)',
                '--arch', 'pnacl',
                '--build', 'newlib_plib',
---- chromium-browser-24.0.1312.45/native_client/tools.gyp~	2012-12-19 10:04:23.000000000 +0200
-+++ chromium-browser-24.0.1312.45/native_client/tools.gyp	2013-01-01 23:40:30.933802957 +0200
-@@ -44,6 +44,17 @@
-         'pnacl_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_x86_pnacl',
+--- chromium-browser-33.0.1750.117/native_client/tools.gyp	2014-02-20 22:29:12.000000000 +0200
++++ chromium-browser-33.0.1750.117.patched/native_client/tools.gyp	2014-02-27 19:27:23.085288396 +0200
+@@ -64,6 +64,17 @@
+         'arm_dir': '<(SHARED_INTERMEDIATE_DIR)/sdk/toolchain/<(OS)_arm_newlib',
        },
        'conditions': [
 +        # create stamp.untar that build system depends on
@@ -252,19 +378,19 @@ Could not find toolchain prep stamp file: ../native_client/toolchain/linux_x86_n
 make: *** [out/Release/obj/gen/tc_newlib/lib32/crtn.o] Error 1
 make: *** Waiting for unfinished jobs....
 make: *** [out/Release/obj/gen/tc_newlib/lib32/crti.o] Error 1
---- chromium-browser-29.0.1547.55/native_client/build/build_nexe.py~	2013-08-16 19:08:10.000000000 +0300
-+++ chromium-browser-29.0.1547.55/native_client/build/build_nexe.py	2013-08-18 14:05:01.071248669 +0300
-@@ -201,9 +201,6 @@
+--- chromium-browser-33.0.1750.117/native_client/build/build_nexe.py	2014-02-20 22:28:56.000000000 +0200
++++ chromium-browser-33.0.1750.117.patched/native_client/build/build_nexe.py	2014-02-27 19:27:23.085288396 +0200
+@@ -251,9 +251,6 @@
      # Set the toolchain directories
      self.toolchain = os.path.join(options.toolpath, tooldir)
-     self.toolbin = os.path.join(self.toolchain, tool_subdir, 'bin')
+     self.toolbin = os.path.join(self.toolchain, 'bin')
 -    self.toolstamp = os.path.join(self.toolchain, 'stamp.prep')
 -    if not IsFile(self.toolstamp):
 -      raise Error('Could not find toolchain prep stamp file: ' + self.toolstamp)
  
      self.inc_paths = ArgToList(options.incdirs)
      self.lib_paths = ArgToList(options.libdirs)
-@@ -410,10 +407,6 @@
+@@ -465,10 +462,6 @@
      return path
  
    def NeedsRebuild(self, outd, out, src, rebuilt=False):
@@ -275,7 +401,7 @@ make: *** [out/Release/obj/gen/tc_newlib/lib32/crti.o] Error 1
      if not IsFile(outd):
        if rebuilt:
          raise Error('Could not find dependency file %s.' % outd)
-@@ -422,15 +415,9 @@
+@@ -477,15 +470,9 @@
        if rebuilt:
          raise Error('Could not find output file %s.' % out)
        return True
