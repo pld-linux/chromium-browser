@@ -8,7 +8,7 @@
 %bcond_with		gps 			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_with	nacl			# build Native Client support, disabled: http://crbug.com/269560
-%bcond_without	ninja			# use Ninja instead of make to build
+%bcond_with	ninja			# use Ninja instead of make to build
 %bcond_without	pulseaudio		# with pulseaudio
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
