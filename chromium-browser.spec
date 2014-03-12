@@ -89,6 +89,7 @@ Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
 Patch1:		plugin-searchdirs.patch
+Patch2:		enable-video-decode-accel.patch
 Patch4:		path-libpdf.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
@@ -300,6 +301,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 ln -s %{SOURCE7} .
 
 %patch1 -p1
+%patch2 -p1
 %patch4 -p3
 %patch7 -p1
 %patch10 -p1

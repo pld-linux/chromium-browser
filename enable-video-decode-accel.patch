@@ -1,0 +1,11 @@
+--- chromium-browser-33.0.1750.146/content/common/gpu/media/gpu_video_decode_accelerator.cc~	2014-02-20 21:28:24.000000000 +0100
++++ chromium-browser-33.0.1750.146/content/common/gpu/media/gpu_video_decode_accelerator.cc	2014-03-12 16:52:52.265999592 +0100
+@@ -278,7 +278,7 @@
+       weak_factory_for_io_.GetWeakPtr(),
+       make_context_current_,
+       io_message_loop_));
+-#elif defined(OS_CHROMEOS) && defined(ARCH_CPU_X86_FAMILY) && defined(USE_X11)
++#elif defined(OS_LINUX) && defined(ARCH_CPU_X86_FAMILY) && defined(USE_X11)
+   gfx::GLContextGLX* glx_context =
+       static_cast<gfx::GLContextGLX*>(stub_->decoder()->GetGLContext());
+   GLXContext glx_context_handle =
