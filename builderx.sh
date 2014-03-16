@@ -51,4 +51,5 @@ time $dir/teeboth '' rpmbuild \
 	--define "_rpmdir $rpmdir" \
 	--without debuginfo \
 	--with verbose \
+	--with ninja \
 	"$@"
