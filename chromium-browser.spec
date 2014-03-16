@@ -301,7 +301,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 ln -s %{SOURCE7} .
 
 %patch1 -p1
-%patch2 -p1
+#%patch2 -p1 NOT COMPILING
 %patch4 -p3
 %patch7 -p1
 %patch10 -p1
