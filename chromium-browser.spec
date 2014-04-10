@@ -60,9 +60,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		33.0.1750
-%define		basever		117
-%define		patchver	152
+%define		branch		34.0.1847
+%define		basever		116
+#define		patchver	152
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -75,7 +75,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	0811b1c65f2b8d1ebf00664ddb2f5e05
+# Source0-md5:	bd73f999cd1716deafd19c41b13c318c
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	194579901c234fbce9e1538e7956d36c
