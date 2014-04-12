@@ -93,11 +93,9 @@ Patch2:		enable-video-decode-accel.patch
 Patch4:		path-libpdf.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
-Patch10:	system-libxnvctrl.patch
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
 # libjpeg-turbo >= 1.1.90 supports that feature
 Patch11:	chromium-revert-jpeg-swizzle-r2.patch
-Patch12:	system-ffmpeg.patch
 Patch15:	nacl-build-irt.patch
 Patch16:	nacl-linkingfix.patch
 Patch18:	nacl-no-untar.patch
@@ -109,6 +107,7 @@ Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
 Patch33:	gn.patch
+Patch34:	depot-tools.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -272,11 +271,11 @@ zh-TW
 %prep
 %setup -qc
 %if "%{?patchver}" != ""
-cd %{name}-%{branch}.%{basever}
+cd chromium*-%{branch}.%{basever}
 %patch0 -p1
 cd ..
 %endif
-mv %{name}-%{branch}.%{basever}/* .
+mv chromium*-%{branch}.%{basever}/* .
 
 # Google's versioning is interesting. They never reset "BUILD", which is how we jumped
 # from 3.0.201.0 to 4.0.202.0 as they moved to a new major branch
@@ -286,9 +285,6 @@ test "$chrome" = %{version}
 
 gyp_rev=$(grep googlecode_url.*gyp DEPS | cut -d'"' -f6 | cut -d@ -f2)
 test "$gyp_rev" = %{gyp_rev} || :
-
-. ./v8.sh
-v8=$MAJOR_VERSION.$MINOR_VERSION.$BUILD_NUMBER.$PATCH_LEVEL
 
 # add chromium and pld to useragent
 %define pld_version %(echo %{pld_release} | sed -e 'y/[at]/[AT]/')
@@ -304,20 +300,19 @@ ln -s %{SOURCE7} .
 #%patch2 -p1 NOT COMPILING
 %patch4 -p3
 %patch7 -p1
-%patch10 -p1
 %patch15 -p2
 %{!?with_libjpegturbo:%patch11 -p0}
-%patch12 -p1
 %patch16 -p1
 %patch28 -p1
 %patch25 -p1
 %{?with_nacl:%patch18 -p1}
 %patch24 -p2
 %patch26 -p2
-%patch30 -p1
-%patch31 -p0
+#%patch30 -p1
+#%patch31 -p0
 %patch32 -p1
-%patch33 -p0
+%patch33 -p1
+%patch34 -p0
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
@@ -393,7 +388,7 @@ flags="
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1} -Dproprietary_codecs=1 \
-	-Dinclude_tests=0 \
+	-Dinclude_tests__=0 \
 %if %{with nacl}
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
 	-Ddisable_glibc_untar=1 \
