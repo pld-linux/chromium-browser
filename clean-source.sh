@@ -41,7 +41,6 @@ remove_nonessential_dirs() {
 	for dir in \
 	v8/benchmarks \
 	v8/src/arm \
-	v8/src/d8__* \
 	third_party/chromite \
 	android_webview \
 	ash/resources/default_100_percent/cros_ \
@@ -432,6 +431,7 @@ remove_nonessential_dirs() {
 		base/win \
 		build/android \
 		chrome/browser/chromeos_ \
+		v8/src/d8* \
 		chrome/browser/component/web_contents_delegate_android \
 		chrome/tools \
 		chromeos_ \
