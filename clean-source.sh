@@ -41,7 +41,6 @@ remove_nonessential_dirs() {
 	for dir in \
 	v8/benchmarks \
 	v8/src/arm \
-	v8/src/d8* \
 	third_party/chromite \
 	android_webview \
 	ash/resources/default_100_percent/cros_ \
@@ -432,6 +431,7 @@ remove_nonessential_dirs() {
 		base/win \
 		build/android \
 		chrome/browser/chromeos_ \
+		v8/src/d8* \
 		chrome/browser/component/web_contents_delegate_android \
 		chrome/tools \
 		chromeos_ \
@@ -462,10 +462,10 @@ remove_nonessential_dirs() {
 	) '!' -type d '(' \
 		'!' -name '*.grd' \
 		'!' -name '*.gyp*' \
+		'!' -name '*.isolate' \
 		'!' -path 'base/mac/bundle_locations.h' \
 		'!' -path 'base/mac/crash_logging.h' \
 		'!' -path 'base/win/windows_version.h' \
-		'!' -path 'build/android/cpufeatures.gypi' \
 		'!' -path 'chrome/browser/chromeos/attestation/platform_verification_flow.h' \
 		'!' -path 'chrome/browser/chromeos/contacts/contact.proto' \
 		'!' -path 'chrome/browser/chromeos/extensions/*.h' \
@@ -587,13 +587,18 @@ clean_third_party() {
 
 	find third_party -type f \
 		'!' -iname '*.gyp*' \
+		'!' -iname '*.isolate' \
 		'!' -path 'third_party/WebKit/*' \
+		'!' -path 'third_party/libwebm/*' \
 		'!' -path 'third_party/adobe/flash/*' \
 		'!' -path 'third_party/angle/include/EGL/*' \
 		'!' -path 'third_party/angle/include/GLSLANG/*' \
 		'!' -path 'third_party/angle/src/common/*' \
 		'!' -path 'third_party/angle/src/compiler/*' \
+		'!' -path 'third_party/angle/src/enumerate_files.py' \
 		'!' -path 'third_party/angle/src/third_party/compiler/*' \
+		'!' -path 'third_party/angle/src/*' \
+		'!' -path 'third_party/brotli/*' \
 		'!' -path 'third_party/cacheinvalidation/*' \
 		'!' -path 'third_party/cld/*' \
 		'!' -path 'third_party/cld_2/*' \
@@ -603,6 +608,8 @@ clean_third_party() {
 		'!' -path 'third_party/hunspell/*' \
 		'!' -path 'third_party/hyphen/*' \
 		'!' -path 'third_party/iccjpeg/*' \
+		'!' -path 'third_party/icu/*' \
+		'!' -path 'third_party/jinja2/*' \
 		'!' -path 'third_party/jstemplate/*' \
 		'!' -path 'third_party/khronos/*' \
 		'!' -path 'third_party/leveldatabase/*' \
@@ -618,6 +625,7 @@ clean_third_party() {
 		'!' -path 'third_party/libyuv/*' \
 		'!' -path 'third_party/lss/*.h' \
 		'!' -path 'third_party/lzma_sdk/*' \
+		'!' -path 'third_party/markupsafe/*' \
 		'!' -path 'third_party/mesa/src/include/GL/gl.h' \
 		'!' -path 'third_party/mesa/src/include/GL/glext.h' \
 		'!' -path 'third_party/mesa/src/include/GL/glx.h' \
@@ -627,6 +635,7 @@ clean_third_party() {
 		'!' -path 'third_party/mt19937ar/*' \
 		'!' -path 'third_party/npapi/*' \
 		'!' -path 'third_party/ots/*' \
+		'!' -path 'third_party/polymer/*' \
 		'!' -path 'third_party/protobuf/*' \
 		'!' -path 'third_party/qcms/*' \
 		'!' -path 'third_party/re2/*' \
@@ -685,7 +694,7 @@ strip_system_dirs() {
 		# skip already removed dirs
 		test -d $dir || continue
 
-		find $dir -depth -mindepth 1 '!' '(' -name '*.gyp' -o -name '*.gypi' -o -path $dir/$lib.h $args ')' -print -delete || :
+		find $dir -depth -mindepth 1 '!' '(' -name '*.gyp' -o -name '*.gypi' -o -name '*.isolate' -o -path $dir/$lib.h $args ')' -print -delete || :
 	done
 	set +f
 }
@@ -696,7 +705,7 @@ strip_system_dirs() {
 remove_tests() {
 	local dir
 
-	# full remove
+	echo '> full remove'
 	for dir in \
 	ash/test \
 	base/test_ \
@@ -728,7 +737,7 @@ remove_tests() {
 	chrome_frame/tools/test \
 	content/browser/worker_host/test \
 	content/common/gpu/testdata \
-	content/public/test \
+	content/public/test_ \
 	content/test \
 	courgette/testdata \
 	device/bluetooth/test \
@@ -892,7 +901,7 @@ remove_tests() {
 		rm -vfr "$dir"
 	done
 
-	# partial remove (keep .gyp)
+	echo '> partial remove (keep .gyp)'
 	for dir in \
 		chrome/browser/nacl_host/test \
 		chrome/test/data \
@@ -929,17 +938,18 @@ remove_tests() {
 #	install -d testing/gtest/include
 #	ln -s /usr/include/gtest testing/gtest/include/gtest
 
-	# delete unittest files
+	echo '> delete unittest files'
 	find . '(' \
-		-name '*_unittest*.*' \
-		-o -name '*_unittest.*' \
-		-o -name '*_unittest' \
-		-o -name 'test_*.*' \
-		-o -name '*_test.*' \
-		-o -path './testing/' \
-	')' '!' -name '*.gyp*' \
-		'!' -name '*.isolate' \
+		-name '*_unittest*.*' -o \
+		-name '*_unittest.*' -o \
+		-name '*_unittest' -o \
+		-name 'test_*.*' -o \
+		-name '*_test.*' -o \
+		-path './testing/' \
+	')' '!' -type d '(' \
 		'!' -name '*.grd' \
+		'!' -name '*.gyp*' \
+		'!' -name '*.isolate' \
 		'!' -path './base/test/*' \
 		'!' -path './base/test/launcher/*' \
 		'!' -path './base/test/launcher/test_launcher.*' \
@@ -959,6 +969,7 @@ remove_tests() {
 		'!' -path './chrome/test/base/test_switches.*' \
 		'!' -path './chrome/test/perf/browser_perf_test.*' \
 		'!' -path './chrome/test/perf/perf_test.*' \
+		'!' -path './content/public/test/test_utils.h' \
 		'!' -path './media/cast/rtcp/test_rtcp_packet_builder.*' \
 		'!' -path './native_client/src/trusted/fault_injection/test_injection.*' \
 		'!' -path './native_client/src/trusted/service_runtime/env_cleanser_test.h' \
@@ -971,6 +982,11 @@ remove_tests() {
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
 		'!' -path './third_party/trace-viewer/src/base/unittest/test_error.js' \
 		'!' -path './third_party/trace-viewer/src/tracing/test_utils.js' \
+		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_case.js' \
+		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_error.js' \
+		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_runner.js' \
+		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/*.js' \
+		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
 		'!' -path './ui/webui/resources/js/webui_resource_test.js' \
@@ -980,15 +996,21 @@ remove_tests() {
 		'!' -path './webkit/gpu/test_context_provider_factory.*' \
 		'!' -path './webkit/support/test_webkit_platform_support.h' \
 		'!' -path './webkit/tools/test_shell/*.h' \
-	-print -delete || :
+	')' \
+		-print -delete || :
 }
 
 # Remove most bundled libraries. Some are still needed.
 # Sync this with gentoo/chromium-*.ebuild
 # NOTE: argument list to script specifies paths to preserve
 remove_bundled_libraries() {
+	# ninja: error: '../../third_party/jinja2/__init__.py', needed by 'gen/blink/InternalSettingsGenerated.idl', missing and no known rule to make it
+	# ninja: error: '../../third_party/markupsafe/__init__.py', needed by 'gen/blink/InternalSettingsGenerated.idl', missing and no known rule to make it
+
 	build/linux/unbundle/remove_bundled_libraries.py \
 		third_party/adobe/flash/flapper_version.h \
+		third_party/jinja2 \
+		third_party/markupsafe/ \
 		'base/third_party/dmg_fp' \
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
@@ -1004,6 +1026,7 @@ remove_bundled_libraries() {
 		'net/third_party/nss' \
 		'third_party/WebKit' \
 		'third_party/angle' \
+		'third_party/brotli' \
 		'third_party/cacheinvalidation' \
 		'third_party/cld' \
 		'third_party/cros_system_api' \
@@ -1011,16 +1034,18 @@ remove_bundled_libraries() {
 		'third_party/flot' \
 		'third_party/hunspell' \
 		'third_party/iccjpeg' \
+		'third_party/icu' \
 		'third_party/jstemplate' \
 		'third_party/khronos' \
 		'third_party/leveldatabase' \
+		'third_party/libXNVCtrl' \
 		'third_party/libaddressinput' \
 		'third_party/libjingle' \
 		'third_party/libphonenumber' \
 		'third_party/libsrtp' \
 		'third_party/libusb' \
+		'third_party/libwebm' \
 		'third_party/libxml/chromium' \
-		'third_party/libXNVCtrl' \
 		'third_party/libyuv' \
 		'third_party/lss' \
 		'third_party/lzma_sdk' \
@@ -1028,8 +1053,10 @@ remove_bundled_libraries() {
 		'third_party/modp_b64' \
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
+		'third_party/nss.isolate' \
 		'third_party/ots' \
 		'third_party/polymer' \
+		'third_party/protobuf' \
 		'third_party/pywebsocket' \
 		'third_party/qcms' \
 		'third_party/readability' \
@@ -1060,7 +1087,7 @@ strip_system_dirs \
 	third_party/bzip2 \
 	third_party/ffmpeg_ \
 	third_party/flac \
-	third_party/icu \
+	third_party/icu_ \
 	third_party/jsoncpp \
 	third_party/libXNVCtrl \
 	third_party/libevent \
