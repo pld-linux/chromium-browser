@@ -71,7 +71,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	1
+Release:	2
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -511,7 +511,7 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 	}
 ' $RPM_BUILD_ROOT%{_bindir}/%{name}
 cp -a locales resources $RPM_BUILD_ROOT%{_datadir}/%{name}
-cp -a *.pak $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -p *.pak icudtl.dat $RPM_BUILD_ROOT%{_libdir}/%{name}
 ln -s %{_datadir}/%{name}/locales $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
 ln -s %{_datadir}/%{name}/resources $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
@@ -598,6 +598,7 @@ fi
 %{_iconsdir}/hicolor/*/apps/%{name}.png
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome*.pak
+%{_libdir}/%{name}/icudtl.dat
 %{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/resources.pak
 %{_libdir}/%{name}/locales
