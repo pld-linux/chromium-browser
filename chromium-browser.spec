@@ -62,7 +62,7 @@
 
 %define		branch		34.0.1847
 %define		basever		116
-#define		patchver	152
+%define		patchver	132
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -78,7 +78,7 @@ Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{
 # Source0-md5:	987b25c0a3aa7bc2354c573113e94e04
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	194579901c234fbce9e1538e7956d36c
+# Patch0-md5:	4eafe1e64bd47a11dbfaf61a2dd50b6e
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
@@ -499,6 +499,8 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins \
 	$RPM_BUILD_ROOT%{_datadir}/%{name}/{locales,resources} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sysconfdir}/%{name},%{_mandir}/man1,%{_desktopdir}}
 
+cp -p third_party/icu/source/data/in/icudtl.dat $RPM_BUILD_ROOT%{_libdir}/%{name}
+
 cd %{builddir}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
@@ -511,7 +513,7 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 	}
 ' $RPM_BUILD_ROOT%{_bindir}/%{name}
 cp -a locales resources $RPM_BUILD_ROOT%{_datadir}/%{name}
-cp -p *.pak icudtl.dat $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -p *.pak $RPM_BUILD_ROOT%{_libdir}/%{name}
 ln -s %{_datadir}/%{name}/locales $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
 ln -s %{_datadir}/%{name}/resources $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
