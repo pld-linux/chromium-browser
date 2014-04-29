@@ -71,7 +71,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	1
+Release:	2
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -108,6 +108,7 @@ Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
 Patch33:	gn.patch
 Patch34:	depot-tools.patch
+Patch35:	etc-dir.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -313,6 +314,7 @@ ln -s %{SOURCE7} .
 %patch32 -p1
 %patch33 -p1
 %patch34 -p0
+%patch35 -p1
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \

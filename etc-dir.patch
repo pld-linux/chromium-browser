@@ -1,0 +1,14 @@
+fix /etc/ path.
+
+should we switch to /etc/chromium instead?
+--- chromium-browser-34.0.1847.116/./chrome/common/chrome_paths.cc~	2014-04-18 02:50:48.000000000 +0300
++++ chromium-browser-34.0.1847.116/./chrome/common/chrome_paths.cc	2014-04-18 04:01:17.224283548 +0300
+@@ -525,7 +525,7 @@
+           "/etc/opt/chrome/native-messaging-hosts"));
+ #else
+       cur = base::FilePath(FILE_PATH_LITERAL(
+-          "/etc/chromium/native-messaging-hosts"));
++          "/etc/chromium-browser/native-messaging-hosts"));
+ #endif
+ #endif  // !defined(OS_MACOSX)
+       break;
