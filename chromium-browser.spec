@@ -499,7 +499,8 @@ MANWIDTH=80 man ./chrome.1 > man.out
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins \
 	$RPM_BUILD_ROOT%{_datadir}/%{name}/{locales,resources} \
-	$RPM_BUILD_ROOT{%{_bindir},%{_sysconfdir}/%{name},%{_mandir}/man1,%{_desktopdir}}
+	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_desktopdir}} \
+	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/{native-messaging-hosts,policies/managed}
 
 cp -p third_party/icu/source/data/in/icudtl.dat $RPM_BUILD_ROOT%{_libdir}/%{name}
 
@@ -596,6 +597,9 @@ fi
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/default
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/master_preferences
+%dir %{_sysconfdir}/%{name}/native-messaging-hosts
+%dir %{_sysconfdir}/%{name}/policies
+%dir %{_sysconfdir}/%{name}/policies/managed
 %attr(755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1*
 %{_desktopdir}/*.desktop
