@@ -106,8 +106,6 @@ Patch28:	system-mesa.patch
 Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
-Patch33:	gn.patch
-Patch34:	depot-tools.patch
 Patch35:	etc-dir.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
@@ -307,13 +305,11 @@ ln -s %{SOURCE7} .
 %patch28 -p1
 %patch25 -p1
 %{?with_nacl:%patch18 -p1}
-%patch24 -p2
+%patch24 -p1
 %patch26 -p2
 #%patch30 -p1
 #%patch31 -p0
 %patch32 -p1
-%patch33 -p1
-%patch34 -p0
 %patch35 -p1
 
 sh -x clean-source.sh \
