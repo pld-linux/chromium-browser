@@ -1,16 +1,16 @@
 dlopen the sonamed libs directly, like it has already been done for libGL.so.1,
-as we don't want to Depend on the -dev packages for the .so files:
+as we don't want to Depend on the -devel packages for the .so files:
 - libOSMesa.so.8: Mesa-libOSMesa-9.2.0-2
 - libGLESv2.so.2: Mesa-libGLES-9.2.0-2
 - libEGL.so.1: Mesa-libEGL-9.2.0-2
---- chromium-browser-30.0.1599.66/./ui/gl/gl_implementation_linux.cc~	2013-09-28 20:10:53.000000000 +0300
-+++ chromium-browser-30.0.1599.66/./ui/gl/gl_implementation_linux.cc	2013-10-02 20:06:36.152324746 +0300
-@@ -37,7 +37,7 @@
+--- chromium-browser-35.0.1916.114/ui/gl/gl_implementation_osmesa.cc~	2014-05-14 22:23:31.000000000 +0300
++++ chromium-browser-35.0.1916.114/ui/gl/gl_implementation_osmesa.cc	2014-05-25 22:46:46.730068460 +0300
+@@ -38,7 +38,7 @@
      return false;
    }
  
--  base::NativeLibrary library = LoadLibrary(module_path.Append("libosmesa.so"));
-+  base::NativeLibrary library = LoadLibrary(module_path.Append("libOSMesa.so.8"));
-   if (!library)
-     return false;
- 
+-  base::FilePath library_path = module_path.Append("libosmesa.so");
++  base::FilePath library_path = module_path.Append("libOSMesa.so.8");
+   base::NativeLibrary library = LoadLibrary(library_path);
+   if (!library) {
+     LOG(ERROR) << "Failed to load " << library_path.value() << ".";
