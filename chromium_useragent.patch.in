@@ -1,6 +1,6 @@
---- chromium-browser-29.0.1547.55/webkit/common/user_agent/user_agent_util.cc~	2013-08-16 19:03:28.000000000 +0300
-+++ chromium-browser-29.0.1547.55/webkit/common/user_agent/user_agent_util.cc	2013-08-18 13:39:00.749897316 +0300
-@@ -181,12 +181,20 @@
+--- chromium-browser-35.0.1916.114/content/common/user_agent.cc~	2014-05-14 22:22:09.000000000 +0300
++++ chromium-browser-35.0.1916.114/content/common/user_agent.cc	2014-05-25 22:43:45.378723143 +0300
+@@ -182,12 +182,20 @@
    // This is done to expose our product name in a manner that is maximally
    // compatible with Safari, we hope!!
    std::string user_agent;
