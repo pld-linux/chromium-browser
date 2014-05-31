@@ -414,7 +414,7 @@ remove_nonessential_dirs() {
 	ui/gfx/mac \
 	ui/resources/default_100_percent/cros_ \
 	ui/resources/default_200_percent/cros_ \
-	ui/views/examples \
+	ui/views/examples_ \
 	ui/views/win \
 	v8/samples \
 	webkit/chromeos \
@@ -589,26 +589,27 @@ clean_third_party() {
 		'!' -iname '*.gyp*' \
 		'!' -iname '*.isolate' \
 		'!' -path 'third_party/WebKit/*' \
-		'!' -path 'third_party/libwebm/*' \
 		'!' -path 'third_party/adobe/flash/*' \
+		'!' -path 'third_party/angle/enumerate_files.py' \
 		'!' -path 'third_party/angle/include/EGL/*' \
 		'!' -path 'third_party/angle/include/GLSLANG/*' \
+		'!' -path 'third_party/angle/src/*' \
 		'!' -path 'third_party/angle/src/common/*' \
 		'!' -path 'third_party/angle/src/compiler/*' \
 		'!' -path 'third_party/angle/src/enumerate_files.py' \
 		'!' -path 'third_party/angle/src/third_party/compiler/*' \
-		'!' -path 'third_party/angle/src/*' \
 		'!' -path 'third_party/brotli/*' \
 		'!' -path 'third_party/cacheinvalidation/*' \
 		'!' -path 'third_party/cld/*' \
 		'!' -path 'third_party/cld_2/*' \
 		'!' -path 'third_party/cros_system_api/*' \
+		'!' -path 'third_party/dom_distiller_js/*' \
 		'!' -path 'third_party/ffmpeg/*' \
 		'!' -path 'third_party/flot/*.js' \
 		'!' -path 'third_party/hunspell/*' \
 		'!' -path 'third_party/hyphen/*' \
 		'!' -path 'third_party/iccjpeg/*' \
-		'!' -path 'third_party/icu/*' \
+		'!' -path 'third_party/icu/icu.isolate' \
 		'!' -path 'third_party/jinja2/*' \
 		'!' -path 'third_party/jstemplate/*' \
 		'!' -path 'third_party/khronos/*' \
@@ -620,6 +621,7 @@ clean_third_party() {
 		'!' -path 'third_party/libusb/*' \
 		'!' -path 'third_party/libva/*' \
 		'!' -path 'third_party/libvpx/*' \
+		'!' -path 'third_party/libwebm/*' \
 		'!' -path 'third_party/libwebp/*' \
 		'!' -path 'third_party/libxml/chromium/*' \
 		'!' -path 'third_party/libyuv/*' \
@@ -635,6 +637,7 @@ clean_third_party() {
 		'!' -path 'third_party/mt19937ar/*' \
 		'!' -path 'third_party/npapi/*' \
 		'!' -path 'third_party/ots/*' \
+		'!' -path 'third_party/ply/*' \
 		'!' -path 'third_party/polymer/*' \
 		'!' -path 'third_party/protobuf/*' \
 		'!' -path 'third_party/qcms/*' \
@@ -657,6 +660,12 @@ clean_third_party() {
 		'!' -path 'third_party/widevine/*' \
 		'!' -path 'third_party/x86inc/*' \
 		'!' -path 'third_party/zlib/google/*' \
+		'!' -path 'third_party/zlib/zlib.h' \
+		\
+		'!' -path 'third_party/jinja2/*' \
+		'!' -path 'third_party/libvpx/*' \
+		'!' -path 'third_party/markupsafe/*' \
+		'!' -path 'third_party/opus/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h
@@ -665,11 +674,12 @@ clean_third_party() {
 # parts based on ubuntu debian/rules
 # http://bazaar.launchpad.net/~chromium-team/chromium-browser/chromium-browser.head/view/head:/debian/rules
 remove_bin_only() {
+	# preserve: ui/keyboard/resources/roboto_bold.ttf
 	find -type f \( \
 		-iname \*.exe -o \
 		-iname \*.nexe -o \
 		-iname \*.fon -o \
-		-iname \*.ttf  -o \
+		-iname \*.ttf_  -o \
 		-iname \*.dll -o \
 		-iname \*.pdb -o \
 		-name \*.o -o \
@@ -982,10 +992,13 @@ remove_tests() {
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
 		'!' -path './third_party/trace-viewer/src/base/unittest/test_error.js' \
 		'!' -path './third_party/trace-viewer/src/tracing/test_utils.js' \
+		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/*.js' \
 		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_case.js' \
 		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_error.js' \
 		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_runner.js' \
-		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/*.js' \
+		'!' -path './third_party/trace-viewer/trace_viewer/tracing/test_utils.js' \
+		'!' -path './mojo/embedder/test_embedder.*' \
+		'!' -path './ui/base/hit_test.*' \
 		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './tools/compile_test/compile_test.py' \
 		'!' -path './ui/compositor/test_web_graphics_context_3d.*' \
@@ -1007,6 +1020,8 @@ remove_bundled_libraries() {
 	# ninja: error: '../../third_party/jinja2/__init__.py', needed by 'gen/blink/InternalSettingsGenerated.idl', missing and no known rule to make it
 	# ninja: error: '../../third_party/markupsafe/__init__.py', needed by 'gen/blink/InternalSettingsGenerated.idl', missing and no known rule to make it
 
+	# NOTE: don't forget to sync clean_third_party()
+
 	build/linux/unbundle/remove_bundled_libraries.py \
 		third_party/adobe/flash/flapper_version.h \
 		third_party/jinja2 \
@@ -1015,6 +1030,7 @@ remove_bundled_libraries() {
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
 		'base/third_party/nspr' \
+		'base/third_party/superfasthash' \
 		'base/third_party/symbolize' \
 		'base/third_party/valgrind' \
 		'base/third_party/xdg_mime' \
@@ -1030,11 +1046,13 @@ remove_bundled_libraries() {
 		'third_party/cacheinvalidation' \
 		'third_party/cld' \
 		'third_party/cros_system_api' \
+		'third_party/dom_distiller_js' \
 		'third_party/ffmpeg' \
 		'third_party/flot' \
 		'third_party/hunspell' \
 		'third_party/iccjpeg' \
-		'third_party/icu' \
+		'third_party/icu/icu.isolate' \
+		'third_party/jinja2' \
 		'third_party/jstemplate' \
 		'third_party/khronos' \
 		'third_party/leveldatabase' \
@@ -1044,17 +1062,21 @@ remove_bundled_libraries() {
 		'third_party/libphonenumber' \
 		'third_party/libsrtp' \
 		'third_party/libusb' \
+		'third_party/libvpx' \
 		'third_party/libwebm' \
 		'third_party/libxml/chromium' \
 		'third_party/libyuv' \
 		'third_party/lss' \
 		'third_party/lzma_sdk' \
+		'third_party/markupsafe' \
 		'third_party/mesa' \
 		'third_party/modp_b64' \
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
 		'third_party/nss.isolate' \
+		'third_party/opus' \
 		'third_party/ots' \
+		'third_party/ply' \
 		'third_party/polymer' \
 		'third_party/protobuf' \
 		'third_party/pywebsocket' \
@@ -1074,6 +1096,7 @@ remove_bundled_libraries() {
 		'third_party/widevine' \
 		'third_party/x86inc' \
 		'third_party/zlib/google' \
+		'third_party/zlib' \
 		'url/third_party/mozilla' \
 		'v8/src/third_party/valgrind' \
 		--do-print \
@@ -1097,11 +1120,11 @@ strip_system_dirs \
 	third_party/libpng \
 	third_party/libsrtp \
 	third_party/libusb_ \
-	third_party/libvpx \
+	third_party/libvpx_ \
 	third_party/libwebp \
 	third_party/libxslt \
 	third_party/mesa \
-	third_party/opus \
+	third_party/opus_ \
 	third_party/protobuf \
 	third_party/re2 \
 	third_party/snappy \
