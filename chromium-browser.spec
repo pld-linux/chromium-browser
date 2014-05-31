@@ -33,7 +33,7 @@
 %bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
-%bcond_without	system_libvpx	# system libvpx
+%bcond_with	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
 %bcond_without	tcmalloc		# use tcmalloc
@@ -75,7 +75,7 @@ Release:	0.1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	987b25c0a3aa7bc2354c573113e94e04
+# Source0-md5:	47875d22979493cd9e9d3aa402dd6a77
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	4eafe1e64bd47a11dbfaf61a2dd50b6e
@@ -382,7 +382,7 @@ flags="
 %if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
 	-Dno_strict_aliasing=1 -Dgcc_version=44 \
 %endif
-	%{!?debug:-Dwerror=} \
+	%{!?debug:-Dwerror= -Ddisable_fatal_linker_warnings=} \
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1} -Dproprietary_codecs=1 \
@@ -498,8 +498,6 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins \
 	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_desktopdir}} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/{native-messaging-hosts,policies/managed}
 
-cp -p third_party/icu/source/data/in/icudtl.dat $RPM_BUILD_ROOT%{_libdir}/%{name}
-
 cd %{builddir}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
@@ -602,8 +600,8 @@ fi
 %{_iconsdir}/hicolor/*/apps/%{name}.png
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome*.pak
-%{_libdir}/%{name}/icudtl.dat
 %{_libdir}/%{name}/content_resources.pak
+%{_libdir}/%{name}/keyboard_resources.pak
 %{_libdir}/%{name}/resources.pak
 %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/resources
