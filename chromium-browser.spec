@@ -2,6 +2,7 @@
 # Conditional build:
 %bcond_without	cups			# with cups
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
+%bcond_with	dev			# with dev optimizations (skip clean source)
 %bcond_without	gconf			# with GConf
 %bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
@@ -311,6 +312,8 @@ ln -s %{SOURCE7} .
 #%patch31 -p0
 %patch32 -p1
 %patch35 -p1
+
+%{?with_dev:exit 0}
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
