@@ -443,7 +443,7 @@ flags="
 	%{gyp_with system_zlib} \
 	-Duse_system_bzip2=1 \
 	-Duse_system_expat=1 \
-	-Duse_system_icu=1 \
+	-Duse_system_icu=1 -Dicu_use_data_file_flag=0 \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
 	-Duse_system_libpng=1 \
