@@ -61,8 +61,8 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		35.0.1916
-%define		basever		114
+%define		branch		36.0.1985
+%define		basever		143
 #define		patchver	132
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -89,7 +89,6 @@ Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
-Patch1:		plugin-searchdirs.patch
 Patch2:		enable-video-decode-accel.patch
 Patch4:		path-libpdf.patch
 Patch7:		dlopen_sonamed_gl.patch
@@ -296,7 +295,6 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_datadir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} .
 
-%patch1 -p1
 #%patch2 -p1 NOT COMPILING
 %patch4 -p3
 %patch7 -p1
