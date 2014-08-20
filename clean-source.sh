@@ -532,7 +532,7 @@ almost_strip_dirs() {
 	for dir in \
 		breakpad_ \
 		build/ios \
-		courgette \
+		courgette_ \
 		third_party/cros_dbus_cplusplus \
 		; do
 		find $dir -depth -mindepth 1 '!' '(' -name '*.gyp' -o -name '*.gypi' ')' -print -delete || :
@@ -574,7 +574,6 @@ clean_third_party() {
 		third_party/icon_family \
 		third_party/isimpledom \
 		third_party/jsr-305 \
-		third_party/libexif \
 		third_party/mach_override \
 		third_party/npapi/npspy \
 		third_party/re2/benchlog \
@@ -980,6 +979,8 @@ remove_tests() {
 		'!' -path './chrome/test/perf/browser_perf_test.*' \
 		'!' -path './chrome/test/perf/perf_test.*' \
 		'!' -path './content/public/test/test_utils.h' \
+		'!' -path './extensions/browser/api/test/test_api.*' \
+		'!' -path './extensions/renderer/test_features_native_handler.*' \
 		'!' -path './media/cast/rtcp/test_rtcp_packet_builder.*' \
 		'!' -path './native_client/src/trusted/fault_injection/test_injection.*' \
 		'!' -path './native_client/src/trusted/service_runtime/env_cleanser_test.h' \
@@ -987,6 +988,7 @@ remove_tests() {
 		'!' -path './net/base/test_data_stream.*' \
 		'!' -path './net/cert/test_root_certs*' \
 		'!' -path './remoting/base/resources_unittest.*' \
+		'!' -path './sync/api/attachments/attachment_service_proxy_for_test.*' \
 		'!' -path './testing/*' \
 		'!' -path './testing/perf/perf_test.*' \
 		'!' -path './third_party/skia/src/gpu/gr_unittests.*' \
@@ -1037,6 +1039,7 @@ remove_bundled_libraries() {
 		'base/third_party/xdg_user_dirs' \
 		'breakpad/src/third_party/curl' \
 		'chrome/third_party/mozilla_security_manager' \
+		'courgette/third_party' \
 		'crypto/third_party/nss' \
 		'net/third_party/mozilla_security_manager' \
 		'net/third_party/nss' \
@@ -1073,7 +1076,6 @@ remove_bundled_libraries() {
 		'third_party/modp_b64' \
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
-		'third_party/nss.isolate' \
 		'third_party/opus' \
 		'third_party/ots' \
 		'third_party/ply' \
