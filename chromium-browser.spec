@@ -37,7 +37,7 @@
 %bcond_with	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
-%bcond_without	tcmalloc		# use tcmalloc
+%bcond_with	tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
 %ifarch %{ix86}
@@ -404,9 +404,10 @@ flags="
 	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
 	-Dlinux_link_libpci=1 \
 	-Dlinux_link_libspeechd=1 -Dlibspeechd_h_prefix=speech-dispatcher/ \
-	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
+	-Duse_allocator=%{!?with_tcmalloc:none}%{?with_tcmalloc:tcmalloc} \
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
-	-Dlinux_use_gold_binary=0 \
+	-Dlinux_use_bundled_binutils=0 \
+	-Dlinux_use_bundled_gold=0 \
 	-Dlinux_use_gold_flags=0 \
 	-Dlogging_like_official_build=1 \
 	-Dgoogle_api_key=%{google_api_key} \
