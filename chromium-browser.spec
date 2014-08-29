@@ -2,13 +2,14 @@
 # Conditional build:
 %bcond_without	cups			# with cups
 %bcond_without	debuginfo		# disable debuginfo creation (it is huge)
+%bcond_with	dev			# with dev optimizations (skip clean source)
 %bcond_without	gconf			# with GConf
 %bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in net/http/http_auth_gssapi_posix.cc)
 %bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
 %bcond_with		gps 			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
 %bcond_without	libjpegturbo	# use libjpeg-turbo features
 %bcond_with	nacl			# build Native Client support, disabled: http://crbug.com/269560
-%bcond_with	ninja			# use Ninja instead of make to build
+%bcond_without	ninja			# use Ninja instead of make to build
 %bcond_without	pulseaudio		# with pulseaudio
 %bcond_without	sandboxing		# with sandboxing
 %bcond_with		selinux			# with SELinux (need policy first)
@@ -33,10 +34,10 @@
 %bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
-%bcond_without	system_libvpx	# system libvpx
+%bcond_with	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
-%bcond_without	tcmalloc		# use tcmalloc
+%bcond_with	tcmalloc		# use tcmalloc
 %bcond_without	verbose			# verbose build (V=1)
 
 %ifarch %{ix86}
@@ -60,9 +61,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		34.0.1847
-%define		basever		116
-%define		patchver	132
+%define		branch		36.0.1985
+%define		basever		143
+#define		patchver	132
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -71,11 +72,11 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	2
+Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	987b25c0a3aa7bc2354c573113e94e04
+# Source0-md5:	8180f26a32fec2f28ae0a2f9a25bdca2
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	4eafe1e64bd47a11dbfaf61a2dd50b6e
@@ -88,7 +89,6 @@ Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
-Patch1:		plugin-searchdirs.patch
 Patch2:		enable-video-decode-accel.patch
 Patch4:		path-libpdf.patch
 Patch7:		dlopen_sonamed_gl.patch
@@ -106,8 +106,6 @@ Patch28:	system-mesa.patch
 Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
-Patch33:	gn.patch
-Patch34:	depot-tools.patch
 Patch35:	etc-dir.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
@@ -297,7 +295,6 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_datadir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} .
 
-%patch1 -p1
 #%patch2 -p1 NOT COMPILING
 %patch4 -p3
 %patch7 -p1
@@ -307,14 +304,14 @@ ln -s %{SOURCE7} .
 %patch28 -p1
 %patch25 -p1
 %{?with_nacl:%patch18 -p1}
-%patch24 -p2
+%patch24 -p1
 %patch26 -p2
 #%patch30 -p1
 #%patch31 -p0
 %patch32 -p1
-%patch33 -p1
-%patch34 -p0
 %patch35 -p1
+
+%{?with_dev:exit 0}
 
 sh -x clean-source.sh \
 	%{!?with_nacl:nacl=0} \
@@ -386,7 +383,7 @@ flags="
 %if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
 	-Dno_strict_aliasing=1 -Dgcc_version=44 \
 %endif
-	%{!?debug:-Dwerror=} \
+	%{!?debug:-Dwerror= -Ddisable_fatal_linker_warnings=} \
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
 	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1} -Dproprietary_codecs=1 \
@@ -407,9 +404,10 @@ flags="
 	-Dusb_ids_path=$(pkg-config --variable usbids usbutils) \
 	-Dlinux_link_libpci=1 \
 	-Dlinux_link_libspeechd=1 -Dlibspeechd_h_prefix=speech-dispatcher/ \
-	%{!?with_tcmalloc:-Dlinux_use_tcmalloc=0} \
+	-Duse_allocator=%{!?with_tcmalloc:none}%{?with_tcmalloc:tcmalloc} \
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
-	-Dlinux_use_gold_binary=0 \
+	-Dlinux_use_bundled_binutils=0 \
+	-Dlinux_use_bundled_gold=0 \
 	-Dlinux_use_gold_flags=0 \
 	-Dlogging_like_official_build=1 \
 	-Dgoogle_api_key=%{google_api_key} \
@@ -444,7 +442,7 @@ flags="
 	%{gyp_with system_zlib} \
 	-Duse_system_bzip2=1 \
 	-Duse_system_expat=1 \
-	-Duse_system_icu=1 \
+	-Duse_system_icu=1 -Dicu_use_data_file_flag=0 \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
 	-Duse_system_libpng=1 \
@@ -501,8 +499,6 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins \
 	$RPM_BUILD_ROOT%{_datadir}/%{name}/{locales,resources} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_desktopdir}} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/{native-messaging-hosts,policies/managed}
-
-cp -p third_party/icu/source/data/in/icudtl.dat $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 cd %{builddir}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
@@ -606,8 +602,8 @@ fi
 %{_iconsdir}/hicolor/*/apps/%{name}.png
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome*.pak
-%{_libdir}/%{name}/icudtl.dat
 %{_libdir}/%{name}/content_resources.pak
+%{_libdir}/%{name}/keyboard_resources.pak
 %{_libdir}/%{name}/resources.pak
 %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/resources
