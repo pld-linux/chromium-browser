@@ -61,8 +61,8 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		36.0.1985
-%define		basever		143
+%define		branch		37.0.2062
+%define		basever		94
 #define		patchver	132
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -76,7 +76,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	8180f26a32fec2f28ae0a2f9a25bdca2
+# Source0-md5:	b911b7768d90948b7f9b0a6cdb87ba40
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	4eafe1e64bd47a11dbfaf61a2dd50b6e
@@ -107,6 +107,8 @@ Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
 Patch35:	etc-dir.patch
+Patch36:	angle.patch
+Patch37:	ffmpeg.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -310,6 +312,8 @@ ln -s %{SOURCE7} .
 #%patch31 -p0
 %patch32 -p1
 %patch35 -p1
+%patch36 -p1
+%patch37 -p1
 
 %{?with_dev:exit 0}
 
@@ -369,15 +373,19 @@ fi
 if [ ! -d third_party/ffmpeg/build.%{target_arch}.linux ]; then
 	# Re-configure bundled ffmpeg
 	cd third_party/ffmpeg
-	chromium/scripts/build_ffmpeg.sh linux %{target_arch} "$PWD" config-only
+	chromium/scripts/build_ffmpeg.py linux %{target_arch}
 	chromium/scripts/copy_config.sh
+	chromium/scripts/generate_gyp.py
 	cd -
 fi
 %endif
 
+third_party/libaddressinput/chromium/tools/update-strings.py
+
 flags="
 	-Dtarget_arch=%{target_arch} \
 	-Dpython_arch=%{target_arch} \
+	-Dffmpeg_branding=Chromium \
 	-Dsystem_libdir=%{_lib} \
 	-Dpython_ver=%{py_ver} \
 %if "%{cc_version}" >= "4.4.0" && "%{cc_version}" < "4.5.0"
@@ -521,6 +529,7 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
 %if %{without system_ffmpeg}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
+install -p libpdf.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/master_preferences
 
