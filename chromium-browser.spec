@@ -617,6 +617,9 @@ fi
 %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/resources
 
+# conflicts with browser-plugin-chrome-pdf?
+%attr(755,root,root) %{_libdir}/%{name}/libpdf.so
+
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/locales
 %{_datadir}/%{name}/locales/en-US.pak
