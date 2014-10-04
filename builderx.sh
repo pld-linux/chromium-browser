@@ -37,10 +37,12 @@ ccache -s
 log=$logs/$(date +%Y%m%d_%H%M%S)
 install -d $log
 mv $outdir/chromium-browser-*.*.*.*/src/REMOVED-*.txt $log
+logfile=$log/rpmbuild.log
+touch $logfile
 rmdir $log
 
 _smp_mflags=$(rpm -E %{?_smp_mflags})
-time $dir/teeboth '' rpmbuild \
+time $dir/teeboth "$logfile" rpmbuild \
 	${_smp_mflags:+--define "_smp_mflags ${_smp_mflags}"} \
 	--define "_unpackaged_files_terminate_build 1" \
 	--define '_enable_debug_packages 0' \
