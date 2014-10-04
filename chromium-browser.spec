@@ -61,8 +61,8 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		37.0.2062
-%define		basever		94
+%define		branch		38.0.2125
+%define		basever		101
 #define		patchver	132
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -76,7 +76,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	b911b7768d90948b7f9b0a6cdb87ba40
+# Source0-md5:	be4d3ad6944e43132e4fbde5a23d1ab8
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	4eafe1e64bd47a11dbfaf61a2dd50b6e
@@ -108,7 +108,6 @@ Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
 Patch35:	etc-dir.patch
 Patch36:	angle.patch
-Patch37:	ffmpeg.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -313,7 +312,6 @@ ln -s %{SOURCE7} .
 %patch32 -p1
 %patch35 -p1
 %patch36 -p1
-%patch37 -p1
 
 %{?with_dev:exit 0}
 
