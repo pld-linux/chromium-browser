@@ -412,6 +412,8 @@ flags="
 	-Dlinux_link_libspeechd=1 -Dlibspeechd_h_prefix=speech-dispatcher/ \
 	-Duse_allocator=%{!?with_tcmalloc:none}%{?with_tcmalloc:tcmalloc} \
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
+	-Dclang=0 \
+	-Dhost_clang=0 \
 	-Dlinux_use_bundled_binutils=0 \
 	-Dlinux_use_bundled_gold=0 \
 	-Dlinux_use_gold_flags=0 \
