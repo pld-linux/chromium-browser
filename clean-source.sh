@@ -46,7 +46,7 @@ remove_nonessential_dirs() {
 	ash/resources/default_100_percent/cros_ \
 	ash/resources/default_200_percent/cros_ \
 	ash/shell/cocoa \
-	ash/system/chromeos \
+	ash/system/chromeos_ \
 	base/android \
 	base/chromeos \
 	base/ios \
@@ -72,7 +72,7 @@ remove_nonessential_dirs() {
 	chrome/browser/chromeos/cros \
 	chrome/browser/extensions/docs \
 	chrome/browser/history/android \
-	chrome/browser/mac \
+	chrome/browser/mac_ \
 	chrome/browser/resources/about_welcome_android \
 	chrome/browser/resources/chromeos_ \
 	chrome/browser/resources/ntp_android \
@@ -158,7 +158,7 @@ remove_nonessential_dirs() {
 	sdch/ios \
 	sdch/mac \
 	skia/config/win \
-	sync/tools \
+	sync/tools_ \
 	tcmalloc/chromium/src/windows \
 	tcmalloc/vendor/src/windows \
 	third_party/WebKit/Source/JavaScriptCore/docs \
@@ -307,19 +307,19 @@ remove_nonessential_dirs() {
 	third_party/ffmpeg/chromium/config/Chromium/win \
 	third_party/ffmpeg/chromium/config/ChromiumOS/linux/arm \
 	third_party/ffmpeg/chromium/include/win \
-	third_party/ffmpeg/doc \
+	third_party/ffmpeg/doc_ \
 	third_party/ffmpeg/libavcodec/alpha \
 	third_party/ffmpeg/libavcodec/arm \
 	third_party/ffmpeg/libavcodec/avr32 \
 	third_party/ffmpeg/libavcodec/bfin \
-	third_party/ffmpeg/libavcodec/mips \
+	third_party/ffmpeg/libavcodec/mips_ \
 	third_party/ffmpeg/libavcodec/ppc \
 	third_party/ffmpeg/libavcodec/sh4 \
 	third_party/ffmpeg/libavcodec/sparc \
 	third_party/ffmpeg/libavresample/arm \
 	third_party/ffmpeg/libavutil/avr32 \
 	third_party/ffmpeg/libavutil/bfin \
-	third_party/ffmpeg/libavutil/mips \
+	third_party/ffmpeg/libavutil/mips_ \
 	third_party/ffmpeg/libavutil/ppc \
 	third_party/ffmpeg/libavutil/sh4 \
 	third_party/ffmpeg/libswresample/arm \
@@ -565,6 +565,9 @@ almost_strip_dirs() {
 # list based from archlinux PKGBUILD
 # https://aur.archlinux.org/packages/ch/chromium-dev/PKGBUILD
 clean_third_party() {
+
+	# NOTE: don't forget to sync remove_bundled_libraries() {
+
 	local dir
 	for dir in \
 		third_party/ashmem \
@@ -592,6 +595,7 @@ clean_third_party() {
 		'!' -path 'third_party/angle/enumerate_files.py' \
 		'!' -path 'third_party/angle/include/EGL/*' \
 		'!' -path 'third_party/angle/include/GLSLANG/*' \
+		'!' -path 'third_party/angle/include/*.h' \
 		'!' -path 'third_party/angle/src/*' \
 		'!' -path 'third_party/angle/src/common/*' \
 		'!' -path 'third_party/angle/src/compiler/*' \
@@ -604,6 +608,7 @@ clean_third_party() {
 		'!' -path 'third_party/cros_system_api/*' \
 		'!' -path 'third_party/dom_distiller_js/*' \
 		'!' -path 'third_party/ffmpeg/*' \
+		'!' -path 'third_party/fips181/*' \
 		'!' -path 'third_party/flot/*.js' \
 		'!' -path 'third_party/hunspell/*' \
 		'!' -path 'third_party/hyphen/*' \
@@ -636,8 +641,10 @@ clean_third_party() {
 		'!' -path 'third_party/mt19937ar/*' \
 		'!' -path 'third_party/npapi/*' \
 		'!' -path 'third_party/ots/*' \
+		'!' -path 'third_party/pdfium/*' \
 		'!' -path 'third_party/ply/*' \
 		'!' -path 'third_party/polymer/*' \
+		'!' -path 'third_party/polymer_legacy/*' \
 		'!' -path 'third_party/protobuf/*' \
 		'!' -path 'third_party/qcms/*' \
 		'!' -path 'third_party/re2/*' \
@@ -823,7 +830,7 @@ remove_tests() {
 	third_party/cacheinvalidation/src/google/cacheinvalidation/test \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing \
 	third_party/cacheinvalidation/src/java/com/google/ipc/invalidation/testing/android \
-	third_party/ffmpeg/tests \
+	third_party/ffmpeg/tests_ \
 	third_party/harfbuzz/tests \
 	third_party/hunspell/tests \
 	third_party/hyphen/tests \
@@ -947,6 +954,9 @@ remove_tests() {
 #	install -d testing/gtest/include
 #	ln -s /usr/include/gtest testing/gtest/include/gtest
 
+	# fast exit. as this requires fine-tuning
+	return
+
 	echo '> delete unittest files'
 	find . '(' \
 		-name '*_unittest*.*' -o \
@@ -970,6 +980,9 @@ remove_tests() {
 		'!' -path './chrome/browser/extensions/api/declarative/test_rules_registry.*' \
 		'!' -path './chrome/browser/extensions/api/test/test_api.*' \
 		'!' -path './chrome/browser/resources/gaia_auth/manifest_test.json' \
+		'!' -path './extensions/renderer/resources/test_custom_bindings.js' \
+		'!' -path './sync/internal_api/attachments/attachment_service_proxy_for_test.cc' \
+		'!' -path './net/base/registry_controlled_domains/effective_tld_names_unittest1.gperf' \
 		'!' -path './chrome/browser/resources/net_internals/*' \
 		'!' -path './chrome/browser/storage_monitor/test_media_transfer_protocol_manager_linux.*' \
 		'!' -path './chrome/browser/ui/webui/test_chrome_web_ui_controller_factory*' \
@@ -1028,6 +1041,8 @@ remove_bundled_libraries() {
 		third_party/adobe/flash/flapper_version.h \
 		third_party/jinja2 \
 		third_party/markupsafe/ \
+		third_party/ply \
+		third_party/fips181 \
 		'base/third_party/dmg_fp' \
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
@@ -1045,17 +1060,17 @@ remove_bundled_libraries() {
 		'net/third_party/nss' \
 		'third_party/WebKit' \
 		'third_party/angle' \
+		'third_party/angle/src/third_party/compiler' \
 		'third_party/brotli' \
 		'third_party/cacheinvalidation' \
-		'third_party/cld' \
+		'third_party/cld_2' \
 		'third_party/cros_system_api' \
 		'third_party/dom_distiller_js' \
+		'third_party/dom_distiller_js/package/proto_gen/third_party/dom_distiller_js' \
 		'third_party/ffmpeg' \
 		'third_party/flot' \
 		'third_party/hunspell' \
 		'third_party/iccjpeg' \
-		'third_party/icu/icu.isolate' \
-		'third_party/jinja2' \
 		'third_party/jstemplate' \
 		'third_party/khronos' \
 		'third_party/leveldatabase' \
@@ -1066,22 +1081,25 @@ remove_bundled_libraries() {
 		'third_party/libsrtp' \
 		'third_party/libusb' \
 		'third_party/libvpx' \
+		'third_party/libvpx/source/libvpx/third_party/x86inc' \
 		'third_party/libwebm' \
 		'third_party/libxml/chromium' \
 		'third_party/libyuv' \
 		'third_party/lss' \
 		'third_party/lzma_sdk' \
-		'third_party/markupsafe' \
 		'third_party/mesa' \
 		'third_party/modp_b64' \
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
 		'third_party/opus' \
 		'third_party/ots' \
-		'third_party/ply' \
+		'third_party/pdfium' \
+		'third_party/pdfium/third_party/logging.h' \
+		'third_party/pdfium/third_party/macros.h' \
+		'third_party/pdfium/third_party/numerics' \
+		'third_party/pdfium/third_party/template_util.h' \
 		'third_party/polymer' \
 		'third_party/protobuf' \
-		'third_party/pywebsocket' \
 		'third_party/qcms' \
 		'third_party/readability' \
 		'third_party/sfntly' \
@@ -1091,6 +1109,11 @@ remove_bundled_libraries() {
 		'third_party/tcmalloc' \
 		'third_party/tlslite' \
 		'third_party/trace-viewer' \
+		'third_party/trace-viewer/third_party/jszip' \
+		'third_party/trace-viewer/third_party/tvcm' \
+		'third_party/trace-viewer/third_party/tvcm/third_party/d3' \
+		'third_party/trace-viewer/third_party/tvcm/third_party/gl-matrix' \
+		'third_party/trace-viewer/third_party/tvcm/third_party/polymer' \
 		'third_party/undoview' \
 		'third_party/usrsctp' \
 		'third_party/webdriver' \
@@ -1100,7 +1123,9 @@ remove_bundled_libraries() {
 		'third_party/zlib/google' \
 		'third_party/zlib' \
 		'url/third_party/mozilla' \
+		'v8/src/third_party/kernel' \
 		'v8/src/third_party/valgrind' \
+		'v8/third_party/fdlibm' \
 		--do-print \
 		--do-remove
 }
@@ -1127,7 +1152,7 @@ strip_system_dirs \
 	third_party/libxslt \
 	third_party/mesa \
 	third_party/opus_ \
-	third_party/protobuf \
+	third_party/protobuf_ \
 	third_party/re2 \
 	third_party/snappy \
 	third_party/speex \
