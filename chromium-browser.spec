@@ -76,7 +76,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	be4d3ad6944e43132e4fbde5a23d1ab8
+# Source0-md5:	f2ec6a50864d8b2ddcda0baef50e9c33
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	4eafe1e64bd47a11dbfaf61a2dd50b6e
