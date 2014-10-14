@@ -45,6 +45,13 @@
 %undefine	with_system_mesa
 
 # unable build with debuginfo on 32bit build systems
+# /usr/bin/ld.gold: fatal error: chrome: mmap: failed to allocate 2994044872 bytes for output file: Cannot allocate memory
+%undefine	with_debuginfo
+%endif
+
+%ifarch %{x8664}
+# x86_64 systems fail with debugedit crashing
+# /usr/lib/rpm/bin/debugedit: canonicalization unexpectedly shrank by one character
 %undefine	with_debuginfo
 %endif
 
