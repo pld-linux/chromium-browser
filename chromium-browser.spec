@@ -43,6 +43,9 @@
 %ifarch %{ix86}
 # GLsizeiptr different size, track: http://bugs.gentoo.org/457130
 %undefine	with_system_mesa
+
+# unable build with debuginfo on 32bit build systems
+%undefine	with_debuginfo
 %endif
 
 # TODO
