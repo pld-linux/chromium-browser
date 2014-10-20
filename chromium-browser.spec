@@ -73,7 +73,7 @@
 
 %define		branch		38.0.2125
 %define		basever		101
-#define		patchver	132
+%define		patchver	104
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -89,7 +89,7 @@ Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{
 # Source0-md5:	f2ec6a50864d8b2ddcda0baef50e9c33
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	4eafe1e64bd47a11dbfaf61a2dd50b6e
+# Patch0-md5:	0d734cfd35874b4c25b1a762a648e9b6
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
@@ -382,7 +382,8 @@ fi
 if [ ! -d third_party/ffmpeg/build.%{target_arch}.linux ]; then
 	# Re-configure bundled ffmpeg
 	cd third_party/ffmpeg
-	chromium/scripts/build_ffmpeg.py linux %{target_arch}
+	chromium/scripts/build_ffmpeg.py linux %{target_arch} \
+		--branding Chromium
 	chromium/scripts/copy_config.sh
 	chromium/scripts/generate_gyp.py
 	cd -
