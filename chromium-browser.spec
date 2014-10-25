@@ -82,7 +82,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	1
+Release:	2
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -404,7 +404,7 @@ flags="
 	%{!?debug:-Dwerror= -Ddisable_fatal_linker_warnings=} \
 	%{!?debuginfo:-Dfastbuild=1 -Dremove_webcore_debug_symbols=1} \
 	%{?with_shared_libs:-Dlibrary=shared_library} \
-	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1} -Dproprietary_codecs=1 \
+	%{!?with_system_ffmpeg:-Dbuild_ffmpegsumo=1} \
 	-Dinclude_tests__=0 \
 %if %{with nacl}
 	-Dnaclsdk_mode=custom:/usr/x86_64-nacl \
