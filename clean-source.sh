@@ -85,7 +85,7 @@ remove_nonessential_dirs() {
 	chrome/browser/ui/webui/ntp/android \
 	chrome/browser/ui/webui/options/chromeos \
 	chrome/common/extensions/docs \
-	chrome/common/mac \
+	chrome/common/mac_ \
 	chrome/installer/mac \
 	chrome/installer/mac/third_party/xz/config/mac \
 	chrome/installer/tools \
@@ -606,6 +606,7 @@ clean_third_party() {
 		'!' -path 'third_party/cld/*' \
 		'!' -path 'third_party/cld_2/*' \
 		'!' -path 'third_party/cros_system_api/*' \
+		'!' -path 'third_party/cython/python_flags.py' \
 		'!' -path 'third_party/dom_distiller_js/*' \
 		'!' -path 'third_party/ffmpeg/*' \
 		'!' -path 'third_party/fips181/*' \
@@ -1065,6 +1066,7 @@ remove_bundled_libraries() {
 		'third_party/cacheinvalidation' \
 		'third_party/cld_2' \
 		'third_party/cros_system_api' \
+		'third_party/cython/python_flags.py' \
 		'third_party/dom_distiller_js' \
 		'third_party/dom_distiller_js/package/proto_gen/third_party/dom_distiller_js' \
 		'third_party/ffmpeg' \
@@ -1099,7 +1101,6 @@ remove_bundled_libraries() {
 		'third_party/pdfium/third_party/numerics' \
 		'third_party/pdfium/third_party/template_util.h' \
 		'third_party/polymer' \
-		'third_party/protobuf' \
 		'third_party/qcms' \
 		'third_party/readability' \
 		'third_party/sfntly' \

@@ -18,6 +18,7 @@
 %bcond_without	system_flac		# system flac
 %bcond_with	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
 %bcond_without	system_harfbuzz	# system harfbuzz
+%bcond_without	system_icu	# system icu
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -71,9 +72,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		38.0.2125
-%define		basever		101
-%define		patchver	122
+%define		branch		39.0.2171
+%define		basever		71
+#define		patchver	122
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -82,11 +83,11 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	3
+Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	f2ec6a50864d8b2ddcda0baef50e9c33
+# Source0-md5:	238cbf816f3d3c01a58894a32eb9995d
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	7c392cf685e1cd16dba424af2eb6f4f4
@@ -113,7 +114,6 @@ Patch24:	nacl-verbose.patch
 Patch25:	gnome3-volume-control.patch
 Patch26:	master-prefs-path.patch
 Patch28:	system-mesa.patch
-Patch30:	system-ply.patch
 Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
 Patch35:	etc-dir.patch
@@ -153,7 +153,7 @@ BuildRequires:	hicolor-icon-theme
 BuildRequires:	libevent-devel
 %{?with_system_libexif:BuildRequires:	libexif-devel >= 1:0.6.21}
 %{?with_keyring:BuildRequires:	libgnome-keyring-devel}
-BuildRequires:	libicu-devel >= 4.6
+%{?with_system_icu:BuildRequires:	libicu-devel >= 4.6}
 %{!?with_libjpegturbo:BuildRequires:	libjpeg-devel}
 %{?with_libjpegturbo:BuildRequires:	libjpeg-turbo-devel >= 1.2.0}
 %{?with_system_libmtp:BuildRequires:	libmtp-devel >= 1.1.3}
@@ -319,8 +319,7 @@ ln -s %{SOURCE7} .
 %{?with_nacl:%patch18 -p1}
 %patch24 -p1
 %patch26 -p2
-#%patch30 -p1
-#%patch31 -p0
+%patch31 -p0
 %patch32 -p1
 %patch35 -p1
 %patch36 -p1
@@ -443,6 +442,7 @@ flags="
 	%{gyp_with system_ffmpeg} -Dmedia_use_ffmpeg=1 \
 	%{gyp_with system_flac} \
 	%{gyp_with system_harfbuzz} \
+	%{gyp_with system_icu} %{?with_system_icu:-Dicu_use_data_file_flag=0} \
 	%{gyp_with system_jsoncpp} \
 	%{gyp_with system_libexif} \
 	%{gyp_with system_libmtp} \
@@ -464,7 +464,6 @@ flags="
 	%{gyp_with system_zlib} \
 	-Duse_system_bzip2=1 \
 	-Duse_system_expat=1 \
-	-Duse_system_icu=1 -Dicu_use_data_file_flag=0 \
 	-Duse_system_libevent=1 \
 	-Duse_system_libjpeg=1 \
 	-Duse_system_libpng=1 \
