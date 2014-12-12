@@ -180,6 +180,7 @@ BuildRequires:	pkgconfig
 %{?with_system_protobuf:BuildRequires:	protobuf-devel}
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	python
+BuildRequires:	python-BeautifulSoup
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
 BuildRequires:	python-jinja2 >= 2.7
 BuildRequires:	python-modules
