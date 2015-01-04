@@ -62,7 +62,7 @@ set -x
 
 	awk '/^#define/ && /(MAJOR|MINOR)_VERSION|BUILD_NUMBER|PATCH_LEVEL/ { printf("%s=%s\n", $2, $3) }' v8/src/version.cc | tee -a v8.sh
 
-	if [ "$CHANNEL" != "dev" ]; then
+	if [ "$CHANNEL" = "stable" ]; then
 		patch -p1 < $WORK_DIR/remove_bundled_libraries-stale.patch
 		sh -x $WORK_DIR/clean-source.sh emptydirs=1 v8=0 mesa=0 sqlite=0 ffmpeg=0
 		patch -p1 -R < $WORK_DIR/remove_bundled_libraries-stale.patch
