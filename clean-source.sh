@@ -131,6 +131,7 @@ remove_nonessential_dirs() {
 	native_client/src/trusted/desc/win \
 	native_client/src/trusted/nonnacl_util/win \
 	native_client/src/trusted/platform_qualify/win \
+	native_client/toolchain \
 	native_client/tools \
 	native_client/tools/trusted_cross_toolchains \
 	native_client_sdk \
@@ -353,6 +354,7 @@ remove_nonessential_dirs() {
 	third_party/nspr \
 	third_party/nss \
 	third_party/ocmock \
+	third_party/openssl \
 	third_party/openssl/config/android \
 	third_party/ots/tools \
 	third_party/pthread \
