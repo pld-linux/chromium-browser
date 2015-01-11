@@ -11,6 +11,7 @@ WORK_DIR=$(cd "$(dirname "$0")"; pwd)
 LOCKFILE=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.lock
 # Browse URL: http://gsdview.appspot.com/chromium-browser-official/
 OFFICIAL_URL=http://commondatastorage.googleapis.com/chromium-browser-official
+ALT_URL=https://github.com/zcbenz/chromium-source-tarball/releases/download
 DIST_DIR=$HOME/public_html/chromium-browser/src/$CHANNEL
 
 # skip package build if interactive
@@ -46,7 +47,9 @@ set -x
 	(
 	cd "$TMP_DIR"
 	srctarball=$PACKAGE_NAME-$VERSION.tar.xz
-	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.xz"
+	wget -nc -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.xz" || :
+	wget -nc -nv -O $srctarball "$ALT_URL/$VERSION/chromium-$VERSION.tar.xz" || :
+	test -f $srctarball
 
 	# repackage cleaned up tarball
 	test -d $PACKAGE_NAME-$VERSION || {
