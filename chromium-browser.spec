@@ -72,9 +72,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		39.0.2171
-%define		basever		71
-%define		patchver	95
+%define		branch		40.0.2214
+%define		basever		69
+#define		patchver	95
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
