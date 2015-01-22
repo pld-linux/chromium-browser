@@ -11,6 +11,7 @@ WORK_DIR=$(cd "$(dirname "$0")"; pwd)
 LOCKFILE=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.lock
 # Browse URL: http://gsdview.appspot.com/chromium-browser-official/
 OFFICIAL_URL=http://commondatastorage.googleapis.com/chromium-browser-official
+ALT_URL=https://github.com/zcbenz/chromium-source-tarball/releases/download
 DIST_DIR=$HOME/public_html/chromium-browser/src/$CHANNEL
 
 # skip package build if interactive
@@ -46,7 +47,9 @@ set -x
 	(
 	cd "$TMP_DIR"
 	srctarball=$PACKAGE_NAME-$VERSION.tar.xz
-	wget -c -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.xz"
+	wget -nc -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.xz" || :
+	wget -nc -nv -O $srctarball "$ALT_URL/$VERSION/chromium-$VERSION.tar.xz" || :
+	test -f $srctarball
 
 	# repackage cleaned up tarball
 	test -d $PACKAGE_NAME-$VERSION || {
@@ -62,7 +65,7 @@ set -x
 
 	awk '/^#define/ && /(MAJOR|MINOR)_VERSION|BUILD_NUMBER|PATCH_LEVEL/ { printf("%s=%s\n", $2, $3) }' v8/src/version.cc | tee -a v8.sh
 
-	if [ "$CHANNEL" != "dev" ]; then
+	if [ "$CHANNEL" = "stable" ]; then
 		patch -p1 < $WORK_DIR/remove_bundled_libraries-stale.patch
 		sh -x $WORK_DIR/clean-source.sh emptydirs=1 v8=0 mesa=0 sqlite=0 ffmpeg=0
 		patch -p1 -R < $WORK_DIR/remove_bundled_libraries-stale.patch
