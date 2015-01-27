@@ -28,7 +28,8 @@
 %bcond_with	system_mesa		# system Mesa
 %bcond_without	system_minizip	# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
-%bcond_without	system_protobuf	# system protobuf
+# protobuf broken: https://bugs.gentoo.org/show_bug.cgi?id=525560
+%bcond_with	system_protobuf	# system protobuf
 %bcond_without	system_re2		# system re2
 %bcond_without	system_snappy	# system snappy
 %bcond_without	system_speex	# system speex
