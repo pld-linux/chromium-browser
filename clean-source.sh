@@ -651,7 +651,6 @@ clean_third_party() {
 		'!' -path 'third_party/polymer/*' \
 		'!' -path 'third_party/polymer_legacy/*' \
 		'!' -path 'third_party/protobuf/*' \
-		'!' -path 'third_party/protobuf/*' \
 		'!' -path 'third_party/qcms/*' \
 		'!' -path 'third_party/re2/*' \
 		'!' -path 'third_party/readability/*' \
@@ -853,7 +852,7 @@ remove_tests() {
 	third_party/openssl/openssl/test \
 	third_party/ots/test \
 	third_party/protobuf/src/google/protobuf/testdata \
-	third_party/protobuf/src/google/protobuf/testing \
+	third_party/protobuf/src/google/protobuf/testing_ \
 	third_party/re2/re2/testing \
 	third_party/safe_browsing/testing \
 	third_party/sfntly/cpp/src/test \
@@ -1164,7 +1163,7 @@ strip_system_dirs \
 	third_party/libxslt \
 	third_party/mesa \
 	third_party/opus_ \
-	third_party/protobuf_ \
+	third_party/protobuf \
 	third_party/re2 \
 	third_party/snappy \
 	third_party/speex \

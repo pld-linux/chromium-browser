@@ -91,7 +91,7 @@ Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{
 # Source0-md5:	662f134029f2d6484873ec3c93a8e049
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	d810c6bc3a40bbab1f04c8af397d93a1
+# Patch0-md5:	6ed1a30145827a1ce9f306a7ebdf1f0f
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
