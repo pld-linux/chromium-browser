@@ -84,7 +84,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	1
+Release:	2
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -102,6 +102,7 @@ Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
 Patch2:		enable-video-decode-accel.patch
+# https://github.com/Kelvin-Ng/Kelvin-Gentoo-Overlay/tree/master/www-client/chromium/files
 Patch4:		path-libpdf.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
@@ -120,6 +121,7 @@ Patch32:	remove_bundled_libraries-stale.patch
 Patch35:	etc-dir.patch
 Patch36:	angle.patch
 Patch37:	%{name}-build.patch
+Patch38:	vaapi_include.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -310,7 +312,8 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_datadir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} .
 
-#%patch2 -p1 NOT COMPILING
+%patch2 -p1 
+#NOT COMPILING
 %patch4 -p3
 %patch7 -p1
 %patch15 -p2
@@ -326,6 +329,7 @@ ln -s %{SOURCE7} .
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
+%patch38 -p1
 
 %{?with_dev:exit 0}
 
