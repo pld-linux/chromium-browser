@@ -1,0 +1,45 @@
+--- chromium-browser-40.0.2214.94_orig/content/common/gpu/media/va_stub_header.fragment	2015-01-21 21:28:16.000000000 +0100
++++ chromium-browser-40.0.2214.94/content/common/gpu/media/va_stub_header.fragment	2015-02-11 21:46:35.317369088 +0100
+@@ -3,7 +3,7 @@
+ 
+ extern "C" {
+ 
+-#include "third_party/libva/va/va.h"
+-#include "third_party/libva/va/va_x11.h"
++#include <va/va.h>
++#include <va/va_x11.h>
+ 
+ }
+--- chromium-browser-40.0.2214.94_orig/content/common/gpu/media/va_surface.h	2015-01-21 21:28:16.000000000 +0100
++++ chromium-browser-40.0.2214.94/content/common/gpu/media/va_surface.h	2015-02-11 21:46:35.310702421 +0100
+@@ -8,7 +8,7 @@
+ #ifndef CONTENT_COMMON_GPU_MEDIA_VA_SURFACE_H_
+ #define CONTENT_COMMON_GPU_MEDIA_VA_SURFACE_H_
+ 
+-#include "third_party/libva/va/va.h"
++#include <va/va.h>
+ 
+ namespace content {
+ 
+--- chromium-browser-40.0.2214.94_orig/content/common/gpu/media/vaapi_wrapper.h	2015-01-21 21:28:16.000000000 +0100
++++ chromium-browser-40.0.2214.94/content/common/gpu/media/vaapi_wrapper.h	2015-02-11 21:46:35.317369088 +0100
+@@ -20,7 +20,7 @@
+ #include "content/common/gpu/media/va_surface.h"
+ #include "media/base/video_decoder_config.h"
+ #include "media/base/video_frame.h"
+-#include "third_party/libva/va/va_x11.h"
++#include <va/va_x11.h>
+ #include "ui/gfx/size.h"
+ 
+ namespace content {
+--- chromium-browser-40.0.2214.94_orig/content/common/gpu/media/vaapi_video_encode_accelerator.cc	2015-01-21 21:28:16.000000000 +0100
++++ chromium-browser-40.0.2214.94/content/common/gpu/media/vaapi_video_encode_accelerator.cc	2015-02-11 21:46:35.327369087 +0100
+@@ -13,7 +13,7 @@
+ #include "content/common/gpu/media/h264_dpb.h"
+ #include "content/public/common/content_switches.h"
+ #include "media/base/bind_to_current_loop.h"
+-#include "third_party/libva/va/va_enc_h264.h"
++#include <va/va_enc_h264.h>
+ 
+ #define DVLOGF(level) DVLOG(level) << __FUNCTION__ << "(): "
+ 
