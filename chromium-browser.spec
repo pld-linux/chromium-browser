@@ -101,8 +101,8 @@ Source6:	update-source.sh
 Source7:	clean-source.sh
 Source8:	get-source.sh
 Source9:	master_preferences.json
-Patch2:		enable-video-decode-accel.patch
 # https://github.com/Kelvin-Ng/Kelvin-Gentoo-Overlay/tree/master/www-client/chromium/files
+Patch2:		enable-video-decode-accel.patch
 Patch4:		path-libpdf.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
@@ -313,7 +313,6 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 ln -s %{SOURCE7} .
 
 %patch2 -p1 
-#NOT COMPILING
 %patch4 -p3
 %patch7 -p1
 %patch15 -p2
