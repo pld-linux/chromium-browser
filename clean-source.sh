@@ -8,6 +8,7 @@ export LC_ALL=C
 # "v8=0" means "do not remove v8"
 eval "$@"
 
+# {{{ remove nonessential dirs
 # Strip tarball from some big directories not needed on the linux platform
 # https://code.google.com/p/chromium/wiki/LinuxPackaging
 # initial list from src/tools/export_tarball/export_tarball.py
@@ -526,7 +527,8 @@ remove_nonessential_dirs() {
 		')' \
 	-print -delete
 }
-
+# }}}
+# {{{ almost_strip_dirs
 # There are directories we want to strip, but that are unnecessarily required by the build-system
 # So we drop everything but the gyp/gypi files
 almost_strip_dirs() {
@@ -562,8 +564,8 @@ almost_strip_dirs() {
 		'!' -path 'tools/zip2msi.py' \
 		-print -delete
 }
-
-# clean third party
+# }}}
+# {{{ clean third party
 # list based from archlinux PKGBUILD
 # https://aur.archlinux.org/packages/ch/chromium-dev/PKGBUILD
 clean_third_party() {
@@ -677,11 +679,13 @@ clean_third_party() {
 		'!' -path 'third_party/libvpx/*' \
 		'!' -path 'third_party/markupsafe/*' \
 		'!' -path 'third_party/opus/*' \
+		'!' -path 'third_party/libudev/*' \
 		-print -delete
 
 	rm -vf third_party/expat/files/lib/expat.h
 }
-
+# }}}
+# {{{ remove_bin_only
 # parts based on ubuntu debian/rules
 # http://bazaar.launchpad.net/~chromium-team/chromium-browser/chromium-browser.head/view/head:/debian/rules
 remove_bin_only() {
@@ -698,7 +702,8 @@ remove_bin_only() {
 		-name \*.dylib \
 	\) -exec rm -fv {} \;
 }
-
+# }}}
+# {{{ strip_system_dirs
 # removes dir, if the bcond is not turned off
 strip_system_dirs() {
 	local dir lib bcond args
@@ -719,7 +724,8 @@ strip_system_dirs() {
 	done
 	set +f
 }
-
+# }}}
+# {{{ remove_tests
 # remove test data and files
 # some scanned with find -name tests -o -name test -o -name test_data -o name testdata
 # and find -iname *test*
@@ -1032,7 +1038,8 @@ remove_tests() {
 	')' \
 		-print -delete || :
 }
-
+# }}}
+# {{{ remove_bundled_libraries
 # Remove most bundled libraries. Some are still needed.
 # Sync this with gentoo/chromium-*.ebuild
 # NOTE: argument list to script specifies paths to preserve
@@ -1088,10 +1095,10 @@ remove_bundled_libraries() {
 		'third_party/libjingle' \
 		'third_party/libphonenumber' \
 		'third_party/libsrtp' \
+		'third_party/libudev' \
 		'third_party/libusb' \
 		'third_party/libvpx' \
 		'third_party/libvpx/source/libvpx/third_party/x86inc' \
-		'third_party/libwebm' \
 		'third_party/libxml/chromium' \
 		'third_party/libXNVCtrl' \
 		'third_party/libyuv' \
@@ -1105,6 +1112,8 @@ remove_bundled_libraries() {
 		'third_party/opus' \
 		'third_party/ots' \
 		'third_party/pdfium' \
+		'third_party/pdfium/third_party/bigint' \
+		'third_party/pdfium/third_party/freetype' \
 		'third_party/pdfium/third_party/logging.h' \
 		'third_party/pdfium/third_party/macros.h' \
 		'third_party/pdfium/third_party/numerics' \
@@ -1140,6 +1149,7 @@ remove_bundled_libraries() {
 		--do-print \
 		--do-remove
 }
+# }}}
 
 remove_bundled_libraries > REMOVED-bundled_libraries.txt
 
@@ -1206,3 +1216,5 @@ fi
 for a in REMOVED-*.txt; do
 	cat $a
 done
+
+# vim:fdm=marker

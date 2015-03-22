@@ -73,9 +73,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		40.0.2214
-%define		basever		91
-%define		patchver	115
+%define		branch		41.0.2272
+%define		basever		101
+#define		patchver	115
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -84,11 +84,11 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	2
+Release:	0.1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	662f134029f2d6484873ec3c93a8e049
+# Source0-md5:	a493cd513f2724eb63d6721707e11c4a
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	220ea8a869cd83b310dff7d227ed6280
@@ -312,7 +312,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_datadir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} .
 
-%patch2 -p1 
+#%patch2 -p1 CHECK
 %patch4 -p3
 %patch7 -p1
 %patch15 -p2
@@ -328,7 +328,7 @@ ln -s %{SOURCE7} .
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
+#%patch38 -p1 CHECK
 
 %{?with_dev:exit 0}
 
