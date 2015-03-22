@@ -84,7 +84,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	0.1
+Release:	0.2
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -538,7 +538,7 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 	}
 ' $RPM_BUILD_ROOT%{_bindir}/%{name}
 cp -a locales resources $RPM_BUILD_ROOT%{_datadir}/%{name}
-cp -p *.pak $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -p *.pak *.bin $RPM_BUILD_ROOT%{_libdir}/%{name}
 ln -s %{_datadir}/%{name}/locales $RPM_BUILD_ROOT%{_libdir}/%{name}/locales
 ln -s %{_datadir}/%{name}/resources $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
@@ -632,6 +632,8 @@ fi
 %{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/keyboard_resources.pak
 %{_libdir}/%{name}/resources.pak
+%{_libdir}/%{name}/natives_blob.bin
+%{_libdir}/%{name}/snapshot_blob.bin
 %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/resources
 
