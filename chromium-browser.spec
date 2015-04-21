@@ -73,9 +73,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		41.0.2272
-%define		basever		101
-%define		patchver	118
+%define		branch		42.0.2311
+%define		basever		82
+#define		patchver	118
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -84,11 +84,11 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	1
+Release:	0.1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	a493cd513f2724eb63d6721707e11c4a
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
+# Source0-md5:	7bdbf015d663e082f5bbe4cf24907049
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	fc9cd6fd3392142db2ada6b98b89fa80
@@ -103,7 +103,6 @@ Source8:	get-source.sh
 Source9:	master_preferences.json
 # https://github.com/Kelvin-Ng/Kelvin-Gentoo-Overlay/tree/master/www-client/chromium/files
 Patch2:		enable-video-decode-accel.patch
-Patch4:		path-libpdf.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
@@ -313,7 +312,6 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 ln -s %{SOURCE7} .
 
 #%patch2 -p1 CHECK
-%patch4 -p3
 %patch7 -p1
 %patch15 -p2
 %{!?with_libjpegturbo:%patch11 -p0}
