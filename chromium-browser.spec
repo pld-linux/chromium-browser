@@ -545,7 +545,6 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
 %if %{without system_ffmpeg}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
-install -p libpdf.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/master_preferences
 
@@ -634,9 +633,6 @@ fi
 %{_libdir}/%{name}/snapshot_blob.bin
 %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/resources
-
-# conflicts with browser-plugin-chrome-pdf?
-%attr(755,root,root) %{_libdir}/%{name}/libpdf.so
 
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/locales
