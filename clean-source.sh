@@ -1039,6 +1039,7 @@ remove_tests() {
 		-print -delete || :
 }
 # }}}
+
 # {{{ remove_bundled_libraries
 # Remove most bundled libraries. Some are still needed.
 # Sync this with gentoo/chromium-*.ebuild
@@ -1071,6 +1072,7 @@ remove_bundled_libraries() {
 		'net/third_party/mozilla_security_manager' \
 		'net/third_party/nss' \
 		'third_party/WebKit' \
+		'third_party/analytics' \
 		'third_party/angle' \
 		'third_party/angle/src/third_party/compiler' \
 		'third_party/brotli' \
@@ -1106,18 +1108,16 @@ remove_bundled_libraries() {
 		'third_party/lzma_sdk' \
 		'third_party/mesa' \
 		'third_party/modp_b64' \
+		'third_party/mojo' \
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
 		'third_party/openmax_dl' \
 		'third_party/opus' \
 		'third_party/ots' \
 		'third_party/pdfium' \
+		'third_party/pdfium/third_party/base' \
 		'third_party/pdfium/third_party/bigint' \
 		'third_party/pdfium/third_party/freetype' \
-		'third_party/pdfium/third_party/logging.h' \
-		'third_party/pdfium/third_party/macros.h' \
-		'third_party/pdfium/third_party/numerics' \
-		'third_party/pdfium/third_party/template_util.h' \
 		'third_party/polymer' \
 		'third_party/protobuf' \
 		'third_party/qcms' \
@@ -1127,7 +1127,6 @@ remove_bundled_libraries() {
 		'third_party/smhasher' \
 		'third_party/sqlite' \
 		'third_party/tcmalloc' \
-		'third_party/tlslite' \
 		'third_party/trace-viewer' \
 		'third_party/trace-viewer/third_party/components/polymer' \
 		'third_party/trace-viewer/third_party/d3' \
@@ -1137,6 +1136,7 @@ remove_bundled_libraries() {
 		'third_party/trace-viewer/third_party/tvcm/third_party/beautifulsoup/polymer_soup.py' \
 		'third_party/undoview' \
 		'third_party/usrsctp' \
+		'third_party/web-animations-js' \
 		'third_party/webdriver' \
 		'third_party/webrtc' \
 		'third_party/widevine' \
