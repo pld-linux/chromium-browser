@@ -121,6 +121,7 @@ Patch35:	etc-dir.patch
 Patch36:	angle.patch
 Patch37:	%{name}-build.patch
 Patch38:	vaapi_include.patch
+Patch39:	libsecret.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -160,6 +161,7 @@ BuildRequires:	libevent-devel
 %{?with_libjpegturbo:BuildRequires:	libjpeg-turbo-devel >= 1.2.0}
 %{?with_system_libmtp:BuildRequires:	libmtp-devel >= 1.1.3}
 BuildRequires:	libpng-devel
+BuildRequires:	libsecret-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
@@ -327,6 +329,7 @@ ln -s %{SOURCE7} .
 %patch36 -p1
 %patch37 -p1
 #%patch38 -p1 CHECK
+%patch38 -p1
 
 %{?with_dev:exit 0}
 
