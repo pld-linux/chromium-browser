@@ -596,10 +596,11 @@ clean_third_party() {
 		'!' -iname '*.isolate' \
 		'!' -path 'third_party/WebKit/*' \
 		'!' -path 'third_party/adobe/flash/*' \
+		'!' -path 'third_party/analytics/*' \
 		'!' -path 'third_party/angle/enumerate_files.py' \
+		'!' -path 'third_party/angle/include/*.h' \
 		'!' -path 'third_party/angle/include/EGL/*' \
 		'!' -path 'third_party/angle/include/GLSLANG/*' \
-		'!' -path 'third_party/angle/include/*.h' \
 		'!' -path 'third_party/angle/src/*' \
 		'!' -path 'third_party/angle/src/common/*' \
 		'!' -path 'third_party/angle/src/compiler/*' \
@@ -644,6 +645,7 @@ clean_third_party() {
 		'!' -path 'third_party/mesa/src/include/GL/glxext.h' \
 		'!' -path 'third_party/mesa/src/include/GL/osmesa.h' \
 		'!' -path 'third_party/modp_b64/*' \
+		'!' -path 'third_party/mojo/*' \
 		'!' -path 'third_party/mt19937ar/*' \
 		'!' -path 'third_party/npapi/*' \
 		'!' -path 'third_party/openmax_dl/*' \
@@ -667,6 +669,7 @@ clean_third_party() {
 		'!' -path 'third_party/trace-viewer/*' \
 		'!' -path 'third_party/undoview/*' \
 		'!' -path 'third_party/usrsctp/*' \
+		'!' -path 'third_party/web-animations-js/*' \
 		'!' -path 'third_party/v8-i18n/*' \
 		'!' -path 'third_party/v8/*' \
 		'!' -path 'third_party/webrtc/*' \
