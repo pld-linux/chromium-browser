@@ -329,7 +329,7 @@ ln -s %{SOURCE7} .
 %patch36 -p1
 %patch37 -p1
 #%patch38 -p1 CHECK
-%patch38 -p1
+%patch39 -p1
 
 %{?with_dev:exit 0}
 
