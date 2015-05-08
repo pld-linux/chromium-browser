@@ -49,7 +49,7 @@ remove_nonessential_dirs() {
 	ash/shell/cocoa \
 	ash/system/chromeos_ \
 	base/android \
-	base/chromeos \
+	base/chromeos_ \
 	base/ios \
 	breakpad/src/client/mac \
 	breakpad/src/common/android \
@@ -742,7 +742,7 @@ remove_tests() {
 	breakpad/src/client/windows/tests \
 	breakpad/src/common/linux/tests \
 	breakpad/src/common/tests \
-	cc/test \
+	cc/test_ \
 	chrome/browser/chromeos/bluetooth/test \
 	chrome/browser/component_updater/test \
 	chrome/browser/extensions/api/test_ \
