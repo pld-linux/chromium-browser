@@ -49,7 +49,7 @@ remove_nonessential_dirs() {
 	ash/shell/cocoa \
 	ash/system/chromeos_ \
 	base/android \
-	base/chromeos \
+	base/chromeos_ \
 	base/ios \
 	breakpad/src/client/mac \
 	breakpad/src/common/android \
@@ -596,10 +596,11 @@ clean_third_party() {
 		'!' -iname '*.isolate' \
 		'!' -path 'third_party/WebKit/*' \
 		'!' -path 'third_party/adobe/flash/*' \
+		'!' -path 'third_party/analytics/*' \
 		'!' -path 'third_party/angle/enumerate_files.py' \
+		'!' -path 'third_party/angle/include/*.h' \
 		'!' -path 'third_party/angle/include/EGL/*' \
 		'!' -path 'third_party/angle/include/GLSLANG/*' \
-		'!' -path 'third_party/angle/include/*.h' \
 		'!' -path 'third_party/angle/src/*' \
 		'!' -path 'third_party/angle/src/common/*' \
 		'!' -path 'third_party/angle/src/compiler/*' \
@@ -644,6 +645,7 @@ clean_third_party() {
 		'!' -path 'third_party/mesa/src/include/GL/glxext.h' \
 		'!' -path 'third_party/mesa/src/include/GL/osmesa.h' \
 		'!' -path 'third_party/modp_b64/*' \
+		'!' -path 'third_party/mojo/*' \
 		'!' -path 'third_party/mt19937ar/*' \
 		'!' -path 'third_party/npapi/*' \
 		'!' -path 'third_party/openmax_dl/*' \
@@ -667,6 +669,7 @@ clean_third_party() {
 		'!' -path 'third_party/trace-viewer/*' \
 		'!' -path 'third_party/undoview/*' \
 		'!' -path 'third_party/usrsctp/*' \
+		'!' -path 'third_party/web-animations-js/*' \
 		'!' -path 'third_party/v8-i18n/*' \
 		'!' -path 'third_party/v8/*' \
 		'!' -path 'third_party/webrtc/*' \
@@ -739,7 +742,7 @@ remove_tests() {
 	breakpad/src/client/windows/tests \
 	breakpad/src/common/linux/tests \
 	breakpad/src/common/tests \
-	cc/test \
+	cc/test_ \
 	chrome/browser/chromeos/bluetooth/test \
 	chrome/browser/component_updater/test \
 	chrome/browser/extensions/api/test_ \
@@ -1039,6 +1042,7 @@ remove_tests() {
 		-print -delete || :
 }
 # }}}
+
 # {{{ remove_bundled_libraries
 # Remove most bundled libraries. Some are still needed.
 # Sync this with gentoo/chromium-*.ebuild
@@ -1071,6 +1075,7 @@ remove_bundled_libraries() {
 		'net/third_party/mozilla_security_manager' \
 		'net/third_party/nss' \
 		'third_party/WebKit' \
+		'third_party/analytics' \
 		'third_party/angle' \
 		'third_party/angle/src/third_party/compiler' \
 		'third_party/brotli' \
@@ -1106,18 +1111,16 @@ remove_bundled_libraries() {
 		'third_party/lzma_sdk' \
 		'third_party/mesa' \
 		'third_party/modp_b64' \
+		'third_party/mojo' \
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
 		'third_party/openmax_dl' \
 		'third_party/opus' \
 		'third_party/ots' \
 		'third_party/pdfium' \
+		'third_party/pdfium/third_party/base' \
 		'third_party/pdfium/third_party/bigint' \
 		'third_party/pdfium/third_party/freetype' \
-		'third_party/pdfium/third_party/logging.h' \
-		'third_party/pdfium/third_party/macros.h' \
-		'third_party/pdfium/third_party/numerics' \
-		'third_party/pdfium/third_party/template_util.h' \
 		'third_party/polymer' \
 		'third_party/protobuf' \
 		'third_party/qcms' \
@@ -1127,7 +1130,6 @@ remove_bundled_libraries() {
 		'third_party/smhasher' \
 		'third_party/sqlite' \
 		'third_party/tcmalloc' \
-		'third_party/tlslite' \
 		'third_party/trace-viewer' \
 		'third_party/trace-viewer/third_party/components/polymer' \
 		'third_party/trace-viewer/third_party/d3' \
@@ -1137,6 +1139,7 @@ remove_bundled_libraries() {
 		'third_party/trace-viewer/third_party/tvcm/third_party/beautifulsoup/polymer_soup.py' \
 		'third_party/undoview' \
 		'third_party/usrsctp' \
+		'third_party/web-animations-js' \
 		'third_party/webdriver' \
 		'third_party/webrtc' \
 		'third_party/widevine' \

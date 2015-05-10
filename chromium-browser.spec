@@ -73,9 +73,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		41.0.2272
-%define		basever		101
-%define		patchver	118
+%define		branch		42.0.2311
+%define		basever		135
+#define		patchver	118
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -88,7 +88,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	a493cd513f2724eb63d6721707e11c4a
+# Source0-md5:	817a2db7a43928ed2d0c60460c13f4b1
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	fc9cd6fd3392142db2ada6b98b89fa80
@@ -103,7 +103,6 @@ Source8:	get-source.sh
 Source9:	master_preferences.json
 # https://github.com/Kelvin-Ng/Kelvin-Gentoo-Overlay/tree/master/www-client/chromium/files
 Patch2:		enable-video-decode-accel.patch
-Patch4:		path-libpdf.patch
 Patch7:		dlopen_sonamed_gl.patch
 Patch8:		chromium_useragent.patch.in
 # https://bugs.gentoo.org/show_bug.cgi?id=393471
@@ -122,6 +121,7 @@ Patch35:	etc-dir.patch
 Patch36:	angle.patch
 Patch37:	%{name}-build.patch
 Patch38:	vaapi_include.patch
+Patch39:	libsecret.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -161,6 +161,7 @@ BuildRequires:	libevent-devel
 %{?with_libjpegturbo:BuildRequires:	libjpeg-turbo-devel >= 1.2.0}
 %{?with_system_libmtp:BuildRequires:	libmtp-devel >= 1.1.3}
 BuildRequires:	libpng-devel
+BuildRequires:	libsecret-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
@@ -313,7 +314,6 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 ln -s %{SOURCE7} .
 
 #%patch2 -p1 CHECK
-%patch4 -p3
 %patch7 -p1
 %patch15 -p2
 %{!?with_libjpegturbo:%patch11 -p0}
@@ -329,6 +329,7 @@ ln -s %{SOURCE7} .
 %patch36 -p1
 %patch37 -p1
 #%patch38 -p1 CHECK
+%patch39 -p1
 
 %{?with_dev:exit 0}
 
@@ -547,7 +548,6 @@ install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
 %if %{without system_ffmpeg}
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
-install -p libpdf.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
 cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/master_preferences
 
@@ -636,9 +636,6 @@ fi
 %{_libdir}/%{name}/snapshot_blob.bin
 %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/resources
-
-# conflicts with browser-plugin-chrome-pdf?
-%attr(755,root,root) %{_libdir}/%{name}/libpdf.so
 
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/locales
