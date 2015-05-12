@@ -165,7 +165,7 @@ BuildRequires:	libsecret-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
-%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.3.0}
+%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.4.0}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.4.0}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
@@ -216,7 +216,7 @@ Requires:	fonts-Type1-urw
 Requires:	hicolor-icon-theme
 Requires:	libevent >= 2.0.21
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
-%{?with_system_libvpx:Requires:	libvpx >= 1.3.0}
+%{?with_system_libvpx:Requires:	libvpx >= 1.4.0}
 Requires:	lsb-release
 %{?with_system_re2:Requires:	re2 >= 20130115-2}
 %{?with_system_protobuf:Requires:	protobuf-libs >= 2.5.0-2}
