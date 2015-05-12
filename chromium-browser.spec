@@ -122,6 +122,7 @@ Patch36:	angle.patch
 Patch37:	%{name}-build.patch
 Patch38:	vaapi_include.patch
 Patch39:	libsecret.patch
+Patch40:	system-libvpx.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -330,6 +331,7 @@ ln -s %{SOURCE7} .
 %patch37 -p1
 #%patch38 -p1 CHECK
 %patch39 -p1
+%patch40 -p0
 
 %{?with_dev:exit 0}
 
@@ -402,6 +404,7 @@ third_party/libaddressinput/chromium/tools/update-strings.py
 flags="
 	-Dtarget_arch=%{target_arch} \
 	-Dpython_arch=%{target_arch} \
+	-Dproprietary_codecs=1 \
 	-Dffmpeg_branding=Chromium \
 	-Dsystem_libdir=%{_lib} \
 	-Dpython_ver=%{py_ver} \
