@@ -486,7 +486,7 @@ remove_nonessential_dirs() {
 		'!' -path 'chrome/browser/chromeos/settings/device_settings_service.h' \
 		'!' -path 'chrome/browser/chromeos/system_logs/*.h' \
 		'!' -path 'chrome/tools/build/generate_policy_source.py' \
-		'!' -path 'chrome/tools/build/linux/sed.sh' \
+		'!' -path 'chrome/tools/build/linux/sed.py' \
 		'!' -path 'chrome/tools/build/make_version_cc.py' \
 		'!' -path 'chrome/tools/build/repack_locales.py' \
 		'!' -path 'chrome/tools/build/version.py' \
@@ -1084,7 +1084,7 @@ remove_bundled_libraries() {
 		'third_party/cros_system_api' \
 		'third_party/cython/python_flags.py' \
 		'third_party/dom_distiller_js' \
-		'third_party/dom_distiller_js/package/proto_gen/third_party/dom_distiller_js' \
+		'third_party/dom_distiller_js/dist/proto_gen/third_party/dom_distiller_js' \
 		'third_party/ffmpeg' \
 		'third_party/fips181' \
 		'third_party/flot' \
