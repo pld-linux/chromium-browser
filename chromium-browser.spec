@@ -73,8 +73,8 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		42.0.2311
-%define		basever		135
+%define		branch		43.0.2357
+%define		basever		65
 #define		patchver	118
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -88,7 +88,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	817a2db7a43928ed2d0c60460c13f4b1
+# Source0-md5:	4aa590c1965817cfb693df7f8404e0b6
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	fc9cd6fd3392142db2ada6b98b89fa80
@@ -122,6 +122,7 @@ Patch36:	angle.patch
 Patch37:	%{name}-build.patch
 Patch38:	vaapi_include.patch
 Patch39:	libsecret.patch
+Patch40:	system-libvpx.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -165,7 +166,7 @@ BuildRequires:	libsecret-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
-%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.3.0}
+%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.4.0}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.4.0}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
@@ -216,7 +217,7 @@ Requires:	fonts-Type1-urw
 Requires:	hicolor-icon-theme
 Requires:	libevent >= 2.0.21
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
-%{?with_system_libvpx:Requires:	libvpx >= 1.3.0}
+%{?with_system_libvpx:Requires:	libvpx >= 1.4.0}
 Requires:	lsb-release
 %{?with_system_re2:Requires:	re2 >= 20130115-2}
 %{?with_system_protobuf:Requires:	protobuf-libs >= 2.5.0-2}
@@ -330,6 +331,7 @@ ln -s %{SOURCE7} .
 %patch37 -p1
 #%patch38 -p1 CHECK
 %patch39 -p1
+%patch40 -p0
 
 %{?with_dev:exit 0}
 
@@ -402,6 +404,7 @@ third_party/libaddressinput/chromium/tools/update-strings.py
 flags="
 	-Dtarget_arch=%{target_arch} \
 	-Dpython_arch=%{target_arch} \
+	-Dproprietary_codecs=1 \
 	-Dffmpeg_branding=Chromium \
 	-Dsystem_libdir=%{_lib} \
 	-Dpython_ver=%{py_ver} \
