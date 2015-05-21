@@ -74,7 +74,7 @@
 # - to look for new tarball, use update-source.sh script
 
 %define		branch		43.0.2357
-%define		basever		52
+%define		basever		65
 #define		patchver	118
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -87,8 +87,8 @@ Version:	%{branch}.%{basever}
 Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
-# Source0-md5:	9028fc1780a301a5c4f7a0aba6872a2a
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
+# Source0-md5:	4aa590c1965817cfb693df7f8404e0b6
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	fc9cd6fd3392142db2ada6b98b89fa80
