@@ -618,6 +618,7 @@ clean_third_party() {
 		'!' -path 'third_party/flot/*.js' \
 		'!' -path 'third_party/google_input_tools/*' \
 		'!' -path 'third_party/hunspell/*' \
+		'!' -path 'third_party/hunspell_new/*' \
 		'!' -path 'third_party/hyphen/*' \
 		'!' -path 'third_party/iccjpeg/*' \
 		'!' -path 'third_party/icu/*' \
