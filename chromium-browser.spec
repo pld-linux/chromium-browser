@@ -18,7 +18,7 @@
 %bcond_without	system_flac		# system flac
 %bcond_with	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
 %bcond_without	system_harfbuzz	# system harfbuzz
-%bcond_without	system_icu	# system icu
+%bcond_with	system_icu	# system icu, disabled: http://bugs.icu-project.org/trac/ticket/11358)
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -122,7 +122,6 @@ Patch36:	angle.patch
 Patch37:	%{name}-build.patch
 Patch38:	vaapi_include.patch
 Patch39:	libsecret.patch
-Patch40:	system-libvpx.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -332,7 +331,6 @@ ln -s %{SOURCE7} .
 %patch37 -p1
 #%patch38 -p1 CHECK
 %patch39 -p1
-%patch40 -p0
 
 %{?with_dev:exit 0}
 
