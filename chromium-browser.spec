@@ -36,7 +36,7 @@
 %bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
-%bcond_with	system_libvpx	# system libvpx
+%bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
 %bcond_with	tcmalloc		# use tcmalloc
