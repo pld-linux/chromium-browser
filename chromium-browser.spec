@@ -62,7 +62,6 @@
 # - use_system_skia
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_stlport (android specific)
-# - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
