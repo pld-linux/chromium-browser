@@ -47,8 +47,13 @@ set -x
 	(
 	cd "$TMP_DIR"
 	srctarball=$PACKAGE_NAME-$VERSION.tar.xz
+
 	wget -nc -nv -O $srctarball "$OFFICIAL_URL/chromium-$VERSION.tar.xz" || :
+	test -s $srctarball || rm $srctarball
+
 	wget -nc -nv -O $srctarball "$ALT_URL/$VERSION/chromium-$VERSION.tar.xz" || :
+	test -s $srctarball || rm $srctarball
+
 	test -f $srctarball
 
 	# repackage cleaned up tarball
