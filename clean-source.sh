@@ -1154,6 +1154,16 @@ remove_bundled_libraries() {
 }
 # }}}
 
+# clean extra files that are cleaned in tarball provided by google
+clean_src_extra() {
+	rm -rfv \
+		.landmines \
+		chrome/browser/resources/pdf/html_office \
+		third_party/WebKit/ManualTests \
+		third_party/WebKit/PerformanceTests \
+		third_party/brotli
+}
+
 remove_bundled_libraries > REMOVED-bundled_libraries.txt
 
 strip_system_dirs \
@@ -1196,6 +1206,8 @@ if [ "${sqlite:-1}" = 1 ]; then
 fi
 
 clean_third_party > REMOVED-third_party.txt
+
+clean_src_extra > REMOVED-extra.txt
 
 if [ "${v8:-1}" != "0" ]; then
 	# The implementation files include v8 headers with full path,
