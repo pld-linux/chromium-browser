@@ -223,6 +223,7 @@ Requires:	lsb-release
 %{?with_system_protobuf:Requires:	protobuf-libs >= 2.5.0-2}
 Requires:	shared-mime-info
 %{?with_system_sqlite:Requires:	sqlite3(icu)}
+Requires:	uname(release) >= 3.17
 Requires:	xdg-utils >= 1.0.2-4
 Requires:	xorg-lib-libX11 >= 1.4.99.1
 Provides:	wwwbrowser
