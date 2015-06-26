@@ -1160,8 +1160,7 @@ clean_src_extra() {
 		.landmines \
 		chrome/browser/resources/pdf/html_office \
 		third_party/WebKit/ManualTests \
-		third_party/WebKit/PerformanceTests \
-		third_party/brotli
+		third_party/WebKit/PerformanceTests
 }
 
 remove_bundled_libraries > REMOVED-bundled_libraries.txt
