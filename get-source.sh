@@ -4,13 +4,13 @@ set -e
 # CHANNEL: any from CHANNELS_URL: stable, beta, dev
 CHANNEL=${1:-beta}
 
-CHANNELS_URL=http://omahaproxy.appspot.com/all
+CHANNELS_URL=https://omahaproxy.appspot.com/all
 PACKAGE_NAME=chromium-browser
 PROGRAM=${0##*/}
 WORK_DIR=$(cd "$(dirname "$0")"; pwd)
 LOCKFILE=$WORK_DIR/$PACKAGE_NAME-$CHANNEL.lock
-# Browse URL: http://gsdview.appspot.com/chromium-browser-official/
-OFFICIAL_URL=http://commondatastorage.googleapis.com/chromium-browser-official
+# Browse URL: https://gsdview.appspot.com/chromium-browser-official/
+OFFICIAL_URL=https://commondatastorage.googleapis.com/chromium-browser-official
 ALT_URL=https://github.com/zcbenz/chromium-source-tarball/releases/download
 DIST_DIR=$HOME/public_html/chromium-browser/src/$CHANNEL
 
