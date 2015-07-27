@@ -121,6 +121,8 @@ Patch36:	angle.patch
 Patch37:	%{name}-build.patch
 Patch38:	vaapi_include.patch
 Patch39:	libsecret.patch
+Patch40:	ffmpeg-generate-errors.patch
+Patch41:	ffmpeg-generate.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -330,6 +332,8 @@ ln -s %{SOURCE7} .
 %patch37 -p1
 #%patch38 -p1 CHECK
 %patch39 -p1
+%patch40 -p1
+%patch41 -p1
 
 %{?with_dev:exit 0}
 
@@ -546,7 +550,7 @@ ln -s %{_datadir}/%{name}/resources $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
-%if %{without system_ffmpeg}
+%if %{without system_ffmpeg} && 0
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
@@ -650,7 +654,7 @@ fi
 %attr(4555,root,root) %{_libdir}/%{name}/chrome-sandbox
 
 # ffmpeg libs
-%if %{without system_ffmpeg}
+%if %{without system_ffmpeg} && 0
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
 %endif
 
