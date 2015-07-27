@@ -83,7 +83,7 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	1
+Release:	2
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
@@ -532,6 +532,10 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins \
 	$RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_desktopdir}} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/{native-messaging-hosts,policies/managed}
 
+%if %{without system_icu}
+cp -p third_party/icu/source/data/in/icudtl.dat $RPM_BUILD_ROOT%{_libdir}/%{name}
+%endif
+
 cd %{builddir}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/default
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
@@ -634,6 +638,7 @@ fi
 %{_iconsdir}/hicolor/*/apps/%{name}.png
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/chrome*.pak
+%{!?with_system_icu:%{_libdir}/%{name}/icudtl.dat}
 %{_libdir}/%{name}/content_resources.pak
 %{_libdir}/%{name}/keyboard_resources.pak
 %{_libdir}/%{name}/resources.pak
