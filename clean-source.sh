@@ -618,8 +618,10 @@ clean_third_party() {
 		'!' -path 'third_party/flot/*.js' \
 		'!' -path 'third_party/google_input_tools/*' \
 		'!' -path 'third_party/hunspell/*' \
+		'!' -path 'third_party/hunspell_new/*' \
 		'!' -path 'third_party/hyphen/*' \
 		'!' -path 'third_party/iccjpeg/*' \
+		'!' -path 'third_party/icu/*' \
 		'!' -path 'third_party/icu/icu.isolate' \
 		'!' -path 'third_party/jinja2/*' \
 		'!' -path 'third_party/jstemplate/*' \
@@ -1025,6 +1027,8 @@ remove_tests() {
 		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_case.js' \
 		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_error.js' \
 		'!' -path './third_party/trace-viewer/third_party/tvcm/src/tvcm/unittest/test_runner.js' \
+		'!' -path './third_party/trace-viewer/third_party/tvcm/third_party/rcssmin/*' \
+		'!' -path './third_party/trace-viewer/third_party/tvcm/third_party/rjsmin/*' \
 		'!' -path './third_party/trace-viewer/trace_viewer/tracing/test_utils.js' \
 		'!' -path './mojo/embedder/test_embedder.*' \
 		'!' -path './ui/base/hit_test.*' \
@@ -1093,6 +1097,7 @@ remove_bundled_libraries() {
 		'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
 		'third_party/hunspell' \
 		'third_party/iccjpeg' \
+		'third_party/icu' \
 		'third_party/jstemplate' \
 		'third_party/khronos' \
 		'third_party/leveldatabase' \
@@ -1137,6 +1142,8 @@ remove_bundled_libraries() {
 		'third_party/trace-viewer/third_party/jszip' \
 		'third_party/trace-viewer/third_party/tvcm' \
 		'third_party/trace-viewer/third_party/tvcm/third_party/beautifulsoup/polymer_soup.py' \
+		'third_party/trace-viewer/third_party/tvcm/third_party/rcssmin' \
+		'third_party/trace-viewer/third_party/tvcm/third_party/rjsmin' \
 		'third_party/undoview' \
 		'third_party/usrsctp' \
 		'third_party/web-animations-js' \

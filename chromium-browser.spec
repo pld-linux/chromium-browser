@@ -18,7 +18,7 @@
 %bcond_without	system_flac		# system flac
 %bcond_with	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
 %bcond_without	system_harfbuzz	# system harfbuzz
-%bcond_without	system_icu	# system icu
+%bcond_with	system_icu	# system icu, disabled: http://bugs.icu-project.org/trac/ticket/11358
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -36,7 +36,7 @@
 %bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
 %bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
 %bcond_with		system_v8		# system v8
-%bcond_with	system_libvpx	# system libvpx
+%bcond_without	system_libvpx	# system libvpx
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
 %bcond_with	tcmalloc		# use tcmalloc
@@ -62,7 +62,6 @@
 # - use_system_skia
 # - use_system_ssl (use_openssl: http://crbug.com/62803)
 # - use_system_stlport (android specific)
-# - vpx: invert (remove) media_use_libvpx when libvpx with vp9 support is released
 
 # NOTES:
 # - mute BEEP mixer if you do not want to hear horrible system bell when
@@ -73,9 +72,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		43.0.2357
-%define		basever		65
-%define		patchver	134
+%define		branch		44.0.2403
+%define		basever		107
+#define		patchver	118
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -88,7 +87,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	4aa590c1965817cfb693df7f8404e0b6
+# Source0-md5:	8686c4033cb1d25d0c60c9b6e09c65e1
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	0cfc52a089350571474c308dab1327ee
@@ -122,7 +121,8 @@ Patch36:	angle.patch
 Patch37:	%{name}-build.patch
 Patch38:	vaapi_include.patch
 Patch39:	libsecret.patch
-Patch40:	system-libvpx.patch
+Patch40:	ffmpeg-generate-errors.patch
+Patch41:	ffmpeg-generate.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -332,7 +332,8 @@ ln -s %{SOURCE7} .
 %patch37 -p1
 #%patch38 -p1 CHECK
 %patch39 -p1
-%patch40 -p0
+%patch40 -p1
+%patch41 -p1
 
 %{?with_dev:exit 0}
 
@@ -549,7 +550,7 @@ ln -s %{_datadir}/%{name}/resources $RPM_BUILD_ROOT%{_libdir}/%{name}/resources
 cp -p chrome.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}.1
 install -p chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/%{name}
 install -p chrome_sandbox $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome-sandbox
-%if %{without system_ffmpeg}
+%if %{without system_ffmpeg} && 0
 install -p libffmpegsumo.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 %endif
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
@@ -653,7 +654,7 @@ fi
 %attr(4555,root,root) %{_libdir}/%{name}/chrome-sandbox
 
 # ffmpeg libs
-%if %{without system_ffmpeg}
+%if %{without system_ffmpeg} && 0
 %attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
 %endif
 
