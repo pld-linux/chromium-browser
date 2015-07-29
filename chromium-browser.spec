@@ -68,13 +68,13 @@
 #   pressing home/end in url bar or more ^F search results on page.
 # - space considerations:
 #   - unpacked sources: ~490MiB
-#   - built code: ~1.4GiB (x86_64/i686)
+#   - built code: ~1.1GiB (x86_64/i686)
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
 %define		branch		44.0.2403
 %define		basever		107
-#define		patchver	118
+%define		patchver	125
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -83,14 +83,14 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	2
+Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
 # Source0-md5:	8686c4033cb1d25d0c60c9b6e09c65e1
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	0cfc52a089350571474c308dab1327ee
+# Patch0-md5:	883987182fccde6a49c26ade439eeff7
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
