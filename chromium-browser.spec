@@ -618,6 +618,7 @@ exit 0
 %postun
 if [ "$1" = 0 ]; then
 	%update_icon_cache hicolor
+	%update_desktop_database
 	%update_browser_plugins
 fi
 
