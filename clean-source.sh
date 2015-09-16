@@ -606,6 +606,7 @@ clean_third_party() {
 		'!' -path 'third_party/angle/src/compiler/*' \
 		'!' -path 'third_party/angle/src/enumerate_files.py' \
 		'!' -path 'third_party/angle/src/third_party/compiler/*' \
+		'!' -path 'third_party/boringssl/*' \
 		'!' -path 'third_party/brotli/*' \
 		'!' -path 'third_party/cacheinvalidation/*' \
 		'!' -path 'third_party/cld/*' \
@@ -613,6 +614,7 @@ clean_third_party() {
 		'!' -path 'third_party/cros_system_api/*' \
 		'!' -path 'third_party/cython/python_flags.py' \
 		'!' -path 'third_party/dom_distiller_js/*' \
+		'!' -path 'third_party/devscripts/*' \
 		'!' -path 'third_party/ffmpeg/*' \
 		'!' -path 'third_party/fips181/*' \
 		'!' -path 'third_party/flot/*.js' \
@@ -631,6 +633,7 @@ clean_third_party() {
 		'!' -path 'third_party/libaddressinput/*' \
 		'!' -path 'third_party/libjingle/*' \
 		'!' -path 'third_party/libphonenumber/*' \
+		'!' -path 'third_party/libsecret/*' \
 		'!' -path 'third_party/libusb/*' \
 		'!' -path 'third_party/libva/*' \
 		'!' -path 'third_party/libvpx/*' \
@@ -1061,8 +1064,7 @@ remove_bundled_libraries() {
 		third_party/adobe/flash/flapper_version.h \
 		third_party/jinja2 \
 		third_party/markupsafe/ \
-		third_party/ply \
-		third_party/fips181 \
+		third_party/ply/ \
 		'base/third_party/dmg_fp' \
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
@@ -1082,11 +1084,13 @@ remove_bundled_libraries() {
 		'third_party/analytics' \
 		'third_party/angle' \
 		'third_party/angle/src/third_party/compiler' \
+		'third_party/boringssl' \
 		'third_party/brotli' \
 		'third_party/cacheinvalidation' \
 		'third_party/cld_2' \
 		'third_party/cros_system_api' \
 		'third_party/cython/python_flags.py' \
+		'third_party/devscripts' \
 		'third_party/dom_distiller_js' \
 		'third_party/dom_distiller_js/dist/proto_gen/third_party/dom_distiller_js' \
 		'third_party/ffmpeg' \
@@ -1097,20 +1101,20 @@ remove_bundled_libraries() {
 		'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
 		'third_party/hunspell' \
 		'third_party/iccjpeg' \
-		'third_party/icu' \
 		'third_party/jstemplate' \
 		'third_party/khronos' \
 		'third_party/leveldatabase' \
+		'third_party/libXNVCtrl' \
 		'third_party/libaddressinput' \
 		'third_party/libjingle' \
 		'third_party/libphonenumber' \
+		'third_party/libsecret' \
 		'third_party/libsrtp' \
 		'third_party/libudev' \
 		'third_party/libusb' \
 		'third_party/libvpx' \
 		'third_party/libvpx/source/libvpx/third_party/x86inc' \
 		'third_party/libxml/chromium' \
-		'third_party/libXNVCtrl' \
 		'third_party/libyuv' \
 		'third_party/lss' \
 		'third_party/lzma_sdk' \
@@ -1123,9 +1127,14 @@ remove_bundled_libraries() {
 		'third_party/opus' \
 		'third_party/ots' \
 		'third_party/pdfium' \
+		'third_party/pdfium/third_party/agg23' \
 		'third_party/pdfium/third_party/base' \
 		'third_party/pdfium/third_party/bigint' \
 		'third_party/pdfium/third_party/freetype' \
+		'third_party/pdfium/third_party/lcms2-2.6' \
+		'third_party/pdfium/third_party/libjpeg' \
+		'third_party/pdfium/third_party/libopenjpeg20' \
+		'third_party/pdfium/third_party/zlib_v128' \
 		'third_party/polymer' \
 		'third_party/protobuf' \
 		'third_party/qcms' \
@@ -1136,15 +1145,14 @@ remove_bundled_libraries() {
 		'third_party/sqlite' \
 		'third_party/tcmalloc' \
 		'third_party/trace-viewer' \
-		'third_party/trace-viewer/third_party/components/polymer' \
-		'third_party/trace-viewer/third_party/d3' \
-		'third_party/trace-viewer/third_party/gl-matrix' \
-		'third_party/trace-viewer/third_party/jszip' \
-		'third_party/trace-viewer/third_party/tvcm' \
-		'third_party/trace-viewer/third_party/tvcm/third_party/beautifulsoup/polymer_soup.py' \
-		'third_party/trace-viewer/third_party/tvcm/third_party/rcssmin' \
-		'third_party/trace-viewer/third_party/tvcm/third_party/rjsmin' \
-		'third_party/undoview' \
+		'third_party/trace-viewer/tracing/third_party/components/polymer' \
+		'third_party/trace-viewer/tracing/third_party/d3' \
+		'third_party/trace-viewer/tracing/third_party/gl-matrix' \
+		'third_party/trace-viewer/tracing/third_party/jszip' \
+		'third_party/trace-viewer/tracing/third_party/tvcm' \
+		'third_party/trace-viewer/tracing/third_party/tvcm/third_party/beautifulsoup/polymer_soup.py' \
+		'third_party/trace-viewer/tracing/third_party/tvcm/third_party/rcssmin' \
+		'third_party/trace-viewer/tracing/third_party/tvcm/third_party/rjsmin' \
 		'third_party/usrsctp' \
 		'third_party/web-animations-js' \
 		'third_party/webdriver' \
@@ -1154,7 +1162,6 @@ remove_bundled_libraries() {
 		'third_party/zlib/google' \
 		'url/third_party/mozilla' \
 		'v8/src/third_party/fdlibm' \
-		'v8/src/third_party/kernel' \
 		'v8/src/third_party/valgrind' \
 		--do-print \
 		--do-remove

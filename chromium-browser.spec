@@ -18,7 +18,7 @@
 %bcond_without	system_flac		# system flac
 %bcond_with	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
 %bcond_without	system_harfbuzz	# system harfbuzz
-%bcond_with	system_icu	# system icu, disabled: http://bugs.icu-project.org/trac/ticket/11358
+%bcond_without	system_icu	# system icu
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -34,9 +34,9 @@
 %bcond_without	system_snappy	# system snappy
 %bcond_without	system_speex	# system speex
 %bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
-%bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
+%bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle), http://bugs.gentoo.org/459932
 %bcond_with		system_v8		# system v8
-%bcond_without	system_libvpx	# system libvpx
+%bcond_without	system_libvpx	# system libvpx, http://crbug.com/494939
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
 %bcond_with	tcmalloc		# use tcmalloc
@@ -72,9 +72,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		44.0.2403
-%define		basever		107
-%define		patchver	130
+%define		branch		45.0.2454
+%define		basever		26
+#define		patchver	130
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -86,8 +86,8 @@ Version:	%{branch}.%{basever}
 Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	8686c4033cb1d25d0c60c9b6e09c65e1
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
+# Source0-md5:	4cc5d5b965f1bfc99fb387828ef48295
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	02973b87b9564ed36220497b4bf83109
