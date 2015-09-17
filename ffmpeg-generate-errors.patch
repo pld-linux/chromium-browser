@@ -7,14 +7,6 @@ TypeError: __call__() takes at most 2 arguments (3 given)
 
 --- ./third_party/ffmpeg/chromium/scripts/generate_gyp.py~	2015-07-27 07:15:51.000000000 +0300
 +++ ./third_party/ffmpeg/chromium/scripts/generate_gyp.py	2015-07-27 07:15:55.928135410 +0300
-@@ -79,6 +79,7 @@
- import string
- import subprocess
- import shutil
-+import sys
- 
- COPYRIGHT = """# Copyright %d The Chromium Authors. All rights reserved.
- # Use of this source code is governed by a BSD-style license that can be
 @@ -149,6 +150,9 @@
  # Mac doesn't have any platform specific files, so just use linux and win.
  SUPPORTED_PLATFORMS = ['linux', 'win']
