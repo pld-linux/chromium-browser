@@ -16,7 +16,7 @@
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
-%bcond_with	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
+%bcond_without	system_ffmpeg	# system ffmpeg
 %bcond_without	system_harfbuzz	# system harfbuzz
 %bcond_without	system_icu	# system icu
 %bcond_without	system_jsoncpp	# system jsoncpp
@@ -140,7 +140,7 @@ BuildRequires:	bzip2-devel
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
-%{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 1.0}
+%{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 2.7.2}
 %{?with_system_flac:BuildRequires:	flac-devel >= 1.2.1-7}
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
@@ -166,7 +166,7 @@ BuildRequires:	libsecret-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
-%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.4.0}
+%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.5.0}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.4.0}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
