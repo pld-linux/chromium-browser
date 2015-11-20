@@ -514,6 +514,7 @@ remove_nonessential_dirs() {
 		'!' -path 'third_party/cld/encodings/compact_lang_det/win/cld_*.cc' \
 		'!' -path 'third_party/cld/encodings/compact_lang_det/win/cld_*.h' \
 		'!' -path 'third_party/cros_system_api/dbus/*.proto' \
+		'!' -path 'third_party/cros_system_api/dbus/*/dbus-constants.h' \
 		'!' -path 'third_party/cros_system_api/dbus/service_constants.h' \
 		'!' -path 'third_party/sfntly/cpp/src/sample/chromium/*' \
 		'!' -path 'third_party/tcmalloc/chromium/*' \
@@ -561,6 +562,7 @@ almost_strip_dirs() {
 		'!' -path 'tools/protoc_wrapper/*' \
 		'!' -path 'tools/usb_ids/*' \
 		'!' -path 'tools/uuidgen.py' \
+		'!' -path 'tools/variations/*' \
 		'!' -path 'tools/zip2msi.py' \
 		-print -delete
 }
@@ -609,12 +611,13 @@ clean_third_party() {
 		'!' -path 'third_party/boringssl/*' \
 		'!' -path 'third_party/brotli/*' \
 		'!' -path 'third_party/cacheinvalidation/*' \
+		'!' -path 'third_party/catapult/*' \
 		'!' -path 'third_party/cld/*' \
 		'!' -path 'third_party/cld_2/*' \
 		'!' -path 'third_party/cros_system_api/*' \
 		'!' -path 'third_party/cython/python_flags.py' \
-		'!' -path 'third_party/dom_distiller_js/*' \
 		'!' -path 'third_party/devscripts/*' \
+		'!' -path 'third_party/dom_distiller_js/*' \
 		'!' -path 'third_party/ffmpeg/*' \
 		'!' -path 'third_party/fips181/*' \
 		'!' -path 'third_party/flot/*.js' \
@@ -636,7 +639,7 @@ clean_third_party() {
 		'!' -path 'third_party/libsecret/*' \
 		'!' -path 'third_party/libusb/*' \
 		'!' -path 'third_party/libva/*' \
-		'!' -path 'third_party/libvpx/*' \
+		'!' -path 'third_party/libvpx_new/*' \
 		'!' -path 'third_party/libwebm/*' \
 		'!' -path 'third_party/libwebp/*' \
 		'!' -path 'third_party/libxml/chromium/*' \
@@ -671,13 +674,12 @@ clean_third_party() {
 		'!' -path 'third_party/sqlite/sqlite3.h' \
 		'!' -path 'third_party/sqlite/src/ext/*' \
 		'!' -path 'third_party/tcmalloc/*' \
-		'!' -path 'third_party/trace-viewer/*' \
-		'!' -path 'third_party/undoview/*' \
 		'!' -path 'third_party/usrsctp/*' \
-		'!' -path 'third_party/web-animations-js/*' \
 		'!' -path 'third_party/v8-i18n/*' \
 		'!' -path 'third_party/v8/*' \
+		'!' -path 'third_party/web-animations-js/*' \
 		'!' -path 'third_party/webrtc/*' \
+		'!' -path 'third_party/webrtc_overrides/*' \
 		'!' -path 'third_party/widevine/*' \
 		'!' -path 'third_party/x86inc/*' \
 		'!' -path 'third_party/zlib/google/*' \
@@ -939,7 +941,7 @@ remove_tests() {
 	echo '> partial remove (keep .gyp)'
 	for dir in \
 		chrome/browser/nacl_host/test \
-		chrome/test/data \
+		chrome/test/data_ \
 		testing/gtest_ \
 		testing/gtest_ios \
 		testing/gmock_ \
@@ -1065,6 +1067,7 @@ remove_bundled_libraries() {
 		third_party/jinja2 \
 		third_party/markupsafe/ \
 		third_party/ply/ \
+		third_party/catapult/third_party/beautifulsoup4 \
 		'base/third_party/dmg_fp' \
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
@@ -1087,6 +1090,14 @@ remove_bundled_libraries() {
 		'third_party/boringssl' \
 		'third_party/brotli' \
 		'third_party/cacheinvalidation' \
+		'third_party/catapult' \
+		'third_party/catapult/tracing/third_party/components/polymer' \
+		'third_party/catapult/tracing/third_party/d3' \
+		'third_party/catapult/tracing/third_party/gl-matrix' \
+		'third_party/catapult/tracing/third_party/jszip' \
+		'third_party/catapult/tracing/third_party/tvcm' \
+		'third_party/catapult/tracing/third_party/tvcm/third_party/rcssmin' \
+		'third_party/catapult/tracing/third_party/tvcm/third_party/rjsmin' \
 		'third_party/cld_2' \
 		'third_party/cros_system_api' \
 		'third_party/cython/python_flags.py' \
@@ -1112,9 +1123,10 @@ remove_bundled_libraries() {
 		'third_party/libsrtp' \
 		'third_party/libudev' \
 		'third_party/libusb' \
-		'third_party/libvpx' \
-		'third_party/libvpx/source/libvpx/third_party/x86inc' \
+		'third_party/libvpx_new' \
+		'third_party/libvpx_new/source/libvpx/third_party/x86inc' \
 		'third_party/libxml/chromium' \
+		'third_party/libwebm' \
 		'third_party/libyuv' \
 		'third_party/lss' \
 		'third_party/lzma_sdk' \
@@ -1144,19 +1156,11 @@ remove_bundled_libraries() {
 		'third_party/smhasher' \
 		'third_party/sqlite' \
 		'third_party/tcmalloc' \
-		'third_party/trace-viewer' \
-		'third_party/trace-viewer/tracing/third_party/components/polymer' \
-		'third_party/trace-viewer/tracing/third_party/d3' \
-		'third_party/trace-viewer/tracing/third_party/gl-matrix' \
-		'third_party/trace-viewer/tracing/third_party/jszip' \
-		'third_party/trace-viewer/tracing/third_party/tvcm' \
-		'third_party/trace-viewer/tracing/third_party/tvcm/third_party/beautifulsoup/polymer_soup.py' \
-		'third_party/trace-viewer/tracing/third_party/tvcm/third_party/rcssmin' \
-		'third_party/trace-viewer/tracing/third_party/tvcm/third_party/rjsmin' \
 		'third_party/usrsctp' \
 		'third_party/web-animations-js' \
 		'third_party/webdriver' \
 		'third_party/webrtc' \
+		'third_party/webrtc_overrides' \
 		'third_party/widevine' \
 		'third_party/x86inc' \
 		'third_party/zlib/google' \

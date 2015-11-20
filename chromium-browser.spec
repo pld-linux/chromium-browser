@@ -188,6 +188,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python
 BuildRequires:	python-BeautifulSoup
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
+BuildRequires:	python-html5lib
 BuildRequires:	python-jinja2 >= 2.7
 BuildRequires:	python-modules
 BuildRequires:	python-ply >= 3.4
