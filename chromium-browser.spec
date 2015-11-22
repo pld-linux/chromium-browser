@@ -339,6 +339,7 @@ ln -s %{SOURCE7} .
 %patch42 -p1
 
 # https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
+install -d chrome/test/data/webui
 touch chrome/test/data/webui/i18n_process_css_test.html
 
 %{?with_dev:exit 0}
