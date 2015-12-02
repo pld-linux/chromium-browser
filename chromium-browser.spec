@@ -16,9 +16,9 @@
 %bcond_with		shared_libs		# with shared libs
 %bcond_with		sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
-%bcond_with	system_ffmpeg	# system ffmpeg instead of ffmpegsumo
+%bcond_without	system_ffmpeg	# system ffmpeg
 %bcond_without	system_harfbuzz	# system harfbuzz
-%bcond_with	system_icu	# system icu, disabled: http://bugs.icu-project.org/trac/ticket/11358
+%bcond_without	system_icu	# system icu
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -34,9 +34,9 @@
 %bcond_without	system_snappy	# system snappy
 %bcond_without	system_speex	# system speex
 %bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
-%bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle)
+%bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle), http://bugs.gentoo.org/459932
 %bcond_with		system_v8		# system v8
-%bcond_without	system_libvpx	# system libvpx
+%bcond_with	system_libvpx	# system libvpx, http://crbug.com/494939
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
 %bcond_with	tcmalloc		# use tcmalloc
@@ -72,9 +72,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		44.0.2403
-%define		basever		107
-%define		patchver	157
+%define		branch		47.0.2526
+%define		basever		73
+#define		patchver	130
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -87,7 +87,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	8686c4033cb1d25d0c60c9b6e09c65e1
+# Source0-md5:	54a013e6b0ea5b6ecacbf283844f962a
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	e62038af53ab3be30a4b75eaf20d0e4b
@@ -123,6 +123,7 @@ Patch38:	vaapi_include.patch
 Patch39:	libsecret.patch
 Patch40:	ffmpeg-generate-errors.patch
 Patch41:	ffmpeg-generate.patch
+Patch42:	system-ffmpeg.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -140,7 +141,7 @@ BuildRequires:	bzip2-devel
 %{?with_cups:BuildRequires:	cups-devel}
 BuildRequires:	elfutils-devel
 BuildRequires:	expat-devel
-%{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 1.0}
+%{?with_system_ffmpeg:BuildRequires:	ffmpeg-devel >= 2.7.2}
 %{?with_system_flac:BuildRequires:	flac-devel >= 1.2.1-7}
 BuildRequires:	fontconfig-devel
 BuildRequires:	glib2-devel
@@ -166,7 +167,7 @@ BuildRequires:	libsecret-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libstdc++-devel
 %{?with_system_libusb:BuildRequires:	libusb-devel >= 1.0}
-%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.4.0}
+%{?with_system_libvpx:BuildRequires:	libvpx-devel >= 1.5.0}
 %{?with_system_libwebp:BuildRequires:	libwebp-devel >= 0.4.0}
 BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
@@ -187,6 +188,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python
 BuildRequires:	python-BeautifulSoup
 #BuildRequires:	python-gyp >= 1-%{gyp_rev}
+BuildRequires:	python-html5lib
 BuildRequires:	python-jinja2 >= 2.7
 BuildRequires:	python-modules
 BuildRequires:	python-ply >= 3.4
@@ -334,6 +336,11 @@ ln -s %{SOURCE7} .
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
+%patch42 -p1
+
+# https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
+install -d chrome/test/data/webui
+touch chrome/test/data/webui/i18n_process_css_test.html
 
 %{?with_dev:exit 0}
 

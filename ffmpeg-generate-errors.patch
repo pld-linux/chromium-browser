@@ -5,16 +5,8 @@ fix error reporting:
     exit('Failed to find file', include_file_path)
 TypeError: __call__() takes at most 2 arguments (3 given)
 
---- ./third_party/ffmpeg/chromium/scripts/generate_gyp.py~	2015-07-27 07:15:51.000000000 +0300
-+++ ./third_party/ffmpeg/chromium/scripts/generate_gyp.py	2015-07-27 07:15:55.928135410 +0300
-@@ -79,6 +79,7 @@
- import string
- import subprocess
- import shutil
-+import sys
- 
- COPYRIGHT = """# Copyright %d The Chromium Authors. All rights reserved.
- # Use of this source code is governed by a BSD-style license that can be
+--- chromium-browser-47.0.2526.58/third_party/ffmpeg/chromium/scripts/generate_gyp.py~	2015-11-15 00:56:33.000000000 +0200
++++ chromium-browser-47.0.2526.58/third_party/ffmpeg/chromium/scripts/generate_gyp.py	2015-11-15 10:57:18.342220254 +0200
 @@ -149,6 +150,9 @@
  # Mac doesn't have any platform specific files, so just use linux and win.
  SUPPORTED_PLATFORMS = ['linux', 'win']
@@ -25,12 +17,12 @@ TypeError: __call__() takes at most 2 arguments (3 given)
  
  def NormalizeFilename(name):
    """ Removes leading path separators in an attempt to normalize paths."""
-@@ -753,7 +757,7 @@
+@@ -850,7 +850,7 @@
      elif include_file_path in IGNORED_INCLUDE_FILES:
        continue
      else:
--      exit('Failed to find file', include_file_path)
-+      die('Failed to find file: ' + include_file_path)
+-      exit('Failed to find file ' + include_file_path)
++      die('Failed to find file ' + include_file_path)
  
      # At this point we've found the file. Check if its in our ignore list which
      # means that the list should be updated to no longer mention this file.
@@ -61,12 +53,12 @@ TypeError: __call__() takes at most 2 arguments (3 given)
           'Are build_dir (%s) and/or source_dir (%s) options correct?' %
                (options.build_dir, options.source_dir))
  
-@@ -904,7 +908,7 @@
+@@ -1017,7 +1017,7 @@
  
-   if not CheckLicensesForStaticLinking(sets, source_dir,
+   if not CheckLicensesForStaticLinking(sources_to_check, source_dir,
                                         options.print_licenses):
--    exit ('GENERATE FAILED: invalid licenses detected.')
+-    exit('GENERATE FAILED: invalid licenses detected.')
 +    die('GENERATE FAILED: invalid licenses detected.')
    print 'License checks passed.'
+   UpdateCredits(sources_to_check, source_dir)
  
-   # Open for writing.

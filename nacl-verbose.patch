@@ -1,7 +1,7 @@
---- chromium-browser-35.0.1916.114/native_client/build/untrusted.gypi~	2014-05-14 22:23:54.000000000 +0300
-+++ chromium-browser-35.0.1916.114/native_client/build/untrusted.gypi	2014-05-25 23:39:02.438068697 +0300
-@@ -57,7 +57,7 @@
-           'build_irt': 0,
+--- chromium-browser-45.0.2454.93/native_client/build/untrusted.gypi~	2015-09-17 12:53:04.000000000 +0300
++++ chromium-browser-45.0.2454.93/native_client/build/untrusted.gypi	2015-09-17 12:53:34.318584373 +0300
+@@ -96,7 +96,7 @@
+           'build_nonsfi_helper': 0,
            'disable_glibc%': 0,
            'disable_bionic%': 1,
 -          'extra_args': [],
@@ -9,17 +9,17 @@
            'enable_x86_32': 1,
            'enable_x86_64': 1,
            'enable_arm': 0,
-@@ -114,7 +114,7 @@
-           'build_irt': 0,
-           'disable_glibc%': 1,
+@@ -153,7 +153,7 @@
+           'build_nonsfi_helper': 0,
+           'disable_glibc%': 0,
            'disable_bionic%': 1,
 -          'extra_args': [],
 +          'extra_args': ['--verbose'],
            'enable_x86_32': 0,
            'enable_x86_64': 0,
            'enable_arm': 1,
-@@ -166,7 +166,7 @@
-           'build_irt': 0,
+@@ -203,7 +203,7 @@
+           'build_nonsfi_helper': 0,
            'disable_glibc%': 1,
            'disable_bionic%': 1,
 -          'extra_args': [],

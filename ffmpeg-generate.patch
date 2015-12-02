@@ -1,10 +1,10 @@
---- chromium-browser-44.0.2403.107/third_party/ffmpeg/chromium/scripts/generate_gyp.py~	2015-07-27 07:21:59.000000000 +0300
-+++ chromium-browser-44.0.2403.107/third_party/ffmpeg/chromium/scripts/generate_gyp.py	2015-07-27 07:22:03.210572817 +0300
-@@ -757,7 +757,8 @@
+--- chromium-browser-47.0.2526.58/third_party/ffmpeg/chromium/scripts/generate_gyp.py~	2015-11-15 11:03:38.000000000 +0200
++++ chromium-browser-47.0.2526.58/third_party/ffmpeg/chromium/scripts/generate_gyp.py	2015-11-15 13:49:46.409735857 +0200
+@@ -850,7 +850,8 @@
      elif include_file_path in IGNORED_INCLUDE_FILES:
        continue
      else:
--      die('Failed to find file: ' + include_file_path)
+-      die('Failed to find file ' + include_file_path)
 +      print('Failed to find file: ' + include_file_path)
 +      continue
  
