@@ -192,7 +192,7 @@ BuildRequires:	python-html5lib
 BuildRequires:	python-jinja2 >= 2.7
 BuildRequires:	python-modules
 BuildRequires:	python-ply >= 3.4
-%{?with_system_re2:BuildRequires:	re2-devel >= 20130115-2}
+%{?with_system_re2:BuildRequires:	re2-devel >= 20151101}
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_snappy:BuildRequires:	snappy-devel}
@@ -221,7 +221,7 @@ Requires:	libevent >= 2.0.21
 %{?with_libjpegturbo:Requires:	libjpeg-turbo >= 1.2.0}
 %{?with_system_libvpx:Requires:	libvpx >= 1.4.0}
 Requires:	lsb-release
-%{?with_system_re2:Requires:	re2 >= 20130115-2}
+%{?with_system_re2:Requires:	re2 >= 20151101}
 %{?with_system_protobuf:Requires:	protobuf-libs >= 2.5.0-2}
 Requires:	shared-mime-info
 %{?with_system_sqlite:Requires:	sqlite3(icu)}
