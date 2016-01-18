@@ -124,6 +124,7 @@ Patch39:	libsecret.patch
 Patch40:	ffmpeg-generate-errors.patch
 Patch41:	ffmpeg-generate.patch
 Patch42:	system-ffmpeg.patch
+Patch43:	system-icu.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -337,6 +338,7 @@ ln -s %{SOURCE7} .
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p0
 
 # https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
 install -d chrome/test/data/webui

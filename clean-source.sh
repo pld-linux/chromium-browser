@@ -506,6 +506,7 @@ remove_nonessential_dirs() {
 		'!' -path 'native_client/src/include/win/mman.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/debug_exception_handler.h' \
 		'!' -path 'native_client/src/trusted/service_runtime/win/exception_patch/ntdll_patch.h' \
+		'!' -path 'net/tools/dafsa/*' \
 		'!' -path 'net/tools/tld_cleanup/*' \
 		'!' -path 'remoting/tools/build/*' \
 		'!' -path 'remoting/tools/verify_resources.py' \
@@ -1098,6 +1099,9 @@ remove_bundled_libraries() {
 		'third_party/catapult/tracing/third_party/tvcm' \
 		'third_party/catapult/tracing/third_party/tvcm/third_party/rcssmin' \
 		'third_party/catapult/tracing/third_party/tvcm/third_party/rjsmin' \
+		'third_party/catapult/third_party/py_vulcanize' \
+		'third_party/catapult/third_party/py_vulcanize/third_party/rcssmin' \
+		'third_party/catapult/third_party/py_vulcanize/third_party/rjsmin' \
 		'third_party/cld_2' \
 		'third_party/cros_system_api' \
 		'third_party/cython/python_flags.py' \
