@@ -72,9 +72,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		47.0.2526
-%define		basever		73
-#define		patchver	130
+%define		branch		48.0.2564
+%define		basever		103
+#define		patchver	106
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -83,14 +83,14 @@ Version:	%{branch}.%{patchver}
 %else
 Version:	%{branch}.%{basever}
 %endif
-Release:	5
+Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	54a013e6b0ea5b6ecacbf283844f962a
+# Source0-md5:	4c527967ce3e6c141ebac00e4b26ae0d
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
-# Patch0-md5:	e62038af53ab3be30a4b75eaf20d0e4b
+# Patch0-md5:	214631f58aae3e9d9ca0795240a95def
 %endif
 Source1:	%{name}.default
 Source2:	%{name}.sh
@@ -124,6 +124,7 @@ Patch39:	libsecret.patch
 Patch40:	ffmpeg-generate-errors.patch
 Patch41:	ffmpeg-generate.patch
 Patch42:	system-ffmpeg.patch
+Patch43:	system-icu.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -337,6 +338,7 @@ ln -s %{SOURCE7} .
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p0
 
 # https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
 install -d chrome/test/data/webui
