@@ -30,7 +30,7 @@
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 # protobuf broken: https://bugs.gentoo.org/show_bug.cgi?id=525560
 %bcond_with	system_protobuf	# system protobuf
-%bcond_without	system_re2		# system re2
+%bcond_with	system_re2		# system re2
 %bcond_without	system_snappy	# system snappy
 %bcond_without	system_speex	# system speex
 %bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
@@ -72,8 +72,8 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		48.0.2564
-%define		basever		103
+%define		branch		49.0.2623
+%define		basever		39
 #define		patchver	106
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
@@ -86,8 +86,9 @@ Version:	%{branch}.%{basever}
 Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
-Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	4c527967ce3e6c141ebac00e4b26ae0d
+#Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
+Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
+# Source0-md5:	30e96da6e5dcc947cc5be803bdb074bb
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
 # Patch0-md5:	214631f58aae3e9d9ca0795240a95def
@@ -124,7 +125,6 @@ Patch39:	libsecret.patch
 Patch40:	ffmpeg-generate-errors.patch
 Patch41:	ffmpeg-generate.patch
 Patch42:	system-ffmpeg.patch
-Patch43:	system-icu.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -338,7 +338,6 @@ ln -s %{SOURCE7} .
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
-%patch43 -p0
 
 # https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
 install -d chrome/test/data/webui
@@ -447,6 +446,7 @@ flags="
 	%{?with_gps:-Dlinux_use_libgps=1 -Dlinux_link_libgps=1} \
 	-Dclang=0 \
 	-Dhost_clang=0 \
+	-Dsysroot= \
 	-Dlinux_use_bundled_binutils=0 \
 	-Dlinux_use_bundled_gold=0 \
 	-Dlinux_use_gold_flags=0 \
