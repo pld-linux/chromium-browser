@@ -72,7 +72,7 @@ set -x
 
 	if [ "$CHANNEL" = "stable" ]; then
 		patch -p1 < $WORK_DIR/remove_bundled_libraries-stale.patch
-		sh -x $WORK_DIR/clean-source.sh emptydirs=1 v8=0 mesa=0 sqlite=0 ffmpeg=0 protobuf=0
+		sh -x $WORK_DIR/clean-source.sh emptydirs=1 v8=0 mesa=0 sqlite=0 ffmpeg=0 protobuf=0 re2=0
 		patch -p1 -R < $WORK_DIR/remove_bundled_libraries-stale.patch
 	fi
 

@@ -609,6 +609,8 @@ clean_third_party() {
 		'!' -path 'third_party/angle/src/compiler/*' \
 		'!' -path 'third_party/angle/src/enumerate_files.py' \
 		'!' -path 'third_party/angle/src/third_party/compiler/*' \
+		'!' -path 'third_party/angle/src/third_party/murmurhash/*' \
+		'!' -path 'third_party/angle/src/third_party/trace_event/*' \
 		'!' -path 'third_party/boringssl/*' \
 		'!' -path 'third_party/brotli/*' \
 		'!' -path 'third_party/cacheinvalidation/*' \
@@ -682,6 +684,7 @@ clean_third_party() {
 		'!' -path 'third_party/webrtc/*' \
 		'!' -path 'third_party/webrtc_overrides/*' \
 		'!' -path 'third_party/widevine/*' \
+		'!' -path 'third_party/woff2/*' \
 		'!' -path 'third_party/x86inc/*' \
 		'!' -path 'third_party/zlib/google/*' \
 		'!' -path 'third_party/zlib/zlib.h' \
@@ -1088,10 +1091,15 @@ remove_bundled_libraries() {
 		'third_party/analytics' \
 		'third_party/angle' \
 		'third_party/angle/src/third_party/compiler' \
+		'third_party/angle/src/third_party/murmurhash' \
+		'third_party/angle/src/third_party/trace_event' \
 		'third_party/boringssl' \
 		'third_party/brotli' \
 		'third_party/cacheinvalidation' \
 		'third_party/catapult' \
+		'third_party/catapult/third_party/py_vulcanize' \
+		'third_party/catapult/third_party/py_vulcanize/third_party/rcssmin' \
+		'third_party/catapult/third_party/py_vulcanize/third_party/rjsmin' \
 		'third_party/catapult/tracing/third_party/components/polymer' \
 		'third_party/catapult/tracing/third_party/d3' \
 		'third_party/catapult/tracing/third_party/gl-matrix' \
@@ -1099,9 +1107,6 @@ remove_bundled_libraries() {
 		'third_party/catapult/tracing/third_party/tvcm' \
 		'third_party/catapult/tracing/third_party/tvcm/third_party/rcssmin' \
 		'third_party/catapult/tracing/third_party/tvcm/third_party/rjsmin' \
-		'third_party/catapult/third_party/py_vulcanize' \
-		'third_party/catapult/third_party/py_vulcanize/third_party/rcssmin' \
-		'third_party/catapult/third_party/py_vulcanize/third_party/rjsmin' \
 		'third_party/cld_2' \
 		'third_party/cros_system_api' \
 		'third_party/cython/python_flags.py' \
@@ -1129,8 +1134,8 @@ remove_bundled_libraries() {
 		'third_party/libusb' \
 		'third_party/libvpx_new' \
 		'third_party/libvpx_new/source/libvpx/third_party/x86inc' \
-		'third_party/libxml/chromium' \
 		'third_party/libwebm' \
+		'third_party/libxml/chromium' \
 		'third_party/libyuv' \
 		'third_party/lss' \
 		'third_party/lzma_sdk' \
@@ -1154,6 +1159,7 @@ remove_bundled_libraries() {
 		'third_party/polymer' \
 		'third_party/protobuf' \
 		'third_party/qcms' \
+		'third_party/re2' \
 		'third_party/readability' \
 		'third_party/sfntly' \
 		'third_party/skia' \
@@ -1166,6 +1172,7 @@ remove_bundled_libraries() {
 		'third_party/webrtc' \
 		'third_party/webrtc_overrides' \
 		'third_party/widevine' \
+		'third_party/woff2' \
 		'third_party/x86inc' \
 		'third_party/zlib/google' \
 		'url/third_party/mozilla' \
