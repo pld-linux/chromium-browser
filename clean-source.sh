@@ -547,6 +547,7 @@ almost_strip_dirs() {
 	find tools -type f \
 		'!' -iname '*.gyp*' \
 		'!' -path 'tools/build/*' \
+		'!' -path 'tools/battor_agent/*' \
 		'!' -path 'tools/clang/scripts/plugin_flags.sh' \
 		'!' -path 'tools/compile_test/compile_test.py' \
 		'!' -path 'tools/generate_library_loader/*' \
@@ -640,6 +641,7 @@ clean_third_party() {
 		'!' -path 'third_party/libjingle/*' \
 		'!' -path 'third_party/libphonenumber/*' \
 		'!' -path 'third_party/libsecret/*' \
+		'!' -path 'third_party/libsrtp/*' \
 		'!' -path 'third_party/libusb/*' \
 		'!' -path 'third_party/libva/*' \
 		'!' -path 'third_party/libvpx_new/*' \
@@ -1072,6 +1074,7 @@ remove_bundled_libraries() {
 		third_party/markupsafe/ \
 		third_party/ply/ \
 		third_party/catapult/third_party/beautifulsoup4 \
+		third_party/icu \
 		'base/third_party/dmg_fp' \
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
@@ -1141,9 +1144,9 @@ remove_bundled_libraries() {
 		'third_party/lzma_sdk' \
 		'third_party/mesa' \
 		'third_party/modp_b64' \
-		'third_party/mojo' \
 		'third_party/mt19937ar' \
 		'third_party/npapi' \
+		'third_party/openh264' \
 		'third_party/openmax_dl' \
 		'third_party/opus' \
 		'third_party/ots' \
@@ -1207,7 +1210,7 @@ strip_system_dirs \
 	third_party/libjpeg \
 	third_party/libmtp \
 	third_party/libpng \
-	third_party/libsrtp \
+	third_party/libsrtp_ \
 	third_party/libusb_ \
 	third_party/libvpx_ \
 	third_party/libwebp \
