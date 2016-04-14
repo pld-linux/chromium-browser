@@ -661,6 +661,7 @@ clean_third_party() {
 		'!' -path 'third_party/mojo/*' \
 		'!' -path 'third_party/mt19937ar/*' \
 		'!' -path 'third_party/npapi/*' \
+		'!' -path 'third_party/openh264/*' \
 		'!' -path 'third_party/openmax_dl/*' \
 		'!' -path 'third_party/ots/*' \
 		'!' -path 'third_party/pdfium/*' \
@@ -1254,7 +1255,7 @@ fi
 
 # report what's in them
 for a in REMOVED-*.txt; do
-	cat $a
+	sed -e "s/^/$a: /" $a
 done
 
 # vim:fdm=marker
