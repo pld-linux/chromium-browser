@@ -1074,7 +1074,6 @@ remove_bundled_libraries() {
 		third_party/markupsafe/ \
 		third_party/ply/ \
 		third_party/catapult/third_party/beautifulsoup4 \
-		third_party/icu \
 		'base/third_party/dmg_fp' \
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
@@ -1107,16 +1106,12 @@ remove_bundled_libraries() {
 		'third_party/catapult/tracing/third_party/d3' \
 		'third_party/catapult/tracing/third_party/gl-matrix' \
 		'third_party/catapult/tracing/third_party/jszip' \
-		'third_party/catapult/tracing/third_party/tvcm' \
-		'third_party/catapult/tracing/third_party/tvcm/third_party/rcssmin' \
-		'third_party/catapult/tracing/third_party/tvcm/third_party/rjsmin' \
 		'third_party/cld_2' \
 		'third_party/cros_system_api' \
 		'third_party/cython/python_flags.py' \
 		'third_party/devscripts' \
 		'third_party/dom_distiller_js' \
 		'third_party/dom_distiller_js/dist/proto_gen/third_party/dom_distiller_js' \
-		'third_party/ffmpeg' \
 		'third_party/fips181' \
 		'third_party/flot' \
 		'third_party/google_input_tools' \
@@ -1124,6 +1119,7 @@ remove_bundled_libraries() {
 		'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
 		'third_party/hunspell' \
 		'third_party/iccjpeg' \
+		'third_party/icu' \
 		'third_party/jstemplate' \
 		'third_party/khronos' \
 		'third_party/leveldatabase' \
@@ -1137,8 +1133,8 @@ remove_bundled_libraries() {
 		'third_party/libusb' \
 		'third_party/libvpx_new' \
 		'third_party/libvpx_new/source/libvpx/third_party/x86inc' \
-		'third_party/libwebm' \
 		'third_party/libxml/chromium' \
+		'third_party/libwebm' \
 		'third_party/libyuv' \
 		'third_party/lss' \
 		'third_party/lzma_sdk' \
@@ -1163,7 +1159,6 @@ remove_bundled_libraries() {
 		'third_party/protobuf' \
 		'third_party/qcms' \
 		'third_party/re2' \
-		'third_party/readability' \
 		'third_party/sfntly' \
 		'third_party/skia' \
 		'third_party/smhasher' \
@@ -1173,7 +1168,6 @@ remove_bundled_libraries() {
 		'third_party/web-animations-js' \
 		'third_party/webdriver' \
 		'third_party/webrtc' \
-		'third_party/webrtc_overrides' \
 		'third_party/widevine' \
 		'third_party/woff2' \
 		'third_party/x86inc' \
