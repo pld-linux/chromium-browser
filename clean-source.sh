@@ -1075,6 +1075,7 @@ remove_bundled_libraries() {
 		third_party/markupsafe/ \
 		third_party/ply/ \
 		third_party/catapult/third_party/beautifulsoup4 \
+		third_party/ffmpeg \
 		'base/third_party/dmg_fp' \
 		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
