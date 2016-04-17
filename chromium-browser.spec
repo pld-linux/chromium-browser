@@ -18,7 +18,8 @@
 %bcond_without	system_flac		# system flac
 %bcond_without	system_ffmpeg	# system ffmpeg
 %bcond_without	system_harfbuzz	# system harfbuzz
-%bcond_without	system_icu	# system icu
+# http://bugs.gentoo.org/576370
+%bcond_with	system_icu	# system icu
 %bcond_without	system_jsoncpp	# system jsoncpp
 %bcond_without	system_libexif	# system libexif
 %bcond_without	system_libmtp	# system libmtp
@@ -72,9 +73,9 @@
 # - http://code.google.com/p/chromium/wiki/LinuxBuildInstructionsPrerequisites
 # - to look for new tarball, use update-source.sh script
 
-%define		branch		49.0.2623
-%define		basever		87
-%define		patchver	112
+%define		branch		50.0.2661
+%define		basever		75
+%define		patchver	%{nil}
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
 Name:		chromium-browser
@@ -87,7 +88,7 @@ Release:	1
 License:	BSD%{!?with_system_ffmpeg:, LGPL v2+ (ffmpeg)}
 Group:		X11/Applications/Networking
 Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{branch}.%{basever}.tar.xz
-# Source0-md5:	75f28841d204632fb6de5375af28535a
+# Source0-md5:	f6ae41191ec560a0d1cd238ac2a618cf
 #Source0:	http://carme.pld-linux.org/~glen/chromium-browser/src/beta/%{name}-%{branch}.%{basever}.tar.gz
 %if "%{?patchver}" != ""
 Patch0:		http://carme.pld-linux.org/~glen/chromium-browser/src/stable/%{name}-%{version}.patch.xz
@@ -335,8 +336,8 @@ ln -s %{SOURCE7} .
 %patch37 -p1
 #%patch38 -p1 CHECK
 %patch39 -p1
-%patch40 -p1
-%patch41 -p1
+#%patch40 -p1 UPDATE
+#%patch41 -p1 CHECK
 %patch42 -p1
 
 # https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
