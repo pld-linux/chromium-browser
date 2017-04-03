@@ -5,39 +5,39 @@
 %bcond_with	dev			# with dev optimizations (skip clean source)
 %bcond_without	gconf			# with GConf
 %bcond_without	kerberos		# build with kerberos support (dlopened if support compiled, library names in net/http/http_auth_gssapi_posix.cc)
-%bcond_without	keyring 		# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
-%bcond_with		gps 			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
-%bcond_without	libjpegturbo	# use libjpeg-turbo features
+%bcond_without	keyring			# with keyring support (gnome-keyring dlopened, kwalletd via dbus)
+%bcond_with	gps			# with gps support (linked), if enabled must use exactly same gpsd as shm structures may change leading to unexpected results (crash)
+%bcond_without	libjpegturbo		# use libjpeg-turbo features
 %bcond_with	nacl			# build Native Client support, disabled: http://crbug.com/269560
 %bcond_without	ninja			# use Ninja instead of make to build
 %bcond_without	pulseaudio		# with pulseaudio
 %bcond_without	sandboxing		# with sandboxing
-%bcond_with		selinux			# with SELinux (need policy first)
-%bcond_with		shared_libs		# with shared libs
-%bcond_with		sse2			# use SSE2 instructions
+%bcond_with	selinux			# with SELinux (need policy first)
+%bcond_with	shared_libs		# with shared libs
+%bcond_with	sse2			# use SSE2 instructions
 %bcond_without	system_flac		# system flac
-%bcond_without	system_ffmpeg	# system ffmpeg
-%bcond_without	system_harfbuzz	# system harfbuzz
+%bcond_without	system_ffmpeg		# system ffmpeg
+%bcond_without	system_harfbuzz		# system harfbuzz
 # http://bugs.gentoo.org/576370
-%bcond_with	system_icu	# system icu
-%bcond_without	system_jsoncpp	# system jsoncpp
-%bcond_without	system_libexif	# system libexif
-%bcond_without	system_libmtp	# system libmtp
-%bcond_with	system_libusb	# system libusb-1, disabled: http://crbug.com/266149
-%bcond_without	system_libwebp	# system libwebp
+%bcond_with	system_icu		# system icu
+%bcond_without	system_jsoncpp		# system jsoncpp
+%bcond_without	system_libexif		# system libexif
+%bcond_without	system_libmtp		# system libmtp
+%bcond_with	system_libusb		# system libusb-1, disabled: http://crbug.com/266149
+%bcond_without	system_libwebp		# system libwebp
 %bcond_without	system_libxnvctrl	# system libxnvctrl
 %bcond_with	system_mesa		# system Mesa
-%bcond_without	system_minizip	# system minizip
+%bcond_without	system_minizip		# system minizip
 %bcond_without	system_opus		# system opus codec support, http://www.opus-codec.org/examples/
 # protobuf broken: https://bugs.gentoo.org/show_bug.cgi?id=525560
-%bcond_with	system_protobuf	# system protobuf
+%bcond_with	system_protobuf		# system protobuf
 %bcond_with	system_re2		# system re2
-%bcond_without	system_snappy	# system snappy
-%bcond_without	system_speex	# system speex
-%bcond_with	system_sqlite	# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
-%bcond_without	system_libsrtp	# system srtp (can be used if using bundled libjingle), http://bugs.gentoo.org/459932
-%bcond_with		system_v8		# system v8
-%bcond_with	system_libvpx	# system libvpx, http://crbug.com/494939
+%bcond_without	system_snappy		# system snappy
+%bcond_without	system_speex		# system speex
+%bcond_with	system_sqlite		# system sqlite WebSQL (http://www.w3.org/TR/webdatabase/) will not work
+%bcond_without	system_libsrtp		# system srtp (can be used if using bundled libjingle), http://bugs.gentoo.org/459932
+%bcond_with	system_v8		# system v8
+%bcond_with	system_libvpx		# system libvpx, http://crbug.com/494939
 %bcond_without	system_yasm		# system yasm
 %bcond_without	system_zlib		# system zlib
 %bcond_with	tcmalloc		# use tcmalloc
@@ -126,6 +126,7 @@ Patch39:	libsecret.patch
 Patch40:	ffmpeg-generate-errors.patch
 Patch41:	ffmpeg-generate.patch
 Patch42:	system-ffmpeg.patch
+Patch43:	cups22.patch
 URL:		http://www.chromium.org/Home
 %{?with_gconf:BuildRequires:	GConf2-devel}
 %{?with_system_mesa:BuildRequires:	Mesa-libGL-devel >= 9.1}
@@ -339,6 +340,7 @@ ln -s %{SOURCE7} .
 #%patch40 -p1 UPDATE
 #%patch41 -p1 CHECK
 %patch42 -p1
+%patch43 -p1
 
 # https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
 install -d chrome/test/data/webui
