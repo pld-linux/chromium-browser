@@ -276,9 +276,7 @@ tracking and an auto-updater system.
 Summary:	chromium-browser language packages
 Group:		I18n
 Requires:	%{name} = %{version}-%{release}
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description l10n
 Chromium is an open-source browser project that aims to build a safer,
