@@ -78,6 +78,7 @@
 %define		patchver	102
 %define		gyp_rev	1014
 Summary:	A WebKit powered web browser
+Summary(pl.UTF-8):	Przeglądarka WWW oparta na bibliotece WebKit
 Name:		chromium-browser
 %if "%{?patchver}" != ""
 Version:	%{branch}.%{patchver}
@@ -272,8 +273,19 @@ Chromium serves as a base for Google Chrome, which is Chromium
 rebranded (name and logo) with very few additions such as usage
 tracking and an auto-updater system.
 
+%description -l pl.UTF-8
+Chromium to mający otwarte źródła projekt przeglądarki WWW, którego
+celem jest stworzenie bezpieczniejszego, szybszego, batdziej
+stabilnego sposobu korzystania przez użytkowników z Internetu.
+
+Chromium służy jako podstawa dla przeglądarki Google Chrome, która
+jest zrebrandowanym (z własną nazwą i logo) Chromium z kilkoma
+dodatkami, takimi jak śledzenie sposobu korzystania czy system
+automatycznych uaktualnień.
+
 %package l10n
 Summary:	chromium-browser language packages
+Summary(pl.UTF-8):	Pakiety językowe do przeglądarki Chromium
 Group:		I18n
 Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
@@ -284,6 +296,18 @@ faster, and more stable way for all Internet users to experience the
 web.
 
 This package contains language packages for 50 languages:
+
+ar, bg, bn, ca, cs, da, de, el, en-GB, es-LA, es, et, fi, fil, fr, gu,
+he, hi, hr, hu, id, it, ja, kn, ko, lt, lv, ml, mr, nb, nl, or, pl,
+pt-BR, pt-PT, ro, ru, sk, sl, sr, sv, ta, te, th, tr, uk, vi, zh-CN,
+zh-TW
+
+%description l10n -l pl.UTF-8
+Chromium to mający otwarte źródła projekt przeglądarki WWW, którego
+celem jest stworzenie bezpieczniejszego, szybszego, batdziej
+stabilnego sposobu korzystania przez użytkowników z Internetu.
+
+Ten pakiet zawiera zasoby językowa dla ponad 50 języków:
 
 ar, bg, bn, ca, cs, da, de, el, en-GB, es-LA, es, et, fi, fil, fr, gu,
 he, hi, hr, hu, id, it, ja, kn, ko, lt, lv, ml, mr, nb, nl, or, pl,
