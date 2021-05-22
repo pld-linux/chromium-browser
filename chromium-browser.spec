@@ -196,6 +196,7 @@ BuildRequires:	python-modules
 BuildRequires:	python-ply >= 3.4
 %{?with_system_re2:BuildRequires:	re2-devel >= 20151101}
 BuildRequires:	rpm >= 4.4.9-56
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.453
 %{?with_system_snappy:BuildRequires:	snappy-devel}
 BuildRequires:	speech-dispatcher-devel >= 0.8
