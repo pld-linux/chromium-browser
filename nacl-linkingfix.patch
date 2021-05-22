@@ -1,20 +1,19 @@
-diff -up chromium-9.0.600.0/native_client/src/trusted/service_runtime/service_runtime.gyp.linking-fix chromium-9.0.600.0/native_client/src/trusted/service_runtime/service_runtime.gyp
---- chromium-9.0.600.0/native_client/src/trusted/service_runtime/service_runtime.gyp.linking-fix	2010-12-03 06:56:29.000000000 -0500
-+++ chromium-9.0.600.0/native_client/src/trusted/service_runtime/service_runtime.gyp	2010-12-13 12:56:50.063551554 -0500
-@@ -187,6 +187,16 @@
-                     'linux/arm/sel_segments.c',
-                   ],
-                 }],
-+                ['target_arch=="ia32"', {
-+                  'sources': [
-+                    'linux/nacl_signal_32.c',
-+                  ],
-+                }],
-+                ['target_arch=="x64"', {
-+                  'sources': [
-+                    'linux/nacl_signal_64.c',
-+                  ],
-+                }],
+--- chromium-browser-50.0.2661.102/native_client/src/trusted/service_runtime/service_runtime.gyp.orig	2021-05-22 14:30:20.134879142 +0200
++++ chromium-browser-50.0.2661.102/native_client/src/trusted/service_runtime/service_runtime.gyp	2021-05-22 14:55:16.892591353 +0200
+@@ -113,6 +113,16 @@
+                 'win/thread_handle_map.c',
                ],
              }],
-             ['OS=="linux" or OS=="mac" or OS=="FreeBSD"', {
++            ['target_arch=="ia32"', {
++              'sources': [
++                'linux/nacl_signal_32.c',
++              ],
++            }],
++            ['target_arch=="x64"', {
++              'sources': [
++                'linux/nacl_signal_64.c',
++              ],
++            }],
+             # TODO(gregoryd): move arm-specific stuff into a separate gyp file.
+             ['target_arch=="arm"', {
+               'sources': [

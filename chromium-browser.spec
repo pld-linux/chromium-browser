@@ -120,7 +120,6 @@ Patch31:	system-jinja.patch
 Patch32:	remove_bundled_libraries-stale.patch
 Patch35:	etc-dir.patch
 Patch36:	angle.patch
-Patch37:	%{name}-build.patch
 Patch38:	vaapi_include.patch
 Patch39:	libsecret.patch
 Patch40:	ffmpeg-generate-errors.patch
@@ -332,7 +331,6 @@ ln -s %{SOURCE7} .
 %patch32 -p1
 %patch35 -p1
 %patch36 -p1
-%patch37 -p1
 #%patch38 -p1 CHECK
 %patch39 -p1
 #%patch40 -p1 UPDATE

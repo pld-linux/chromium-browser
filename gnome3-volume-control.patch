@@ -1,7 +1,7 @@
---- chromium-browser-33.0.1750.117/media/audio/alsa/audio_manager_alsa.cc~	2014-02-20 22:27:58.000000000 +0200
-+++ chromium-browser-33.0.1750.117/media/audio/alsa/audio_manager_alsa.cc	2014-02-23 10:24:29.610111342 +0200
-@@ -53,7 +53,8 @@
-   CommandLine command_line(CommandLine::NO_PROGRAM);
+--- chromium-browser-50.0.2661.102/media/audio/alsa/audio_manager_alsa.cc.orig	2021-05-22 17:02:40.236005735 +0200
++++ chromium-browser-50.0.2661.102/media/audio/alsa/audio_manager_alsa.cc	2021-05-22 17:07:10.666708626 +0200
+@@ -56,7 +56,8 @@ void AudioManagerAlsa::ShowLinuxAudioInp
+   base::CommandLine command_line(base::CommandLine::NO_PROGRAM);
    switch (base::nix::GetDesktopEnvironment(env.get())) {
      case base::nix::DESKTOP_ENVIRONMENT_GNOME:
 -      command_line.SetProgram(base::FilePath("gnome-volume-control"));
