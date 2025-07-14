@@ -318,7 +318,7 @@ zh-TW
 %setup -qc
 %if "%{?patchver}" != ""
 cd chromium*-%{branch}.%{basever}
-%patch0 -p1
+%patch -P0 -p1
 cd ..
 %endif
 mv chromium*-%{branch}.%{basever}/* .
@@ -343,25 +343,25 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 ln -s %{SOURCE7} .
 
 #%patch2 -p1 CHECK
-%patch7 -p1
-%patch15 -p2
+%patch -P7 -p1
+%patch -P15 -p2
 %{!?with_libjpegturbo:%patch11 -p0}
-%patch16 -p1
-%patch28 -p1
-%patch25 -p1
+%patch -P16 -p1
+%patch -P28 -p1
+%patch -P25 -p1
 %{?with_nacl:%patch18 -p1}
-%patch24 -p1
-%patch26 -p2
-%patch31 -p0
-%patch32 -p1
-%patch35 -p1
-%patch36 -p1
+%patch -P24 -p1
+%patch -P26 -p2
+%patch -P31 -p0
+%patch -P32 -p1
+%patch -P35 -p1
+%patch -P36 -p1
 #%patch38 -p1 CHECK
-%patch39 -p1
+%patch -P39 -p1
 #%patch40 -p1 UPDATE
 #%patch41 -p1 CHECK
-%patch42 -p1
-%patch43 -p1
+%patch -P42 -p1
+%patch -P43 -p1
 
 # https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
 install -d chrome/test/data/webui
