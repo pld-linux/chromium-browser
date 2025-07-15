@@ -342,7 +342,7 @@ sed -e 's/@BUILD_DIST@/PLD %{pld_version}/g' \
 %{__sed} -e 's,@localedir@,%{_datadir}/%{name},' %{SOURCE5} > find-lang.sh
 ln -s %{SOURCE7} .
 
-#%patch2 -p1 CHECK
+#%%patch2 -p1 CHECK
 %patch -P7 -p1
 %patch -P15 -p2
 %{!?with_libjpegturbo:%patch11 -p0}
@@ -356,10 +356,10 @@ ln -s %{SOURCE7} .
 %patch -P32 -p1
 %patch -P35 -p1
 %patch -P36 -p1
-#%patch38 -p1 CHECK
+#%%patch38 -p1 CHECK
 %patch -P39 -p1
-#%patch40 -p1 UPDATE
-#%patch41 -p1 CHECK
+#%%patch40 -p1 UPDATE
+#%%patch41 -p1 CHECK
 %patch -P42 -p1
 %patch -P43 -p1
 
